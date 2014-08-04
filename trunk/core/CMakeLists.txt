@@ -7,6 +7,7 @@ set( SRC
     src/core.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED ${SRC} ${HEADERS} )
+add_library(${PROJECT_NAME} ${SHARED_LIBS} ${SRC} ${HEADERS} )
+
 target_link_libraries( ${PROJECT_NAME} ${Boost_LIBRARIES} )
 
