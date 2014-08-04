@@ -28,4 +28,5 @@ add_executable(${PROJECT_NAME} ${SRC} ${FORMS} ${HEADERS})
 
 qt5_use_modules(${PROJECT_NAME} Core Gui Widgets OpenGL )
 
+link_directories( ${${CORE_NAME}_SOURCE_DIR} )
 target_link_libraries(${PROJECT_NAME} ${CORE_NAME})

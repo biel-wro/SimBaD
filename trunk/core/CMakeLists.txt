@@ -8,6 +8,5 @@ set( SRC
 )
 
 add_library(${PROJECT_NAME} SHARED ${SRC} ${HEADERS} )
-link_directories(${${PROJECT_NAME}_SOURCE_DIR}/src)
 target_link_libraries( ${PROJECT_NAME} ${Boost_LIBRARIES} )
 
