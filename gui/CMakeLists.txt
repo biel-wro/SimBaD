@@ -1,0 +1,31 @@
+project(${GUI_NAME})
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+FIND_PACKAGE( Qt5 COMPONENTS Core Gui OpenGL REQUIRED  )
+
+set( SRC
+    src/main.cpp
+    src/mainwindow.cpp
+)
+
+
+set( UI
+    forms/mainwindow.ui
+)
+
+
+include_directories(inc)
+FILE( GLOB HEADERS inc/*.h )  # workaround for headers in QtCreator
+
+include_directories(${${CORE_NAME}_SOURCE_DIR}/inc)
+
+QT5_WRAP_UI(FORMS ${UI})
+
+
+add_executable(${PROJECT_NAME} ${SRC} ${FORMS} ${HEADERS})
+
+qt5_use_modules(${PROJECT_NAME} Core Gui Widgets OpenGL )
+
+target_link_libraries(${PROJECT_NAME} ${CORE_NAME})
