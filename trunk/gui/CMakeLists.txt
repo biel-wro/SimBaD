@@ -8,12 +8,15 @@ FIND_PACKAGE( Qt5 COMPONENTS Core Gui OpenGL REQUIRED  )
 set( SRC
     src/main.cpp
     src/mainwindow.cpp
+    src/dialog_open_model.cpp
 )
 
 
 set( UI
     forms/mainwindow.ui
+    forms/dialog_open_model.ui
 )
+
 
 
 include_directories(inc)
