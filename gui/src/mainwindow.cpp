@@ -4,6 +4,10 @@
 #include <QtGui>
 #include <QMessageBox>
 #include <dialog_open_model.h>
+
+namespace simbad{
+namespace gui{
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
   ,ui(new Ui::MainWindow)
@@ -29,4 +33,7 @@ void MainWindow::on_actionDownload_Evolutiion_triggered()
     Dialog_open_model my_dialog_for_open_model;
     my_dialog_for_open_model.setModal(true);
     my_dialog_for_open_model.exec();
+}
+
+}
 }
