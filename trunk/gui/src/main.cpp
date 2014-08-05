@@ -8,7 +8,7 @@ int main(int argc, char** argv)
 {
     hello();
     QApplication app(argc,argv);
-    MainWindow mw;
+    simbad::gui::MainWindow mw;
     mw.show();
     app.exec();
 }

@@ -6,6 +6,9 @@
 namespace Ui {
 class MainWindow;
 }
+namespace simbad{
+namespace gui{
+
 
 class MainWindow : public QMainWindow
 {
@@ -24,6 +27,8 @@ private:
     Ui::MainWindow *ui;
 };
 
+}
+}
 #endif // MAINWINDOW_H
 
 
