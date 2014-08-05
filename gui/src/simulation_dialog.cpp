@@ -12,3 +12,8 @@ Simulation_Dialog::~Simulation_Dialog()
 {
     delete ui;
 }
+
+void Simulation_Dialog::on_buttonBox_accepted()
+{
+
+}

@@ -15,6 +15,9 @@ public:
     explicit Simulation_Dialog(QWidget *parent = 0);
     ~Simulation_Dialog();
 
+private slots:
+    void on_buttonBox_accepted();
+
 private:
     Ui::Simulation_Dialog *ui;
 };
