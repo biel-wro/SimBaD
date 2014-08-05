@@ -33,10 +33,6 @@ else()
 endif()
 
 
-set(BOOST_INCLUDEDIR C:/Program Files/boost/boost_1_55_0/include)
-set(BOOST_LIBRARYDIR C:/Program Files/boost/boost_1_55_0/lib)
-
-
 # Boost	
 if( WIN32 )
  set(Boost_USE_STATIC_LIBS ON)
@@ -45,7 +41,7 @@ if( WIN32 )
 
 endif()
 
-find_package( Boost 1.55 COMPONENTS exception program_options REQUIRED )
+find_package( Boost 1.40 COMPONENTS exception program_options REQUIRED )
 
 include_directories( ${Boost_INCLUDE_DIR} )
 
