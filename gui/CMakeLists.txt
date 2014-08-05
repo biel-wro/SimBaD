@@ -9,12 +9,15 @@ set( SRC
     src/main.cpp
     src/mainwindow.cpp
     src/dialog_open_model.cpp
+    src/simulation_dialog.cpp
+    src/my_glwidget.cpp
 )
 
 
 set( UI
     forms/mainwindow.ui
     forms/dialog_open_model.ui
+    forms/simulation_dialog.ui
 )
 
 
