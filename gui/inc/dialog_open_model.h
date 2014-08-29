@@ -15,6 +15,10 @@ public:
     explicit Dialog_open_model(QWidget *parent = 0);
     ~Dialog_open_model();
 
+private slots:
+
+    void on_pushButton_4_clicked();
+
 private:
     Ui::Dialog_open_model *ui;
 };

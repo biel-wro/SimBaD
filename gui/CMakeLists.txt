@@ -11,6 +11,7 @@ set( SRC
     src/dialog_open_model.cpp
     src/simulation_dialog.cpp
     src/my_glwidget.cpp
+    src/new_event_dialog.cpp
 )
 
 
@@ -18,6 +19,7 @@ set( UI
     forms/mainwindow.ui
     forms/dialog_open_model.ui
     forms/simulation_dialog.ui
+    forms/new_event_dialog.ui
 )
 
 

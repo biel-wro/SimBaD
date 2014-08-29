@@ -12,9 +12,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>640</width>
+    <height>640</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>14</pointsize>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Interacting particle systems</string>
@@ -30,8 +36,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>21</height>
+     <width>640</width>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -72,10 +78,10 @@
   </widget>
   <action name="actionNew_Evolution">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
-    <string>New Model ...</string>
+    <string>New File (Model) ...</string>
    </property>
   </action>
   <action name="actionDownload_Evolutiion">
@@ -83,7 +89,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Open Model...</string>
+    <string>Open File (Model) ...</string>
    </property>
   </action>
   <action name="actionChange_project">
@@ -104,7 +110,7 @@
   </action>
   <action name="actionOpen_Initial_Configuration">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>Open ...</string>
@@ -120,7 +126,7 @@
   </action>
   <action name="actionNew">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>New...</string>
@@ -140,6 +146,11 @@
    </property>
    <property name="text">
     <string>Analyze ...</string>
+   </property>
+  </action>
+  <action name="actionDownload">
+   <property name="text">
+    <string>download</string>
    </property>
   </action>
  </widget>

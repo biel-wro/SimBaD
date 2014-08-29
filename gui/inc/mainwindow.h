@@ -23,8 +23,14 @@ private slots:
 
     void on_actionDownload_Evolutiion_triggered();
 
+    void on_actionNew_triggered();
+
+    void on_actionNew_Evolution_triggered();
+
 private:
     Ui::MainWindow *ui;
+
+
 };
 
 }
