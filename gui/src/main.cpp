@@ -11,4 +11,5 @@ int main(int argc, char** argv)
     simbad::gui::MainWindow mw;
     mw.show();
     app.exec();
+
 }

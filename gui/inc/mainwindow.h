@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <model_of_space.h>
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +18,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    Model_of_space *Big_model;
 
 private slots:
     void on_pushButton_clicked();

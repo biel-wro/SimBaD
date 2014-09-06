@@ -5,25 +5,30 @@
 #include <QtMath>
 #include <QtCore>
 #include <QtScript/QScriptEngine>
+#include <mainwindow.h>
+#include <model_of_space.h>
+#include <iostream>
+
+
+using namespace std;
+
+namespace simbad{
+namespace gui{
 
 New_event_dialog::New_event_dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::New_event_dialog)
 {
-
     ui->setupUi(this);
-}
+};
+void New_event_dialog::initialisation_of_New_event_dialog()
+{
 
-New_event_dialog::~New_event_dialog()
-{
-    delete ui;
-}
-void New_event_dialog::set_number_of_types_and_probable_events(int Number)
-{
-    number_of_types = Number;
+    int number_of_types;
+    number_of_types = this->Big_model->get_number_of_types();
 
     QString String_for_birth_of_1_particle;
-    for (int i=1;i <= this->number_of_types; i++){
+    for (int i=1;i <= number_of_types ; i++){
 
         String_for_birth_of_1_particle= "birth of one particle with type # " + QString::number(i);
         ui->comboBox->addItem(String_for_birth_of_1_particle);
@@ -49,12 +54,36 @@ void New_event_dialog::set_number_of_types_and_probable_events(int Number)
         }
 
     };
+
+
 }
+
+New_event_dialog::~New_event_dialog()
+{
+    delete ui;
+}
+//void New_event_dialog::set_number_of_types_and_probable_events(int Number)
+//{
+//    number_of_types = Number;
+
+//}
 
 
 void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
 {
-
+   int number_of_types;
+   number_of_types = this->Big_model->get_number_of_types();
+   //
+   //
+   //   int t= this->dialog_for_open_model->mainForm->Big_model.get_number_of_types();
+   //
+   //
+   //
+   //
+   //   int t=this->mainForm->Big_model.get_number_of_types();
+   //   this->mainForm->Big_model.set_number_of_types(3);
+   //
+   //
     if (ui->comboBox->currentText().contains("birth of one particle with type #") or
             ui->comboBox->currentText().contains("death of one particle with type # ") or
                 ui->comboBox->currentText().contains("Mutation of #") or
@@ -62,7 +91,7 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
             ){
       ui->label_2->setText("Table of component rates for choosen event (d is a distance between chosen point and a neighbor point)");
       ui->tableWidget->setColumnCount(6);
-      ui->tableWidget->setRowCount(this->number_of_types+1);
+      ui->tableWidget->setRowCount(number_of_types+1);
 
 
       QStringList header;
@@ -76,11 +105,11 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
 
       ui->tableWidget->setCellWidget ( 0, 1, new QComboBox( ui->tableWidget ) );
       QComboBox *pComboB_environment(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(0,1)));
-      pComboB_environment->addItem("1) 0");
-      pComboB_environment->addItem("2) 1");
+      pComboB_environment->addItem("-- 0");
+      pComboB_environment->addItem("-- 1");
 
 
-      for(int i=1; i<=this->number_of_types; i++){
+      for(int i=1; i<=number_of_types; i++){
           QString my_String = "Particles of ";
           my_String = my_String + QString::number(i)+"-type";
           QTableWidgetItem *newItem = new QTableWidgetItem(my_String);
@@ -88,31 +117,33 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
       };
 
 
-      for(int i=1; i<=this->number_of_types; i++){
+      for(int i=1; i<=number_of_types; i++){
         ui->tableWidget->setCellWidget ( i, 1, new QComboBox( ui->tableWidget ) );
         QComboBox *pComboB(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(i,1)));
-        pComboB->addItem("1) 0");
-        pComboB->addItem("2) 1 - d if d \u2208 [0, 1),\n    0 if d \u2208 [1, \u221E)");
-        pComboB->addItem("3) d if d \u2208 [0; +\u221E)");
-        pComboB->addItem("4) 1");
-        pComboB->addItem("5) exp(-d) if d \u2208 [0; +\u221E)");
-        pComboB->addItem("6) 0 if [0,1)\n    d - 1 if d \u2208 [1; +\u221E)");
+        pComboB->addItem("-- 0");
+        pComboB->addItem("-- 1 - d if d \u2208 [0, 1),\n    0 if d \u2208 [1, \u221E)");
+        pComboB->addItem("-- d if d \u2208 [0; +\u221E)");
+        pComboB->addItem("-- 1");
+        pComboB->addItem("-- exp(-d) if d \u2208 [0; +\u221E)");
+        pComboB->addItem("-- 0 if d \u2208 [0,1)\n    d - 1 if d \u2208 [1; +\u221E)");
+        pComboB->addItem("-- 0 if d \u2208 [0,1)\n    d - 1 if d \u2208 [1; +\u221E)");
+        pComboB->addItem("-- min(d)");
       };
 
 
-      for(int i=0; i<=this->number_of_types; i++){
+      for(int i=0; i<=number_of_types; i++){
         ui->tableWidget->setCellWidget ( i, 2, new QDoubleSpinBox( ui->tableWidget ) );
         //QDoubleSpinBox *pDoubleSpinB(qobject_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(i,2)));
       };
 
-      for(int i=0; i<=this->number_of_types; i++){
+      for(int i=0; i<=number_of_types; i++){
         ui->tableWidget->setCellWidget ( i, 3, new QComboBox( ui->tableWidget ) );
         QComboBox *pComboB(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(i,3)));
         pComboB->addItem("circle");
         pComboB->addItem("square");
       };
 
-      for(int i=0; i<=this->number_of_types; i++){
+      for(int i=0; i<=number_of_types; i++){
         ui->tableWidget->setCellWidget ( i, 4, new QDoubleSpinBox( ui->tableWidget ) );
         //QDoubleSpinBox *pDoubleSpinB(qobject_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(i,2)));
       };
@@ -121,7 +152,7 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
       QComboBox *pEnvironmentComboB(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(0,5)));
       pEnvironmentComboB->addItem("-");
 
-      for(int i=1; i<=this->number_of_types; i++){
+      for(int i=1; i<=number_of_types; i++){
         ui->tableWidget->setCellWidget ( i, 5, new QComboBox( ui->tableWidget ) );
         QComboBox *pComboB(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(i,5)));
         pComboB->addItem("\u2211");
@@ -172,4 +203,17 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
         ui->label_3->setText("Distribution of new particles");
 
     };
+}
+
+void New_event_dialog::on_pushButton_clicked()
+{
+    Event_of_model Current_event;
+
+
+
+//    this->mainForm->Big_model.List_of_events_of_model.pop_back();
+}
+
+
+}
 }

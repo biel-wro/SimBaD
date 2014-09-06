@@ -12,6 +12,11 @@ set( SRC
     src/simulation_dialog.cpp
     src/my_glwidget.cpp
     src/new_event_dialog.cpp
+    src/model_of_space.cpp
+    src/function_for_component_rate.cpp
+    src/table_of_component_rates.cpp
+    src/distribution_of_particle.cpp
+    src/event_of_model.cpp
 )
 
 

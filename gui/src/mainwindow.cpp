@@ -6,31 +6,33 @@
 #include <dialog_open_model.h>
 #include <simulation_dialog.h>
 #include <QFileDialog>
+#include <model_of_space.h>
 
 
-namespace simbad{
-namespace gui{
 
-MainWindow::MainWindow(QWidget *parent) :
+simbad::gui::MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
   ,ui(new Ui::MainWindow)
 {
+//Big_model
+ //   Model_of_space A;
+
+    this->Big_model = new Model_of_space;
+
     ui->setupUi(this);
 }
 
-MainWindow::~MainWindow()
+simbad::gui::MainWindow::~MainWindow()
 {
+//    Model_of_space *A;
+//    A=this->Big_model;
+//    delete A;
     delete ui;
 }
 
 
-void MainWindow::on_pushButton_clicked()
-{
- //   MyCustomWidget *frame = new MyCustomWidget(this);
- //  ui->scrollAreaWidgetContents_2->addWidget(frame);
-}
 
-void MainWindow::on_actionDownload_Evolutiion_triggered()
+void simbad::gui::MainWindow::on_actionDownload_Evolutiion_triggered()
 {
     //QMessageBox::information(this,"title","Hello");
 //    QString fileName;
@@ -69,14 +71,25 @@ void simbad::gui::MainWindow::on_actionNew_triggered()
 }
 
 
-}
-}
 
 void simbad::gui::MainWindow::on_actionNew_Evolution_triggered()
 {
 
         Dialog_open_model my_dialog_for_open_model;
+
+//save refferens to mainForm for Big_model "main model"
+        my_dialog_for_open_model.Big_model=this->Big_model;
+
+
         my_dialog_for_open_model.setModal(true);
+
         my_dialog_for_open_model.exec();
+        
+}
+
+
+
+void simbad::gui::MainWindow::on_pushButton_clicked()
+{
 
 }
