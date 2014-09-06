@@ -17,13 +17,13 @@ class Model_of_space
 {
     QString Name_of_model;
     int dimention_of_model;
-
+    int number_of_types_in_model;
 //    QVector <Event_of_model> List_of_events_of_model;
 
 public:
     Model_of_space();
     ~Model_of_space();
-    int number_of_types_in_model;
+
 
 // functions for changing the Model_of_space
     void set_name_of_model(QString Name_of_the_model);

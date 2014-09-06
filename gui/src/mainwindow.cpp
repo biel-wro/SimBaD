@@ -25,8 +25,9 @@ simbad::gui::MainWindow::MainWindow(QWidget *parent) :
 simbad::gui::MainWindow::~MainWindow()
 {
 //    Model_of_space *A;
-//    A=this->Big_model;
-//    delete A;
+//    A=;
+    delete this->Big_model;
+
     delete ui;
 }
 

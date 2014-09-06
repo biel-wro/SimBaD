@@ -7,6 +7,13 @@ simbad::gui::Model_of_space::Model_of_space()
     number_of_types_in_model=2;
 }
 
+
+simbad::gui::Model_of_space::~Model_of_space()
+{
+
+}
+
+
 void simbad::gui::Model_of_space::set_name_of_model(QString Name_of_the_model)
 {
     Name_of_model = Name_of_the_model;
@@ -20,7 +27,7 @@ void simbad::gui::Model_of_space::set_number_of_types(int Number)
 
 QString simbad::gui::Model_of_space::get_name_of_model()
 {
-    return Name_of_model;
+   return Name_of_model;
 }
 
 int simbad::gui::Model_of_space::get_number_of_types()
@@ -29,5 +36,3 @@ int simbad::gui::Model_of_space::get_number_of_types()
    return number_of_types_in_model;
 }
 
-//}
-//}
