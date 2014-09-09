@@ -12,11 +12,12 @@ set( SRC
     src/simulation_dialog.cpp
     src/my_glwidget.cpp
     src/new_event_dialog.cpp
-    src/model_of_space.cpp
-    src/function_for_component_rate.cpp
-    src/table_of_component_rates.cpp
-    src/distribution_of_particle.cpp
-    src/event_of_model.cpp
+
+    src/Model/model_of_space.cpp
+    src/Model/function_for_component_rate.cpp
+    src/Model/table_of_component_rates.cpp
+    src/Model/distribution_of_particle.cpp
+    src/Model/event_of_model.cpp
 )
 
 
@@ -30,14 +31,18 @@ set( UI
 
 
 include_directories(inc)
-FILE( GLOB HEADERS inc/*.h )  # workaround for headers in QtCreator
+include_directories(inc/Model)
+
+FILE( GLOB HEADERS inc/*.h inc/Model/*.h )  # workaround for headers in QtCreator
 
 include_directories(${${CORE_NAME}_SOURCE_DIR}/inc)
+
+
 
 QT5_WRAP_UI(FORMS ${UI})
 
 
-add_executable(${PROJECT_NAME} ${SRC} ${FORMS} ${HEADERS})
+add_executable(${PROJECT_NAME} ${SRC} ${FORMS} ${HEADERS} )
 
 qt5_use_modules(${PROJECT_NAME} Core Gui Widgets OpenGL )
 

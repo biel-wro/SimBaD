@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include "model_of_space.h"
+#include "dialog_open_model.h"
+#include "event_of_model.h"
 
 //
 //
@@ -23,6 +25,7 @@ class New_event_dialog : public QDialog
 {
     Q_OBJECT
 
+    int current_number_of_event_for_changing;
 public:
 
 //
@@ -32,12 +35,13 @@ public:
 //
 //
     Model_of_space *Big_model;
+//    Ui::Dialog_open_model *Ui_for_parent_Dialog_open_model;
 
     explicit New_event_dialog(QWidget *parent = 0);
     ~New_event_dialog();
 //    void set_number_of_types_and_probable_events(int Number=0);
     void initialisation_of_New_event_dialog();
-
+    void initialisation_of_changing_event_dialog(int Number_of_event);
 
 private slots:
 
@@ -45,9 +49,14 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_pushButton_2_clicked();
+
 private:
+
     Ui::New_event_dialog *ui;
-//    int number_of_types=0;
+
+    bool New_event_dialog_regime;
+
 };
 
 }

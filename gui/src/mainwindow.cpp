@@ -65,6 +65,7 @@ void simbad::gui::MainWindow::on_actionNew_triggered()
 {
 
     Simulation_Dialog my_dialog_for_open_model;
+
     my_dialog_for_open_model.setModal(true);
     my_dialog_for_open_model.exec();
 
@@ -85,7 +86,10 @@ void simbad::gui::MainWindow::on_actionNew_Evolution_triggered()
         my_dialog_for_open_model.setModal(true);
 
         my_dialog_for_open_model.exec();
-        
+
+        this->menuBar()->actions()[0]->menu()->actions()[0]->setEnabled(false);
+        this->menuBar()->actions()[1]->menu()->actions()[0]->setEnabled(true);
+        this->menuBar()->actions()[1]->menu()->actions()[1]->setEnabled(true);
 }
 
 

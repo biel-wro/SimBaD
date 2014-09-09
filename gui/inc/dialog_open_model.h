@@ -22,18 +22,29 @@ public:
 
     //save refferens to mainForm for Big_model "main model"
     Model_of_space* Big_model;
+    void initialization_of_Table();
+ //   Ui::MainWindow *Ui_for_parent_Main_window;
 private slots:
 
     void on_pushButton_4_clicked();
 
     void on_spinBox_2_valueChanged(int arg1);
 
-    void on_pushButton_5_clicked();
+
+
+
+    void on_spinBox_3_valueChanged(int arg1);
+
+    void on_tableWidget_clicked(const QModelIndex &index);
+
+    void on_pushButton_3_clicked();
+
+    void on_pushButton_2_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::Dialog_open_model *ui;
-
-
 };
 }
 }
