@@ -4,12 +4,11 @@
 #include <QDoubleSpinBox>
 #include <QtMath>
 #include <QtCore>
-#include <QtScript/QScriptEngine>
 #include <mainwindow.h>
 #include <model_of_space.h>
 #include <iostream>
-//#include "stdlib.h"
 #include "event_of_model.h"
+
 using namespace std;
 
 namespace simbad{
