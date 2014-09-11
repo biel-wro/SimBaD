@@ -23,7 +23,7 @@ My_GLWidget::My_GLWidget(QWidget *parent) :
 void My_GLWidget::initializeGL()
 {
     qglClearColor(Qt::black);
-//    glEnable(GL_DEPTH);
+//   glEnable(GL_DEPTH);
 //  glClearColor(0.0, 0.0, 102.0/255.0, 0.0);
 
 

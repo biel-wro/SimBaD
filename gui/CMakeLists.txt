@@ -6,12 +6,13 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 
 FIND_PACKAGE( Qt5 COMPONENTS Core Gui Widgets OpenGL REQUIRED  )
-FIND_PACKAGE(Qt COMPONENTS OpenGL REQUIRED)
+FIND_PACKAGE(Qt COMPONENTS QtOpenGL REQUIRED)
 
 
-if (NOT QtOpenGL_FOUND)
-  message(FATAL_ERROR "Package  and component QtOpenGL required, but not found!")
-endif( NOT QtOpenGL_FOUND )
+
+#if (NOT QtOpenGL_FOUND)
+#message(FATAL_ERROR "Package  and component QtOpenGL required, but not found!")
+#endif( NOT QtOpenGL_FOUND )
 
 
 set( SRC
