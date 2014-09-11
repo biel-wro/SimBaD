@@ -6,7 +6,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 
 FIND_PACKAGE( Qt5 COMPONENTS Core Gui Widgets OpenGL REQUIRED  )
-FIND_PACKAGE(Qt COMPONENTS QtOpenGL REQUIRED)
+FIND_PACKAGE(OpenGL REQUIRED)
+#FIND_PACKAGE(Qt COMPONENTS QtOpenGL REQUIRED)
+
 
 
 
@@ -57,5 +59,5 @@ add_executable(${PROJECT_NAME} ${SRC} ${FORMS} ${HEADERS} )
 
 qt5_use_modules(${PROJECT_NAME} Core Gui Widgets OpenGL)
 
-target_link_libraries(${PROJECT_NAME} ${CORE_NAME})
+target_link_libraries(${PROJECT_NAME} ${CORE_NAME} ${OPENGL_LIBRARIES} )
 
