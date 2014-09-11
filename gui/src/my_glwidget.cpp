@@ -23,7 +23,7 @@ My_GLWidget::My_GLWidget(QWidget *parent) :
 void My_GLWidget::initializeGL()
 {
     qglClearColor(Qt::black);
-    glEnable(GL_DEPTH);
+//    glEnable(GL_DEPTH);
 //  glClearColor(0.0, 0.0, 102.0/255.0, 0.0);
 
 
@@ -53,7 +53,7 @@ void My_GLWidget::initializeGL()
 }
 void My_GLWidget::paintGL()
 {
-//    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ //   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //    glLoadIdentity();
 //    glTranslatef(0.0, 0.0, -10.0);
 //    glRotatef(xRot / 16.0, 1.0, 0.0, 0.0);

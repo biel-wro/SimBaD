@@ -4,7 +4,7 @@
 //#include <QGLWidget>
 //#include <qgl.h>
 #include <QGLWidget>
-
+#include <QtOpenGL>
 
 
 class My_GLWidget : public QGLWidget
