@@ -1,8 +1,10 @@
 #include "core.h"
 #include <boost/program_options.hpp>
-#include <QtCore>
-#include <QtOpenGL>
+//#include <QtCore>
+//#include <QtOpenGL>
 #include "mainwindow.h"
+#include <QApplication>
+
 
 int main(int argc, char** argv)
 {

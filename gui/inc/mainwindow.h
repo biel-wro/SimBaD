@@ -30,6 +30,8 @@ private slots:
 
     void on_actionNew_Evolution_triggered();
 
+    void on_actionCreat_triggered();
+
 private:
     Ui::MainWindow *ui;
 

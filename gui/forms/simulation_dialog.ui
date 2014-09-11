@@ -16,8 +16,8 @@
   <widget class="My_GLWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
+     <x>20</x>
+     <y>0</y>
      <width>401</width>
      <height>401</height>
     </rect>
@@ -41,7 +41,7 @@
   <customwidget>
    <class>My_GLWidget</class>
    <extends>QWidget</extends>
-   <header>my_glwidget.h</header>
+   <header location="global">my_glwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

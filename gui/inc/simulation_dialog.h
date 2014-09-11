@@ -15,9 +15,6 @@ public:
     explicit Simulation_Dialog(QWidget *parent = 0);
     ~Simulation_Dialog();
 
-    void initializeGL();
-    void paintGL();
-    void resize(int w,int h);
 
 private slots:
     void on_buttonBox_accepted();

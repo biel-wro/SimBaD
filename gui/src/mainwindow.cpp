@@ -98,3 +98,11 @@ void simbad::gui::MainWindow::on_pushButton_clicked()
 {
 
 }
+
+void simbad::gui::MainWindow::on_actionCreat_triggered()
+{
+    Simulation_Dialog Sim_dialog_for_new_conf;
+    Sim_dialog_for_new_conf.setModal(true);
+    Sim_dialog_for_new_conf.exec();
+
+}
