@@ -2,7 +2,7 @@
 #define TILE_H
 
 
-#include "tile_impl.h"
+#include "board_impl.h"
 
 /*
 template<class T, class int_dim, class tile_conf>

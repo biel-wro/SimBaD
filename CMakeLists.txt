@@ -46,6 +46,6 @@ find_package( Boost 1.40 COMPONENTS exception program_options REQUIRED )
 include_directories( ${Boost_INCLUDE_DIR} )
 
 
-
+enable_testing()
 subdirs( core cli gui)
 

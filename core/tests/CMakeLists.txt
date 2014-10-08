@@ -4,6 +4,7 @@ set( TEST_SRCS
   test_fixed.cpp
   test_lazy_set_chunk.cpp
   test_lazy_set.cpp
+  test_tile.cpp
 )
 
 
