@@ -15,6 +15,7 @@ namespace gui{
 
 
 class Distribution_of_particle{
+//it will be extended to the vector
     int Type_of_particle;
     int Type_of_T_student_distribution;
 public:

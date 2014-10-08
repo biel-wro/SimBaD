@@ -24,12 +24,19 @@ set( SRC
     src/simulation_dialog.cpp
     src/my_glwidget.cpp
     src/new_event_dialog.cpp
+    src/dialog_for_init_model.cpp
+    src/glwidjet_for_init_model.cpp
 
+    #src/Model/dynamics_of_model.cpp
+    src/Model/cell_map.cpp
+    src/Model/points_of_model.cpp
     src/Model/model_of_space.cpp
     src/Model/function_for_component_rate.cpp
     src/Model/table_of_component_rates.cpp
     src/Model/distribution_of_particle.cpp
     src/Model/event_of_model.cpp
+#    src/Model/point_of_space.cpp
+    src/Model/points_of_type.cpp	
 )
 
 
@@ -38,6 +45,8 @@ set( UI
     forms/dialog_open_model.ui
     forms/simulation_dialog.ui
     forms/new_event_dialog.ui
+    forms/dialog_for_init_model.ui
+
 )
 
 

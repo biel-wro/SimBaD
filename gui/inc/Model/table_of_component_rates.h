@@ -1,7 +1,7 @@
 #ifndef TABLE_OF_COMPONENT_RATES_H
 #define TABLE_OF_COMPONENT_RATES_H
 #include"function_for_component_rate.h"
-#include <QtCore>
+
 namespace Ui {
     class Table_of_component_rates;
 }
@@ -28,9 +28,7 @@ public:
     {
 
        Number_of_types = that.Number_of_types;
-//+++
        Table = that.Table;
-//+++
        return *this;
     }
 
