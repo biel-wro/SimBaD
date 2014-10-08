@@ -2,6 +2,7 @@
 #include "ui_dialog_open_model.h"
 #include <QFileDialog>
 #include "new_event_dialog.h"
+#include "iostream"
 
 
 
@@ -94,8 +95,10 @@ void simbad::gui::Dialog_open_model::on_pushButton_3_clicked()
         Event.set_number_of_types_for_event_of_model(this->Big_model->get_number_of_types());
 
 
-        QVector<Event_of_model>::const_pointer p1 = std::remove (this->Big_model->List_of_events_of_model.begin(),
-                             this->Big_model->List_of_events_of_model.end(), Event);
+        //QVector<Event_of_model>::const_pointer p1 = std::remove (this->Big_model->List_of_events_of_model.begin(),
+        //                     this->Big_model->List_of_events_of_model.end(), Event);
+        std::remove (this->Big_model->List_of_events_of_model.begin(),
+                                     this->Big_model->List_of_events_of_model.end(), Event);
 
         this->Big_model->List_of_events_of_model.pop_back();
 
@@ -126,6 +129,7 @@ void simbad::gui::Dialog_open_model::on_pushButton_3_clicked()
 void simbad::gui::Dialog_open_model::on_pushButton_2_clicked()
 {
     if (this->ui->spinBox_3->value()!=0) {
+
         New_event_dialog my_New_event_dialog;
 
     //save refferens to  Big_model "main model"

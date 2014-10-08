@@ -18,11 +18,11 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+ //   random_device RandomSeed;
     Model_of_space *Big_model;
 
 private slots:
-    void on_pushButton_clicked();
+
 
     void on_actionDownload_Evolutiion_triggered();
 

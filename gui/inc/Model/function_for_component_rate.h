@@ -47,6 +47,7 @@ enum Approach_of_influence{
 
 class function_for_component_rate
 {
+    float Constant_rate_plus;
     Functions Function_for_rate;
     float Multiplication_by_constant;
     Restrictions Restriction_of_the_range;
@@ -60,6 +61,7 @@ public:
     function_for_component_rate (const function_for_component_rate& that);
     function_for_component_rate & operator = (const function_for_component_rate& that)
         {
+            Constant_rate_plus = that.Constant_rate_plus;
             Function_for_rate = that.Function_for_rate;
             Multiplication_by_constant = that.Multiplication_by_constant;
             Restriction_of_the_range = that.Restriction_of_the_range;
@@ -68,12 +70,13 @@ public:
 
             return *this;
         }
-
+ ~function_for_component_rate();
 // Overloading operators
 
     bool operator == (const function_for_component_rate& that)
     {
-        if (       (this->Function_for_rate  == that.Function_for_rate ) and
+        if (       (this->Constant_rate_plus == that.Constant_rate_plus ) and
+                   (this->Function_for_rate  == that.Function_for_rate ) and
                    (this->Multiplication_by_constant == that.Multiplication_by_constant)  and
                    (this->Restriction_of_the_range == that.Restriction_of_the_range)  and
                    (this->Range_of_the_function == that.Range_of_the_function)  and
@@ -83,15 +86,19 @@ public:
                 return false;
     }
 
+
     void set_Functions_from_string(QString A);
     void set_Restrictions_from_string(QString A);
     void set_Approach_of_influence_from_string(QString A);
+    void set_Constant_rate_plus(float value);
     void set_Multiplication_by_constant(float value);
     void set_Range_of_the_function(float value);
+
 
     QString get_string_of_Functions();
     QString get_string_of_Restrictions();
     QString get_string_of_Approach_of_influence();
+    float get_Constant_rate_plus();
     float get_Multiplication_of_constant();
     float get_Range_of_function();
 
@@ -99,6 +106,9 @@ public:
     Restrictions get_Restrictions();
     Approach_of_influence get_Approach_of_influence();
 
+//Max of function
+    float get_max_of_Function();
+    float get_value_of_Function (float dist);
 
 };
 

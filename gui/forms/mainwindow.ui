@@ -29,18 +29,7 @@
    <iconset>
     <normaloff>Resources/paint.bmp</normaloff>Resources/paint.bmp</iconset>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="My_GLWidget" name="widget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>180</y>
-      <width>141</width>
-      <height>171</height>
-     </rect>
-    </property>
-   </widget>
-  </widget>
+  <widget class="QWidget" name="centralwidget"/>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -165,14 +154,6 @@
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>My_GLWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">my_glwidget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
