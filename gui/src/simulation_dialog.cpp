@@ -58,7 +58,7 @@ void simbad::gui::Simulation_Dialog::on_pushButton_clicked()
 {
     this->ui->pushButton_2->setEnabled(true);
     this->ui->pushButton->setEnabled(false);
-    Timer_clock->start(1);
+    Timer_clock->start(5);
 
     //step_for_number_of_event
     //string str = to_string(this->Big_model->get_global_clock());

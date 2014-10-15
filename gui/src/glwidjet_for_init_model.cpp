@@ -134,15 +134,15 @@ void GLWidjet_for_init_model::mousePressEvent( QMouseEvent * event )
     int YCoord_Widjet =  CursorPoint.y()-Y_Parent_Widjet_pos -30;
 
     // obtain a seed from the system clock:
-    unsigned seedXcoord = std::chrono::system_clock::now().time_since_epoch().count();
-    unsigned seedYcoord = std::chrono::system_clock::now().time_since_epoch().count()+3;
+    unsigned seed_coord = std::chrono::system_clock::now().time_since_epoch().count();
+    //unsigned seedYcoord = std::chrono::system_clock::now().time_since_epoch().count()+3;
     unsigned seedPoissonDistribution = std::chrono::system_clock::now().time_since_epoch().count()+5;
 
 
 
     std::poisson_distribution<int> PoissonDistribution((int)(IntensityValue*4.0/3.1415926535897932384626433832795));
-    std::uniform_real_distribution <float> uniform_int_distributionX(0,BrushRadius);
-    std::uniform_real_distribution <float> uniform_int_distributionY(0,BrushRadius);
+    //std::uniform_real_distribution <float> uniform_real_distributionX(0,BrushRadius);
+    std::uniform_real_distribution <float> uniform_real_distribution_coord(0,BrushRadius);
 
 
 
@@ -157,8 +157,8 @@ void GLWidjet_for_init_model::mousePressEvent( QMouseEvent * event )
 
 
 
-    mt19937 mtX(seedXcoord);
-    mt19937 mtY(seedYcoord);
+    mt19937 mt(seed_coord);
+
 
 
 
@@ -167,8 +167,8 @@ void GLWidjet_for_init_model::mousePressEvent( QMouseEvent * event )
 
     for(int i = 0;i<Nuber_of_points_in_square; i++){
 
-        int X_probable_point = XCoord_Widjet + uniform_int_distributionX(mtX) - BrushRadius/2;
-        int Y_probable_point = YCoord_Widjet + uniform_int_distributionY(mtY) - BrushRadius/2;
+        float X_probable_point = XCoord_Widjet + uniform_real_distribution_coord(mt) - BrushRadius/2;
+        float Y_probable_point = YCoord_Widjet + uniform_real_distribution_coord(mt) - BrushRadius/2;
         if ((X_probable_point<=512) and (X_probable_point>=0) and
             (Y_probable_point<=512) and (Y_probable_point>=0) and
               (((X_probable_point-XCoord_Widjet)*(X_probable_point-XCoord_Widjet)+
@@ -181,8 +181,8 @@ void GLWidjet_for_init_model::mousePressEvent( QMouseEvent * event )
 //            CurrentPoint.setXcoordinate((float)(X_probable_point)*1.0/512.0 - 0.5);
 //            CurrentPoint.setYcoordinate((float)(Y_probable_point)*1.0/512.0 - 0.5);
 //+++
-            CurrentPoint.Xcoordinate=(float)(X_probable_point)*1.0/512.0 - 0.5;
-            CurrentPoint.Ycoordinate=-(float)(Y_probable_point)*1.0/512.0 + 0.5;
+            CurrentPoint.Xcoordinate=X_probable_point*1.0/512.0 - 0.5;
+            CurrentPoint.Ycoordinate=-Y_probable_point*1.0/512.0 + 0.5;
             Vector_of_points.push_back(CurrentPoint);
             j=j+1;
         };
