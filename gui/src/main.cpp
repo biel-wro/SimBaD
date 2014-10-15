@@ -1,4 +1,4 @@
-#include "core.h"
+//#include "core.h"
 //#include <boost/program_options.hpp>
 //#include <QtCore>
 //#include <QtOpenGL>

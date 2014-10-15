@@ -57,6 +57,8 @@ public:
     void Event_execution(int Number_of_event, int Number_function_for_component_rate);
 
     void birth_of_particle(int EventNumber, int Numberfunctionforcomponentrate);
+    void birth_of_particle_from_environment(int EventNumber);
+
     void jump_of_particle(int EventNumber, int Numberfunctionforcomponentrate);
     void mutation_of_particle(int EventNumber, int Numberfunctionforcomponentrate);
     void death_of_particle(int EventNumber, int Numberfunctionforcomponentrate);

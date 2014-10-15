@@ -34,25 +34,19 @@ void New_event_dialog::initialisation_of_New_event_dialog()
     number_of_types = this->Big_model->get_number_of_types();
 
     QString String_for_birth_death_jump_of_1_particle;
-    Event_of_model Current_event_1;
+//    Event_of_model Current_event_1;
     for (int i=1;i <= number_of_types ; i++){
+//Environment
+//-- birth
+        String_for_birth_death_jump_of_1_particle = "birth of one particle with type # "+ QString::number(i)
+                + " from an environment";
+        add_string_to_com_box(String_for_birth_death_jump_of_1_particle);
+
 //birth-------------------------------------------------------------------------------------------------------
         for(int j=1;j<=number_of_types; j++){
             String_for_birth_death_jump_of_1_particle = "birth of one particle with type # " +
                     QString::number(i) + " from particle with type # " + QString::number(j);
-
-
-            Current_event_1.set_name_of_event(String_for_birth_death_jump_of_1_particle);
-            //Current_event_1.set_code_of_event(String_for_birth_death_jump_of_1_particle);
-            Current_event_1.set_type_of_event(String_for_birth_death_jump_of_1_particle);
-
-            QVector<Event_of_model>::const_pointer p1 = std::find (this->Big_model->List_of_events_of_model.begin(),
-                                                               this->Big_model->List_of_events_of_model.end(), Current_event_1);;
-
-            if (p1 == end(this->Big_model->List_of_events_of_model)) {
-                ui->comboBox->addItem(String_for_birth_death_jump_of_1_particle);
-            } else {
-            };
+            add_string_to_com_box(String_for_birth_death_jump_of_1_particle);
         };
 //-------------------------------------------------------------------------------------------------------
 
@@ -60,42 +54,19 @@ void New_event_dialog::initialisation_of_New_event_dialog()
 
         String_for_birth_death_jump_of_1_particle = "death of one particle with type # " + QString::number(i);
 
+        add_string_to_com_box(String_for_birth_death_jump_of_1_particle);
 
-
-        Current_event_1.set_name_of_event(String_for_birth_death_jump_of_1_particle );
-        //Current_event_1.set_code_of_event(String_for_birth_death_jump_of_1_particle );
-        Current_event_1.set_type_of_event(String_for_birth_death_jump_of_1_particle );
-
-        QVector<Event_of_model>::const_pointer p2 = std::find (this->Big_model->List_of_events_of_model.begin(),
-                                                               this->Big_model->List_of_events_of_model.end(), Current_event_1);;
-
-        if (p2 == end(this->Big_model->List_of_events_of_model)) {
-            ui->comboBox->addItem(String_for_birth_death_jump_of_1_particle);
-        } else {
-
-        };
 //-------------------------------------------------------------------------------------------------------
 
 //jump-------------------------------------------------------------------------------------------------------
 
         String_for_birth_death_jump_of_1_particle = "jump of one particle with type # " + QString::number(i);
-
-
-        Current_event_1.set_name_of_event(String_for_birth_death_jump_of_1_particle );
-        //Current_event_1.set_code_of_event(String_for_birth_death_jump_of_1_particle );
-        Current_event_1.set_type_of_event(String_for_birth_death_jump_of_1_particle );
-        QVector<Event_of_model>::const_pointer p3= std::find (this->Big_model->List_of_events_of_model.begin(),
-                                                               this->Big_model->List_of_events_of_model.end(), Current_event_1);;
-        if (p3 == end(this->Big_model->List_of_events_of_model)) {
-            ui->comboBox->addItem(String_for_birth_death_jump_of_1_particle);
-        } else {
-
-        };
+        add_string_to_com_box(String_for_birth_death_jump_of_1_particle);
 
 //-------------------------------------------------------------------------------------------------------
 
-
     };
+//mutation----------------------------------------------------------------------------------
     QString String_for_particle_mutations;
     if (number_of_types>1){
         for (int i=1;i<= number_of_types; i++)
@@ -103,31 +74,31 @@ void New_event_dialog::initialisation_of_New_event_dialog()
             if (i!=j)
             {
 
-
                 String_for_particle_mutations = "mutation of one particle with type # " + QString::number(i)+" to particle with type # " + QString::number(j);
 
-
-
-                Current_event_1.set_name_of_event(String_for_particle_mutations);
-                //Current_event_1.set_code_of_event(String_for_particle_mutations);
-                Current_event_1.set_type_of_event(String_for_particle_mutations);
-
-                QVector<Event_of_model>::const_pointer p4 = std::find (this->Big_model->List_of_events_of_model.begin(),
-                                                                       this->Big_model->List_of_events_of_model.end(), Current_event_1);;
-
-                if (p4 == end(this->Big_model->List_of_events_of_model)) {
-                    ui->comboBox->addItem(String_for_particle_mutations);
-                } else {
-
-                };
-
+                add_string_to_com_box(String_for_particle_mutations);
 
             };
         };
 
     };
+//-------------------------------------------------------------------
+}
 
-    //cout << "void New_event_dialog::initialisation_of_New_event_dialog()" << endl;
+void simbad::gui::New_event_dialog::add_string_to_com_box(QString String_for_com_box)
+{
+    Event_of_model Current_event;
+    Current_event.set_name_of_event(String_for_com_box);
+    Current_event.set_type_of_event(String_for_com_box);
+
+    QVector<Event_of_model>::const_pointer Const_Pointer = std::find (this->Big_model->List_of_events_of_model.begin(),
+                                                       this->Big_model->List_of_events_of_model.end(), Current_event);
+
+    if (Const_Pointer == end(this->Big_model->List_of_events_of_model)) {
+        ui->comboBox->addItem(String_for_com_box);
+    } else {
+    };
+
 }
 
 
@@ -169,6 +140,15 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
                 ui->comboBox->currentText().contains("mutation of one particle with type #") or
                     ui->comboBox->currentText().contains("jump of one particle with type #"))
    {
+      bool influence_of_environment = false;
+
+      if (ui->comboBox->currentText().contains("death of one particle with type #") or
+              ui->comboBox->currentText().contains("jump of one particle with type #") or
+              ui->comboBox->currentText().contains("from an environment") or
+               ui->comboBox->currentText().contains("mutation of one particle with type #")
+              )
+          influence_of_environment = true;
+
 
       ui->tableWidget->setEnabled(true);
 
@@ -182,10 +162,10 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
       header << "type"  << "function" << "multiplication \n by constant"  <<"restriction of \n the range" << "range of \n the function" << "approach \n of influence"<<"Const. rate";
       ui->tableWidget->setHorizontalHeaderLabels(header);
 
+      QString my_String_for_environment;
+      my_String_for_environment="Environment";
 
-      QString my_String_for_environment="----";
-
-      //if(this->New_event_dialog_regime == false)
+          //if(this->New_event_dialog_regime == false)
 
 
 
@@ -193,11 +173,11 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
       QTableWidgetItem *newItem_for_environment = new QTableWidgetItem(my_String_for_environment);
       ui->tableWidget->setItem(0, 0, newItem_for_environment);
 
+
       ui->tableWidget->setCellWidget ( 0, 1, new QComboBox( ui->tableWidget ) );
       QComboBox *pComboB_environment(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(0,1)));
       pComboB_environment->addItem("-- 0");
-     // pComboB_environment->addItem("-- 1");
-
+      pComboB_environment->addItem("-- 1");
 // Changing ragime
       if(this->New_event_dialog_regime == false)
       {
@@ -242,6 +222,8 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
       };
 
 
+
+
       for(int i=0; i<=number_of_types; i++){
         ui->tableWidget->setCellWidget ( i, 2, new QDoubleSpinBox( ui->tableWidget ) );       
 
@@ -256,7 +238,27 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
         };
       };
 
-      for(int i=0; i<=number_of_types; i++){
+
+
+
+      ui->tableWidget->setCellWidget ( 0, 3, new QComboBox( ui->tableWidget) );
+      QComboBox *pComboB_Restrictions(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(0,3)));
+//+++
+//        pComboB->addItem("zero");
+      pComboB_Restrictions->addItem("--");
+//        pComboB->addItem("square");
+//+++
+      if(this->New_event_dialog_regime == false)
+      {
+         // pComboB->setCurrentText("square");
+            pComboB_Restrictions->setCurrentText(
+            this->Big_model->List_of_events_of_model[current_number_of_event_for_changing].
+            Table_of_component_rates_for_event_of_model.Table[0].get_string_of_Restrictions());
+      };
+
+
+
+      for(int i=1; i<=number_of_types; i++){
         ui->tableWidget->setCellWidget ( i, 3, new QComboBox( ui->tableWidget) );
         QComboBox *pComboB(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(i,3)));
 //+++
@@ -277,6 +279,7 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
 
       };
 
+
       for(int i=0; i<=number_of_types; i++){
         ui->tableWidget->setCellWidget ( i, 4, new QDoubleSpinBox( ui->tableWidget ) );
         if(this->New_event_dialog_regime == false)
@@ -291,6 +294,9 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
 
         //QDoubleSpinBox *pDoubleSpinB(qobject_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(i,2)));
       };
+
+
+
 
       ui->tableWidget->setCellWidget ( 0, 5, new QComboBox( ui->tableWidget ) );
       QComboBox *pEnvironmentComboB(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(0,5)));
@@ -317,14 +323,9 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
       };
 
 
+
       for(int i=0; i<=number_of_types; i++){
         ui->tableWidget->setCellWidget ( i, 6, new QDoubleSpinBox( ui->tableWidget ) );
-
-
-
-
-
-
         if(this->New_event_dialog_regime == false)
         {
 
@@ -335,10 +336,52 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
                                 get_Constant_rate_plus());
         };
       };
-//Exclude++++++++++++++++++++++++++++++++++
-      QDoubleSpinBox* QDSpinBox(qobject_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(0,6)));
-      QDSpinBox->setMinimum(0.0);
-      QDSpinBox->setMaximum(0.0);
+
+//Environment++++++++
+// ///////////////////////////////////////// //
+//                                           //
+      if (influence_of_environment == false){
+          pComboB_environment->setEnabled(false);
+
+          QDoubleSpinBox* QDSpinBox_Mul_by_const(qobject_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(0,2)));
+          QDSpinBox_Mul_by_const->setEnabled(false);
+
+      };
+
+      //QComboBox *pComboB_Restrictions(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(0,3)));
+      pComboB_Restrictions->setEnabled(false);
+
+      QDoubleSpinBox* QDSpinBox_Range_of_function(qobject_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(0,4)));
+      QDSpinBox_Range_of_function->setEnabled(false);
+
+      QComboBox *pComboB_Approach_of_influence(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(0,5)));
+      pComboB_Approach_of_influence->setEnabled(false);
+
+      QDoubleSpinBox* QDSpinBox_Constant_rate_plus(qobject_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(0,6)));
+      QDSpinBox_Constant_rate_plus->setEnabled(false);
+
+      if (ui->comboBox->currentText().contains("birth of one particle with type #") &&
+              ui->comboBox->currentText().contains("from an environment")){
+          pComboB_Restrictions->setEnabled(true);
+
+          pComboB_Restrictions->addItem("square");
+          pComboB_Restrictions->setCurrentText("square");
+          QDSpinBox_Range_of_function->setEnabled(true);
+
+          for(int i=1;i<=number_of_types;i++)
+              for(int j=1;j<=6;j++) ui->tableWidget->cellWidget(i,j)->setEnabled(false);
+
+
+      };
+
+
+//                                                    //
+// ////////////////////////////////////////////////// //
+
+      //Exclude++++++++++++++++++++++++++++++++++
+//      QDoubleSpinBox* QDSpinBox(qobject_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(0,6)));
+//      QDSpinBox->setMinimum(0.0);
+//      QDSpinBox->setMaximum(0.0);
 //+++++++++++++++++++++++++++++++++++++++++
 
       ui->tableWidget->horizontalHeader()->setSectionResizeMode(0,  QHeaderView::Stretch);
@@ -359,34 +402,42 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
 
 
 
-    if (ui->comboBox->currentText().contains("birth of one particle with type #") or
-            ui->comboBox->currentText().contains("jump of one particle with type")){
+    if ((ui->comboBox->currentText().contains("birth of one particle with type #") or
+            ui->comboBox->currentText().contains("jump of one particle with type")) and
+                (ui->comboBox->currentText().contains("from an environment")!=true)){
 
-        ui->tableWidget_2->setEnabled(true);
-        ui->label_3->setEnabled(true);
-        ui->label_3->setText("2-dim Student's t - distribution of a new particle (0 is for Gaussian)");
-
-
-        ui->tableWidget_2-> setColumnCount(2);
-
-        ui->tableWidget_2-> setRowCount(1);
+                ui->tableWidget_2->setEnabled(true);
+                ui->label_3->setEnabled(true);
+                ui->label_3->setText("2-dim Student's t - distribution of a new particle with scale paramiter \u03C3 (0 is for Gaussian)");
 
 
-        QStringList header;
-        header << "Type of event " << "Coefficient of t - distribution";
-        ui->tableWidget_2->setHorizontalHeaderLabels(header);
+                ui->tableWidget_2-> setColumnCount(3);
+
+                ui->tableWidget_2-> setRowCount(1);
 
 
-        QTableWidgetItem *newItem_for_environment = new QTableWidgetItem(ui->comboBox->currentText());
-        ui->tableWidget_2->setItem(0, 0, newItem_for_environment);
+                QStringList header;
+                header << "Type of event " << "Coefficient of t - distribution"<< "\u03C3 ";
+                //\n(X=\u03C3 Z; \n Z- standart t-student distribution)
+                ui->tableWidget_2->setHorizontalHeaderLabels(header);
 
-        ui->tableWidget_2->setCellWidget ( 0, 1, new QSpinBox( ui->tableWidget ) );
 
-        ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(0,  QHeaderView::Stretch);
-        ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(1,  QHeaderView::ResizeToContents);
+                QTableWidgetItem *newItem_for_environment = new QTableWidgetItem(ui->comboBox->currentText());
+                ui->tableWidget_2->setItem(0, 0, newItem_for_environment);
 
-        if(this->New_event_dialog_regime == false)
-        {
+                ui->tableWidget_2->setCellWidget ( 0, 1, new QSpinBox( ui->tableWidget ) );
+                ui->tableWidget_2->setCellWidget ( 0, 2, new QDoubleSpinBox( ui->tableWidget ) );
+
+                QDoubleSpinBox* QDoubleBox_for_scale_paramiter(qobject_cast<QDoubleSpinBox*>(ui->tableWidget_2->cellWidget(0,2)));
+                QDoubleBox_for_scale_paramiter->setValue(0.1);
+                QDoubleBox_for_scale_paramiter->setMinimum(0.01);
+
+                ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(0,  QHeaderView::Stretch);
+                ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(1,  QHeaderView::ResizeToContents);
+                ui->tableWidget_2->horizontalHeader()->setSectionResizeMode(2,  QHeaderView::ResizeToContents);
+
+                if(this->New_event_dialog_regime == false)
+                {
 
                   QSpinBox* QSpinBox_for_distribution(qobject_cast<QSpinBox*>(ui->tableWidget_2->cellWidget(0,1)));
                   QSpinBox_for_distribution->setValue(
@@ -394,17 +445,35 @@ void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
                                                       Distribution_of_particle_for_event.get_Type_of_T_student_distribution()
                                                       );
 
-        };
+                  QDoubleSpinBox* QDoubleBox_for_distribution(qobject_cast<QDoubleSpinBox*>(ui->tableWidget_2->cellWidget(0,2)));
+                  QDoubleBox_for_distribution->setValue(
+                                  this->Big_model->List_of_events_of_model[current_number_of_event_for_changing].
+                                                      Distribution_of_particle_for_event.get_scale_paramiter()
+                                                       );
+                  QDoubleBox_for_distribution->setMinimum(0.01);
+                };
 
 
-    } else {
-        ui->tableWidget_2->setEnabled(false);
-        ui->tableWidget_2->clear();
-        ui->label_3->setEnabled(false);
-        ui->label_3->setText("Distribution of new particles");
+        } else {
+
+                ui->tableWidget_2->setEnabled(false);
+                ui->tableWidget_2->clear();
+
+                ui->label_3->setEnabled(false);
+                ui->label_3->setText("Distribution of new particle");
+
+
+                ui->tableWidget_2-> setColumnCount(0);
+                ui->tableWidget_2-> setRowCount(0);
 
     };
 }
+
+void set_settings_for_birth_from_enviroment()
+{
+
+};
+
 
 void New_event_dialog::on_pushButton_clicked()
 {
@@ -414,17 +483,10 @@ void New_event_dialog::on_pushButton_clicked()
 
         Event_of_model Current_event(this->Big_model->get_number_of_types());
         Current_event.set_name_of_event(this->ui->comboBox->currentText());
-        //Current_event.set_code_of_event(this->ui->comboBox->currentText());
         Current_event.set_type_of_event(this->ui->comboBox->currentText());
         Current_event.set_number_of_types_for_event_of_model(this->Big_model->get_number_of_types());
-
         Current_event.set_code_of_event(this->ui->comboBox->currentText());
 
-//        if (ui->comboBox->currentText().contains("birth of one particle with type #") or
-//               ui->comboBox->currentText().contains("jump of one particle with type")){
-        //if
-
-        //Current_event.set_type_of_parent();
 
 
         Current_event.Table_of_component_rates_for_event_of_model.Number_of_types = this->Big_model->get_number_of_types();
@@ -436,7 +498,7 @@ void New_event_dialog::on_pushButton_clicked()
             Function_of_com_rate.set_Functions_from_string(combo_for_Functions->currentText());
 
             QDoubleSpinBox* double_spin_box_for_Multiplication_by_constant =
-                    (QDoubleSpinBox*) ui->tableWidget->cellWidget ( i, 2);
+                    (QDoubleSpinBox*) ui->tableWidget->cellWidget (i, 2);
             Function_of_com_rate.set_Multiplication_by_constant((float)double_spin_box_for_Multiplication_by_constant->value());
 
             QComboBox* combo_for_Restrictions=(QComboBox*)ui->tableWidget->cellWidget(i,3);
@@ -459,12 +521,19 @@ void New_event_dialog::on_pushButton_clicked()
 
         };
 
-        if (ui->comboBox->currentText().contains("birth of one particle with type #") or
-               ui->comboBox->currentText().contains("jump of one particle with type")){
-               QSpinBox* QSpin_for_T_distribution =
+        if ((ui->comboBox->currentText().contains("birth of one particle with type #") or
+               ui->comboBox->currentText().contains("jump of one particle with type")) and
+                (ui->comboBox->currentText().contains("from an environment")!=true)){
+                QSpinBox* QSpin_for_T_distribution =
                        (QSpinBox*) ui->tableWidget_2->cellWidget (0, 1);
                 Current_event.Distribution_of_particle_for_event.
                         set_Type_of_Tstudent_distribution( QSpin_for_T_distribution->value() );
+
+                QDoubleSpinBox* QDouble_for_scale_paramiter =
+                        (QDoubleSpinBox*) ui->tableWidget_2->cellWidget (0, 2);
+                Current_event.Distribution_of_particle_for_event.set_scale_paramiter(QDouble_for_scale_paramiter->value());
+
+
         };
 
 
@@ -493,12 +562,12 @@ void New_event_dialog::on_pushButton_clicked()
                       ui->comboBox->currentText().contains("jump of one particle with type"))
      {
 
-         QComboBox *pComboB_environment(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(0,1)));
-         this->Big_model->List_of_events_of_model[current_number_of_event_for_changing].
-         Table_of_component_rates_for_event_of_model.Table[0].
-                 set_Functions_from_string(pComboB_environment->currentText());
+//         QComboBox *pComboB_environment(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(0,1)));
+//         this->Big_model->List_of_events_of_model[current_number_of_event_for_changing].
+//         Table_of_component_rates_for_event_of_model.Table[0].
+//                 set_Functions_from_string(pComboB_environment->currentText());
 
-         for(int i=1; i<=number_of_types; i++){
+         for(int i=0; i<=number_of_types; i++){
            QComboBox *pComboB(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(i,1)));
            this->Big_model->List_of_events_of_model[current_number_of_event_for_changing].
            Table_of_component_rates_for_event_of_model.Table[i].
@@ -525,15 +594,15 @@ void New_event_dialog::on_pushButton_clicked()
             Table_of_component_rates_for_event_of_model.Table[i].
                    set_Range_of_the_function(QDSpinBox->value());
          };
-
-         for(int i=1; i<=number_of_types; i++){
+//have changed-------1->0
+         for(int i=0; i<=number_of_types; i++){
            QComboBox *pComboB(qobject_cast<QComboBox*>(ui->tableWidget->cellWidget(i,5)));
            this->Big_model->List_of_events_of_model[current_number_of_event_for_changing].
            Table_of_component_rates_for_event_of_model.Table[i].
                    set_Approach_of_influence_from_string(pComboB->currentText());
 
          };
-
+//------------------------
 
          for(int i=0; i<=number_of_types; i++){
            QDoubleSpinBox* QDSpinBox(qobject_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(i,6)));
@@ -545,13 +614,19 @@ void New_event_dialog::on_pushButton_clicked()
 
      };
 
-     if (ui->comboBox->currentText().contains("birth of one particle with type #") or
-             ui->comboBox->currentText().contains("jump of one particle with type"))
+     if ((ui->comboBox->currentText().contains("birth of one particle with type #") ||
+             ui->comboBox->currentText().contains("jump of one particle with type")) &&
+             (ui->comboBox->currentText().contains("from an environment")!=true))
      {
           QSpinBox* QSpinBox_for_distribution(qobject_cast<QSpinBox*>(ui->tableWidget_2->cellWidget(0,1)));
           this->Big_model->List_of_events_of_model[current_number_of_event_for_changing].
           Distribution_of_particle_for_event.
                   set_Type_of_Tstudent_distribution(QSpinBox_for_distribution->value());
+          QDoubleSpinBox* QDoubleSpinBox_for_distribution(qobject_cast<QDoubleSpinBox*>(ui->tableWidget_2->cellWidget(0,2)));
+          this->Big_model->List_of_events_of_model[current_number_of_event_for_changing].
+          Distribution_of_particle_for_event.
+                  set_scale_paramiter(QDoubleSpinBox_for_distribution->value());
+
      };
 
 
@@ -562,7 +637,6 @@ void New_event_dialog::on_pushButton_clicked()
     this->close();
  };
 }
-
 
 void simbad::gui::New_event_dialog::on_pushButton_2_clicked()
 {

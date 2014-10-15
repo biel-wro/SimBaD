@@ -51,11 +51,16 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    //void on_comboBox_currentIndexChanged(int index);
+
 private:
 
     Ui::New_event_dialog *ui;
 
     bool New_event_dialog_regime;
+
+protected:
+    void add_string_to_com_box(QString String_for_com_box);
 
 };
 
