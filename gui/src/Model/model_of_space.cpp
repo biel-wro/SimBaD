@@ -84,33 +84,31 @@ bool simbad::gui::Model_of_space::timer()
                             this->ModelPoints.Vector_of_types[Type_of_event_parent_point]
                             .Number_of_points_in_SpacePointArray *
                             Vector_of_Dzeta_type_event[i][j];
-                    //не забыть изменить Dzeta + b cf функцию
-                    //не забыть про соответствие индексов для типов и типов в рейте function_of_rate (+1)
 //                                                                                                            //
 // /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                        if (Vector_comulative_rate_for_type_of_event[i][j]!=0){
-                            exponential_distribution <double> exp_distribution_for_times
-                            (Vector_comulative_rate_for_type_of_event[i][j]);
-                            Vector_time_before_next_event_of_type[i][j] =
-                            exp_distribution_for_times(mtPoissonDistribution);
-
-                        } else {
-                            Vector_time_before_next_event_of_type[i][j]= 10001;
-                        };
-
-                        if (min_for_time>Vector_time_before_next_event_of_type[i][j])
-                        {
-                            min_for_time=Vector_time_before_next_event_of_type[i][j];
-                            i_min=i;
-                            j_min=j;
-                        };
-
-
-
                     } else {
+                        Vector_comulative_rate_for_type_of_event[i][j] =
+                            Vector_of_Dzeta_type_event[i][j];
 
                     };
+
+                    if (Vector_comulative_rate_for_type_of_event[i][j]!=0){
+                        exponential_distribution <double> exp_distribution_for_times
+                        (Vector_comulative_rate_for_type_of_event[i][j]);
+                        Vector_time_before_next_event_of_type[i][j] =
+                        exp_distribution_for_times(mtPoissonDistribution);
+
+                    } else {
+                        Vector_time_before_next_event_of_type[i][j]= 10001;
+                    };
+
+                    if (min_for_time>Vector_time_before_next_event_of_type[i][j])
+                    {
+                        min_for_time=Vector_time_before_next_event_of_type[i][j];
+                        i_min=i;
+                        j_min=j;
+                    };
+
                 };
             };
 
@@ -162,7 +160,7 @@ void simbad::gui::Model_of_space::initiate_before_simulation(){
     int max_range_of_functions = 0;
     for(int i = 0; i < this->List_of_events_of_model.size(); i++)
     {
-        for(int j = 0; j < this->List_of_events_of_model[i].
+        for(int j = 1; j < this->List_of_events_of_model[i].
             Table_of_component_rates_for_event_of_model.Table.size()+1; j++)
         {
 
@@ -178,7 +176,7 @@ void simbad::gui::Model_of_space::initiate_before_simulation(){
     if(max_range_of_functions!=0){
         for(int i = 0; i < this->List_of_events_of_model.size(); i++)
         {
-            for(int j = 0; j<this->List_of_events_of_model[i].
+            for(int j = 1; j<this->List_of_events_of_model[i].
                 Table_of_component_rates_for_event_of_model.Table.size(); j++)
             {
                 float old_range_of_function;
@@ -215,9 +213,58 @@ void simbad::gui::Model_of_space::initiate_before_simulation(){
     };
 
     //--------------------------------------------------------------------------
+
+    initiale_Dzeta();
+
+//cout<<"4"<<endl;
+
+
+    //for (int i=0; i<t+his->List_of_events_of_model.size(); i++){
+
+     //   for (int j=0;j<this->get_number_of_types()+1;j++)
+     //   {
+
+    //    };
+    //};
+//Seed
+
+
+}
+
+void simbad::gui::Model_of_space::initiale_Dzeta()
+{
+//    for (int i = 0; i < this->List_of_events_of_model.size(); i++){
+//        Vector_max_of_rate_functions[i][0] = this->List_of_events_of_model[i].
+//                Table_of_component_rates_for_event_of_model.Table[j].get_max_of_Function();
+//        Vector_of_Dzeta_type_event[i][0] = Vector_max_of_rate_functions[i][0];
+
+//        for (int j = 1; j < this->get_number_of_types() + 1; j++)
+//        {
+// dzeta
+//            Vector_of_Dzeta_type_event[i][j] =
+//                    4.0*(this->CellMap.Types_Array_numbers_of_sizes_of_cells[
+//                    j - 1
+                         //this->List_of_events_of_model[i].Code_of_event[0][0]
+//                    ].size()-1)*
+//                    Vector_max_of_rate_functions[i][j];
+//        };
+//    };
+
+
+
     for (int i=0; i<this->List_of_events_of_model.size(); i++){
-        Vector_max_of_rate_functions[i][0]=0;
-        Vector_of_Dzeta_type_event[i][0]=0;
+
+        Vector_max_of_rate_functions[i][0] = this->List_of_events_of_model[i].
+                Table_of_component_rates_for_event_of_model.Table[0].get_max_of_Function();
+        Vector_of_Dzeta_type_event[i][0]= Vector_max_of_rate_functions[i][0];
+//        if (this->List_of_events_of_model[i].Code_of_event[0][0]==-1 &&
+//                this->List_of_events_of_model[i].Code_of_event[0][0]!=-1){
+//            Vector_of_Dzeta_type_event[i][0]= Vector_max_of_rate_functions[i][0];
+//        } else {
+//            Vector_of_Dzeta_type_event[i][0] = Vector_max_of_rate_functions[i][0] *
+//               this->ModelPoints.Vector_of_types[i].Number_of_points_in_SpacePointArray;
+//        };
+
         for (int j=1;j<this->get_number_of_types() + 1; j++)
         {
 //max of functions
@@ -240,46 +287,16 @@ void simbad::gui::Model_of_space::initiate_before_simulation(){
         };
     };
 
-//cout<<"4"<<endl;
 
-
-    //for (int i=0; i<t+his->List_of_events_of_model.size(); i++){
-
-     //   for (int j=0;j<this->get_number_of_types()+1;j++)
-     //   {
-
-    //    };
-    //};
-//Seed
 
 
 }
 
-
-void simbad::gui::Model_of_space::initiale_Dzeta()
-{
-    for (int i = 0; i < this->List_of_events_of_model.size(); i++){
-        Vector_max_of_rate_functions[i][0]=0;
-        Vector_of_Dzeta_type_event[i][0]=0;
-
-        for (int j = 1; j < this->get_number_of_types() + 1; j++)
-        {
-// dzeta
-            Vector_of_Dzeta_type_event[i][j] =
-                    4.0*(this->CellMap.Types_Array_numbers_of_sizes_of_cells[
-                    j - 1
-                         //this->List_of_events_of_model[i].Code_of_event[0][0]
-                    ].size()-1)*
-                    Vector_max_of_rate_functions[i][j];
-        };
-    };
-
-}
 
 void simbad::gui::Model_of_space::Event_execution(int Number_of_event, int Number_function_for_component_rate)
 {
-     cout<<"yes"<<endl;
-     cout<<"Number_of_event"<<Number_of_event<<endl;
+    cout<<"yes"<<endl;
+    cout<<"Number_of_event"<<Number_of_event<<endl;
     cout<<"this->List_of_events_of_model[Number_of_event].Code_of_event.size()="<<
            this->List_of_events_of_model[Number_of_event].Code_of_event.size()<<endl;
     int Number_of_changed_points_in_conf =
@@ -309,10 +326,20 @@ void simbad::gui::Model_of_space::Event_execution(int Number_of_event, int Numbe
 
     if  (Number_of_changed_points_in_conf==1)
     {
+        //birth from environment
+        if  (this->List_of_events_of_model[Number_of_event].Code_of_event[0][0] == -1)
+        {
+            cout<<"birth from environment"<<endl;
+            birth_of_particle_from_environment(Number_of_event);
+
+        };
+
         //mutation of particle
         if (this->List_of_events_of_model[Number_of_event].Code_of_event[0][0]!=
                 this->List_of_events_of_model[Number_of_event].Code_of_event[0][1] &&
-                this->List_of_events_of_model[Number_of_event].Code_of_event[0][1]!=-1)
+                    this->List_of_events_of_model[Number_of_event].Code_of_event[0][1]!=-1 &&
+                        this->List_of_events_of_model[Number_of_event].Code_of_event[0][0]!=-1
+                )
         {
             cout<<"mutation of particle"<<endl;
             mutation_of_particle(Number_of_event, Number_function_for_component_rate);
@@ -330,6 +357,7 @@ void simbad::gui::Model_of_space::Event_execution(int Number_of_event, int Numbe
     } ;
 
 }
+
 
 void simbad::gui::Model_of_space::birth_of_particle(int EventNumber, int Numberfunctionforcomponentrate){
     unsigned seed;
@@ -353,11 +381,11 @@ void simbad::gui::Model_of_space::birth_of_particle(int EventNumber, int Numberf
     //cout<< "Number_of_points="<<Number_of_points<<endl;
     cout<<"Number_of_child_type_points"<<Number_of_child_type_points<<endl;
 
-    mt19937 mtUniIntDistribution(seed);
+    mt19937 mtUniDistribution(seed);
 
     uniform_int_distribution<int> distribution_1(0,Number_of_parent_type_points-1);
 
-    int number_of_parent = distribution_1(mtUniIntDistribution);
+    int number_of_parent = distribution_1(mtUniDistribution);
 
     cout<<"number_of_parent="<<number_of_parent<<endl;
 
@@ -373,57 +401,67 @@ void simbad::gui::Model_of_space::birth_of_particle(int EventNumber, int Numberf
     //bernoulli_distribution distribution_2(rate*0.999/Vector_comulative_rate_for_type_of_event[EventNumber][Numberfunctionforcomponentrate]);
     bernoulli_distribution distribution_2(rate*0.999/Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]);
 
-    bool bernulli_D = distribution_2(mtUniIntDistribution);
+    bool bernulli_D = distribution_2(mtUniDistribution);
     cout<< "bernulli_D="<<bernulli_D<<endl;
     if (bernulli_D){
     //        cout<< "Global_clock="<<Global_clock<<endl;
 
 
-        uniform_real_distribution<float> uniform_distribution_angle_for_t_student_distribution(0.0,2.0*PI);
-        student_t_distribution<float> Student_T_Distribution(0);
-        normal_distribution<float> Normal_distribution(0.0,0.1);
+        float Xcoordinate_of_new_particle;
+        float Ycoordinate_of_new_particle;
+
+        if (this->List_of_events_of_model[EventNumber].Distribution_of_particle_for_event.
+            get_Type_of_T_student_distribution() == 0){
+        //cout<<"qazwsx----+++++"<<endl;
+            normal_distribution<float> Normal_distribution(0.0,this->List_of_events_of_model[EventNumber].
+                                                           Distribution_of_particle_for_event.get_scale_paramiter());
+        //cout<<"scale_paramiter="<<this->List_of_events_of_model[EventNumber].
+        //    Distribution_of_particle_for_event.get_scale_paramiter()<<endl;
+
+        //cout<<"befor Xcoordinate_of_new_particle="<<this->ModelPoints.Vector_of_types[number_of_type_of_parent].
+        //    SpacePointArray[number_of_parent].Xcoordinate<<endl;
+            Xcoordinate_of_new_particle = this->ModelPoints.Vector_of_types[number_of_type_of_parent].
+                  SpacePointArray[number_of_parent].Xcoordinate + Normal_distribution(mtUniDistribution);
+        //cout<<"after Xcoordinate_of_new_particle="<<Xcoordinate_of_new_particle<<endl;
 
 
-        float angle_for_student_t_distribution = uniform_distribution_angle_for_t_student_distribution(mtUniIntDistribution);
+
+            Ycoordinate_of_new_particle = this->ModelPoints.Vector_of_types[number_of_type_of_parent].
+                    SpacePointArray[number_of_parent].Ycoordinate + Normal_distribution(mtUniDistribution);
+
+        } else {
+            uniform_real_distribution<float> uniform_distribution_angle_for_t_student_distribution(0.0,2.0*PI);
+            student_t_distribution<float> Student_T_Distribution
+                    (this->List_of_events_of_model[EventNumber].Distribution_of_particle_for_event.get_Type_of_T_student_distribution());
+
+            float Student_t_Distibution=this->List_of_events_of_model[EventNumber].
+                    Distribution_of_particle_for_event.get_scale_paramiter()
+                    *fabs(Student_T_Distribution(mtUniDistribution));
+            float angle=uniform_distribution_angle_for_t_student_distribution(mtUniDistribution);
+
+            Xcoordinate_of_new_particle = this->ModelPoints.Vector_of_types[number_of_type_of_parent].
+                  SpacePointArray[number_of_parent].Xcoordinate + Student_t_Distibution*cos(angle);
 
 
-        mt19937 mtUniRealDistribution(seed);
-        float Xcoordinate_of_new_particle = this->ModelPoints.Vector_of_types[number_of_type_of_parent].
-              SpacePointArray[number_of_parent].Xcoordinate + Normal_distribution(mtUniRealDistribution)*cos(angle_for_student_t_distribution);
+            Ycoordinate_of_new_particle = this->ModelPoints.Vector_of_types[number_of_type_of_parent].
+                    SpacePointArray[number_of_parent].Ycoordinate + Student_t_Distibution*
+                    sin(angle);
 
+        };
 
-        //float Xcoordinate_of_new_particle = this->ModelPoints.Vector_of_types[number_of_type_of_parent].
-        //SpacePointArray[number_of_parent].Xcoordinate + 0.05 * Student_T_Distribution(mtUniRealDistribution)*cos(angle_for_student_t_distribution);
-        //cout<< "SpacePointArray[number_of_parent].Xcoordinate="<<
-        //       this->ModelPoints.Vector_of_types[number_of_type_of_parent].
-        //      SpacePointArray[number_of_parent].Xcoordinate<<endl;
-        //cout<< "Xcoordinate_of_new_particle="<<Xcoordinate_of_new_particle<<endl;
-
-
-        float Ycoordinate_of_new_particle = this->ModelPoints.Vector_of_types[number_of_type_of_parent].
-                SpacePointArray[number_of_parent].Ycoordinate + Normal_distribution(mtUniRealDistribution)*
-                sin(angle_for_student_t_distribution);
-
-    //        float Ycoordinate_of_new_particle = this->ModelPoints.Vector_of_types[number_of_type_of_parent].
-    //                SpacePointArray[number_of_parent].Ycoordinate + 0.05*Student_T_Distribution(mtUniRealDistribution)*
-    //                sin(angle_for_student_t_distribution);
-    //    cout<< "SpacePointArray[number_of_parent].Ycoordinate="<<this->ModelPoints.Vector_of_types[number_of_type_of_parent].
-    //           SpacePointArray[number_of_parent].Ycoordinate<<endl;
-    //    cout<< "Ycoordinate_of_new_particle="<<Ycoordinate_of_new_particle<<endl;
-    //    cout<< "Ycoordinate_of_new_particle="<<Ycoordinate_of_new_particle<<endl;
-        one_birth(number_of_type_of_child,
+       one_birth(number_of_type_of_child,
                   Xcoordinate_of_new_particle, Ycoordinate_of_new_particle);
+
         Global_clock = Global_clock + Min_time;
-            cout << "number_of_type_of_child=" << number_of_type_of_child<<endl;
 
         Number_of_child_type_points=Number_of_child_type_points + 1;
+        cout <<"number_of_type_of_child="<<number_of_type_of_child <<endl;
         this->ModelPoints.Vector_of_types[number_of_type_of_child].
                         SpacePointArray[Number_of_child_type_points - 1].BirthTime = Global_clock;
-        cout <<"number_of_type_of_child="<<number_of_type_of_child <<endl;
         cout <<"Number_of_child_type_points="<<Number_of_child_type_points <<endl;
         cout <<"ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray="<<
         ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray<<endl;
-        cout <<"Global_clock"<<Global_clock<<endl;
+        cout <<"Global_clock="<<Global_clock<<endl;
 
         //cout <<"timer::Number_of_child_type_points"<<Number_of_child_type_points<<endl;
         Number_of_occurings = Number_of_occurings + 1;
@@ -431,9 +469,49 @@ void simbad::gui::Model_of_space::birth_of_particle(int EventNumber, int Numberf
 }
 
 
+void simbad::gui::Model_of_space::birth_of_particle_from_environment(int EventNumber){
+    unsigned seed;
+    seed=std::chrono::system_clock::now().time_since_epoch().count();
+
+
+    int number_of_type_of_child = this->List_of_events_of_model[EventNumber].Code_of_event[0][1];
+
+    int Number_of_child_type_points =
+            this->ModelPoints.Vector_of_types[number_of_type_of_child].
+            Number_of_points_in_SpacePointArray;
+    cout<<"Number_of_child_type_points="<<Number_of_child_type_points<<endl;
+
+    mt19937 mtUniDistribution(seed);
+    float range_of_function=
+            this->List_of_events_of_model[EventNumber].
+            Table_of_component_rates_for_event_of_model.Table[0].get_Range_of_function();
+    uniform_real_distribution<double> uni_distribution(-range_of_function,range_of_function);
+
+    float Xcoordinate_of_new_particle = uni_distribution(mtUniDistribution);
+    float Ycoordinate_of_new_particle = uni_distribution(mtUniDistribution);
+
+
+    one_birth(number_of_type_of_child,
+                  Xcoordinate_of_new_particle, Ycoordinate_of_new_particle);
+
+    Global_clock = Global_clock + Min_time;
+
+    Number_of_child_type_points=Number_of_child_type_points + 1;
+    cout <<"number_of_type_of_child="<<number_of_type_of_child <<endl;
+
+    this->ModelPoints.Vector_of_types[number_of_type_of_child].
+                        SpacePointArray[Number_of_child_type_points - 1].BirthTime = Global_clock;
+    cout <<"Number_of_child_type_points="<<Number_of_child_type_points <<endl;
+    cout <<"ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray="<<
+    ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray<<endl;
+    cout <<"Global_clock="<<Global_clock<<endl;
+
+    Number_of_occurings = Number_of_occurings + 1;
+}
+
+
 void simbad::gui::Model_of_space::one_birth(int number_of_type_of_child,
-float Xcoordinate_of_new_particle, float Ycoordinate_of_new_particle)
-{
+float Xcoordinate_of_new_particle, float Ycoordinate_of_new_particle){
 
     //--------------
     cout<<"one_birth::number_of_type_of_child="<<number_of_type_of_child<<endl;
@@ -552,6 +630,8 @@ cout<<"6"<<endl;
 //			structure_for_dynamic_changes_of_Dzetas. Number_of_birth_occurings_without_birth_impracticable_event = 0;
 
 }
+
+
 void simbad::gui::Model_of_space::jump_of_particle(int EventNumber, int Numberfunctionforcomponentrate){
     unsigned seed;
     seed=std::chrono::system_clock::now().time_since_epoch().count();
@@ -567,65 +647,152 @@ void simbad::gui::Model_of_space::jump_of_particle(int EventNumber, int Numberfu
     //cout<< "Number_of_points="<<Number_of_points<<endl;
 
 
-    mt19937 mtUniIntDistribution(seed);
+    mt19937 mtUniDistribution(seed);
     uniform_int_distribution<int> distribution_1(0,Number_of_points-1);
 
-    int number_of_jump_man = distribution_1(mtUniIntDistribution);
+    int number_of_jump_man = distribution_1(mtUniDistribution);
 
-    // cout<< "number_of_dead_man="<<number_of_dead_man<<endl;
 
-    float rate = rate_linear_on_configuration(EventNumber, Numberfunctionforcomponentrate, number_of_type_of_jump_particle, number_of_jump_man);
-    // cout<< "rate="<<rate<<endl;
-    // cout<<"Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]"<<
-    //       Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate];
-    //bernoulli_distribution distribution_2(rate*0.999/Vector_comulative_rate_for_type_of_event[EventNumber][Numberfunctionforcomponentrate]);
-    bernoulli_distribution distribution_2(rate*0.999/Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]);
+    if (Numberfunctionforcomponentrate!=0){
+        float rate = rate_linear_on_configuration(EventNumber, Numberfunctionforcomponentrate, number_of_type_of_jump_particle, number_of_jump_man);
+        bernoulli_distribution distribution_2(rate*0.999/Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]);
 
-    bool bernulli_D = distribution_2(mtUniIntDistribution);
 
-    if (bernulli_D){
-        float Xcoordinate_of_jump_particle = this->ModelPoints.Vector_of_types[number_of_type_of_jump_particle].
+
+
+        bool bernulli_D = distribution_2(mtUniDistribution);
+
+
+        if (bernulli_D){
+
+            float Xcoordinate_of_jump_particle;
+            float Ycoordinate_of_jump_particle;
+
+            Xcoordinate_of_jump_particle = this->ModelPoints.Vector_of_types[number_of_type_of_jump_particle].
+                    SpacePointArray[number_of_jump_man].Xcoordinate;
+
+            Ycoordinate_of_jump_particle = this->ModelPoints.Vector_of_types[number_of_type_of_jump_particle].
+                    SpacePointArray[number_of_jump_man].Ycoordinate;
+
+            float New_Xcoordinate_of_jump_particle;
+            float New_Ycoordinate_of_jump_particle;
+
+            if (this->List_of_events_of_model[EventNumber].Distribution_of_particle_for_event.
+                    get_Type_of_T_student_distribution() == 0){
+
+                normal_distribution<float> Normal_distribution(0.0,this->List_of_events_of_model[EventNumber].
+                                                               Distribution_of_particle_for_event.get_scale_paramiter());
+
+
+                New_Xcoordinate_of_jump_particle = Xcoordinate_of_jump_particle
+                        + Normal_distribution(mtUniDistribution);
+
+
+
+                New_Ycoordinate_of_jump_particle = Ycoordinate_of_jump_particle
+                        + Normal_distribution(mtUniDistribution);
+
+
+            } else {
+                student_t_distribution<float> Student_T_Distribution
+                        (this->List_of_events_of_model[EventNumber].Distribution_of_particle_for_event.get_Type_of_T_student_distribution());
+
+                float Student_t_Distibution=this->List_of_events_of_model[EventNumber].
+                        Distribution_of_particle_for_event.get_scale_paramiter()
+                        *fabs(Student_T_Distribution(mtUniDistribution));
+
+                uniform_real_distribution<float> uniform_distribution_angle_for_t_student_distribution(0.0,2.0*PI);
+
+                float angle=uniform_distribution_angle_for_t_student_distribution(mtUniDistribution);
+
+
+                New_Xcoordinate_of_jump_particle = Xcoordinate_of_jump_particle
+                        + Student_t_Distibution * cos(angle);
+
+
+
+                New_Ycoordinate_of_jump_particle = Ycoordinate_of_jump_particle
+                        + Student_t_Distibution *sin(angle);
+
+            };
+
+            one_death(number_of_type_of_jump_particle, number_of_jump_man);
+            one_birth(number_of_type_of_jump_particle,
+                      New_Xcoordinate_of_jump_particle, New_Ycoordinate_of_jump_particle);                   // number_of_type_of_jump_particle
+
+
+            Global_clock = Global_clock + Min_time;
+            Number_of_occurings = Number_of_occurings + 1;
+
+
+        };
+    } else {
+        float Xcoordinate_of_jump_particle;
+        float Ycoordinate_of_jump_particle;
+
+        Xcoordinate_of_jump_particle = this->ModelPoints.Vector_of_types[number_of_type_of_jump_particle].
                 SpacePointArray[number_of_jump_man].Xcoordinate;
 
-        float Ycoordinate_of_jump_particle = this->ModelPoints.Vector_of_types[number_of_type_of_jump_particle].
+        Ycoordinate_of_jump_particle = this->ModelPoints.Vector_of_types[number_of_type_of_jump_particle].
                 SpacePointArray[number_of_jump_man].Ycoordinate;
 
-        uniform_real_distribution<float> uniform_distribution_angle_for_t_student_distribution(0.0,2.0*3.14);
-        //student_t_distribution<float> Student_T_Distribution(0);
-        normal_distribution<float> Normal_distribution(0.0,0.1);
+        float New_Xcoordinate_of_jump_particle;
+        float New_Ycoordinate_of_jump_particle;
+
+        if (this->List_of_events_of_model[EventNumber].Distribution_of_particle_for_event.
+                get_Type_of_T_student_distribution() == 0){
+
+            normal_distribution<float> Normal_distribution(0.0,this->List_of_events_of_model[EventNumber].
+                                                           Distribution_of_particle_for_event.get_scale_paramiter());
 
 
-        float angle_for_student_t_distribution = uniform_distribution_angle_for_t_student_distribution(mtUniIntDistribution);
-
-
-        mt19937 mtUniRealDistribution(seed);
-        float New_Xcoordinate_of_jump_particle = Xcoordinate_of_jump_particle
-                + Normal_distribution(mtUniRealDistribution)*cos(angle_for_student_t_distribution);
-
-
-
-        float New_Ycoordinate_of_jump_particle = Ycoordinate_of_jump_particle + Normal_distribution(mtUniRealDistribution)*
-                sin(angle_for_student_t_distribution);
+            New_Xcoordinate_of_jump_particle = Xcoordinate_of_jump_particle
+                    + Normal_distribution(mtUniDistribution);
 
 
 
+            New_Ycoordinate_of_jump_particle = Ycoordinate_of_jump_particle
+                    + Normal_distribution(mtUniDistribution);
+
+
+        } else {
+            student_t_distribution<float> Student_T_Distribution
+                    (this->List_of_events_of_model[EventNumber].Distribution_of_particle_for_event.get_Type_of_T_student_distribution());
+
+            float Student_t_Distibution=this->List_of_events_of_model[EventNumber].
+                    Distribution_of_particle_for_event.get_scale_paramiter()
+                    *fabs(Student_T_Distribution(mtUniDistribution));
+
+            uniform_real_distribution<float> uniform_distribution_angle_for_t_student_distribution(0.0,2.0*PI);
+
+            float angle=uniform_distribution_angle_for_t_student_distribution(mtUniDistribution);
+
+
+            New_Xcoordinate_of_jump_particle = Xcoordinate_of_jump_particle
+                    + Student_t_Distibution * cos(angle);
+
+
+
+            New_Ycoordinate_of_jump_particle = Ycoordinate_of_jump_particle
+                    + Student_t_Distibution *sin(angle);
+
+        };
 
         one_death(number_of_type_of_jump_particle, number_of_jump_man);
         one_birth(number_of_type_of_jump_particle,
                   New_Xcoordinate_of_jump_particle, New_Ycoordinate_of_jump_particle);                   // number_of_type_of_jump_particle
 
 
-
-
         Global_clock = Global_clock + Min_time;
         Number_of_occurings = Number_of_occurings + 1;
 
-    };
+    }
 
 
 }
-void simbad::gui::Model_of_space::mutation_of_particle(int EventNumber, int Numberfunctionforcomponentrate)
-{
+
+
+void simbad::gui::Model_of_space::mutation_of_particle(int EventNumber, int Numberfunctionforcomponentrate){
     unsigned seed;
     seed=std::chrono::system_clock::now().time_since_epoch().count();
 
@@ -647,16 +814,70 @@ void simbad::gui::Model_of_space::mutation_of_particle(int EventNumber, int Numb
 
     // cout<< "number_of_dead_man="<<number_of_dead_man<<endl;
 
-    float rate = rate_linear_on_configuration(EventNumber, Numberfunctionforcomponentrate, number_of_old_type_of_mutated_particle, number_of_mutated_man);
-    // cout<< "rate="<<rate<<endl;
-    // cout<<"Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]"<<
-    //       Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate];
-    //bernoulli_distribution distribution_2(rate*0.999/Vector_comulative_rate_for_type_of_event[EventNumber][Numberfunctionforcomponentrate]);
-    bernoulli_distribution distribution_2(rate*0.999/Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]);
+    if (Numberfunctionforcomponentrate!=0){
+        float rate = rate_linear_on_configuration(EventNumber, Numberfunctionforcomponentrate, number_of_old_type_of_mutated_particle, number_of_mutated_man);
+        // cout<< "rate="<<rate<<endl;
+        // cout<<"Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]"<<
+        //       Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate];
+        //bernoulli_distribution distribution_2(rate*0.999/Vector_comulative_rate_for_type_of_event[EventNumber][Numberfunctionforcomponentrate]);
+        bernoulli_distribution distribution_2(rate*0.999/Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]);
 
-    bool bernulli_D = distribution_2(mtUniIntDistribution);
+        bool bernulli_D = distribution_2(mtUniIntDistribution);
 
-    if (bernulli_D){
+        if (bernulli_D){
+            float Xcoordinate_of_mutated_particle = this->ModelPoints.Vector_of_types[number_of_old_type_of_mutated_particle].
+                    SpacePointArray[number_of_mutated_man].Xcoordinate;
+
+            float Ycoordinate_of_mutated_particle = this->ModelPoints.Vector_of_types[number_of_old_type_of_mutated_particle].
+                    SpacePointArray[number_of_mutated_man].Ycoordinate;
+
+            //uniform_real_distribution<float> uniform_distribution_angle_for_t_student_distribution(0.0,2.0*3.14);
+            //student_t_distribution<float> Student_T_Distribution(0);
+            //normal_distribution<float> Normal_distribution(0.0,0.1);
+
+
+            //float angle_for_student_t_distribution = uniform_distribution_angle_for_t_student_distribution(mtUniIntDistribution);
+
+
+            //mt19937 mtUniRealDistribution(seed);
+            //float New_Xcoordinate_of_jump_particle = Xcoordinate_of_jump_particle
+            //        + Normal_distribution(mtUniRealDistribution)*cos(angle_for_student_t_distribution);
+
+
+
+            //float New_Ycoordinate_of_jump_particle = Ycoordinate_of_jump_particle + Normal_distribution(mtUniRealDistribution)*
+            //        sin(angle_for_student_t_distribution);
+
+
+
+
+            one_death(number_of_old_type_of_mutated_particle, number_of_mutated_man);
+            one_birth(number_of_new_type_of_mutated_particle,
+                      Xcoordinate_of_mutated_particle, Ycoordinate_of_mutated_particle);                   // number_of_type_of_jump_particle
+
+
+
+
+
+            Global_clock = Global_clock + Min_time;
+            //if (this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].SpacePointArray.size() != 0)
+            //{
+                //this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].
+                //            SpacePointArray
+                //[
+                //
+                //    this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].
+                //        Number_of_points_in_SpacePointArray - 1
+                //
+                //
+                //].BirthTime = Global_clock;
+
+            //};
+            Number_of_occurings = Number_of_occurings + 1;
+
+        };
+
+    } else {
         float Xcoordinate_of_mutated_particle = this->ModelPoints.Vector_of_types[number_of_old_type_of_mutated_particle].
                 SpacePointArray[number_of_mutated_man].Xcoordinate;
 
@@ -692,25 +913,29 @@ void simbad::gui::Model_of_space::mutation_of_particle(int EventNumber, int Numb
 
 
         Global_clock = Global_clock + Min_time;
-        if (this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].SpacePointArray.size() != 0)
-        {
-            this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].
-                        SpacePointArray
-            [
+         //if (this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].SpacePointArray.size() != 0)
+         //{
+         //  this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].
+         //               SpacePointArray
+         //   [
 
-                this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].
-                    Number_of_points_in_SpacePointArray - 1
+         //       this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].
+         //           Number_of_points_in_SpacePointArray - 1
 
 
-            ].BirthTime = Global_clock;
-
-        };
+         //   ].BirthTime = Global_clock;
+         //
+        //};
         Number_of_occurings = Number_of_occurings + 1;
 
     };
 
 
+
+
 }
+
+
 void simbad::gui::Model_of_space::death_of_particle(int EventNumber, int Numberfunctionforcomponentrate){
     unsigned seed;
     seed=std::chrono::system_clock::now().time_since_epoch().count();
@@ -732,28 +957,35 @@ void simbad::gui::Model_of_space::death_of_particle(int EventNumber, int Numberf
     int number_of_dead_man = distribution_1(mtUniIntDistribution);
    // cout<< "number_of_dead_man="<<number_of_dead_man<<endl;
 
-    float rate = rate_linear_on_configuration(EventNumber, Numberfunctionforcomponentrate, number_of_type_of_death_particle, number_of_dead_man);
+    if (Numberfunctionforcomponentrate!=0){
+        float rate = rate_linear_on_configuration(EventNumber, Numberfunctionforcomponentrate, number_of_type_of_death_particle, number_of_dead_man);
    // cout<< "rate="<<rate<<endl;
    // cout<<"Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]"<<
    //       Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate];
     //bernoulli_distribution distribution_2(rate*0.999/Vector_comulative_rate_for_type_of_event[EventNumber][Numberfunctionforcomponentrate]);
-    bernoulli_distribution distribution_2(rate*0.999/Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]);
+        bernoulli_distribution distribution_2(rate*0.999/Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]);
 
-    bool bernulli_D = distribution_2(mtUniIntDistribution);
+        bool bernulli_D = distribution_2(mtUniIntDistribution);
     //cout<< "bernulli_D="<<bernulli_D<<endl;
-    if (bernulli_D){
+        if (bernulli_D){
+            one_death(number_of_type_of_death_particle, number_of_dead_man);
+            Global_clock = Global_clock + Min_time;
+            Number_of_occurings = Number_of_occurings + 1;
+
+        };
+    } else {
         one_death(number_of_type_of_death_particle, number_of_dead_man);
         Global_clock = Global_clock + Min_time;
         Number_of_occurings = Number_of_occurings + 1;
 
-    };
+    }
 
 
 }
 
 
-void simbad::gui::Model_of_space::one_death(int number_of_type_of_death_particle, int number_of_dead_man)
-{
+
+void simbad::gui::Model_of_space::one_death(int number_of_type_of_death_particle, int number_of_dead_man){
     int Number_of_points =
             this->ModelPoints.Vector_of_types[number_of_type_of_death_particle].
             Number_of_points_in_SpacePointArray;
@@ -762,6 +994,7 @@ void simbad::gui::Model_of_space::one_death(int number_of_type_of_death_particle
                     SpacePointArray[number_of_dead_man].Xcoordinate;
             float Y_coord_of_dad_man = this->ModelPoints.Vector_of_types[number_of_type_of_death_particle].
                     SpacePointArray[number_of_dead_man].Ycoordinate;
+
             int Cell_num_of_dad_man = this->ModelPoints.Vector_of_types[number_of_type_of_death_particle].
                     SpacePointArray[number_of_dead_man]. number_of_point_in_cell;
     //
@@ -903,6 +1136,9 @@ void simbad::gui::Model_of_space::one_death(int number_of_type_of_death_particle
                 int Cell_num_last_point = this->ModelPoints.Vector_of_types[number_of_type_of_death_particle].
                         SpacePointArray[Number_of_points-1].number_of_point_in_cell;
                         //Array_of_points[Number_of_points-1]. number_of_point_in_cell;
+//                long double Birth_time_last_point = this->ModelPoints.Vector_of_types[number_of_type_of_death_particle].
+//                        SpacePointArray[Number_of_points-1].BirthTime;
+
 
     // номер ячейки с точкой с крайним номером
                 int addtional_variable_last_element=(int) floorf(10 * X_coord_last_point + matrix_scaling_factor * 5)
@@ -935,6 +1171,12 @@ void simbad::gui::Model_of_space::one_death(int number_of_type_of_death_particle
                         SpacePointArray[number_of_dead_man].number_of_point_in_cell =
                         this->ModelPoints.Vector_of_types[number_of_type_of_death_particle].
                         SpacePointArray [Number_of_points-1].number_of_point_in_cell;
+
+                this->ModelPoints.Vector_of_types[number_of_type_of_death_particle].
+                        SpacePointArray[number_of_dead_man].BirthTime =
+                        this->ModelPoints.Vector_of_types[number_of_type_of_death_particle].
+                        SpacePointArray [Number_of_points-1].BirthTime;
+
 
                 //Array_of_points[number_of_dead_man].number_of_point_in_cell = Array_of_points[Number_of_points-1].number_of_point_in_cell;
 
@@ -1078,6 +1320,8 @@ void simbad::gui::Model_of_space::one_death(int number_of_type_of_death_particle
 
 }
 
+
+
 float simbad::gui::Model_of_space::rate_linear_on_configuration(int EventNumber, int Numberfunctionforcomponentrate,int Number_of_type_of_particle, int Number_of_point_in_type_array)
 {
     //сумма всех
@@ -1180,6 +1424,7 @@ float simbad::gui::Model_of_space::rate_linear_on_configuration(int EventNumber,
 
 
 }
+
 
 long double simbad::gui::Model_of_space::get_global_clock()
 {

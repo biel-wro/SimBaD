@@ -154,32 +154,51 @@ void simbad::gui::Event_of_model::set_code_of_event(QString Code_of_event_string
 {
 
     if (Code_of_event_string.contains("birth of one particle with type # ")) {
-
-
+        int New_point_type ;
+        int Old_point_type;
         Code_of_event_string.remove("birth of one particle with type # ");
-        Code_of_event_string.remove(" from particle with type # ");
-        //int Number = Code_of_event_string.toInt();
-        int Number = Code_of_event_string.toInt();
-        int New_point_type = (int)((Number*10/100));
-        int Old_point_type = Number - 10 * New_point_type;
+
+        if (Code_of_event_string.contains(" from an environment"))
+        {
+            Code_of_event_string.remove(" from an environment");
+            int Number = Code_of_event_string.toInt();
+            New_point_type = Number;
+            Code_of_event.resize(1);
+            Code_of_event[0].resize(2);
+            Code_of_event[0][0] = - 1;
+            Code_of_event[0][1] = New_point_type - 1;
+
+            cout << Number << endl;
+            cout << New_point_type << endl;
 
 
-        cout << Number << endl;
-        cout << Old_point_type << endl;
-        cout << New_point_type << endl;
-        //" , " <<Old_point_type <<" , " <<New_point_type<<
-        // std::cout << "void simbad::gui::Dialog_open_model::on_pushButton_4_clicked()++++" << std::endl;
-        Code_of_event.resize(2);
-        Code_of_event[0].resize(2);
-        Code_of_event[1].resize(2);
+        } else {
+            Code_of_event_string.remove(" from particle with type # ");
+
+            //int Number = Code_of_event_string.toInt();
+            int Number = Code_of_event_string.toInt();
+            New_point_type = (int)((Number*10/100));
+            Old_point_type = Number - 10 * New_point_type;
+            Code_of_event.resize(2);
+            Code_of_event[0].resize(2);
+            Code_of_event[1].resize(2);
+            Code_of_event[0][0] = Old_point_type-1;
+            Code_of_event[0][1] = Old_point_type-1;
+            Code_of_event[1][0] = -1;
+            Code_of_event[1][1] = New_point_type-1;
+
+            cout << Number << endl;
+            cout << Old_point_type << endl;
+            cout << New_point_type << endl;
+
+        };
+
+            //" , " <<Old_point_type <<" , " <<New_point_type<<
+            // std::cout << "void simbad::gui::Dialog_open_model::on_pushButton_4_clicked()++++" << std::endl;
 
 
-        Code_of_event[0][0] = Old_point_type-1;
-        Code_of_event[0][1] = Old_point_type-1;
-        Code_of_event[1][0] = -1;
-        Code_of_event[1][1] = New_point_type-1;
 
-    };
+    } ;
 
     if (Code_of_event_string.contains("death of one particle with type # ")){
 

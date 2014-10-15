@@ -83,7 +83,7 @@ void simbad::gui::function_for_component_rate::set_Functions_from_string(QString
 
 void simbad::gui::function_for_component_rate::set_Restrictions_from_string(QString A)
 {
-        if (A == "zero")
+        if (A == "--")
         {
             Restriction_of_the_range = zero;
         };
@@ -98,7 +98,7 @@ void simbad::gui::function_for_component_rate::set_Restrictions_from_string(QStr
             Restriction_of_the_range = square;
         };
 
-        if ((A != "zero") and
+        if ((A != "--") and
             (A != "circle") and
             (A != "square"))
         {
@@ -213,7 +213,7 @@ QString simbad::gui::function_for_component_rate::get_string_of_Restrictions()
 
     if (Restriction_of_the_range == zero)
     {
-        return "zero";
+        return "--";
     };
     if (Restriction_of_the_range == circle)
     {
@@ -224,7 +224,7 @@ QString simbad::gui::function_for_component_rate::get_string_of_Restrictions()
         return "square";
     };
 
-    return "zero";
+    return "--";
 
 }
 
