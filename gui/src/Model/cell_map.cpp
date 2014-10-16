@@ -96,25 +96,25 @@ void simbad::gui::Cell_Map::setInitConfiguration(Points_of_model & Model_P)
 
 
 
-              for (int k=0; k<Model_P.Number_of_types; k++)
+              //for (int k=0; k<Model_P.Number_of_types; k++)
 
-                  for (int i=0; i< Model_P.Vector_of_types[k].Number_of_points_in_SpacePointArray;i++)
-                      cout <<i <<","<<
-                           Model_P.Vector_of_types[k].SpacePointArray[i].BirthTime
-                           <<","<<
-                           Model_P.Vector_of_types[k].SpacePointArray[i].number_of_point_in_cell
-                           <<","<<
-                           Model_P.Vector_of_types[k].SpacePointArray[i].Xcoordinate
-                           <<","<<
-                           Model_P.Vector_of_types[k].SpacePointArray[i].Ycoordinate
-                           <<","<<
-                              endl;
+                //  for (int i=0; i< Model_P.Vector_of_types[k].Number_of_points_in_SpacePointArray;i++)
+                      //cout <<i <<","<<
+                      //     Model_P.Vector_of_types[k].SpacePointArray[i].BirthTime
+                      //     <<","<<
+                      //     Model_P.Vector_of_types[k].SpacePointArray[i].number_of_point_in_cell
+                      //     <<","<<
+                      //     Model_P.Vector_of_types[k].SpacePointArray[i].Xcoordinate
+                      //     <<","<<
+                      //     Model_P.Vector_of_types[k].SpacePointArray[i].Ycoordinate
+                      //     <<","<<
+                      //        endl;
 
-              for (int k=0; k<Model_P.Number_of_types; k++)
+              //for (int k=0; k<Model_P.Number_of_types; k++)
 
-                  for (int i=0;i<Types_Array_numbers_of_sizes_of_cells[k].size() ;i++)
-                      cout <<"Types_Array_numbers_of_sizes_of_cells[k][i]="<<
-                             Types_Array_numbers_of_sizes_of_cells[k][i]<<endl;
+                  //for (int i=0;i<Types_Array_numbers_of_sizes_of_cells[k].size() ;i++)
+                      // cout <<"Types_Array_numbers_of_sizes_of_cells[k][i]="<<
+                      //       Types_Array_numbers_of_sizes_of_cells[k][i]<<endl;
 
 
 }
