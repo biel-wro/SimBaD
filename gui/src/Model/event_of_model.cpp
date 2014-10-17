@@ -168,8 +168,8 @@ void simbad::gui::Event_of_model::set_code_of_event(QString Code_of_event_string
             Code_of_event[0][0] = - 1;
             Code_of_event[0][1] = New_point_type - 1;
 
-            cout << Number << endl;
-            cout << New_point_type << endl;
+            //cout << Number << endl;
+            //cout << New_point_type << endl;
 
 
         } else {
@@ -187,9 +187,9 @@ void simbad::gui::Event_of_model::set_code_of_event(QString Code_of_event_string
             Code_of_event[1][0] = -1;
             Code_of_event[1][1] = New_point_type-1;
 
-            cout << Number << endl;
-            cout << Old_point_type << endl;
-            cout << New_point_type << endl;
+            //cout << Number << endl;
+            //cout << Old_point_type << endl;
+            //cout << New_point_type << endl;
 
         };
 
@@ -205,7 +205,7 @@ void simbad::gui::Event_of_model::set_code_of_event(QString Code_of_event_string
         Code_of_event_string.remove("death of one particle with type # ");
         int Old_point_type= Code_of_event_string.toInt();
 
-        cout << Old_point_type << endl;
+        //cout << Old_point_type << endl;
 
 
         Code_of_event.resize(1);
@@ -222,7 +222,7 @@ void simbad::gui::Event_of_model::set_code_of_event(QString Code_of_event_string
         Code_of_event_string.remove("jump of one particle with type # ");
         int point_type = Code_of_event_string.toInt();
 
-        cout << point_type << endl;
+        //cout << point_type << endl;
 
         Code_of_event.resize(2);
         Code_of_event[0].resize(2);
@@ -256,9 +256,9 @@ void simbad::gui::Event_of_model::set_code_of_event(QString Code_of_event_string
         Code_of_event[0][0] = Old_point_type-1;
         Code_of_event[0][1] = New_point_type-1;
 
-        cout << Number << endl;
-        cout << Old_point_type << endl;
-        cout << New_point_type << endl;
+       // cout << Number << endl;
+       // cout << Old_point_type << endl;
+       // cout << New_point_type << endl;
 
 
     };

@@ -2,7 +2,7 @@ project(SimBaD)
 cmake_minimum_required(VERSION 2.8)
 
 set( CLI_NAME cli )
-#set( CORE_NAME core )
+set( CORE_NAME core )
 set( GUI_NAME gui )
 
 # C++11
@@ -47,6 +47,6 @@ include_directories( ${Boost_INCLUDE_DIR} )
 
 
 enable_testing()
-subdirs( cli gui)
-#subdirs( core cli gui)
+#subdirs( cli gui)
+subdirs( core cli gui)
 

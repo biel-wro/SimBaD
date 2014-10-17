@@ -3,8 +3,8 @@
 
 #include <limits>
 
-#include "generic_particle.h"
-#include "virtual_iterator.h"
+//#include "generic_particle.h"
+//#include "virtual_iterator.h"
 
 namespace simbad {
 namespace core{
@@ -14,7 +14,7 @@ class Model
 {
 public:
     // types
-    typedef VirtualIterator<GenericParticle,GenericParticle> iterator;
+    //typedef VirtualIterator<GenericParticle,GenericParticle> iterator;
 
     // constructors & destructors
     Model() noexcept;
@@ -27,8 +27,8 @@ public:
 
     // pure virtual
     virtual double run(std::size_t maxEvents, double maxTime=std::numeric_limits<double>::infinity() ) noexcept = 0;
-    virtual iterator begin() const noexcept = 0;
-    virtual iterator end() const noexcept = 0;
+    //virtual iterator begin() const noexcept = 0;
+    //virtual iterator end() const noexcept = 0;
 
     virtual std::size_t particleCount() const noexcept = 0;
     virtual double simulationTime() const noexcept = 0;

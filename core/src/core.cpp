@@ -2,7 +2,7 @@
 #include <boost/program_options.hpp>
 
 #include "core.h"
-#include "generic_particle.h"
+//#include "generic_particle.h"
 
 
 int hello()

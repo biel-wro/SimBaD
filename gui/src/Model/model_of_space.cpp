@@ -68,7 +68,7 @@ bool simbad::gui::Model_of_space::timer()
         double min_for_time=10000;
         int i_min=-1, j_min=-1;
 
-        cout<<"1"<<endl;
+       // cout<<"1"<<endl;
 
         for (int i = 0; i < this->List_of_events_of_model.size(); i++)
             for (int j = 0; j < this->get_number_of_types() + 1; j++)
@@ -115,7 +115,7 @@ bool simbad::gui::Model_of_space::timer()
         if (i_min != -1 && min_for_time<10000){
 
             Number_of_events_dynamics = Number_of_events_dynamics + 1;
-            cout<<"Number_of_events_dynamics="<<Number_of_events_dynamics<<endl;
+           // cout<<"Number_of_events_dynamics="<<Number_of_events_dynamics<<endl;
             Min_time = min_for_time;
             Event_execution(i_min, j_min);
             initiale_Dzeta();
@@ -271,7 +271,7 @@ void simbad::gui::Model_of_space::initiale_Dzeta()
             Vector_max_of_rate_functions[i][j] =
                     this->List_of_events_of_model[i].
                     Table_of_component_rates_for_event_of_model.Table[j].get_max_of_Function();
-            cout<<"Vector_max_of_rate_functions["<<i<<"]["<<j<<"]"<<Vector_max_of_rate_functions[i][j] <<endl;
+            //cout<<"Vector_max_of_rate_functions["<<i<<"]["<<j<<"]"<<Vector_max_of_rate_functions[i][j] <<endl;
 
 // dzeta
             Vector_of_Dzeta_type_event[i][j] =
@@ -282,7 +282,7 @@ void simbad::gui::Model_of_space::initiale_Dzeta()
 
                     ].size()-1)*
                     Vector_max_of_rate_functions[i][j];
-            cout<<"Vector_of_Dzeta_type_event["<<i<<"]["<<j<<"]"<<Vector_of_Dzeta_type_event[i][j] <<endl;
+            //cout<<"Vector_of_Dzeta_type_event["<<i<<"]["<<j<<"]"<<Vector_of_Dzeta_type_event[i][j] <<endl;
             //cout<<i<<",*"<<j<<","<<Vector_of_Dzeta_type_event[i][j]<<endl;
         };
     };
@@ -295,21 +295,21 @@ void simbad::gui::Model_of_space::initiale_Dzeta()
 
 void simbad::gui::Model_of_space::Event_execution(int Number_of_event, int Number_function_for_component_rate)
 {
-    cout<<"yes"<<endl;
-    cout<<"Number_of_event"<<Number_of_event<<endl;
-    cout<<"this->List_of_events_of_model[Number_of_event].Code_of_event.size()="<<
-           this->List_of_events_of_model[Number_of_event].Code_of_event.size()<<endl;
+    //cout<<"yes"<<endl;
+    //cout<<"Number_of_event"<<Number_of_event<<endl;
+    //cout<<"this->List_of_events_of_model[Number_of_event].Code_of_event.size()="<<
+    //       this->List_of_events_of_model[Number_of_event].Code_of_event.size()<<endl;
     int Number_of_changed_points_in_conf =
             this->List_of_events_of_model[Number_of_event].Code_of_event.size();
-    cout<<"Number_of_changed_points_in_conf"<<
-           Number_of_changed_points_in_conf<<endl;
+    //cout<<"Number_of_changed_points_in_conf"<<
+    //       Number_of_changed_points_in_conf<<endl;
 
     if  (Number_of_changed_points_in_conf == 2)
     {
         //birth of particle
         if (this->List_of_events_of_model[Number_of_event].Code_of_event[0][1] != -1)
         {
-            cout << "birth of particle" << endl;
+            //cout << "birth of particle" << endl;
             birth_of_particle(Number_of_event, Number_function_for_component_rate);
 
         }
@@ -317,7 +317,7 @@ void simbad::gui::Model_of_space::Event_execution(int Number_of_event, int Numbe
         //jump of particle
         if (this->List_of_events_of_model[Number_of_event].Code_of_event[0][1] == -1)
         {
-            cout << "jump of particle" << endl;
+            //cout << "jump of particle" << endl;
             jump_of_particle(Number_of_event, Number_function_for_component_rate);
 
         }
@@ -329,7 +329,7 @@ void simbad::gui::Model_of_space::Event_execution(int Number_of_event, int Numbe
         //birth from environment
         if  (this->List_of_events_of_model[Number_of_event].Code_of_event[0][0] == -1)
         {
-            cout<<"birth from environment"<<endl;
+            //cout<<"birth from environment"<<endl;
             birth_of_particle_from_environment(Number_of_event);
 
         };
@@ -341,15 +341,15 @@ void simbad::gui::Model_of_space::Event_execution(int Number_of_event, int Numbe
                         this->List_of_events_of_model[Number_of_event].Code_of_event[0][0]!=-1
                 )
         {
-            cout<<"mutation of particle"<<endl;
+            //cout<<"mutation of particle"<<endl;
             mutation_of_particle(Number_of_event, Number_function_for_component_rate);
         }
 
         //death of particle
         if (this->List_of_events_of_model[Number_of_event].Code_of_event[0][1]==-1)
         {
-            cout<<"death of particle"<<endl;
-            cout<<"Number_of_event="<<Number_of_event<<" Number_function_for_component_rate="<<Number_function_for_component_rate<<endl;
+            //cout<<"death of particle"<<endl;
+            //cout<<"Number_of_event="<<Number_of_event<<" Number_function_for_component_rate="<<Number_function_for_component_rate<<endl;
             death_of_particle(Number_of_event, Number_function_for_component_rate);
 
         }
@@ -379,7 +379,7 @@ void simbad::gui::Model_of_space::birth_of_particle(int EventNumber, int Numberf
             this->ModelPoints.Vector_of_types[number_of_type_of_child].
             Number_of_points_in_SpacePointArray;
     //cout<< "Number_of_points="<<Number_of_points<<endl;
-    cout<<"Number_of_child_type_points"<<Number_of_child_type_points<<endl;
+    //cout<<"Number_of_child_type_points"<<Number_of_child_type_points<<endl;
 
     mt19937 mtUniDistribution(seed);
 
@@ -387,7 +387,7 @@ void simbad::gui::Model_of_space::birth_of_particle(int EventNumber, int Numberf
 
     int number_of_parent = distribution_1(mtUniDistribution);
 
-    cout<<"number_of_parent="<<number_of_parent<<endl;
+    //cout<<"number_of_parent="<<number_of_parent<<endl;
 
 
 
@@ -402,7 +402,7 @@ void simbad::gui::Model_of_space::birth_of_particle(int EventNumber, int Numberf
     bernoulli_distribution distribution_2(rate*0.999/Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]);
 
     bool bernulli_D = distribution_2(mtUniDistribution);
-    cout<< "bernulli_D="<<bernulli_D<<endl;
+    //cout<< "bernulli_D="<<bernulli_D<<endl;
     if (bernulli_D){
     //        cout<< "Global_clock="<<Global_clock<<endl;
 
@@ -455,13 +455,13 @@ void simbad::gui::Model_of_space::birth_of_particle(int EventNumber, int Numberf
         Global_clock = Global_clock + Min_time;
 
         Number_of_child_type_points=Number_of_child_type_points + 1;
-        cout <<"number_of_type_of_child="<<number_of_type_of_child <<endl;
+        //cout <<"number_of_type_of_child="<<number_of_type_of_child <<endl;
         this->ModelPoints.Vector_of_types[number_of_type_of_child].
                         SpacePointArray[Number_of_child_type_points - 1].BirthTime = Global_clock;
-        cout <<"Number_of_child_type_points="<<Number_of_child_type_points <<endl;
-        cout <<"ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray="<<
-        ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray<<endl;
-        cout <<"Global_clock="<<Global_clock<<endl;
+        //cout <<"Number_of_child_type_points="<<Number_of_child_type_points <<endl;
+        //cout <<"ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray="<<
+        //ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray<<endl;
+        //cout <<"Global_clock="<<Global_clock<<endl;
 
         //cout <<"timer::Number_of_child_type_points"<<Number_of_child_type_points<<endl;
         Number_of_occurings = Number_of_occurings + 1;
@@ -479,7 +479,7 @@ void simbad::gui::Model_of_space::birth_of_particle_from_environment(int EventNu
     int Number_of_child_type_points =
             this->ModelPoints.Vector_of_types[number_of_type_of_child].
             Number_of_points_in_SpacePointArray;
-    cout<<"Number_of_child_type_points="<<Number_of_child_type_points<<endl;
+    //cout<<"Number_of_child_type_points="<<Number_of_child_type_points<<endl;
 
     mt19937 mtUniDistribution(seed);
     float range_of_function=
@@ -497,14 +497,14 @@ void simbad::gui::Model_of_space::birth_of_particle_from_environment(int EventNu
     Global_clock = Global_clock + Min_time;
 
     Number_of_child_type_points=Number_of_child_type_points + 1;
-    cout <<"number_of_type_of_child="<<number_of_type_of_child <<endl;
+    //cout <<"number_of_type_of_child="<<number_of_type_of_child <<endl;
 
     this->ModelPoints.Vector_of_types[number_of_type_of_child].
                         SpacePointArray[Number_of_child_type_points - 1].BirthTime = Global_clock;
-    cout <<"Number_of_child_type_points="<<Number_of_child_type_points <<endl;
-    cout <<"ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray="<<
-    ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray<<endl;
-    cout <<"Global_clock="<<Global_clock<<endl;
+    //cout <<"Number_of_child_type_points="<<Number_of_child_type_points <<endl;
+    //cout <<"ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray="<<
+    //ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray<<endl;
+    //cout <<"Global_clock="<<Global_clock<<endl;
 
     Number_of_occurings = Number_of_occurings + 1;
 }
@@ -514,11 +514,11 @@ void simbad::gui::Model_of_space::one_birth(int number_of_type_of_child,
 float Xcoordinate_of_new_particle, float Ycoordinate_of_new_particle){
 
     //--------------
-    cout<<"one_birth::number_of_type_of_child="<<number_of_type_of_child<<endl;
+    //cout<<"one_birth::number_of_type_of_child="<<number_of_type_of_child<<endl;
 
-    cout<<"this->ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray="<<
-          this->ModelPoints.Vector_of_types[number_of_type_of_child].
-                  Number_of_points_in_SpacePointArray<<endl;
+    //cout<<"this->ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray="<<
+    //      this->ModelPoints.Vector_of_types[number_of_type_of_child].
+    //              Number_of_points_in_SpacePointArray<<endl;
 
     //--------------
 
@@ -528,33 +528,33 @@ float Xcoordinate_of_new_particle, float Ycoordinate_of_new_particle){
             Number_of_points_in_SpacePointArray + 1;
     int Number_of_child_type_points = this->ModelPoints.Vector_of_types[number_of_type_of_child].
                     Number_of_points_in_SpacePointArray;
-    cout<<"one_birth::Number_of_child_type_points="<<Number_of_child_type_points<<endl;
-    cout<<"Xcoordinate_of_new_particle="<<Xcoordinate_of_new_particle<<endl;
-    cout<<"Ycoordinate_of_new_particle="<<Ycoordinate_of_new_particle<<endl;
-    cout<<"number_of_type_of_child="<<number_of_type_of_child<<endl;
-    cout<<"this->ModelPoints.Vector_of_types[number_of_type_of_child].SpacePointArray[Number_of_child_type_points-1].Xcoordinate"
-       <<this->ModelPoints.Vector_of_types[number_of_type_of_child].SpacePointArray[Number_of_child_type_points-1].Xcoordinate<<endl;
+    //cout<<"one_birth::Number_of_child_type_points="<<Number_of_child_type_points<<endl;
+    //cout<<"Xcoordinate_of_new_particle="<<Xcoordinate_of_new_particle<<endl;
+    //cout<<"Ycoordinate_of_new_particle="<<Ycoordinate_of_new_particle<<endl;
+    //cout<<"number_of_type_of_child="<<number_of_type_of_child<<endl;
+    //cout<<"this->ModelPoints.Vector_of_types[number_of_type_of_child].SpacePointArray[Number_of_child_type_points-1].Xcoordinate"
+    //   <<this->ModelPoints.Vector_of_types[number_of_type_of_child].SpacePointArray[Number_of_child_type_points-1].Xcoordinate<<endl;
     this->ModelPoints.Vector_of_types[number_of_type_of_child].
                     SpacePointArray[Number_of_child_type_points-1].Xcoordinate = Xcoordinate_of_new_particle;
     this->ModelPoints.Vector_of_types[number_of_type_of_child].
                     SpacePointArray[Number_of_child_type_points-1].Ycoordinate = Ycoordinate_of_new_particle;
-    cout<<"q_1"<<endl;
+    //cout<<"q_1"<<endl;
     int addtional_variable=(int) floorf(10 * this->ModelPoints.Vector_of_types[number_of_type_of_child].
                                         SpacePointArray[Number_of_child_type_points-1].Xcoordinate + matrix_scaling_factor * 5) +
         10 * matrix_scaling_factor * floorf(10 * this->ModelPoints.Vector_of_types[number_of_type_of_child].
                                         SpacePointArray[Number_of_child_type_points-1].Ycoordinate + matrix_scaling_factor * 5);
-    cout<<"1"<<endl;
+    //cout<<"1"<<endl;
     //добавить индекс элемента в ячейку отвечающую родившейся точке
     this->CellMap.Array_of_cells[addtional_variable][number_of_type_of_child].
             push_back(Number_of_child_type_points - 1);
 
-    cout<<"2"<<endl;
+    //cout<<"2"<<endl;
     //добавить номер элемента в список
     this->ModelPoints.Vector_of_types[number_of_type_of_child].
                     SpacePointArray[Number_of_child_type_points-1].number_of_point_in_cell =
         this->CellMap.Array_of_cells[addtional_variable][number_of_type_of_child].size() - 1;
 
-cout<<"3"<<endl;
+//cout<<"3"<<endl;
 
 
 // если ячейка с новой точкой стала содержать максимальное кол-во элементов среди всех ячеек, то
@@ -565,10 +565,10 @@ cout<<"3"<<endl;
             this->CellMap.Types_Array_numbers_of_sizes_of_cells[number_of_type_of_child].size() - 1){
 //уменьшаем кол-во ячеек с предыдущим максимумом (он на ед. меньше чем новый)
 
-        cout<<"this->CellMap.Array_of_cells[addtional_variable][number_of_type_of_child].size()="<<
-              this->CellMap.Array_of_cells[addtional_variable]
-                      [number_of_type_of_child].size()<<endl;
-        this->CellMap.Types_Array_numbers_of_sizes_of_cells[number_of_type_of_child]
+       // cout<<"this->CellMap.Array_of_cells[addtional_variable][number_of_type_of_child].size()="<<
+       //       this->CellMap.Array_of_cells[addtional_variable]
+       //               [number_of_type_of_child].size()<<endl;
+         this->CellMap.Types_Array_numbers_of_sizes_of_cells[number_of_type_of_child]
                  [
                      this->CellMap.Array_of_cells[addtional_variable]
                              [number_of_type_of_child].size() - 1
@@ -579,7 +579,7 @@ cout<<"3"<<endl;
                              [number_of_type_of_child].size() - 1
                  ] - 1;
 
-cout<<"4"<<endl;
+//cout<<"4"<<endl;
 //           Array_numbers_of_sizes_of_cells[Array_numbers_of_sizes_of_cells.size() - 1]=
 //              Array_numbers_of_sizes_of_cells[Array_numbers_of_sizes_of_cells.size() - 1] - 1;
 //увеличиваем максимум  (тоесть кол-во ячеек с новым максимумом уже стало ровняться 1)
@@ -600,7 +600,7 @@ cout<<"4"<<endl;
                       this->CellMap.Array_of_cells[addtional_variable]
                             [number_of_type_of_child].size() - 1
                  ] - 1;
-cout<<"5"<<endl;
+//cout<<"5"<<endl;
       //  Array_numbers_of_sizes_of_cells[Array_of_cells_a_minus[addtional_variable].size() - 1]=
       //      Array_numbers_of_sizes_of_cells[Array_of_cells_a_minus[addtional_variable].size() - 1] - 1;
 // увеличиваем кол-во ячеек на +1 с размером Array_of_cells_a_minus[addtional_variable].size() (так-как после повяления нового єлемента
@@ -615,7 +615,7 @@ cout<<"5"<<endl;
                       this->CellMap.Array_of_cells[addtional_variable]
                             [number_of_type_of_child].size()
                  ] + 1;
-cout<<"6"<<endl;
+//cout<<"6"<<endl;
         //Array_numbers_of_sizes_of_cells[Array_of_cells_a_minus[addtional_variable].size()]=
         //    Array_numbers_of_sizes_of_cells[Array_of_cells_a_minus[addtional_variable].size()] + 1;
     };
@@ -1311,10 +1311,10 @@ void simbad::gui::Model_of_space::one_death(int number_of_type_of_death_particle
                     Number_of_points = Number_of_points - 1;
 
 
-                    for (int k=0; k<this->ModelPoints.Number_of_types; k++)
-                        for (int i=0;i<this->CellMap.Types_Array_numbers_of_sizes_of_cells[k].size() ;i++)
-                            cout <<"Types_Array_numbers_of_sizes_of_cells[k][i]="<<
-                                   this->CellMap.Types_Array_numbers_of_sizes_of_cells[k][i]<<endl;
+                    //for (int k=0; k<this->ModelPoints.Number_of_types; k++)
+                    //    for (int i=0;i<this->CellMap.Types_Array_numbers_of_sizes_of_cells[k].size() ;i++)
+                    //        cout <<"Types_Array_numbers_of_sizes_of_cells[k][i]="<<
+                    //               this->CellMap.Types_Array_numbers_of_sizes_of_cells[k][i]<<endl;
 
 
 
