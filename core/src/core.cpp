@@ -14,6 +14,25 @@ int hello()
 namespace simbad{
 namespace core{
 
+void Core::writeModel(const Model &model, std::ostream &os) const throw (std::exception)
+{
+    os << "# model " << model.modelName() << '\n';
+    os << "# dimension " << model.dimension() << '\n';
+    os << "# time " << model.simulationTime() << '\n';
+    os << "# events " << model.simulationEvents() << '\n';
+    os << "# particles " << model.particleCount() << '\n';
+
+    for( GenericParticle p: model ){
+      for( size_t d=0; d<p.dimension(); d++ )
+        {
+            os << p[d] <<" ";
+        }
+        os << '\n';
+
+
+    }
+}
+
 
 }}
 
