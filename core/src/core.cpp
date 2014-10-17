@@ -2,7 +2,7 @@
 #include <boost/program_options.hpp>
 
 #include "core.h"
-//#include "generic_particle.h"
+#include "generic_particle.h"
 
 
 int hello()
@@ -22,15 +22,15 @@ void Core::writeModel(const Model &model, std::ostream &os) const throw (std::ex
     os << "# events " << model.simulationEvents() << '\n';
     os << "# particles " << model.particleCount() << '\n';
 
-    for( GenericParticle p: model ){
-      for( size_t d=0; d<p.dimension(); d++ )
-        {
-            os << p[d] <<" ";
-        }
-        os << '\n';
+//    for( GenericParticle p: model ){
+//      for( size_t d=0; d<p.dimension(); d++ )
+//        {
+//            os << p[d] <<" ";
+//        }
+//        os << '\n';
 
 
-    }
+//    }
 }
 
 
