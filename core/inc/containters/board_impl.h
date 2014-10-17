@@ -1,5 +1,5 @@
-#ifndef TILE_IMPL_H
-#define TILE_IMPL_H
+#ifndef BOARD_IMPL_H
+#define BOARD_IMPL_H
 
 #include <array>
 
@@ -13,18 +13,22 @@
 namespace simbad{
 namespace core{
 
-
-
-template< class tile_coord_type, class integral_dim >
-struct tile_coordinates : public std::array<tile_coord_type, integral_dim::value> {
+template< class board_coord_type, class integral_dim >
+struct board_coordinates :
+        public boost::totally_ordered<
+            board_coordinates<board_coord_type, integral_dim>,
+        std::array<board_coord_type, integral_dim::value>
+        >
+{
 
     constexpr static const size_t dimension = integral_dim::value;
+    typedef std::array<board_coord_type, integral_dim::value> base_array;
 
-    tile_coordinates() = default;
+    board_coordinates() = default;
 
 
     template< class coord_type, class tile_size_type>
-    tile_coordinates( std::array<coord_type,dimension> const &c, tile_coord_type const &tile_size ){
+    board_coordinates( std::array<coord_type,dimension> const &c, board_coord_type const &tile_size ){
         compute<coord_type,tile_size_type,dimension>(c,tile_size);
     }
 
@@ -46,22 +50,30 @@ struct tile_coordinates : public std::array<tile_coord_type, integral_dim::value
     {}
 
     template< class coord_type, class tile_size_type>
-    static tile_coordinates from_coordinates( std::array<coord_type,dimension> const &c, tile_size_type const &tileSize  ){
-        return tile_coordinates( c, tileSize );
+    static board_coordinates from_coordinates(
+            std::array<coord_type,dimension> const &c,
+            tile_size_type const &tileSize  )
+    noexcept{
+        return board_coordinates( c, tileSize );
     }
 
+    bool operator==(board_coordinates const &o ){
+        return static_cast<base_array const&>(*this)==static_cast<base_array const&>(o);
+    }
+    bool operator<(board_coordinates const &o ){
+        return static_cast<base_array const&>(*this)<static_cast<base_array const&>(o);
+    }
 
-    static bool next(
-        tile_coordinates &what,
-        tile_coordinates const &region_min,
-        tile_coordinates const &region_max,
-        tile_coordinates const &board_min,
-        tile_coordinates const &board_max)
-    {
-
+    static bool next (
+        board_coordinates &what,
+        board_coordinates const &region_min,
+        board_coordinates const &region_max,
+        board_coordinates const &board_min,
+        board_coordinates const &board_max)
+    noexcept{
         for( size_t i=0; i<dimension; i++ )
         {
-            tile_coord_type &c = what[i];
+            board_coord_type &c = what[i];
 
             if( c == board_max[i] ){
                 c = board_min[i];
@@ -78,17 +90,17 @@ struct tile_coordinates : public std::array<tile_coord_type, integral_dim::value
         return false;
 
     }
-    static bool prev(
-        tile_coordinates &what,
-        tile_coordinates const &region_min,
-        tile_coordinates const &region_max,
-        tile_coordinates const &board_min,
-        tile_coordinates const &board_max)
-    {
 
+    static bool prev(
+        board_coordinates &what,
+        board_coordinates const &region_min,
+        board_coordinates const &region_max,
+        board_coordinates const &board_min,
+        board_coordinates const &board_max)
+    noexcept{
         for( size_t i=0; i<dimension; i++ )
         {
-            tile_coord_type &c = what[i];
+            board_coord_type &c = what[i];
 
             if( c == board_min[i] ){
                 c = board_max[i];
@@ -107,15 +119,29 @@ struct tile_coordinates : public std::array<tile_coord_type, integral_dim::value
     }
 };
 
-template<class tile_coord_type, class integral_dim>
-std::size_t hash_value( tile_coordinates<tile_coord_type,integral_dim> const &v ){
-    typedef std::array<tile_coord_type, integral_dim::value> base_type;
+template<class board_coord_type, class integral_dim>
+std::size_t hash_value( board_coordinates<board_coord_type,integral_dim> const &v ){
 
-    boost::hash<base_type> hasher;
-    return hasher( static_cast<base_type const&>(v) );
+    typedef std::array<board_coord_type, integral_dim::value> base_array;
+
+    boost::hash<base_array> hasher;
+    return hasher( static_cast<base_array const&>(v) );
 }
 
+template<class T>
+class board_tile :
+        public boost::totally_ordered<
+            board_tile<T>,
+            boost::intrusive::unordered_set_base_hook<>
+        >
+{
 
+};
+
+template<class inner_containter, class board_coords>
+class board_impl{
+
+};
 
 //template<class D,class int_dim,class chunk_size>
 //struct Tile : public
