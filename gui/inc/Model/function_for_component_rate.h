@@ -47,6 +47,7 @@ enum Approach_of_influence{
 
 class function_for_component_rate
 {
+    int influent_particle_type;
     float Constant_rate_plus;
     Functions Function_for_rate;
     float Multiplication_by_constant;
@@ -61,6 +62,7 @@ public:
     function_for_component_rate (const function_for_component_rate& that);
     function_for_component_rate & operator = (const function_for_component_rate& that)
         {
+            influent_particle_type = that.influent_particle_type;
             Constant_rate_plus = that.Constant_rate_plus;
             Function_for_rate = that.Function_for_rate;
             Multiplication_by_constant = that.Multiplication_by_constant;
@@ -75,7 +77,8 @@ public:
 
     bool operator == (const function_for_component_rate& that)
     {
-        if (       (this->Constant_rate_plus == that.Constant_rate_plus ) and
+        if (       (this->influent_particle_type == that.influent_particle_type ) and
+                   (this->Constant_rate_plus == that.Constant_rate_plus ) and
                    (this->Function_for_rate  == that.Function_for_rate ) and
                    (this->Multiplication_by_constant == that.Multiplication_by_constant)  and
                    (this->Restriction_of_the_range == that.Restriction_of_the_range)  and
@@ -86,7 +89,7 @@ public:
                 return false;
     }
 
-
+    void set_influent_particle_type(int Type);
     void set_Functions_from_string(QString A);
     void set_Restrictions_from_string(QString A);
     void set_Approach_of_influence_from_string(QString A);
@@ -94,7 +97,7 @@ public:
     void set_Multiplication_by_constant(float value);
     void set_Range_of_the_function(float value);
 
-
+    int get_influent_particle_type();
     QString get_string_of_Functions();
     QString get_string_of_Restrictions();
     QString get_string_of_Approach_of_influence();
