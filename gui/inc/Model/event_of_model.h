@@ -20,9 +20,11 @@ namespace gui{
 class Event_of_model{
 
 
-    QString Name_of_event;
+//    QString Name_of_event;
     //QString Code_of_event;
     QString Type_of_event;
+    QString Name_of_event;
+
     int Number_of_types_for_event_of_model = 1;
 //Example 0->1 birth of particle, 1->0 death of particle----------
 
@@ -33,6 +35,8 @@ class Event_of_model{
 //--------------------------------- Distribution_of_particle Distribution;
 
 public:
+
+
     typedef QVector <int> type_of_particle_before_and_after_event;
     QVector <type_of_particle_before_and_after_event> Code_of_event;
 
