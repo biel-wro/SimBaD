@@ -17,7 +17,7 @@ class Dialog_open_model : public QDialog
     Q_OBJECT
 
 public:
-    explicit Dialog_open_model(QWidget *parent = 0);
+    explicit Dialog_open_model(Model_of_space* B_Model,bool new_model,QWidget *parent = 0);
     ~Dialog_open_model();
 
     //save refferens to mainForm for Big_model "main model"
