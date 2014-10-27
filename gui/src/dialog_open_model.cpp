@@ -6,14 +6,44 @@
 
 
 
-simbad::gui::Dialog_open_model::Dialog_open_model(QWidget *parent) :
+simbad::gui::Dialog_open_model::Dialog_open_model(Model_of_space *B_Model, bool new_model, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog_open_model)
 {
     ui->setupUi(this);
+
     ui->tableWidget->selectRow(0);
-     ;
-//    we have mistake here ->
+
+    this->Big_model=B_Model;
+
+    this->ui->lineEdit->setText(this->Big_model->get_name_of_model());
+
+    ui->spinBox_2->setValue(Big_model->get_number_of_types());
+    this->ui->tableWidget->setColumnCount(1);
+    this->ui->tableWidget->setRowCount(this->Big_model->List_of_events_of_model.size());
+    for(int i=0;i<this->Big_model->List_of_events_of_model.size();i++)
+    {
+        QString S=this->Big_model->List_of_events_of_model[i].get_name_of_event();
+
+        QTableWidgetItem *newItem = new QTableWidgetItem(S,0);
+        this->ui->tableWidget->setItem(i, 0, newItem);
+    };
+
+//changing of maximum of spin box
+ this->ui->spinBox_3->setMinimum(1);
+ this->ui->spinBox_3->setMaximum(this->Big_model->List_of_events_of_model.size());
+
+
+    if (new_model)
+    {
+        ui->lineEdit->setEnabled(true);
+        ui->spinBox_2->setEnabled(true);
+    }
+    else{
+        ui->lineEdit->setEnabled(false);
+        ui->spinBox_2->setEnabled(false);
+    };
+    //    we have mistake here ->
 //    this->ui->spinBox_2->setValue(3);
 
 }
@@ -148,6 +178,61 @@ void simbad::gui::Dialog_open_model::on_pushButton_2_clicked()
 
 void simbad::gui::Dialog_open_model::on_pushButton_clicked()
 {
+    Big_model->set_name_of_model(this->ui->lineEdit->text());
 
-    this->close();
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Select directory for a new project"),
+                                                     "/home",
+                                                     QFileDialog::ShowDirsOnly
+                                                     | QFileDialog::DontResolveSymlinks);
+
+    QFile file;
+    //QDir::setCurrent(dir);
+    QDir Dir;
+    Dir.setCurrent(dir);
+    dir = dir + "/" + Big_model->get_name_of_model();
+    Dir.mkpath(Big_model->get_name_of_model());
+    QDir::setCurrent(dir);
+
+    file.setFileName(Big_model->get_name_of_model()+".sim");
+    //QDir::setCurrent("/home");
+    //file.open(QIODevice::ReadOnly);
+    //file.open(QIODevice::ReadOnly);
+
+    //QFile file;
+    //(Big_model->get_name_of_model())
+    if (file.exists()) {
+        file.remove();
+        file.setFileName(Big_model->get_name_of_model());
+    };
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
+       return;
+
+     QTextStream out(&file);
+     QStringList File_info = Big_model->get_model_settings_for_file();
+
+     for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
+        out << *it;
+
+     //        << "The magic number is: " << 50 << "\n";
+
+    //---QFileDialog dialog(this);
+    //---dialog.setFileMode(QFileDialog::Directory);
+
+
+    //dialog.setNameFilter(tr("Model Files (*.sim)"));
+    //dialog.setViewMode(QFileDialog::Detail);
+
+//    QString DirectoryName;
+//    if (dialog.exec()){
+
+//       DirectoryName = dialog.getExistingDirectory();
+
+        //Dialog_open_model my_dialog_for_open_model;
+        //my_dialog_for_open_model.setModal(true);
+        //my_dialog_for_open_model.exec();
+//    }
+
+
+    this->ui->lineEdit->setText(dir);
+    //this->close();
 }
