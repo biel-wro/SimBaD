@@ -418,7 +418,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Finish</string>
+    <string>Save model ...</string>
    </property>
   </widget>
   <widget class="Line" name="line_3">
