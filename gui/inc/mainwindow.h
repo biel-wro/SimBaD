@@ -18,9 +18,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
- //   random_device RandomSeed;
+    //random_device RandomSeed;
     Model_of_space *Big_model;
-
+    void clean_Big_model();
 private slots:
 
 
@@ -31,6 +31,9 @@ private slots:
     void on_actionNew_Evolution_triggered();
 
     void on_actionCreat_triggered();
+
+
+    void on_actionChange_project_triggered();
 
 private:
     Ui::MainWindow *ui;
