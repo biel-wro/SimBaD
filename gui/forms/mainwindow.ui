@@ -48,7 +48,6 @@
     <addaction name="actionDownload_Evolutiion"/>
     <addaction name="separator"/>
     <addaction name="actionChange_project"/>
-    <addaction name="actionSave_Project"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuLog">
@@ -97,15 +96,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Change Settings</string>
-   </property>
-  </action>
-  <action name="actionSave_Project">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Save Settings</string>
+    <string>Change Event Settings</string>
    </property>
   </action>
   <action name="actionOpen_Initial_Configuration">
