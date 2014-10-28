@@ -3,7 +3,7 @@
 #include <QFileDialog>
 #include "new_event_dialog.h"
 #include "iostream"
-
+#include <QMessageBox>
 
 
 simbad::gui::Dialog_open_model::Dialog_open_model(Model_of_space *B_Model, bool new_model, QWidget *parent) :
@@ -38,10 +38,13 @@ simbad::gui::Dialog_open_model::Dialog_open_model(Model_of_space *B_Model, bool 
     {
         ui->lineEdit->setEnabled(true);
         ui->spinBox_2->setEnabled(true);
+        Model_new=true;
     }
     else{
         ui->lineEdit->setEnabled(false);
         ui->spinBox_2->setEnabled(false);
+        ui->pushButton->setText("Save Model");
+        Model_new=false;
     };
     //    we have mistake here ->
 //    this->ui->spinBox_2->setValue(3);
@@ -178,61 +181,39 @@ void simbad::gui::Dialog_open_model::on_pushButton_2_clicked()
 
 void simbad::gui::Dialog_open_model::on_pushButton_clicked()
 {
-    Big_model->set_name_of_model(this->ui->lineEdit->text());
+     Big_model->set_name_of_model(this->ui->lineEdit->text());
+     if (Model_new) {
+        QFile file;
+        file.setFileName(
+            QFileDialog::getSaveFileName(this,
+            tr("Save File"),
+            Big_model->get_name_of_model(),
+            tr("Model (*.sim)")));
 
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Select directory for a new project"),
-                                                     "/home",
-                                                     QFileDialog::ShowDirsOnly
-                                                     | QFileDialog::DontResolveSymlinks);
+        if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
+        return;
+        this->Big_model->set_full_file_name(file.fileName());
 
-    QFile file;
-    //QDir::setCurrent(dir);
-    QDir Dir;
-    Dir.setCurrent(dir);
-    dir = dir + "/" + Big_model->get_name_of_model();
-    Dir.mkpath(Big_model->get_name_of_model());
-    QDir::setCurrent(dir);
+        QTextStream out(&file);
+        QStringList File_info = Big_model->get_model_settings_for_file();
 
-    file.setFileName(Big_model->get_name_of_model()+".sim");
-    //QDir::setCurrent("/home");
-    //file.open(QIODevice::ReadOnly);
-    //file.open(QIODevice::ReadOnly);
-
-    //QFile file;
-    //(Big_model->get_name_of_model())
-    if (file.exists()) {
-        file.remove();
-        file.setFileName(Big_model->get_name_of_model());
-    };
-    if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
-       return;
-
-     QTextStream out(&file);
-     QStringList File_info = Big_model->get_model_settings_for_file();
-
-     for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
+        for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
         out << *it;
+     } else {
+         QFile file;
+         file.setFileName(Big_model->get_full_file_name());
 
-     //        << "The magic number is: " << 50 << "\n";
+         if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
+         return;
 
-    //---QFileDialog dialog(this);
-    //---dialog.setFileMode(QFileDialog::Directory);
+         QTextStream out(&file);
+         QStringList File_info = Big_model->get_model_settings_for_file();
 
+         for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
+         out << *it;
 
-    //dialog.setNameFilter(tr("Model Files (*.sim)"));
-    //dialog.setViewMode(QFileDialog::Detail);
-
-//    QString DirectoryName;
-//    if (dialog.exec()){
-
-//       DirectoryName = dialog.getExistingDirectory();
-
-        //Dialog_open_model my_dialog_for_open_model;
-        //my_dialog_for_open_model.setModal(true);
-        //my_dialog_for_open_model.exec();
-//    }
+     };
 
 
-    this->ui->lineEdit->setText(dir);
-    //this->close();
+    this->close();
 }
