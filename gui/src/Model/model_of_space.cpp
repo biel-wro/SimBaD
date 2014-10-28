@@ -15,6 +15,15 @@ simbad::gui::Model_of_space::Model_of_space()
     Number_of_occurings = 0;
 }
 
+void simbad::gui::Model_of_space::set_full_file_name(QString File)
+{
+ FullFileName = File;
+}
+
+QString simbad::gui::Model_of_space::get_full_file_name()
+{
+    return FullFileName;
+}
 
 QStringList simbad::gui::Model_of_space::get_model_settings_for_file()
 {
@@ -28,18 +37,19 @@ QStringList simbad::gui::Model_of_space::get_model_settings_for_file()
         QString QStr;
         QStr = this->List_of_events_of_model[i].get_name_of_event();
         Model_Q_String_List.push_back(QStr + "\n");
-        Model_Q_String_List.push_back("Code of event :");
-        for (int j = 0; j< this->List_of_events_of_model[i].Code_of_event.size(); j++){
 
-            for (int k = 0; k < this->List_of_events_of_model[i].Code_of_event[j].size(); k++){
-                 Model_Q_String_List.push_back(QString::number(this->List_of_events_of_model[i].Code_of_event[j][k]+1));
-                 if (k != (this->List_of_events_of_model[i].Code_of_event[j].size()-1)) Model_Q_String_List.push_back("->");
-            }
-            Model_Q_String_List.push_back("\n");
+        //Model_Q_String_List.push_back("Code of event :");
+        //for (int j = 0; j< this->List_of_events_of_model[i].Code_of_event.size(); j++){
 
-            if (j!=(this->List_of_events_of_model[i].Code_of_event.size()-1))
-                Model_Q_String_List.push_back("               ");
-        };
+        //    for (int k = 0; k < this->List_of_events_of_model[i].Code_of_event[j].size(); k++){
+        //         Model_Q_String_List.push_back(QString::number(this->List_of_events_of_model[i].Code_of_event[j][k]+1));
+        //         if (k != (this->List_of_events_of_model[i].Code_of_event[j].size()-1)) Model_Q_String_List.push_back("->");
+        //    }
+        //    Model_Q_String_List.push_back("\n");
+
+        //    if (j!=(this->List_of_events_of_model[i].Code_of_event.size()-1))
+        //        Model_Q_String_List.push_back("               ");
+        //};
 
         for (int j=0; j < this->List_of_events_of_model[i].Table_of_component_rates_for_event_of_model.Table.size(); j++){
 
@@ -128,6 +138,120 @@ QStringList simbad::gui::Model_of_space::get_model_settings_for_file()
     return Model_Q_String_List;
 
 }
+
+
+
+bool simbad::gui::Model_of_space::set_model_setting_for_model_from_file(QStringList String_list)
+{
+    String_list[0].remove("Name of model: ");
+    this->set_name_of_model(String_list[0]);
+
+    String_list[1].remove("Number of dimensions: ");
+    this->set_dimension_of_model(String_list[1].toInt());
+
+    String_list[2].remove("Number of point types: ");
+    this->set_number_of_types(String_list[2].toInt());
+
+    String_list[3].remove("Number of events in model: ");
+    int Nuberm_of_events = String_list[3].toInt();
+
+    int current_line_number=4;
+    for (int i=0; i< Nuberm_of_events; i++){
+
+
+        Event_of_model Current_event(this->get_number_of_types());
+
+        Current_event.set_name_of_event(String_list[++current_line_number]);
+        Current_event.set_type_of_event(String_list[current_line_number]);
+
+        Current_event.set_number_of_types_for_event_of_model(this->get_number_of_types());
+
+        Current_event.set_code_of_event(Current_event.get_name_of_event());
+
+        Current_event.Table_of_component_rates_for_event_of_model.Number_of_types = this->get_number_of_types();
+
+        for(int i = 0; i <= this->get_number_of_types() ; i++){
+            function_for_component_rate Function_of_com_rate;
+
+            String_list[++current_line_number].remove("influent particle type: ");
+            Function_of_com_rate.set_influent_particle_type(String_list[current_line_number].toInt());
+
+            String_list[++current_line_number].remove("Function: ");
+            QString Str_Func=String_list[current_line_number];
+            Functions Func;
+            if (Str_Func=="null") Func=null;
+            if (Str_Func=="triangle") Func=triangle;
+            if (Str_Func=="modul") Func=modul ;
+            if (Str_Func=="one") Func=one ;
+            if (Str_Func=="exp_minus") Func=exp_minus;
+            if (Str_Func=="zero_next_to_null") Func=zero_next_to_null;
+            Function_of_com_rate.set_Function(Func);
+
+            String_list[++current_line_number].remove("Multiplication by constant of function: ");
+            Function_of_com_rate.set_Multiplication_by_constant(String_list[current_line_number].toFloat());
+
+
+            String_list[++current_line_number].remove("Restriction of the range: ");
+            Function_of_com_rate.set_Restrictions_from_string(String_list[current_line_number]);
+
+            String_list[++current_line_number].remove("Range of the function: ");
+            Function_of_com_rate.set_Range_of_the_function(String_list[current_line_number].toFloat());
+
+            String_list[++current_line_number].remove("Approach of the influence: ");
+            QString Str_Approach=String_list[current_line_number];
+            Approach_of_influence Appro;
+            if (Str_Approach=="no") Appro=no;
+            if (Str_Approach=="sum") Appro=sum;
+            if (Str_Approach=="exp_minus_sum") Appro=exp_minus_sum;
+            if (Str_Approach=="exp_plus_sum") Appro=exp_plus_sum;
+            if (Str_Approach=="product") Appro=product;
+            Function_of_com_rate.set_Approach_of_influence(Appro);
+
+            String_list[++current_line_number].remove("Constant rate plus: ");
+            Function_of_com_rate.set_Constant_rate_plus(String_list[current_line_number].toFloat());
+            Current_event.Table_of_component_rates_for_event_of_model.Table.push_back(Function_of_com_rate);
+        };
+
+        String_list[++current_line_number].remove("Type of new particle: ");
+        Current_event.Distribution_of_particle_for_event.
+                set_Type_of_particle(String_list[current_line_number].toInt());
+
+        String_list[++current_line_number].remove("Type of T student distribution: ");
+        Current_event.Distribution_of_particle_for_event.
+                set_Type_of_Tstudent_distribution(String_list[current_line_number].toInt());
+
+        String_list[++current_line_number].remove("Scale paramiter: ");
+        Current_event.Distribution_of_particle_for_event.
+                set_scale_paramiter(String_list[current_line_number].toFloat());
+
+        ++current_line_number;
+
+        this->push_back_new_event(Current_event);
+    };
+
+
+
+//if event was in vector, then we do not do anything
+//    QVector<Event_of_model>::const_pointer p = std::find (this->Big_model->List_of_events_of_model.begin(),
+//                                                      this->Big_model->List_of_events_of_model.end(), Current_event);;
+
+//    if (p == end(this->Big_model->List_of_events_of_model)) {
+
+//    } else {};
+
+
+
+
+   // Model_Q_String_List.push_back("\n");
+ return true;
+}
+
+void simbad::gui::Model_of_space::set_dimension_of_model(int Number)
+{
+    dimension_of_model=Number;
+}
+
+
 
 int simbad::gui::Model_of_space::get_number_of_dimentsions(){
     return dimension_of_model;
