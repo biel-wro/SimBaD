@@ -34,61 +34,91 @@ simbad::gui::MainWindow::~MainWindow()
 
 void simbad::gui::MainWindow::on_actionDownload_Evolutiion_triggered()
 {
-    //QMessageBox::information(this,"title","Hello");
-//    QString fileName;
-//    fileName = QFileDialog::getOpenFileName(this,
-//   tr("Open File(Model)"), "/home/", tr("Model Files (*.sim)"));
 
 
-//    QFileDialog dialog(this);
-//    dialog.setFileMode(QFileDialog::ExistingFile);
-//    dialog.setNameFilter(tr("Model Files (*.sim)"));
-//    dialog.setViewMode(QFileDialog::Detail);
+//    QString dir = QFileDialog::getExistingDirectory(this, tr("Select project directory"),
+//                                                     "/home",
+//                                                     QFileDialog::ShowDirsOnly
+//                                                     | QFileDialog::DontResolveSymlinks);
+//    QFile file;
 
-//    QStringList fileNames;
-//    if (dialog.exec()){
+//    QDir Dir;
 
-        //fileNames = dialog.selectedFiles();
+//    Dir.setCurrent(dir);
 
-        //Dialog_open_model my_dialog_for_open_model;
-        //my_dialog_for_open_model.setModal(true);
-        //my_dialog_for_open_model.exec();
-    //}
+//    QStringList files;
+//    files.clear();
+//    QString fileName = "*.sim";
 
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Select project directory"),
-                                                     "/home",
-                                                     QFileDialog::ShowDirsOnly
-                                                     | QFileDialog::DontResolveSymlinks);
-        //найти файлы с расширением *.sim если файлов не будет сообщить об этом если будет 2 то тоже сообщить об этом
+//    files = Dir.entryList(QStringList(fileName));
+
+
     QFile file;
-    //QDir::setCurrent(dir);
-    QDir Dir;
-    Dir.setCurrent(dir);
-    Dir.
-    dir = dir + "/" + Big_model->get_name_of_model();
-    Dir.mkpath(Big_model->get_name_of_model());
-    QDir::setCurrent(dir);
+    file.setFileName(
+         QFileDialog::getOpenFileName(this,tr("Open file"),
+                                      "/home",tr("Model (*.sim)")));
 
-    file.setFileName(Big_model->get_name_of_model());
-    //QDir::setCurrent("/home");
-    //file.open(QIODevice::ReadOnly);
-    //file.open(QIODevice::ReadOnly);
 
-    //QFile file;
-    //(Big_model->get_name_of_model())
-    if (file.exists()) {
-        file.remove();
-        file.setFileName(Big_model->get_name_of_model());
-    };
-    if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
-       return;
+   // if (file.exists()) {
+   //        file.remove();
+           //file.setFileName(Big_model->get_name_of_model()+".sim");
+   //    };
+   // if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
+   // return;
 
-     QTextStream out(&file);
-     QStringList File_info = Big_model->get_model_settings_for_file();
 
-     for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
-        out << *it;
+    //QTextStream out(&file);
+    //QStringList File_info = Big_model->get_model_settings_for_file();
 
+    //for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
+    //   out << *it;
+
+    //QMessageBox msgBox;
+    //msgBox.setText("file " + file.fileName()+ " have been saved successfully");
+    //msgBox.exec();
+
+
+
+    //if (files.size()==1){
+
+        //file.setFileName(files.at(0));
+        clean_Big_model();
+        this->menuBar()->actions()[0]->menu()->actions()[3]->setEnabled(true);
+
+        if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) return;
+
+        QTextStream input(&file);
+
+        QStringList Input_Info;
+
+        do
+        {
+            Input_Info.push_back(input.readLine());
+        } while(input.atEnd()!=true);
+
+        Big_model->set_model_setting_for_model_from_file(Input_Info);
+        Big_model->set_full_file_name(file.fileName());
+        //QMessageBox msgBox;
+        //msgBox.setText("file "+  +" have been uploaded successfully");
+        //msgBox.exec();
+
+        //input >> Input_Info.push_back();
+
+//     for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
+//        out << *it;
+    //} else {
+    //    if (files.size()==0) {
+    //            QMessageBox msgBox;
+    //            msgBox.setText("There are no *.sim files in chosen directory. Please choose a directory with *.sim file");
+    //            msgBox.exec();
+    //    } else
+    //    {
+    //        QMessageBox msgBox;
+    //        msgBox.setText("There are several *.sim files in chosen directory. Please delete extra *.sim files in the directory");
+    //        msgBox.exec();
+
+    //    }
+    //};
 
 
 }
