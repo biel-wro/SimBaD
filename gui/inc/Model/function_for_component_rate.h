@@ -97,6 +97,10 @@ public:
     void set_Multiplication_by_constant(float value);
     void set_Range_of_the_function(float value);
 
+    void set_Function(Functions Function);
+    void set_Restriction(Restrictions Restriction);
+    void set_Approach_of_influence(Approach_of_influence Approach_of_inf);
+
     int get_influent_particle_type();
     QString get_string_of_Functions();
     QString get_string_of_Restrictions();
