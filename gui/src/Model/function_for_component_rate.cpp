@@ -26,6 +26,7 @@ simbad::gui::function_for_component_rate::function_for_component_rate(const func
 
 
 
+
 simbad::gui::function_for_component_rate::~function_for_component_rate()
 {
 
@@ -81,6 +82,21 @@ void simbad::gui::function_for_component_rate::set_Functions_from_string(QString
             Function_for_rate=null;
         };
 
+}
+
+void simbad::gui::function_for_component_rate::set_Function(Functions Function)
+{
+    Function_for_rate = Function;
+}
+
+void simbad::gui::function_for_component_rate::set_Restriction(Restrictions Restriction)
+{
+    Restriction_of_the_range = Restriction;
+}
+
+void simbad::gui::function_for_component_rate::set_Approach_of_influence(Approach_of_influence Approach_of_inf)
+{
+    Approach = Approach_of_inf;
 }
 
 void simbad::gui::function_for_component_rate::set_Restrictions_from_string(QString A)
