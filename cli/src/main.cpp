@@ -1,7 +1,6 @@
 #include "core.h"
 #include "launcher.h"
 
-
 #include <boost/program_options.hpp>
 
 int main(int argc, char** argv)
