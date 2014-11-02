@@ -94,16 +94,16 @@
    <property name="geometry">
     <rect>
      <x>550</x>
-     <y>390</y>
+     <y>430</y>
      <width>301</width>
      <height>20</height>
     </rect>
    </property>
    <property name="minimum">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="maximum">
-    <number>100</number>
+    <number>200</number>
    </property>
    <property name="singleStep">
     <number>1</number>
@@ -134,7 +134,7 @@
    <property name="geometry">
     <rect>
      <x>550</x>
-     <y>360</y>
+     <y>390</y>
      <width>311</width>
      <height>16</height>
     </rect>
@@ -153,7 +153,7 @@
    <property name="geometry">
     <rect>
      <x>550</x>
-     <y>430</y>
+     <y>460</y>
      <width>311</width>
      <height>31</height>
     </rect>
@@ -172,25 +172,31 @@
    <property name="geometry">
     <rect>
      <x>550</x>
-     <y>470</y>
+     <y>500</y>
      <width>301</width>
      <height>20</height>
     </rect>
    </property>
    <property name="minimum">
-    <number>0</number>
+    <number>1</number>
    </property>
    <property name="maximum">
-    <number>100</number>
+    <number>200</number>
    </property>
    <property name="singleStep">
     <number>1</number>
    </property>
    <property name="pageStep">
-    <number>10</number>
+    <number>1</number>
    </property>
    <property name="value">
     <number>10</number>
+   </property>
+   <property name="sliderPosition">
+    <number>10</number>
+   </property>
+   <property name="tracking">
+    <bool>true</bool>
    </property>
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
@@ -269,19 +275,19 @@
    <property name="geometry">
     <rect>
      <x>550</x>
-     <y>310</y>
-     <width>221</width>
-     <height>21</height>
+     <y>300</y>
+     <width>220</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Arial</family>
-     <pointsize>14</pointsize>
+     <pointsize>16</pointsize>
     </font>
    </property>
    <property name="text">
-    <string>Particle Brush settings</string>
+    <string>Particle Brush settings:</string>
    </property>
   </widget>
   <widget class="GLWidjet_for_init_model" name="widget" native="true">
@@ -357,9 +363,9 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>720</x>
+     <x>640</x>
      <y>630</y>
-     <width>121</width>
+     <width>211</width>
      <height>31</height>
     </rect>
    </property>
@@ -370,7 +376,81 @@
     </font>
    </property>
    <property name="text">
-    <string>Ok</string>
+    <string>Save configuration ...</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="radioButton">
+   <property name="geometry">
+    <rect>
+     <x>820</x>
+     <y>350</y>
+     <width>31</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::DefaultContextMenu</enum>
+   </property>
+   <property name="acceptDrops">
+    <bool>false</bool>
+   </property>
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="toolTipDuration">
+    <number>-1</number>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::RightToLeft</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="autoExclusive">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_Brush_2">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>350</y>
+     <width>251</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Random (Poisson measure):</string>
    </property>
   </widget>
  </widget>

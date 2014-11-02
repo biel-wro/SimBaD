@@ -1,8 +1,10 @@
 project(SimBaD)
 cmake_minimum_required(VERSION 2.8)
 
-set( CLI_NAME cli )
-set( CORE_NAME core )
+#+++++
+#set( CLI_NAME cli )
+#set( CORE_NAME core )
+#+++++
 set( GUI_NAME gui )
 
 # C++11
@@ -32,21 +34,24 @@ else()
     set( SHARED_LIBS SHARED )
 endif()
 
-
+#+++++
 # Boost	
-if( WIN32 )
- set(Boost_USE_STATIC_LIBS ON)
- set(Boost_USE_MULTITHREADED ON)
+# if( WIN32 )
+# set(Boost_USE_STATIC_LIBS ON)
+# set(Boost_USE_MULTITHREADED ON)
 
+#endif()
 
-endif()
+#find_package( Boost 1.40 COMPONENTS exception program_options REQUIRED )
 
-find_package( Boost 1.40 COMPONENTS exception program_options REQUIRED )
-
-include_directories( ${Boost_INCLUDE_DIR} )
+#include_directories( ${Boost_INCLUDE_DIR} )
+#+++++
 
 
 enable_testing()
-#subdirs( cli gui)
-subdirs( core cli gui)
 
+subdirs(gui)
+
+#+++++
+#subdirs( core cli gui)
+#+++++

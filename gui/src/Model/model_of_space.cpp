@@ -25,6 +25,72 @@ QString simbad::gui::Model_of_space::get_full_file_name()
     return FullFileName;
 }
 
+QStringList simbad::gui::Model_of_space::get_configuration_setting_for_file()
+{
+    QStringList Conf_Q_String_List;
+
+    Conf_Q_String_List.push_back("Number of dimensions: " + QString::number(this->get_number_of_dimentsions())+ "\n");
+    Conf_Q_String_List.push_back("Number of point types: " + QString::number(this->get_number_of_types()) + "\n");
+
+    for (int i=0;i<this->get_number_of_types();i++){
+        int red=this->ModelPoints.Vector_of_types[i].InitialConfigurationColor.red();
+        int green=this->ModelPoints.Vector_of_types[i].InitialConfigurationColor.green();
+        int blue=this->ModelPoints.Vector_of_types[i].InitialConfigurationColor.blue();
+        Conf_Q_String_List.push_back("Color for initial configuration : \n");
+        Conf_Q_String_List.push_back("Red: " + QString::number(red) + "\n");
+        Conf_Q_String_List.push_back("Green: " + QString::number(green) + "\n");
+        Conf_Q_String_List.push_back("Blue: " + QString::number(blue) + "\n");
+
+
+        red=this->ModelPoints.Vector_of_types[i].DynamicSimulationColor.red();
+        green=this->ModelPoints.Vector_of_types[i].DynamicSimulationColor.green();
+        blue=this->ModelPoints.Vector_of_types[i].DynamicSimulationColor.blue();
+
+        Conf_Q_String_List.push_back("Color for dynamical configuration: \n");
+        Conf_Q_String_List.push_back("Red: " + QString::number(red) + "\n");
+        Conf_Q_String_List.push_back("Green: " + QString::number(green) + "\n");
+        Conf_Q_String_List.push_back("Blue: " + QString::number(blue) + "\n");
+
+        Conf_Q_String_List.push_back("Number of points in type "+ QString::number(i+1)+  ": " +
+                                     QString::number(this->ModelPoints.
+                                                     Vector_of_types[i].
+                                                     Number_of_points_in_SpacePointArray)
+                                     +"\n");
+
+        for(int j=0;j<this->ModelPoints.Vector_of_types[i].Number_of_points_in_SpacePointArray; j++ )
+        {
+            Conf_Q_String_List.push_back("BirthTime: " +
+                        QString::number(this->ModelPoints.
+                                        Vector_of_types[i].
+                                        SpacePointArray[j].BirthTime) +
+                                         "\n");
+            Conf_Q_String_List.push_back("number of point in cell: " +
+                        QString::number(this->ModelPoints.
+                                        Vector_of_types[i].
+                                        SpacePointArray[j].number_of_point_in_cell) +
+                                         "\n");
+
+            Conf_Q_String_List.push_back("X coordinate: " +
+                        QString::number(this->ModelPoints.
+                                        Vector_of_types[i].
+                                        SpacePointArray[j].Xcoordinate) +
+                                         "\n");
+
+            Conf_Q_String_List.push_back("Y coordinate: " +
+                        QString::number(this->ModelPoints.
+                                        Vector_of_types[i].
+                                        SpacePointArray[j].Ycoordinate) +
+                                         "\n");
+       }
+
+
+
+
+    };
+    return Conf_Q_String_List;
+
+}
+
 QStringList simbad::gui::Model_of_space::get_model_settings_for_file()
 {
     QStringList Model_Q_String_List;
@@ -139,6 +205,94 @@ QStringList simbad::gui::Model_of_space::get_model_settings_for_file()
 
 }
 
+bool simbad::gui::Model_of_space::set_configiguration_setting_from_file(QStringList String_list)
+{
+
+    int Dimention;
+    int Number_of_typ;
+
+    String_list[0].remove("Number of dimensions: ");
+    Dimention = String_list[0].toInt();
+
+    String_list[1].remove("Number of point types: ");
+    Number_of_typ = String_list[1].toInt();
+
+    if (this->get_number_of_dimentsions()== Dimention &&
+            this->get_number_of_types()== Number_of_typ) {
+
+        int current_line_number=1;
+        for (int i=0;i<this->get_number_of_types();i++){
+
+            ++current_line_number;
+
+            this->ModelPoints.Number_of_types = this->get_number_of_types();
+            String_list[++current_line_number].remove("Red: ");
+            this->ModelPoints.Vector_of_types[i].
+                    InitialConfigurationColor.setRed(String_list[current_line_number].toInt());
+            String_list[++current_line_number].remove("Green: ");
+            this->ModelPoints.Vector_of_types[i].
+                    InitialConfigurationColor.setGreen(String_list[current_line_number].toInt());
+            String_list[++current_line_number].remove("Blue: ");
+            this->ModelPoints.Vector_of_types[i].
+                    InitialConfigurationColor.setBlue(String_list[current_line_number].toInt());
+
+
+            ++current_line_number;
+            String_list[++current_line_number].remove("Red: ");
+            this->ModelPoints.Vector_of_types[i].
+                    DynamicSimulationColor.setRed(String_list[current_line_number].toInt());
+            String_list[++current_line_number].remove("Green: ");
+            this->ModelPoints.Vector_of_types[i].
+                    DynamicSimulationColor.setGreen(String_list[current_line_number].toInt());
+            String_list[++current_line_number].remove("Blue: ");
+            this->ModelPoints.Vector_of_types[i].
+                    DynamicSimulationColor.setBlue(String_list[current_line_number].toInt());
+
+
+            String_list[++current_line_number].remove("Number of points in type " + QString::number(i+1)+  ": ");
+            this->ModelPoints.Vector_of_types[i].
+                    setNumber_of_points_in_SpacePointArray(
+                        String_list[current_line_number].toInt());
+
+
+            for(int j=0;j<this->ModelPoints.Vector_of_types[i].Number_of_points_in_SpacePointArray; j++ )
+            {
+                String_list[++current_line_number].remove("BirthTime: ");
+                this->ModelPoints.Vector_of_types[i].
+                        SpacePointArray[j].BirthTime = String_list[current_line_number].toDouble();
+
+                String_list[++current_line_number].remove("number of point in cell: ");
+                this->ModelPoints.Vector_of_types[i].
+                        SpacePointArray[j].number_of_point_in_cell = String_list[current_line_number].toInt();
+
+
+                String_list[++current_line_number].remove("X coordinate: ");
+                this->ModelPoints.Vector_of_types[i].
+                        SpacePointArray[j].Xcoordinate = String_list[current_line_number].toFloat();
+
+                String_list[++current_line_number].remove("Y coordinate: ");
+                this->ModelPoints.Vector_of_types[i].
+                        SpacePointArray[j].Ycoordinate = String_list[current_line_number].toFloat();
+
+           };
+
+
+
+
+        };
+
+
+        return true;
+    } else {
+
+        return false;
+    };
+
+
+
+
+
+}
 
 
 bool simbad::gui::Model_of_space::set_model_setting_for_model_from_file(QStringList String_list)

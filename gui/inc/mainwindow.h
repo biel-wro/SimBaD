@@ -35,6 +35,9 @@ private slots:
 
     void on_actionChange_project_triggered();
 
+
+    void on_actionOpen_Initial_Configuration_triggered();
+
 private:
     Ui::MainWindow *ui;
 

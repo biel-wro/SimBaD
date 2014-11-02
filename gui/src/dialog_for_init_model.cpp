@@ -2,10 +2,11 @@
 #include "ui_dialog_for_init_model.h"
 #include <QColorDialog>
 #include "glwidjet_for_init_model.h"
+#include "qfiledialog.h"
 using namespace std;
 #include<qstring.h>
 
-simbad::gui::Dialog_for_init_model::Dialog_for_init_model(QWidget *parent) :
+simbad::gui::Dialog_for_init_model::Dialog_for_init_model(bool new_configuration, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog_for_init_model)
 {
@@ -14,7 +15,9 @@ simbad::gui::Dialog_for_init_model::Dialog_for_init_model(QWidget *parent) :
 
 
     ui->setupUi(this);
-
+    new_config = new_configuration;
+    if (new_config) this->ui->pushButton->setText("Save new config ...");
+            else this->ui->pushButton->setText("Save configuration");
     //this->ui->widget->RandomSeed=this->RandomSeed;
 
     QPalette Pal_color_for_init_conf(palette());
@@ -32,6 +35,8 @@ simbad::gui::Dialog_for_init_model::Dialog_for_init_model(QWidget *parent) :
 
     ui->widget->setParentWidjetpos(this->pos());
  //   ui->label->setText(QString::number(this->Big_model->ModelPoints.Vector_of_types.));
+    ui->radioButton->setChecked(true);
+    ui->widget->set_regime(true);
 }
 
 simbad::gui::Dialog_for_init_model::~Dialog_for_init_model()
@@ -143,5 +148,51 @@ void simbad::gui::Dialog_for_init_model::on_horizontalSlider_2_valueChanged(int 
 
 void simbad::gui::Dialog_for_init_model::on_pushButton_clicked()
 {
+  if (new_config){
+    QFile file;
+    QString File_name;
+    File_name =         QFileDialog::getSaveFileName(this,
+                                                     tr("Save configuration file "),
+                                                     "new_configuration",
+                                                     tr("Model (*.cnf)"));
+    file.setFileName(File_name);
+    if (file.exists()) {
+        file.remove();
+        file.setFileName(File_name);
+    };
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
+    return;
+
+
+    QTextStream out(&file);
+    QStringList File_info = Big_model->get_configuration_setting_for_file();
+    for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
+    out << *it;
+
     this->close();
+ } else {
+     //QFile file;
+     //file.setFileName(Big_model->get_full_file_name());
+
+     //if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
+     //return;
+
+     //QTextStream out(&file);
+     //QStringList File_info = Big_model->get_model_settings_for_file();
+
+     //for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
+     //out << *it;
+    this->close();
+ };
+
+
+
+
+
+}
+
+
+void simbad::gui::Dialog_for_init_model::on_radioButton_clicked(bool checked)
+{
+    this->ui->widget->set_regime(checked);
 }

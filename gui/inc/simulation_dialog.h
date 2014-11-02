@@ -29,7 +29,6 @@ public:
     int step_for_number_of_event=0;
 
 private slots:
-    void on_buttonBox_accepted();
 
     void on_pushButton_clicked();
 

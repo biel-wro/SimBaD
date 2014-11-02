@@ -35,90 +35,37 @@ simbad::gui::MainWindow::~MainWindow()
 void simbad::gui::MainWindow::on_actionDownload_Evolutiion_triggered()
 {
 
-
-//    QString dir = QFileDialog::getExistingDirectory(this, tr("Select project directory"),
-//                                                     "/home",
-//                                                     QFileDialog::ShowDirsOnly
-//                                                     | QFileDialog::DontResolveSymlinks);
-//    QFile file;
-
-//    QDir Dir;
-
-//    Dir.setCurrent(dir);
-
-//    QStringList files;
-//    files.clear();
-//    QString fileName = "*.sim";
-
-//    files = Dir.entryList(QStringList(fileName));
-
-
     QFile file;
-    file.setFileName(
-         QFileDialog::getOpenFileName(this,tr("Open file"),
-                                      "/home",tr("Model (*.sim)")));
+    QString File_name=QFileDialog::getOpenFileName(this,tr("Open file"),
+                                                            "/home",tr("Model (*.sim)"));
+    file.setFileName(File_name);
+
+    clean_Big_model();
+
+    this->menuBar()->actions()[0]->menu()->actions()[3]->setEnabled(true);
 
 
-   // if (file.exists()) {
-   //        file.remove();
-           //file.setFileName(Big_model->get_name_of_model()+".sim");
-   //    };
-   // if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
-   // return;
+    this->menuBar()->actions()[1]->menu()->actions()[0]->setEnabled(true);
+    this->menuBar()->actions()[1]->menu()->actions()[1]->setEnabled(true);
+
+    this->menuBar()->actions()[2]->menu()->actions()[0]->setEnabled(false);
 
 
-    //QTextStream out(&file);
-    //QStringList File_info = Big_model->get_model_settings_for_file();
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) return;
 
-    //for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
-    //   out << *it;
+    QTextStream input(&file);
 
-    //QMessageBox msgBox;
-    //msgBox.setText("file " + file.fileName()+ " have been saved successfully");
-    //msgBox.exec();
+    QStringList Input_Info;
 
+    do
+    {
+       Input_Info.push_back(input.readLine());
+    } while(input.atEnd()!=true);
 
+    Big_model->set_model_setting_for_model_from_file(Input_Info);
+    Big_model->set_full_file_name(file.fileName());
 
-    //if (files.size()==1){
-
-        //file.setFileName(files.at(0));
-        clean_Big_model();
-        this->menuBar()->actions()[0]->menu()->actions()[3]->setEnabled(true);
-
-        if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) return;
-
-        QTextStream input(&file);
-
-        QStringList Input_Info;
-
-        do
-        {
-            Input_Info.push_back(input.readLine());
-        } while(input.atEnd()!=true);
-
-        Big_model->set_model_setting_for_model_from_file(Input_Info);
-        Big_model->set_full_file_name(file.fileName());
-        //QMessageBox msgBox;
-        //msgBox.setText("file "+  +" have been uploaded successfully");
-        //msgBox.exec();
-
-        //input >> Input_Info.push_back();
-
-//     for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
-//        out << *it;
-    //} else {
-    //    if (files.size()==0) {
-    //            QMessageBox msgBox;
-    //            msgBox.setText("There are no *.sim files in chosen directory. Please choose a directory with *.sim file");
-    //            msgBox.exec();
-    //    } else
-    //    {
-    //        QMessageBox msgBox;
-    //        msgBox.setText("There are several *.sim files in chosen directory. Please delete extra *.sim files in the directory");
-    //        msgBox.exec();
-
-    //    }
-    //};
+    this->Big_model->ModelPoints.initialisation_of_model(Big_model->get_number_of_types());
 
 
 }
@@ -128,6 +75,7 @@ void simbad::gui::MainWindow::on_actionDownload_Evolutiion_triggered()
 void simbad::gui::MainWindow::on_actionNew_triggered()
 {
 
+    this->Big_model->initiate_before_simulation();
 
     Simulation_Dialog Sim_dialog_for_dyn_conf;
     Sim_dialog_for_dyn_conf.setModel_of_space(this->Big_model);
@@ -135,6 +83,15 @@ void simbad::gui::MainWindow::on_actionNew_triggered()
     Sim_dialog_for_dyn_conf.setModal(true);
     Sim_dialog_for_dyn_conf.exec();
 
+
+    this->clean_Big_model();
+    this->menuBar()->actions()[0]->menu()->actions()[3]->setEnabled(false);
+
+    this->menuBar()->actions()[1]->menu()->actions()[0]->setEnabled(false);
+
+    this->menuBar()->actions()[1]->menu()->actions()[1]->setEnabled(false);
+
+    this->menuBar()->actions()[2]->menu()->actions()[0]->setEnabled(false);
 
 
 
@@ -150,22 +107,19 @@ void simbad::gui::MainWindow::on_actionNew_Evolution_triggered()
 
 //save refferens to mainForm for Big_model "main model"
 
-
-//        my_dialog_for_open_model.Big_model=this->Big_model;
-
         my_dialog_for_open_model.setModal(true);
 
         my_dialog_for_open_model.exec();
 
-        //this->menuBar()->actions()[0]->menu()->actions()[0]->setEnabled(false);
-        //this->menuBar()->actions()[1]->menu()->actions()[0]->setEnabled(true);
-        //this->menuBar()->actions()[1]->menu()->actions()[1]->setEnabled(true);
         this->menuBar()->actions()[0]->menu()->actions()[3]->setEnabled(true);
-        //this->menuBar()->actions()[0]->menu()->actions()[4]->setEnabled(true);
 
+
+        this->menuBar()->actions()[1]->menu()->actions()[0]->setEnabled(true);
+        this->menuBar()->actions()[1]->menu()->actions()[1]->setEnabled(true);
+
+        this->menuBar()->actions()[2]->menu()->actions()[0]->setEnabled(false);
 
         this->Big_model->ModelPoints.initialisation_of_model(Big_model->get_number_of_types());
-
 }
 
 
@@ -173,19 +127,16 @@ void simbad::gui::MainWindow::on_actionNew_Evolution_triggered()
 
 void simbad::gui::MainWindow::on_actionCreat_triggered()
 {
-    Dialog_for_init_model Sim_dialog_for_new_conf;
+    Dialog_for_init_model Sim_dialog_for_new_conf(true);
     Sim_dialog_for_new_conf.setModel_of_space(this->Big_model);
-    //Sim_dialog_for_new_conf.RandomSeed=this->RandomSeed;
+
     Sim_dialog_for_new_conf.setModal(true);
     Sim_dialog_for_new_conf.exec();
 
-    this->menuBar()->actions()[0]->menu()->actions()[0]->setEnabled(false);
-    this->menuBar()->actions()[1]->menu()->actions()[0]->setEnabled(false);
-    this->menuBar()->actions()[1]->menu()->actions()[1]->setEnabled(false);
+
     this->menuBar()->actions()[2]->menu()->actions()[0]->setEnabled(true);
 
-    //cout<<"void simbad::gui::MainWindow::on_actionCreat_triggered()"<<endl;
-    this->Big_model->initiate_before_simulation();
+
 }
 
 
@@ -198,10 +149,49 @@ void simbad::gui::MainWindow::on_actionChange_project_triggered()
     my_dialog_for_open_model.setModal(true);
 
     my_dialog_for_open_model.exec();
+
+    this->menuBar()->actions()[0]->menu()->actions()[3]->setEnabled(true);
+
 }
 
 void simbad::gui::MainWindow::clean_Big_model()
 {
     delete this->Big_model;
     this->Big_model = new Model_of_space;
+}
+
+void simbad::gui::MainWindow::on_actionOpen_Initial_Configuration_triggered()
+{
+
+
+    QFile file;
+    QString File_name=          QFileDialog::getOpenFileName(this,tr("Open file for initial configuration"),
+                                                             "/home",tr("Model (*.cnf)"));
+
+    file.setFileName(File_name);
+
+
+
+    if (!file.open(QIODevice::ReadWrite | QIODevice::Text)) return;
+
+    QTextStream input(&file);
+
+    QStringList Input_Info;
+
+    do
+    {
+      Input_Info.push_back(input.readLine());
+    } while(input.atEnd()!=true);
+
+
+
+        if (Big_model->set_configiguration_setting_from_file(Input_Info)){
+//            Big_model->set_full_file_name(file.fileName());
+
+            this->menuBar()->actions()[2]->menu()->actions()[0]->setEnabled(true);
+
+        } else {
+
+
+        };
 }

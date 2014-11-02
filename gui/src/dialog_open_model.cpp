@@ -184,11 +184,17 @@ void simbad::gui::Dialog_open_model::on_pushButton_clicked()
      Big_model->set_name_of_model(this->ui->lineEdit->text());
      if (Model_new) {
         QFile file;
-        file.setFileName(
-            QFileDialog::getSaveFileName(this,
-            tr("Save File"),
-            Big_model->get_name_of_model(),
-            tr("Model (*.sim)")));
+        QString File_name=QFileDialog::getSaveFileName(this,
+                                                                   tr("Save File"),
+                                                                   Big_model->get_name_of_model(),
+                                                                   tr("Model (*.sim)"));
+        file.setFileName(File_name);
+        if (file.exists()){
+            file.remove();
+        }
+        file.setFileName(File_name);
+
+
 
         if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
         return;
@@ -199,9 +205,16 @@ void simbad::gui::Dialog_open_model::on_pushButton_clicked()
 
         for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
         out << *it;
+
      } else {
          QFile file;
          file.setFileName(Big_model->get_full_file_name());
+         if (file.exists()){
+             file.remove();
+         }
+         file.setFileName(Big_model->get_full_file_name());
+
+
 
          if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
          return;

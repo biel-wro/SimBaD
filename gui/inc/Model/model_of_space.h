@@ -53,6 +53,8 @@ public:
 
     void set_full_file_name(QString File);
     bool set_model_setting_for_model_from_file(QStringList String_list);
+    bool set_configiguration_setting_from_file(QStringList String_list);
+
     void set_dimension_of_model(int Number);
     void set_name_of_model(QString Name_of_the_model);
     void set_number_of_types(int Number);
@@ -77,6 +79,7 @@ public:
     void push_back_new_event(const Event_of_model &New_event);
     QVector <Event_of_model> get_vector_of_events();
     QStringList get_model_settings_for_file();
+    QStringList get_configuration_setting_for_file();
     int get_number_of_dimentsions();
 
 

@@ -25,7 +25,7 @@ void simbad::gui::Cell_Map::setInitConfiguration(Points_of_model & Model_P)
     };
 
     for(int k=0; k < Model_P.Number_of_types; k++){
-        for(int i = 0; i < range_of_call_array; ++i)
+        for(int i = 0; i < range_of_call_array; i++)
         Array_of_cells[i][k].reserve(10);
     };
 //    cout << "1" << endl;

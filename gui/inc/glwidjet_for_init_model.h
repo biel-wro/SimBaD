@@ -13,7 +13,7 @@ using namespace std;
 class GLWidjet_for_init_model : public QWidget
 {
     //QTimer animationTimer;
-
+    bool random_regime;
 public:
     simbad::gui::Model_of_space* Big_model;
     GLWidjet_for_init_model(QWidget *parent = 0 );
@@ -49,7 +49,7 @@ protected:
 
 //private:
 public:
-
+     void set_regime(bool random_reg);
 //    void initializeGL();
 //    void paintGL();
 //    void resize(int w,int h);

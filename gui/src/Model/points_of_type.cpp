@@ -58,10 +58,16 @@ void simbad::gui::points_of_type::setParticle_Type(int ParticleType)
 
 void simbad::gui::points_of_type::setNumber_of_points_in_SpacePointArray(int Number)
 {
-    Number_of_points_in_SpacePointArray =Number;
+    Number_of_points_in_SpacePointArray = Number;
 }
 
 
 simbad::gui::points_of_type::~points_of_type()
 {
+}
+
+
+int simbad::gui::points_of_type::get_number_of_points_in_type()
+{
+    return Number_of_points_in_SpacePointArray;
 }

@@ -49,10 +49,6 @@ simbad::gui::Simulation_Dialog::~Simulation_Dialog()
     delete ui;
 }
 
-void simbad::gui::Simulation_Dialog::on_buttonBox_accepted()
-{
-
-}
 
 void simbad::gui::Simulation_Dialog::on_pushButton_clicked()
 {

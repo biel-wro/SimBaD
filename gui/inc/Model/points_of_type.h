@@ -124,6 +124,9 @@ public:
     QColor DynSimColor, const QVector<Point_of_space> & Array_of_points);
 //destuctor
    ~points_of_type();
+
+    void set_number_of_points_in_type(int Number);
+    int get_number_of_points_in_type();
 };
 
 
