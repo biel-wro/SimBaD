@@ -155,22 +155,25 @@ void simbad::gui::Dialog_for_init_model::on_pushButton_clicked()
                                                      tr("Save configuration file "),
                                                      "new_configuration",
                                                      tr("Model (*.cnf)"));
-    file.setFileName(File_name);
-    if (file.exists()) {
-        file.remove();
+    if (File_name!=""){
         file.setFileName(File_name);
+        if (file.exists()) {
+            file.remove();
+            file.setFileName(File_name);
+        };
+        if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
+        return;
+
+
+        QTextStream out(&file);
+        QStringList File_info = Big_model->get_configuration_setting_for_file();
+        for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
+        out << *it;
+
+        this->Big_model->set_conf_full_file_name(File_name);
+        this->close();
     };
-    if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
-    return;
-
-
-    QTextStream out(&file);
-    QStringList File_info = Big_model->get_configuration_setting_for_file();
-    for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
-    out << *it;
-
-    this->close();
- } else {
+    } else {
      //QFile file;
      //file.setFileName(Big_model->get_full_file_name());
 

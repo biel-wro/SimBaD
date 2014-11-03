@@ -13,6 +13,8 @@ simbad::gui::Model_of_space::Model_of_space()
     Global_clock = 0.0;
     Number_of_events_dynamics = 0;
     Number_of_occurings = 0;
+    FullFileName="";
+    ConfFullFileName="";
 }
 
 void simbad::gui::Model_of_space::set_full_file_name(QString File)
@@ -1826,4 +1828,15 @@ float simbad::gui::Model_of_space::rate_linear_on_configuration(int EventNumber,
 long double simbad::gui::Model_of_space::get_global_clock()
 {
     return Global_clock;
+}
+
+
+void simbad::gui::Model_of_space::set_conf_full_file_name(QString Conf_file_name)
+{
+    ConfFullFileName = Conf_file_name;
+}
+
+QString simbad::gui::Model_of_space::get_conf_full_file_name()
+{
+    return ConfFullFileName;
 }

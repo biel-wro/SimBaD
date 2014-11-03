@@ -194,19 +194,19 @@ void simbad::gui::Dialog_open_model::on_pushButton_clicked()
         }
         file.setFileName(File_name);
 
+        if (File_name!="" && file.open(QIODevice::ReadWrite | QIODevice::Text)){
 
 
-        if (!file.open(QIODevice::ReadWrite | QIODevice::Text))
-        return;
-        this->Big_model->set_full_file_name(file.fileName());
+            this->Big_model->set_full_file_name(file.fileName());
 
-        QTextStream out(&file);
-        QStringList File_info = Big_model->get_model_settings_for_file();
+            QTextStream out(&file);
+            QStringList File_info = Big_model->get_model_settings_for_file();
 
-        for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
-        out << *it;
-
-     } else {
+            for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
+            out << *it;
+            this->close();
+        };
+    } else {
          QFile file;
          file.setFileName(Big_model->get_full_file_name());
          if (file.exists()){
@@ -224,9 +224,9 @@ void simbad::gui::Dialog_open_model::on_pushButton_clicked()
 
          for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
          out << *it;
-
+         this->close();
      };
 
 
-    this->close();
+
 }

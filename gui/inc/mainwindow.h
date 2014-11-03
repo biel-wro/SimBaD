@@ -21,6 +21,7 @@ public:
     //random_device RandomSeed;
     Model_of_space *Big_model;
     void clean_Big_model();
+    void clean_init_conf_and_download_model_settings();
 private slots:
 
 

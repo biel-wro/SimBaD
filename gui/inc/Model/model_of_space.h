@@ -19,6 +19,7 @@ namespace gui{
 class Model_of_space
 {
     QString FullFileName;
+    QString ConfFullFileName;
     QString Name_of_model;
     int dimension_of_model;
     int number_of_types_in_model;
@@ -50,6 +51,7 @@ public:
 
 
 // functions for changing the Model_of_space
+    void set_conf_full_file_name(QString Conf_file_name);
 
     void set_full_file_name(QString File);
     bool set_model_setting_for_model_from_file(QStringList String_list);
@@ -73,6 +75,7 @@ public:
     void one_birth(int number_of_type_of_child,
                    float Xcoordinate_of_new_particle, float Ycoordinate_of_new_particle);
 // functions for examining the Model_of_space
+    QString get_conf_full_file_name();
     QString get_full_file_name();
     QString get_name_of_model();
     int get_number_of_types();
