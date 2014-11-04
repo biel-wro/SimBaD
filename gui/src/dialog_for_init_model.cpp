@@ -35,7 +35,9 @@ simbad::gui::Dialog_for_init_model::Dialog_for_init_model(bool new_configuration
 
     ui->widget->setParentWidjetpos(this->pos());
  //   ui->label->setText(QString::number(this->Big_model->ModelPoints.Vector_of_types.));
-    ui->radioButton->setChecked(true);
+ //   ui->radioButton->setChecked(true);
+    ui->checkBox_Random_measure->setChecked(true);
+
     ui->widget->set_regime(true);
 }
 
@@ -195,7 +197,9 @@ void simbad::gui::Dialog_for_init_model::on_pushButton_clicked()
 }
 
 
-void simbad::gui::Dialog_for_init_model::on_radioButton_clicked(bool checked)
+
+
+void simbad::gui::Dialog_for_init_model::on_checkBox_Random_measure_clicked(bool checked)
 {
     this->ui->widget->set_regime(checked);
 }

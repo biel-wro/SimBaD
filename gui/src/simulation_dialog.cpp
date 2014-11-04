@@ -75,6 +75,8 @@ void simbad::gui::Simulation_Dialog::on_pushButton_2_clicked()
    // sim_regime=false;
     this->ui->pushButton->setEnabled(true);
     this->ui->pushButton_2->setEnabled(false);
+
+
     Timer_clock->stop();
 
 
@@ -89,9 +91,14 @@ void simbad::gui::Simulation_Dialog::dynamics()
     while (i && Number_of_occurings_bigen + step_for_number_of_event > this->Big_model->Number_of_occurings){
           i=this->Big_model->timer();
     };
-    this->ui->lineTime->setText(QString::number((double)this->Big_model->get_global_clock()));
-    this->ui->line_number_of_events->setText(QString::number(this->Big_model->Number_of_occurings));
-    this->ui->line_number_of_events_2->setText(QString::number(this->Big_model->Number_of_events_dynamics));
+    //this->ui->lineTime->setText(QString::number());
+    //this->ui->lcdNumber_Time->value(get_global_clock());
+    //this->ui->line_number_of_events->setText(QString::number(this->Big_model->Number_of_occurings));
+    //this->ui->line_number_of_events_2->setText(QString::number(this->Big_model->Number_of_events_dynamics));
+
+    this->ui->lcdNumber_Time->display((double)this->Big_model->get_global_clock());
+    this->ui->lcdNumber_events->display(this->Big_model->Number_of_occurings);
+    this->ui->lcdNumber_attempts->display(this->Big_model->Number_of_events_dynamics);
     this->ui->widget->repaint();
 
 }
@@ -113,4 +120,9 @@ void simbad::gui::Simulation_Dialog::on_horizontalScrollBar_valueChanged(int val
 {
     this->ui->widget->shift_X= - ((value*1.0) / 5.0 - 10)*0.1*this->ui->widget->scaling_factor;
 
+}
+
+void simbad::gui::Simulation_Dialog::on_pushButton_Close_clicked()
+{
+    this->close();
 }

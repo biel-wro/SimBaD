@@ -43,6 +43,8 @@ private slots:
 
     void on_horizontalScrollBar_valueChanged(int value);
 
+    void on_pushButton_Close_clicked();
+
 private:
     Ui::Simulation_Dialog *ui;
     QTimer *Timer_clock;

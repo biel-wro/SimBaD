@@ -36,9 +36,7 @@ private slots:
 
     void on_pushButton_clicked();
 
-
-
-    void on_radioButton_clicked(bool checked);
+    void on_checkBox_Random_measure_clicked(bool checked);
 
 private:
     Ui::Dialog_for_init_model *ui;

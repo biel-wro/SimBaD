@@ -46,12 +46,42 @@ void My_GLWidget::paintEvent(QPaintEvent *event)
  //     painter.drawPoint(i,i);
  //   };
 
-    painter.setPen(Qt::blue);
+    painter.setPen(Qt::black);
 
     //Lines for coord. sistem
-    if ((256 - (int) (512 * (shift_Y)) >=0) &&(256 - (int) (512 * (shift_Y)) <=512)   ) painter.drawLine(0,256 - (int) (512 * (shift_Y)),512,256 - (int) (512 * (shift_Y)));
-    if ((256 - (int) (512 * (shift_X)) >=0) &&(256 - (int) (512 * (shift_X)) <=512)   ) painter.drawLine(256 - (int) (512 * (shift_X)),512,256 - (int) (512 * (shift_X)),0);
+    if ((256 - (int) (512 * (shift_Y)) >=0) &&(256 - (int) (512 * (shift_Y)) <=512)   ){
+    //    painter.drawLine(0,256,12,256);
+    //    painter.drawLine(500,256,512,256);
 
+        //painter.drawLine(256,512,256,500);
+        //painter.drawLine(256,12,256,0);
+
+
+    painter.drawLine(0,256 - (int) (512 * (shift_Y)),12,256 - (int) (512 * (shift_Y)));
+
+
+    painter.drawLine(500,256 - (int) (512 * (shift_Y)),512,256 - (int) (512 * (shift_Y)));
+
+
+
+    painter.drawText(490,256 - 8 - (int) (512 * (shift_Y)),QString::number(0.5/scaling_factor));
+    painter.drawText(4,256 - 8 - (int) (512 * (shift_Y)),QString::number(-0.5/scaling_factor));
+
+
+
+    };
+
+    if ((256 - (int) (512 * (shift_X)) >=0) &&(256 - (int) (512 * (shift_X)) <=512)   )
+    {
+        //painter.drawLine(256 - (int) (512 * (shift_X)),512,256 - (int) (512 * (shift_X)),0);
+        painter.drawLine(256 - (int) (512 * (shift_X)),512,256 - (int) (512 * (shift_X)),500);
+        painter.drawLine(256 - (int) (512 * (shift_X)),12,256 - (int) (512 * (shift_X)),0);
+//        painter.drawLine(256,512,256,500);
+//        painter.drawLine(256,12,256,0);
+        painter.drawText(256 + 4 - (int) (512 * (shift_X)),508,QString::number(-0.5/scaling_factor));
+        painter.drawText(256 + 4 - (int) (512 * (shift_X)),12,QString::number(0.5/scaling_factor));
+
+    };
 
     QPoint CursorPoint;
     QCursor Cursor;

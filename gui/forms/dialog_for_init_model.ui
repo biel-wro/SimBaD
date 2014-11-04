@@ -133,7 +133,7 @@
   <widget class="QLabel" name="label_Brush">
    <property name="geometry">
     <rect>
-     <x>550</x>
+     <x>570</x>
      <y>390</y>
      <width>311</width>
      <height>16</height>
@@ -274,7 +274,7 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>550</x>
+     <x>570</x>
      <y>300</y>
      <width>220</width>
      <height>30</height>
@@ -379,67 +379,12 @@
     <string>Save configuration ...</string>
    </property>
   </widget>
-  <widget class="QRadioButton" name="radioButton">
-   <property name="geometry">
-    <rect>
-     <x>820</x>
-     <y>350</y>
-     <width>31</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>14</pointsize>
-    </font>
-   </property>
-   <property name="mouseTracking">
-    <bool>true</bool>
-   </property>
-   <property name="focusPolicy">
-    <enum>Qt::ClickFocus</enum>
-   </property>
-   <property name="contextMenuPolicy">
-    <enum>Qt::DefaultContextMenu</enum>
-   </property>
-   <property name="acceptDrops">
-    <bool>false</bool>
-   </property>
-   <property name="toolTip">
-    <string/>
-   </property>
-   <property name="toolTipDuration">
-    <number>-1</number>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::RightToLeft</enum>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>32</width>
-     <height>32</height>
-    </size>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="autoExclusive">
-    <bool>false</bool>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_Brush_2">
+  <widget class="QCheckBox" name="checkBox_Random_measure">
    <property name="geometry">
     <rect>
      <x>550</x>
      <y>350</y>
-     <width>251</width>
+     <width>300</width>
      <height>20</height>
     </rect>
    </property>
@@ -447,10 +392,20 @@
     <font>
      <family>Arial</family>
      <pointsize>14</pointsize>
+     <kerning>true</kerning>
     </font>
+   </property>
+   <property name="accessibleDescription">
+    <string/>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
    </property>
    <property name="text">
     <string>Random (Poisson measure):</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

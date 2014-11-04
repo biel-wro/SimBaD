@@ -42,12 +42,25 @@ void GLWidjet_for_init_model::paintEvent(QPaintEvent *event)
  //     painter.drawPoint(i,i);
  //   };
 
-    painter.setPen(Qt::blue);
+    painter.setPen(Qt::black);
 
     //Lines for coord. sistem
-    painter.drawLine(0,256,512,256);
-    painter.drawLine(256,512,256,0);
+    painter.drawLine(0,256,12,256);
+    painter.drawLine(500,256,512,256);
 
+//    painter.drawLine(252,256,260,256);
+//    painter.drawLine(256,252,256,260);
+
+    painter.drawLine(256,512,256,500);
+    painter.drawLine(256,12,256,0);
+
+    painter.drawText(260,508,QString::number(-0.5));
+    painter.drawText(260,12,QString::number(0.5));
+
+    painter.drawText(490,248,QString::number(0.5));
+    painter.drawText(4,248,QString::number(-0.5));
+
+    painter.setPen(Qt::blue);
 
     QPoint CursorPoint;
     QCursor Cursor;

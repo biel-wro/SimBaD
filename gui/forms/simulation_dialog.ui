@@ -26,10 +26,10 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>690</x>
-     <y>570</y>
-     <width>161</width>
-     <height>23</height>
+     <x>700</x>
+     <y>270</y>
+     <width>150</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="font">
@@ -147,19 +147,19 @@
     <string>Scaling factor:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_sim_step">
+  <widget class="QLabel" name="label_visualisation_step">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>60</y>
-     <width>151</width>
-     <height>21</height>
+     <x>540</x>
+     <y>10</y>
+     <width>170</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Arial</family>
-     <pointsize>14</pointsize>
+     <pointsize>16</pointsize>
     </font>
    </property>
    <property name="text">
@@ -169,11 +169,16 @@
   <widget class="QSpinBox" name="spinBox">
    <property name="geometry">
     <rect>
-     <x>710</x>
-     <y>60</y>
-     <width>42</width>
-     <height>21</height>
+     <x>720</x>
+     <y>10</y>
+     <width>130</width>
+     <height>25</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
    </property>
    <property name="minimum">
     <number>1</number>
@@ -185,10 +190,10 @@
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>690</x>
-     <y>540</y>
-     <width>161</width>
-     <height>23</height>
+     <x>540</x>
+     <y>270</y>
+     <width>150</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="font">
@@ -201,30 +206,11 @@
     <string>Pause</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="line_number_of_events_2">
+  <widget class="QLabel" name="label_time">
    <property name="geometry">
     <rect>
-     <x>740</x>
-     <y>375</y>
-     <width>113</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>14</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_time_2">
-   <property name="geometry">
-    <rect>
-     <x>560</x>
-     <y>290</y>
+     <x>540</x>
+     <y>120</y>
      <width>91</width>
      <height>21</height>
     </rect>
@@ -239,11 +225,11 @@
     <string>Time:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="label_Number_of_attempts">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>370</y>
+     <x>540</x>
+     <y>190</y>
      <width>181</width>
      <height>31</height>
     </rect>
@@ -258,30 +244,11 @@
     <string>Number of attempts:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="line_number_of_events">
-   <property name="geometry">
-    <rect>
-     <x>740</x>
-     <y>330</y>
-     <width>113</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>14</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>0</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_number_of_events">
    <property name="geometry">
     <rect>
-     <x>560</x>
-     <y>330</y>
+     <x>540</x>
+     <y>160</y>
      <width>161</width>
      <height>16</height>
     </rect>
@@ -296,33 +263,11 @@
     <string>Number of events:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineTime">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>740</x>
-     <y>290</y>
-     <width>113</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>14</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>0.0</string>
-   </property>
-  </widget>
   <widget class="Line" name="line_3">
    <property name="geometry">
     <rect>
      <x>540</x>
-     <y>240</y>
+     <y>40</y>
      <width>321</width>
      <height>16</height>
     </rect>
@@ -331,13 +276,13 @@
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="label_Dynami_information">
    <property name="geometry">
     <rect>
      <x>540</x>
-     <y>250</y>
-     <width>271</width>
-     <height>31</height>
+     <y>60</y>
+     <width>270</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="font">
@@ -354,7 +299,217 @@
    <property name="geometry">
     <rect>
      <x>540</x>
-     <y>430</y>
+     <y>220</y>
+     <width>321</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QLCDNumber" name="lcdNumber_Time">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>120</y>
+     <width>240</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>100</width>
+     <height>15</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>250</width>
+     <height>25</height>
+    </size>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::WinPanel</enum>
+   </property>
+   <property name="smallDecimalPoint">
+    <bool>true</bool>
+   </property>
+   <property name="digitCount">
+    <number>15</number>
+   </property>
+   <property name="mode">
+    <enum>QLCDNumber::Dec</enum>
+   </property>
+   <property name="segmentStyle">
+    <enum>QLCDNumber::Flat</enum>
+   </property>
+   <property name="value" stdset="0">
+    <double>0.000000000000000</double>
+   </property>
+  </widget>
+  <widget class="QLCDNumber" name="lcdNumber_events">
+   <property name="geometry">
+    <rect>
+     <x>720</x>
+     <y>160</y>
+     <width>130</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::WinPanel</enum>
+   </property>
+   <property name="smallDecimalPoint">
+    <bool>false</bool>
+   </property>
+   <property name="digitCount">
+    <number>10</number>
+   </property>
+   <property name="mode">
+    <enum>QLCDNumber::Dec</enum>
+   </property>
+   <property name="segmentStyle">
+    <enum>QLCDNumber::Flat</enum>
+   </property>
+  </widget>
+  <widget class="QLCDNumber" name="lcdNumber_attempts">
+   <property name="geometry">
+    <rect>
+     <x>720</x>
+     <y>200</y>
+     <width>130</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::WinPanel</enum>
+   </property>
+   <property name="smallDecimalPoint">
+    <bool>false</bool>
+   </property>
+   <property name="digitCount">
+    <number>10</number>
+   </property>
+   <property name="mode">
+    <enum>QLCDNumber::Dec</enum>
+   </property>
+   <property name="segmentStyle">
+    <enum>QLCDNumber::Flat</enum>
+   </property>
+  </widget>
+  <widget class="Line" name="line_5">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>310</y>
+     <width>321</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_Save_results">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>360</y>
+     <width>210</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Save simulation as ...</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_Close">
+   <property name="geometry">
+    <rect>
+     <x>740</x>
+     <y>560</y>
+     <width>111</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Close </string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_Save_conf">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>400</y>
+     <width>210</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Save configuration as ...</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_simulation_managmen">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>230</y>
+     <width>270</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Simulation management </string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_saving_managment">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>320</y>
+     <width>270</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Saving management </string>
+   </property>
+  </widget>
+  <widget class="Line" name="line_6">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>440</y>
      <width>321</width>
      <height>16</height>
     </rect>
