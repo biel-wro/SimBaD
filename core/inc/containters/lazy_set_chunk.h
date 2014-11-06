@@ -11,22 +11,20 @@
 namespace simbad{
 namespace core {
 
-struct default_size{
-    typedef default_size type;
-    typedef unsigned long value_type;
-    constexpr static const value_type value=1000u;
-};
+constexpr size_t DEFAULT_CHUNK_SIZE = 1000;
 
-template <class D, class size_param = default_size >
+template <class D, size_t chunk_size = DEFAULT_CHUNK_SIZE >
 class
 LazySetChunk
 {
 
 public:
-    typedef D                                               value_type;
-    typedef std::array<char,sizeof(D)*size_param::value >   array_type;
-    typedef std::array<D,size_param::value>                 emulated_array_type;
-    typedef typename size_param::value_type                 size_type;
+    typedef D                                        value_type;
+    typedef D&                                       reference_type;
+    typedef D const &                                const_reference_type;
+    typedef std::array<char,sizeof(D)*chunk_size >   array_type;
+    typedef std::array<D,chunk_size>                 emulated_array_type;
+    typedef size_t                                   size_type;
     //template<class> friend class                            LazySet;
 
     typedef typename emulated_array_type::iterator iterator;
@@ -62,11 +60,13 @@ public:
      */
 
     template<class ...Args>
-    D &emplace_back(Args &&...args)
+    iterator emplace_back(Args &&...args)
     {
-        D *ptr = new(getPlace(occupied)) D( std::forward<Args>(args)...);
+        new(getPlace(occupied)) D( std::forward<Args>(args)...);
+        iterator it = begin() + occupied;
         ++occupied;
-        return *ptr;
+
+        return it;
     }
 
     void pop_back(){
@@ -82,11 +82,11 @@ public:
         return occupied;
     }
     constexpr static size_type length(){
-        return size_param::value;
+        return chunk_size;
     }
 
     bool isFull() const{
-        return occupied==size_param::value;
+        return occupied==chunk_size;
     }
 
     bool isEmpty() const{
@@ -95,26 +95,27 @@ public:
 
     bool containsByAddress( D const *ptr ) const
     {
-        if( std::greater_equal<D const*>()(ptr, getEmulatedArray().data()) &&
-                std::less_equal<D const *>()(ptr, getEmulatedArray().data() + this->length() - 1) )
-            return true;
-        else
-            return false;
+    if( std::greater_equal<D const*>()(ptr, getEmulatedArray().data()) &&
+        std::less_equal<D const *>()
+            (ptr, getEmulatedArray().data() + this->length() - 1) )
+        return true;
+    else
+        return false;
     }
 
-    size_type findIdx( D const *p ) const{
-        return p - getEmulatedArray().data();
+    size_type findIdx( const_reference_type p ) const{
+        return &p - getEmulatedArray().data();
     }
 
-    iterator find( D const *p ){
-        if( !containsByAddress(p) )
+    iterator find( const_reference_type p ){
+        if( !containsByAddress(&p) )
             return end();
         else
-            return begin() + findIdx(*p);
+            return begin() + findIdx(p);
     }
 
-    const_iterator find( D const *p ) const{
-        if( !containsByAddress(p) )
+    const_iterator find( const_reference_type p ) const{
+        if( !containsByAddress( &p) )
             return end();
         else
             return begin() + findIdx(p);
@@ -124,21 +125,21 @@ public:
      * Element accessors
      */
 
-    D &back(){
+    reference_type back(){
         assert(!isEmpty());
         return at(occupied-1);
     }
-    const D &back() const{
+    const_reference_type back() const{
         assert(!isEmpty());
         return at(occupied-1);
     }
 
-    D &at( size_type idx ){
+    reference_type at( size_type idx ){
         assert(idx<occupied);
         return *reinterpret_cast<D*>(getPlace(idx));
     }
 
-    const D &at( size_type idx ) const{
+    const_reference_type at( size_type idx ) const{
         assert(idx<occupied);
         return *reinterpret_cast<const D*>(getPlace(idx));
     }

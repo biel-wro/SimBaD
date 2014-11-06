@@ -21,13 +21,7 @@ struct LazySetNode :
         public Chunk,
         public boost::intrusive::avl_set_base_hook<>,
         public boost::intrusive::list_base_hook<>
-{
-    //typedef LazySetNode<Chunk> type;
-    //explicit LazySetNode( LazySet *tile ):
-    //    parent(tile)
-    //{}
-    //LazySet *parent; //TODO: why it is needed?
-};
+{};
 
 /*
  * Template of an iterator over LazySet
@@ -41,10 +35,17 @@ class LazySetIterator_ : public boost::iterator_facade<
 {
     typedef typename std::remove_const<D_>::type        base_value_type;
     typedef Node                                        node_type;
-    typedef typename node_type::iterator                inner_iter;
+
+    typedef typename std::is_const<D_>::type            is_const;
+
+    typedef typename std::conditional< is_const::value,
+      typename node_type::const_iterator,
+      typename node_type::iterator>::type               inner_iter;
 
     typedef typename boost::intrusive::list<node_type>  list_type;
-    typedef typename list_type::iterator                outer_iter;
+    typedef typename std::conditional< is_const::value,
+      typename list_type::const_iterator,
+      typename list_type::iterator>::type               outer_iter;
 
     typedef size_t size_type;
 
@@ -120,11 +121,26 @@ private:
  * specified element
  */
 struct LowerAddr{
-    template<class Obj1,class Obj2>
-    bool operator()(Obj1 const &o1, Obj2 const &o2 ) const{
-        return std::less<const void*>()(static_cast<const void*>(&o1), static_cast<const void*>(&o2));
-    }
+  template<class C>
+  bool operator()(LazySetNode<C> const &o1, LazySetNode<C> const &o2 ) const{
+    return std::less<const void*>()(
+      static_cast<const void*>(&o1),
+      static_cast<const void*>(&o2)
+    );
+  }
 };
+
+struct LowerAddrThanEnd{
+  template< class C, class D >
+  bool operator()(LazySetNode<C> const &n,D &v) const{
+    return std::less<const void*>()(
+      static_cast<const void*>(
+            reinterpret_cast<const char*>(&n)+sizeof(LazySetNode<C>)),
+      static_cast<const void*>(&v)
+    );
+  }
+};
+
 
 /*
  * Disposer which deletes the node in boost::intrusive
@@ -189,78 +205,28 @@ public:
         return list.front().isEmpty();
     }
 
-//    size_type size() const{
-
-//        bool emptyLast = list.rbegin()->isFree();
-//        size_type sz = 0;
-
-//    if( !emptyLast )
-//            sz = list.rbegin()->occupancy() + (list.size() - 1) * chunk_type::max_occupancy();
-//        else{
-//            const_list_reverse_iterator it = list.rbegin();
-//            ++it;
-//            if( it == list.rend() )
-//                return 0;
-//            sz = it->occupancy() + (list.size() - 2) * chunk_type::max_occupancy();
-//        }
-//        return sz;
-//    }
-
-//    bool checkConsistency() const{
-//        bool ok = true;
-//        typename list_type::const_reverse_iterator it = list.rbegin();
-
-//        if( it->isFree() ){
-//            ++it;
-//            if( it == list.rend() )
-//                return ok;
-//            ok &= !it->isFree();
-//            ++it;
-//        }
-//        else
-//        {
-//            ++it;
-//        }
-//        for( ; it!=list.rend(); ++it)
-//        {
-//            ok &= it->isFull();
-//        }
-
-//        if( begin()==end() )
-//            ok &= size_==0;
-//        if( size_==0 ){
-//            ok &= begin()==end();
-//        }
-
-//        ok &= size_ == size();
-
-//        return ok;
-//    }
-
 
     /*
      * Modifiers
      */
     template<class ...Args>
-    reference_type emplace_back( Args &&...args)
+    iterator emplace_back( Args &&...args)
     {
 
         typename list_type::iterator itOuter = itEnd.get_outer();
         typename chunk_type::iterator itInner = itEnd.get_inner();
 
-        reference_type ref = itOuter->emplace_back( std::forward<Args>(args)... );
+        itOuter->emplace_back( std::forward<Args>(args)... );
 
         if( ++(itInner) == itEnd.get_outer()->end() )
             pushChunk();
-
+        iterator it = itEnd;
         ++itEnd;
 
         ++size_;
 
-        return ref;
+        return it;
     }
-
-
 
     void pop_back(){
         assert( !isEmpty() );
@@ -301,10 +267,40 @@ public:
         typename list_type::const_iterator oi = list.begin();
         typename chunk_type::const_iterator ii = list.begin()->begin();
 
-        return iterator(oi,ii);
+        return const_iterator(oi,ii);
     }
     const_iterator end() const{
         return itEnd;
+    }
+
+    iterator find( const_reference_type v ){
+      typename tree_type::iterator tit;
+      tit = tree.lower_bound( v, LowerAddrThanEnd() );
+      if( tit == tree.end() )
+        return end();
+
+      typename chunk_type::iterator cit = tit->find( v );
+      if( tit->end() == cit )
+        return end();
+
+      typename list_type::iterator lit = list_type::s_iterator_to( *tit );
+
+      return iterator(lit,cit);
+    }
+
+    const_iterator find( const_reference_type v ) const{
+      typename tree_type::const_iterator tit;
+      tit = tree.lower_bound( v, LowerAddrThanEnd() );
+      if( tit == tree.end() )
+        return end();
+
+      typename chunk_type::const_iterator cit = tit->find( v );
+      if( tit->end() == cit )
+        return end();
+
+      typename list_type::const_iterator lit = list_type::s_iterator_to( *tit );
+
+      return const_iterator(lit,cit);
     }
 
 
@@ -313,42 +309,23 @@ public:
      */
 protected:
 
-    void pushChunk(){
-        node_type *pNode = new node_type;
-        list.push_back(*pNode);
-        tree.insert(*pNode);
-    }
+  void pushChunk(){
+    node_type *pNode = new node_type;
+    list.push_back(*pNode);
+    tree.insert(*pNode);
+  }
 
-    void popChunk(){
-        typename tree_type::iterator tit = tree.find( list.back() );
-        tree.erase(tit);
-        list.pop_back_and_dispose(DeleteNodeDisposer());
-    }
+  void popChunk(){
+    typename tree_type::iterator tit = tree.find( list.back() );
+    tree.erase(tit);
+    list.pop_back_and_dispose(DeleteNodeDisposer());
+  }
 
-//    LazySetNode &tileNodeOf(D const& d){
-//        tree_iterator it = tree.find(d,ChunkContains() );
-//        return *it;
-//    }
 
-//    LazySetNode const &tileNodeOf(D const& d) const{
-//        const_tree_interator it = tree.find(d,ChunkContains() );
-//        return *it;
-//    }
 
-//    list_type::iterator listIteratorTo(D &d){
-//        return s_listIteratorTo(tileNodeOf(d));
-//    }
-//    static list_iterator s_listIteratorTo(LazySetNode &node){
-//        return list_type::s_iterator_to(node);
-//    }
 
-//    list_type::const_iterator listIteratorTo(D const &d){
-//        return s_listIteratorTo(tileNodeOf(d));
-//    }
 
-//    static const_list_iterator s_listIteratorTo(LazySetNode const &node){
-//        return list_type::s_iterator_to(node);
-//    }
+
 private:
     size_type size_;            // counts value_type elements
     list_type list;             // keeps the order of chunks

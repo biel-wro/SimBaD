@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE( find )
         std::string *ptr = &*it;
         BOOST_CHECK( chk.containsByAddress(ptr) );
 
-        unsigned idx = chk.findIdx( ptr );
+        unsigned idx = chk.findIdx( *ptr );
         BOOST_CHECK_LT( idx, chk.occupancy() );
         BOOST_CHECK_EQUAL( idx, i);
 

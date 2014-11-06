@@ -7,14 +7,14 @@
 namespace simbad{
 namespace core{
 
-template<class T, class ChunkSize=default_size  >
+template<class T, size_t chunk_size=DEFAULT_CHUNK_SIZE  >
 class LazySet
 {
 public:
     /*
      * types
      */
-    typedef LazySetChunk<T,ChunkSize>           chunk_type;
+    typedef LazySetChunk<T,chunk_size>          chunk_type;
     typedef T                                   value_type;
     typedef LazySet_impl<chunk_type>            impl;
     typedef typename impl::reference_type       reference_type;
@@ -61,7 +61,7 @@ public:
      * Modifiers
      */
     template<class ... Args>
-    reference_type emplace_back( Args &&...args ){
+    iterator emplace_back( Args &&...args ){
         return impl_.emplace_back(std::forward<Args>(args)...);
     }
 
@@ -102,6 +102,13 @@ public:
         return impl_.end();
     }
 
+    iterator find( value_type const &v){
+        return impl_.find(v);
+    }
+
+    const_iterator find( value_type const &v ) const{
+      return impl_.find(v);
+    }
 
 
 };
