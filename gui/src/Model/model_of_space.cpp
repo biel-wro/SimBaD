@@ -3,6 +3,7 @@
 #include "iostream"
 #include <random>
 #include <chrono>
+
 using namespace std;
 #define PI 3.14159265
 simbad::gui::Model_of_space::Model_of_space()
@@ -19,13 +20,67 @@ simbad::gui::Model_of_space::Model_of_space()
 
 void simbad::gui::Model_of_space::set_full_file_name(QString File)
 {
- FullFileName = File;
+  FullFileName = File;
 }
 
 QString simbad::gui::Model_of_space::get_full_file_name()
 {
     return FullFileName;
 }
+
+QStringList simbad::gui::Model_of_space::get_results_of_simulation_for_file()
+{
+    QStringList Result_Q_String_List;
+
+    Result_Q_String_List.push_back("Number of events: " + QString::number(this->Vector_of_result_event.size())+ "\n");
+
+    for(int i=0;i<this->Vector_of_result_event.size();i++){
+        //"Event Number: "
+        Result_Q_String_List.push_back(QString::number(i) + "\n");
+        //"Time of Event: "
+        Result_Q_String_List.push_back(
+                    QString::number((double)this->Vector_of_result_event[i].get_global_time_of_result_event()) +
+                                       "\n");
+
+        //Result_Q_String_List.push_back("Dead points of configuration after event:\n");
+        //"Dead point type: " +
+        Result_Q_String_List.push_back(QString::number(this->Vector_of_result_event[i].
+                                                       get_vector_of_dead_points()[0].
+                                                            get_type_of_result_point()) + "\n");
+        //"Dead point Xcood: " +
+        Result_Q_String_List.push_back(QString::number(this->Vector_of_result_event[i].
+                                                       get_vector_of_dead_points()[0].
+                                                             get_Xcoord_of_result_point()) + "\n");
+        //"Dead point Ycood: " +
+        Result_Q_String_List.push_back(QString::number(this->Vector_of_result_event[i].
+                                                       get_vector_of_dead_points()[0].
+                                                             get_Ycoord_of_result_point()) + "\n");
+
+
+        //Result_Q_String_List.push_back("New points of configuration after event:\n");
+        //"New point type: "
+        Result_Q_String_List.push_back(QString::number(this->Vector_of_result_event[i].
+                                                       get_vector_of_new_points()[0].
+                                                            get_type_of_result_point()) + "\n");
+        //"New point Xcood: "
+        Result_Q_String_List.push_back(QString::number(this->Vector_of_result_event[i].
+                                                       get_vector_of_new_points()[0].
+                                                             get_Xcoord_of_result_point()) + "\n");
+
+        //"New point Ycood: "
+        Result_Q_String_List.push_back(QString::number(this->Vector_of_result_event[i].
+                                                       get_vector_of_new_points()[0].
+                                                             get_Ycoord_of_result_point()) + "\n");
+
+
+    }
+
+
+    return Result_Q_String_List;
+
+}
+
+
 
 QStringList simbad::gui::Model_of_space::get_configuration_setting_for_file()
 {
@@ -764,21 +819,15 @@ void simbad::gui::Model_of_space::birth_of_particle(int EventNumber, int Numberf
     int number_of_type_of_parent =
             this->List_of_events_of_model[EventNumber].Code_of_event[0][0];
 
-//    cout<<"number_of_type_of_parent"<<number_of_type_of_parent<<endl;
-
     int number_of_type_of_child = this->List_of_events_of_model[EventNumber].Code_of_event[1][1];
-//    cout<<"number_of_type_of_child"<<number_of_type_of_child<<endl;
 
-//    //cout<< "number_of_type_of_death_particle="<<number_of_type_of_death_particle<<endl;
     int Number_of_parent_type_points =
             this->ModelPoints.Vector_of_types[number_of_type_of_parent].
             Number_of_points_in_SpacePointArray;
-//    cout<<"Number_of_parent_type_points"<<Number_of_parent_type_points<<endl;
+
     int Number_of_child_type_points =
             this->ModelPoints.Vector_of_types[number_of_type_of_child].
             Number_of_points_in_SpacePointArray;
-    //cout<< "Number_of_points="<<Number_of_points<<endl;
-    //cout<<"Number_of_child_type_points"<<Number_of_child_type_points<<endl;
 
     mt19937 mtUniDistribution(seed);
 
@@ -786,43 +835,26 @@ void simbad::gui::Model_of_space::birth_of_particle(int EventNumber, int Numberf
 
     int number_of_parent = distribution_1(mtUniDistribution);
 
-    //cout<<"number_of_parent="<<number_of_parent<<endl;
-
-
-
-
 
     float rate = rate_linear_on_configuration(EventNumber, Numberfunctionforcomponentrate,
                                               number_of_type_of_parent, number_of_parent);
-    //cout<<"rate="<<rate<<endl;
-    //cout<<"Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]"<<
-    //Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]<<endl;
-    //bernoulli_distribution distribution_2(rate*0.999/Vector_comulative_rate_for_type_of_event[EventNumber][Numberfunctionforcomponentrate]);
+
     bernoulli_distribution distribution_2(rate*0.999/Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]);
 
     bool bernulli_D = distribution_2(mtUniDistribution);
-    //cout<< "bernulli_D="<<bernulli_D<<endl;
-    if (bernulli_D){
-    //        cout<< "Global_clock="<<Global_clock<<endl;
 
+    if (bernulli_D){
 
         float Xcoordinate_of_new_particle;
         float Ycoordinate_of_new_particle;
 
         if (this->List_of_events_of_model[EventNumber].Distribution_of_particle_for_event.
             get_Type_of_T_student_distribution() == 0){
-        //cout<<"qazwsx----+++++"<<endl;
             normal_distribution<float> Normal_distribution(0.0,this->List_of_events_of_model[EventNumber].
                                                            Distribution_of_particle_for_event.get_scale_paramiter());
-        //cout<<"scale_paramiter="<<this->List_of_events_of_model[EventNumber].
-        //    Distribution_of_particle_for_event.get_scale_paramiter()<<endl;
 
-        //cout<<"befor Xcoordinate_of_new_particle="<<this->ModelPoints.Vector_of_types[number_of_type_of_parent].
-        //    SpacePointArray[number_of_parent].Xcoordinate<<endl;
             Xcoordinate_of_new_particle = this->ModelPoints.Vector_of_types[number_of_type_of_parent].
                   SpacePointArray[number_of_parent].Xcoordinate + Normal_distribution(mtUniDistribution);
-        //cout<<"after Xcoordinate_of_new_particle="<<Xcoordinate_of_new_particle<<endl;
-
 
 
             Ycoordinate_of_new_particle = this->ModelPoints.Vector_of_types[number_of_type_of_parent].
@@ -851,19 +883,45 @@ void simbad::gui::Model_of_space::birth_of_particle(int EventNumber, int Numberf
        one_birth(number_of_type_of_child,
                   Xcoordinate_of_new_particle, Ycoordinate_of_new_particle);
 
-        Global_clock = Global_clock + Min_time;
+       Global_clock = Global_clock + Min_time;
 
-        Number_of_child_type_points=Number_of_child_type_points + 1;
-        //cout <<"number_of_type_of_child="<<number_of_type_of_child <<endl;
-        this->ModelPoints.Vector_of_types[number_of_type_of_child].
+       Number_of_child_type_points = Number_of_child_type_points + 1;
+       this->ModelPoints.Vector_of_types[number_of_type_of_child].
                         SpacePointArray[Number_of_child_type_points - 1].BirthTime = Global_clock;
-        //cout <<"Number_of_child_type_points="<<Number_of_child_type_points <<endl;
-        //cout <<"ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray="<<
-        //ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray<<endl;
-        //cout <<"Global_clock="<<Global_clock<<endl;
+       Number_of_occurings = Number_of_occurings + 1;
 
-        //cout <<"timer::Number_of_child_type_points"<<Number_of_child_type_points<<endl;
-        Number_of_occurings = Number_of_occurings + 1;
+// put result of event in Vector_result_events
+       result_point_of_space New_result_point;
+       New_result_point.set_Xcoord_of_result_point(Xcoordinate_of_new_particle);
+       New_result_point.set_Ycoord_of_result_point(Ycoordinate_of_new_particle);
+       New_result_point.set_type_of_result_point(number_of_type_of_child);
+
+
+       QVector<result_point_of_space> New_points_of_conf_after_event;
+       New_points_of_conf_after_event.push_back(New_result_point);
+
+       result_point_of_space Dead_result_point;
+       Dead_result_point.set_Xcoord_of_result_point(0);
+       Dead_result_point.set_Ycoord_of_result_point(0);
+       Dead_result_point.set_type_of_result_point(-1);
+
+       QVector<result_point_of_space> Dead_points_of_conf_after_event;
+       Dead_points_of_conf_after_event.push_back(Dead_result_point);
+
+
+
+
+       result_of_event A(Global_clock,New_points_of_conf_after_event,Dead_points_of_conf_after_event);
+
+       Vector_of_result_event.push_back(A);
+
+       //add result of simulation in in array if results for future saving in file
+       add_new_result_of_dynamics_one_beath_and_one_death(Global_clock,
+                                                          Xcoordinate_of_new_particle,
+                                                          Ycoordinate_of_new_particle,
+                                                          number_of_type_of_child,
+                                                          0,0,-1);
+
     };
 }
 
@@ -878,7 +936,6 @@ void simbad::gui::Model_of_space::birth_of_particle_from_environment(int EventNu
     int Number_of_child_type_points =
             this->ModelPoints.Vector_of_types[number_of_type_of_child].
             Number_of_points_in_SpacePointArray;
-    //cout<<"Number_of_child_type_points="<<Number_of_child_type_points<<endl;
 
     mt19937 mtUniDistribution(seed);
     float range_of_function=
@@ -896,16 +953,38 @@ void simbad::gui::Model_of_space::birth_of_particle_from_environment(int EventNu
     Global_clock = Global_clock + Min_time;
 
     Number_of_child_type_points=Number_of_child_type_points + 1;
-    //cout <<"number_of_type_of_child="<<number_of_type_of_child <<endl;
 
     this->ModelPoints.Vector_of_types[number_of_type_of_child].
                         SpacePointArray[Number_of_child_type_points - 1].BirthTime = Global_clock;
-    //cout <<"Number_of_child_type_points="<<Number_of_child_type_points <<endl;
-    //cout <<"ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray="<<
-    //ModelPoints.Vector_of_types[number_of_type_of_child].Number_of_points_in_SpacePointArray<<endl;
-    //cout <<"Global_clock="<<Global_clock<<endl;
 
     Number_of_occurings = Number_of_occurings + 1;
+
+    // put result of event in Vector_result_events
+           result_point_of_space New_result_point;
+           New_result_point.set_Xcoord_of_result_point(Xcoordinate_of_new_particle);
+           New_result_point.set_Ycoord_of_result_point(Ycoordinate_of_new_particle);
+           New_result_point.set_type_of_result_point(number_of_type_of_child);
+
+
+           QVector<result_point_of_space> New_points_of_conf_after_event;
+           New_points_of_conf_after_event.push_back(New_result_point);
+
+           result_point_of_space Dead_result_point;
+           Dead_result_point.set_Xcoord_of_result_point(0);
+           Dead_result_point.set_Ycoord_of_result_point(0);
+           Dead_result_point.set_type_of_result_point(-1);
+
+           QVector<result_point_of_space> Dead_points_of_conf_after_event;
+           Dead_points_of_conf_after_event.push_back(Dead_result_point);
+
+
+
+
+           result_of_event A(Global_clock,New_points_of_conf_after_event,Dead_points_of_conf_after_event);
+
+           Vector_of_result_event.push_back(A);
+
+
 }
 
 
@@ -1836,7 +1915,56 @@ void simbad::gui::Model_of_space::set_conf_full_file_name(QString Conf_file_name
     ConfFullFileName = Conf_file_name;
 }
 
+void simbad::gui::Model_of_space::set_result_full_fill_name(QString Result_file_name)
+{
+    ResultFullFileName=Result_file_name;
+}
+
 QString simbad::gui::Model_of_space::get_conf_full_file_name()
 {
     return ConfFullFileName;
+}
+
+
+void simbad::gui::Model_of_space::add_new_result_of_dynamics(result_of_event New_result)
+{
+    Vector_of_result_event.push_back(New_result);
+
+
+}
+
+
+void simbad::gui::Model_of_space::add_new_result_of_dynamics_one_beath_and_one_death(long double Time_of_event,
+                                                        float Xcoordinate_of_new_particle,
+                                                        float Ycoordinate_of_new_particle,
+                                                        float number_of_type_of_new_particle,
+                                                        float Xcoordinate_of_dead_particle,
+                                                        float Ycoordinate_of_dead_particle,
+                                                        float number_of_type_of_dead_particle
+                                                        )
+{
+    result_point_of_space New_result_point;
+    New_result_point.set_Xcoord_of_result_point(Xcoordinate_of_new_particle);
+    New_result_point.set_Ycoord_of_result_point(Ycoordinate_of_new_particle);
+    New_result_point.set_type_of_result_point(number_of_type_of_new_particle);
+
+
+    QVector<result_point_of_space> New_points_of_conf_after_event;
+    New_points_of_conf_after_event.push_back(New_result_point);
+
+    result_point_of_space Dead_result_point;
+    Dead_result_point.set_Xcoord_of_result_point(Xcoordinate_of_dead_particle);
+    Dead_result_point.set_Ycoord_of_result_point(Ycoordinate_of_dead_particle);
+    Dead_result_point.set_type_of_result_point(number_of_type_of_dead_particle);
+
+    QVector<result_point_of_space> Dead_points_of_conf_after_event;
+    Dead_points_of_conf_after_event.push_back(Dead_result_point);
+
+
+
+
+    result_of_event A(Time_of_event,New_points_of_conf_after_event,Dead_points_of_conf_after_event);
+
+    Vector_of_result_event.push_back(A);
+
 }

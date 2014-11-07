@@ -36,7 +36,7 @@ set( SRC
     src/Model/table_of_component_rates.cpp
     src/Model/distribution_of_particle.cpp
     src/Model/event_of_model.cpp
-
+    src/Model/result_point_of_space.cpp
 #    src/Model/point_of_space.cpp
     src/Model/points_of_type.cpp	
 )

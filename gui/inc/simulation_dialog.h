@@ -30,11 +30,11 @@ public:
 
 private slots:
 
-    void on_pushButton_clicked();
+    void on_pushButton_start_sim_clicked();
 
     void on_spinBox_valueChanged(const QString &arg1);
 
-    void on_pushButton_2_clicked();
+    void on_pushButton_pause_clicked();
 
     void dynamics();
     void on_horizontalSlider_valueChanged(int value);
@@ -44,6 +44,12 @@ private slots:
     void on_horizontalScrollBar_valueChanged(int value);
 
     void on_pushButton_Close_clicked();
+
+    void on_groupBox_saving_management_clicked(bool checked);
+
+    void on_pushButton_Save_results_clicked();
+
+    void on_pushButton_Save_conf_clicked();
 
 private:
     Ui::Simulation_Dialog *ui;

@@ -241,8 +241,10 @@ void simbad::gui::MainWindow::on_actionOpen_Initial_Configuration_triggered()
 
         if (Big_model->set_configiguration_setting_from_file(Input_Info)){
             this->menuBar()->actions()[2]->menu()->actions()[0]->setEnabled(true);
+            Big_model->set_conf_full_file_name(File_name);
         } else {
 
         };
+
    };
 }

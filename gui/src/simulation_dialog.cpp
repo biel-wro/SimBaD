@@ -20,7 +20,7 @@ simbad::gui::Simulation_Dialog::Simulation_Dialog(QWidget *parent) :
 
     this->ui->widget->setParentWidjetpos(this->pos());
     this->step_for_number_of_event = 1;
-    this->ui->pushButton_2->setEnabled(false);
+    this->ui->pushButton_pause->setEnabled(false);
 
 
 
@@ -50,18 +50,17 @@ simbad::gui::Simulation_Dialog::~Simulation_Dialog()
 }
 
 
-void simbad::gui::Simulation_Dialog::on_pushButton_clicked()
+void simbad::gui::Simulation_Dialog::on_pushButton_start_sim_clicked()
 {
-    this->ui->pushButton_2->setEnabled(true);
-    this->ui->pushButton->setEnabled(false);
+    this->ui->pushButton_pause->setEnabled(true);
+    this->ui->pushButton_start_sim->setEnabled(false);
+
+    this->ui->pushButton_Save_conf->setEnabled(false);
+    this->ui->spinBox_saving_step->setEnabled(false);
+    this->ui->pushButton_Save_results->setEnabled(false);
+
     Timer_clock->start(5);
 
-    //step_for_number_of_event
-    //string str = to_string(this->Big_model->get_global_clock());
-    //str="Time" + str;
-    //QString Qstr = QString::fromStdString(str);
-
-    //this->ui->label_time->setText(Qstr);
 
 }
 
@@ -70,12 +69,17 @@ void simbad::gui::Simulation_Dialog::on_spinBox_valueChanged(const QString &arg1
     step_for_number_of_event = arg1.toFloat();
 }
 
-void simbad::gui::Simulation_Dialog::on_pushButton_2_clicked()
+void simbad::gui::Simulation_Dialog::on_pushButton_pause_clicked()
 {
    // sim_regime=false;
-    this->ui->pushButton->setEnabled(true);
-    this->ui->pushButton_2->setEnabled(false);
+    this->ui->pushButton_start_sim->setEnabled(true);
+    this->ui->pushButton_pause->setEnabled(false);
 
+    if (ui->groupBox_saving_management->isChecked()){
+        this->ui->pushButton_Save_conf->setEnabled(true);
+        this->ui->pushButton_Save_results->setEnabled(true);
+        this->ui->spinBox_saving_step->setEnabled(true);
+    };
 
     Timer_clock->stop();
 
@@ -125,4 +129,70 @@ void simbad::gui::Simulation_Dialog::on_horizontalScrollBar_valueChanged(int val
 void simbad::gui::Simulation_Dialog::on_pushButton_Close_clicked()
 {
     this->close();
+}
+
+void simbad::gui::Simulation_Dialog::on_groupBox_saving_management_clicked(bool checked)
+{
+    if (checked && ui->pushButton_pause->isEnabled()==false){
+        ui->pushButton_Save_conf->setEnabled(true);
+        ui->pushButton_Save_results->setEnabled(true);
+        this->ui->spinBox_saving_step->setEnabled(true);
+    } else
+    {
+        ui->pushButton_Save_conf->setEnabled(false);
+        ui->pushButton_Save_results->setEnabled(false);
+        this->ui->spinBox_saving_step->setEnabled(false);
+
+    };
+}
+
+void simbad::gui::Simulation_Dialog::on_pushButton_Save_results_clicked()
+{
+
+
+
+
+    QFile file,conf_file;
+    QString File_name=QFileDialog::getSaveFileName(this,
+                                                               tr("Save File"),
+                                                               "Simulation_Result",
+                                                               tr("Results (*.rst)"));
+    file.setFileName(File_name);
+    if (file.exists()){
+        file.remove();
+    }
+    file.setFileName(File_name);
+
+
+    conf_file.setFileName(Big_model->get_conf_full_file_name());
+
+    if (File_name!="" &&
+            file.open(QIODevice::ReadWrite | QIODevice::Text) &&
+            conf_file.open(QIODevice::ReadWrite | QIODevice::Text)){
+
+
+        Big_model->set_result_full_fill_name(File_name);
+
+        QTextStream in(&file), out(&conf_file);
+
+        do
+        {
+            in<<out.readLine()<<"\n";
+        } while(out.atEnd()!=true);
+
+        QStringList File_info = Big_model->get_results_of_simulation_for_file();
+
+        for (auto it = std::begin(File_info); it!=std::end(File_info); ++it)
+        in << *it;
+    };
+
+
+
+
+
+}
+
+void simbad::gui::Simulation_Dialog::on_pushButton_Save_conf_clicked()
+{
+
 }
