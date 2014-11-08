@@ -1,4 +1,4 @@
-#include "inc\Model\result_of_event.h"
+#include "result_of_event.h"
 #include "result_point_of_space.h"
 
 
