@@ -28,7 +28,6 @@ simbad::gui::result_of_event::result_of_event(const result_of_event& that):
 
 simbad::gui::result_of_event::~result_of_event()
 {
-
 }
 
 
