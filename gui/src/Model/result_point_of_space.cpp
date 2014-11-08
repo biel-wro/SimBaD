@@ -1,4 +1,4 @@
-#include "inc\Model\result_point_of_space.h"
+#include "result_point_of_space.h"
 
 
 simbad::gui::result_point_of_space::result_point_of_space()
