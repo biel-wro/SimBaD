@@ -26,6 +26,7 @@ set( SRC
     src/new_event_dialog.cpp
     src/dialog_for_init_model.cpp
     src/glwidjet_for_init_model.cpp
+    src/frame_for_statistics.cpp
 
     #src/Model/dynamics_of_model.cpp
     src/Model/cell_map.cpp
@@ -48,15 +49,16 @@ set( UI
     forms/simulation_dialog.ui
     forms/new_event_dialog.ui
     forms/dialog_for_init_model.ui
+    forms/frame_for_statistics.ui
 )
 
 
 
 include_directories(inc)
-include_directories(inc/Model) # please remove this and fix all the haeders
+include_directories(inc/Model)
 
 
-FILE( GLOB HEADERS inc/*.h )  # workaround for headers in QtCreator
+FILE( GLOB HEADERS inc/*.h inc/Model/*.h )  # workaround for headers in QtCreator
 
 include_directories(${${CORE_NAME}_SOURCE_DIR}/inc)
 
