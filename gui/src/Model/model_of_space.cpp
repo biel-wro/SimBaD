@@ -16,6 +16,7 @@ simbad::gui::Model_of_space::Model_of_space()
     Number_of_occurings = 0;
     FullFileName="";
     ConfFullFileName="";
+    Saving_step = 0;
 }
 
 void simbad::gui::Model_of_space::set_full_file_name(QString File)
@@ -571,6 +572,7 @@ bool simbad::gui::Model_of_space::timer()
             Number_of_events_dynamics = Number_of_events_dynamics + 1;
            // cout<<"Number_of_events_dynamics="<<Number_of_events_dynamics<<endl;
             Min_time = min_for_time;
+            Global_clock = Global_clock + Min_time;
             Event_execution(i_min, j_min);
             initiale_Dzeta();
             seed=std::chrono::system_clock::now().time_since_epoch().count();
@@ -753,12 +755,12 @@ void simbad::gui::Model_of_space::Event_execution(int Number_of_event, int Numbe
     //cout<<"Number_of_event"<<Number_of_event<<endl;
     //cout<<"this->List_of_events_of_model[Number_of_event].Code_of_event.size()="<<
     //       this->List_of_events_of_model[Number_of_event].Code_of_event.size()<<endl;
-    int Number_of_changed_points_in_conf =
+    int Number_of_involved_points_in_event =
             this->List_of_events_of_model[Number_of_event].Code_of_event.size();
     //cout<<"Number_of_changed_points_in_conf"<<
     //       Number_of_changed_points_in_conf<<endl;
 
-    if  (Number_of_changed_points_in_conf == 2)
+    if  (Number_of_involved_points_in_event == 2)
     {
         //birth of particle
         if (this->List_of_events_of_model[Number_of_event].Code_of_event[0][1] != -1)
@@ -778,7 +780,7 @@ void simbad::gui::Model_of_space::Event_execution(int Number_of_event, int Numbe
 
     };
 
-    if  (Number_of_changed_points_in_conf==1)
+    if  (Number_of_involved_points_in_event==1)
     {
         //birth from environment
         if  (this->List_of_events_of_model[Number_of_event].Code_of_event[0][0] == -1)
@@ -883,40 +885,17 @@ void simbad::gui::Model_of_space::birth_of_particle(int EventNumber, int Numberf
        one_birth(number_of_type_of_child,
                   Xcoordinate_of_new_particle, Ycoordinate_of_new_particle);
 
-       Global_clock = Global_clock + Min_time;
+//       Global_clock = Global_clock + Min_time;
 
        Number_of_child_type_points = Number_of_child_type_points + 1;
        this->ModelPoints.Vector_of_types[number_of_type_of_child].
                         SpacePointArray[Number_of_child_type_points - 1].BirthTime = Global_clock;
        Number_of_occurings = Number_of_occurings + 1;
 
-// put result of event in Vector_result_events
-       result_point_of_space New_result_point;
-       New_result_point.set_Xcoord_of_result_point(Xcoordinate_of_new_particle);
-       New_result_point.set_Ycoord_of_result_point(Ycoordinate_of_new_particle);
-       New_result_point.set_type_of_result_point(number_of_type_of_child);
 
+       //add result of simulation in an array if results for future saving in file
 
-       QVector<result_point_of_space> New_points_of_conf_after_event;
-       New_points_of_conf_after_event.push_back(New_result_point);
-
-       result_point_of_space Dead_result_point;
-       Dead_result_point.set_Xcoord_of_result_point(0);
-       Dead_result_point.set_Ycoord_of_result_point(0);
-       Dead_result_point.set_type_of_result_point(-1);
-
-       QVector<result_point_of_space> Dead_points_of_conf_after_event;
-       Dead_points_of_conf_after_event.push_back(Dead_result_point);
-
-
-
-
-       result_of_event A(Global_clock,New_points_of_conf_after_event,Dead_points_of_conf_after_event);
-
-       Vector_of_result_event.push_back(A);
-
-       //add result of simulation in in array if results for future saving in file
-       add_new_result_of_dynamics_one_beath_and_one_death(Global_clock,
+       if ((Saving_step>0) && (Number_of_occurings%Saving_step==0))add_new_result_of_dynamics_one_beath_and_one_death(Global_clock,
                                                           Xcoordinate_of_new_particle,
                                                           Ycoordinate_of_new_particle,
                                                           number_of_type_of_child,
@@ -950,7 +929,7 @@ void simbad::gui::Model_of_space::birth_of_particle_from_environment(int EventNu
     one_birth(number_of_type_of_child,
                   Xcoordinate_of_new_particle, Ycoordinate_of_new_particle);
 
-    Global_clock = Global_clock + Min_time;
+    //Global_clock = Global_clock + Min_time;
 
     Number_of_child_type_points=Number_of_child_type_points + 1;
 
@@ -959,30 +938,13 @@ void simbad::gui::Model_of_space::birth_of_particle_from_environment(int EventNu
 
     Number_of_occurings = Number_of_occurings + 1;
 
-    // put result of event in Vector_result_events
-           result_point_of_space New_result_point;
-           New_result_point.set_Xcoord_of_result_point(Xcoordinate_of_new_particle);
-           New_result_point.set_Ycoord_of_result_point(Ycoordinate_of_new_particle);
-           New_result_point.set_type_of_result_point(number_of_type_of_child);
+    //add result of simulation in in array if results for future saving in file
 
-
-           QVector<result_point_of_space> New_points_of_conf_after_event;
-           New_points_of_conf_after_event.push_back(New_result_point);
-
-           result_point_of_space Dead_result_point;
-           Dead_result_point.set_Xcoord_of_result_point(0);
-           Dead_result_point.set_Ycoord_of_result_point(0);
-           Dead_result_point.set_type_of_result_point(-1);
-
-           QVector<result_point_of_space> Dead_points_of_conf_after_event;
-           Dead_points_of_conf_after_event.push_back(Dead_result_point);
-
-
-
-
-           result_of_event A(Global_clock,New_points_of_conf_after_event,Dead_points_of_conf_after_event);
-
-           Vector_of_result_event.push_back(A);
+    if ((Saving_step>0) && (Number_of_occurings%Saving_step==0))add_new_result_of_dynamics_one_beath_and_one_death(Global_clock,
+                                                       Xcoordinate_of_new_particle,
+                                                       Ycoordinate_of_new_particle,
+                                                       number_of_type_of_child,
+                                                       0,0,-1);
 
 
 }
@@ -1114,11 +1076,9 @@ void simbad::gui::Model_of_space::jump_of_particle(int EventNumber, int Numberfu
     unsigned seed;
     seed=std::chrono::system_clock::now().time_since_epoch().count();
 
-    // cout<< "Yes"<<endl;
-    //    cout<< EventNumber<<", "<<Numberfunctionforcomponentrate<<"***"<<endl;
     int number_of_type_of_jump_particle =
             this->List_of_events_of_model[EventNumber].Code_of_event[0][0];
-    //  cout<< "number_of_type_of_death_particle="<<number_of_type_of_death_particle<<endl;
+
     int Number_of_points =
             this->ModelPoints.Vector_of_types[number_of_type_of_jump_particle].
             Number_of_points_in_SpacePointArray;
@@ -1135,6 +1095,7 @@ void simbad::gui::Model_of_space::jump_of_particle(int EventNumber, int Numberfu
         float rate = rate_linear_on_configuration(EventNumber, Numberfunctionforcomponentrate, number_of_type_of_jump_particle, number_of_jump_man);
         bernoulli_distribution distribution_2(rate*0.999/Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate]);
 
+        cout<< "Numberfunctionforcomponentrate!=0"<<endl;
 
 
 
@@ -1199,7 +1160,7 @@ void simbad::gui::Model_of_space::jump_of_particle(int EventNumber, int Numberfu
                       New_Xcoordinate_of_jump_particle, New_Ycoordinate_of_jump_particle);                   // number_of_type_of_jump_particle
 
 
-            Global_clock = Global_clock + Min_time;
+            //Global_clock = Global_clock + Min_time;
             Number_of_occurings = Number_of_occurings + 1;
 
 
@@ -1207,7 +1168,7 @@ void simbad::gui::Model_of_space::jump_of_particle(int EventNumber, int Numberfu
     } else {
         float Xcoordinate_of_jump_particle;
         float Ycoordinate_of_jump_particle;
-
+        cout<< "Numberfunctionforcomponentrate==0"<<endl;
         Xcoordinate_of_jump_particle = this->ModelPoints.Vector_of_types[number_of_type_of_jump_particle].
                 SpacePointArray[number_of_jump_man].Xcoordinate;
 
@@ -1218,7 +1179,8 @@ void simbad::gui::Model_of_space::jump_of_particle(int EventNumber, int Numberfu
         float New_Ycoordinate_of_jump_particle;
 
         if (this->List_of_events_of_model[EventNumber].Distribution_of_particle_for_event.
-                get_Type_of_T_student_distribution() == 0){
+                get_Type_of_T_student_distribution() == 0)
+        {
 
             normal_distribution<float> Normal_distribution(0.0,this->List_of_events_of_model[EventNumber].
                                                            Distribution_of_particle_for_event.get_scale_paramiter());
@@ -1261,7 +1223,7 @@ void simbad::gui::Model_of_space::jump_of_particle(int EventNumber, int Numberfu
                   New_Xcoordinate_of_jump_particle, New_Ycoordinate_of_jump_particle);                   // number_of_type_of_jump_particle
 
 
-        Global_clock = Global_clock + Min_time;
+        //Global_clock = Global_clock + Min_time;
         Number_of_occurings = Number_of_occurings + 1;
 
     }
@@ -1337,7 +1299,7 @@ void simbad::gui::Model_of_space::mutation_of_particle(int EventNumber, int Numb
 
 
 
-            Global_clock = Global_clock + Min_time;
+//            Global_clock = Global_clock + Min_time;
             //if (this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].SpacePointArray.size() != 0)
             //{
                 //this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].
@@ -1390,7 +1352,7 @@ void simbad::gui::Model_of_space::mutation_of_particle(int EventNumber, int Numb
 
 
 
-        Global_clock = Global_clock + Min_time;
+  //      Global_clock = Global_clock + Min_time;
          //if (this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].SpacePointArray.size() != 0)
          //{
          //  this->ModelPoints.Vector_of_types[number_of_new_type_of_mutated_particle].
@@ -1447,13 +1409,13 @@ void simbad::gui::Model_of_space::death_of_particle(int EventNumber, int Numberf
     //cout<< "bernulli_D="<<bernulli_D<<endl;
         if (bernulli_D){
             one_death(number_of_type_of_death_particle, number_of_dead_man);
-            Global_clock = Global_clock + Min_time;
+            //Global_clock = Global_clock + Min_time;
             Number_of_occurings = Number_of_occurings + 1;
 
         };
     } else {
         one_death(number_of_type_of_death_particle, number_of_dead_man);
-        Global_clock = Global_clock + Min_time;
+        //Global_clock = Global_clock + Min_time;
         Number_of_occurings = Number_of_occurings + 1;
 
     }
@@ -1967,4 +1929,9 @@ void simbad::gui::Model_of_space::add_new_result_of_dynamics_one_beath_and_one_d
 
     Vector_of_result_event.push_back(A);
 
+}
+
+void simbad::gui::Model_of_space::set_saving_step(int Step)
+{
+    Saving_step=Step;
 }
