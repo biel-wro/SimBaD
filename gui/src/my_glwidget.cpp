@@ -65,6 +65,7 @@ void My_GLWidget::paintEvent(QPaintEvent *event)
 
 
     painter.drawText(490,256 - 8 - (int) (512 * (shift_Y)),QString::number(0.5/scaling_factor));
+
     painter.drawText(4,256 - 8 - (int) (512 * (shift_Y)),QString::number(-0.5/scaling_factor));
 
 
