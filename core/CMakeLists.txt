@@ -7,7 +7,8 @@ set( SRC
     src/core.cpp
 #    src/core_old.cpp
     src/generic_particle.cpp
-#    src/model_loader.cpp
+    src/model.cpp
+    src/model_loader.cpp
     src/particle_interface.cpp
 )
 
@@ -15,8 +16,7 @@ set( LIBS
 	${Boost_LIBRARIES}
 )
 
-add_library(${PROJECT_NAME} ${SHARED_LIBS} ${SRC} ${HEADERS} )
-
+add_library(${PROJECT_NAME} ${SHARED_LIBS} ${SRC} ${HEADERS})
 target_link_libraries( ${PROJECT_NAME} ${LIBS} )
 
 subdirs( tests )

@@ -11,7 +11,7 @@ namespace core{
 
 class Core{
 
-    void writeModel(Model const &m, std::ostream & os) const throw(std::exception);
+    void writeModel(model const &m, std::ostream & os) const throw(std::exception);
 };
 
 }

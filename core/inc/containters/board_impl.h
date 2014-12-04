@@ -224,8 +224,8 @@ template<class T, class conf>
  * Implementation of the iterator over elements in some region of the board
  */
 template< class D_, class itercfg >
-class board_region_iterator_ : public boost::iterator_facade<
-        board_region_iterator_<D_,itercfg>,            // itself
+class board_region_iterator : public boost::iterator_facade<
+        board_region_iterator<D_,itercfg>,            // itself
         D_,                                            // value
         boost::bidirectional_traversal_tag             // travelsal type
         >
@@ -245,76 +245,81 @@ class board_region_iterator_ : public boost::iterator_facade<
     typename tile_type::iterator>::type               tile_iter;
 
   typedef typename tile_type::board_coord             board_coord;
-
-  typedef typename itercfg::board_max                 board_max;
-  typedef typename itercfg::board_min                 board_min;
-  typedef typename itercfg::region_max                region_max;
-  typedef typename itercfg::region_min                region_min;
-
+  typedef typename itercfg::region_coord              region_coord;
+  typedef typename itercfg::limit_coord               limit_coord;
     struct enabler{}; // for std::enable_if
  public:
-    board_region_iterator_(){}
+    board_region_iterator():
+      p_board(nullptr)
+    {}
+
+    board_region_iterator( board_type &board, bool begin_not_end,
+        region_coord rmin, region_coord rmax,
+        limit_coord bmin=limit_coord(), limit_coord bmax=limit_coord() ):
+      p_board( &board ),
+      rmin( std::move(rmin) ),
+      rmax( std::move(rmax) ),
+      bmin( std::move(bmin) ),
+      bmax( std::move(bmax) ),
+      valid( false )
+    {
+      if(begin_not_end)
+        increment();
+      else
+        decrement();
+    }
 
     template< class OtherD_>
-    board_region_iterator_( board_region_iterator_<OtherD_,itercfg > const &o,
+    board_region_iterator( board_region_iterator<OtherD_,itercfg > const &o,
       typename std::enable_if<std::is_convertible<OtherD_*,D_*>::value,
       enabler >::type = enabler() ) :
-      board(o.board), it(o.it), pTile(o.pTile),
-      rmax(o.rmax),rmin(o.rmin),bmax(o.bmax), bmin(o.bmin), m_valid(o.m_valid)
+      p_board(o.p_board), it(o.it), p_tile(o.p_tile),
+      rmax(o.rmax),rmin(o.rmin),bmax(o.bmax), bmin(o.bmin), valid(o.valid)
     {}
 
  protected:
     friend class boost::iterator_core_access;
-    template<class,class> friend class board_region_iterator_;
+    template<class,class> friend class board_region_iterator;
 
     template< class OtherD_>
-    inline bool equal(board_region_iterator_<OtherD_,itercfg> const& o) const
+    inline bool equal(board_region_iterator<OtherD_,itercfg> const& o) const
     {
-      if( !m_valid )
-        return !o.m_valid;
+      if( !valid )
+        return !o.valid;
       else
-        return it == o.it && pTile == o.pTile;
+        return it == o.it && p_tile == o.p_tile;
     }
 
     inline void increment()
     {
-      if( !m_valid ){
-        m_valid = true;
-        return;
-      }
-      ++it;
+      if( valid ) // including into the while condition complicates too much
+        ++it;
 
-      while( pTile->end() == it )   // if done iterating over current tile
+      while( !valid || p_tile->end() == it )   // if done iterating over current tile
       {
-        board_coord c = pTile->get_coords();
+        board_coord c = p_tile->get_coords();
 
-        m_valid = increment_to_valid(c);
+        valid = increment_to_valid(c);
 
-        if( !m_valid )
+        if( !valid )
           return;                       //iterator is now end()
         else
         {
-          pTile = &board.get_tile(c);   // iterator goes to next tile
-          it = pTile.begin();
+          p_tile = p_board->get_tile(c);   // iterator goes to next tile
+          it = p_tile.begin();
         }
       }
     }
-    inline void decrement()
-    {
-      if( !m_valid ){
-        m_valid = true;
-        return;
-      }
-
-      while( pTile->begin() == it )
+    inline void decrement()    {
+      while( !valid || p_tile->begin() == it )
       {
-        board_coord c = pTile->get_coords();
-        m_valid = decrement_to_valid(c);
-        if( !m_valid )
+        board_coord c = p_tile->get_coords();
+        valid = decrement_to_valid(c);
+        if( !valid )
           return;
         else{
-          pTile = &board.get_tile(c);
-          it = pTile.end();
+          p_tile = &p_board.get_tile(c);
+          it = p_tile.end();
         }
       }
       --it;
@@ -330,7 +335,7 @@ private:
         bool has_next = board_coord::next(c,rmin,rmax,bmin,bmax);
         if( has_next )
           return true;
-        else if( board.tile_exists(c) )
+        else if( p_board->tile_exists(c) )
           return false;
       }
     }
@@ -341,19 +346,19 @@ private:
         bool has_prev = board_coord::prev(c,rmin,rmax,bmin,bmax);
         if( !has_prev )
           return false;
-        else if( board.tile_exists(c) )
+        else if( p_board->tile_exists(c) )
           return true;
       }
     }
 
-  board_type &board;
+  board_type *p_board;
   tile_iter it;
-  tile_type *pTile;
-  region_max rmax;
-  region_min rmin;
-  board_max bmax;
-  board_min bmin;
-  bool m_valid;
+  tile_type *p_tile;
+  board_coord rmax;
+  board_coord rmin;
+  board_coord bmax;
+  board_coord bmin;
+  bool valid;
 
 };
 /*
@@ -486,6 +491,8 @@ private:
   inner_iter iit;
   bool valid;
 };
+
+
 struct tile_disposer{
   template< class tile> void operator()(tile *ptr){ delete ptr; }
 };
@@ -496,34 +503,45 @@ struct tile_disposer{
 template<class T, class config>
 class board_impl{
 public:
-  typedef T                                                 value_type;
-  typedef T&                                                reference_type;
-  typedef const T&                                          const_refernce_type;
-  typedef board_tile<T,config>                              tile_type;
-  typedef typename tile_type::coordinates_type              coordinates_type;
+  typedef T                                               value_type;
+  typedef T&                                              reference_type;
+  typedef const T&                                        const_refernce_type;
+  typedef board_tile<T,config>                            tile_type;
+  typedef typename tile_type::coordinates_type            coordinates_type;
   typedef boost::intrusive::unordered_set<
     tile_type,
     boost::intrusive::equal< same_coords >,
     boost::intrusive::hash< tile_hash >
-  >                                                         set_type;
-  typedef typename set_type::bucket_type                    bucket_type;
-  typedef typename set_type::bucket_traits                  bucket_traits;
-  //typedef typename config::int_dimension                    integral_dim;
-  static constexpr const int DEFAULT_BUCKET_COUNT =         1024;
+  >                                                       set_type;
+  typedef typename set_type::bucket_type                  bucket_type;
+  typedef typename set_type::bucket_traits                bucket_traits;
+  //typedef typename config::int_dimension                  integral_dim;
+  static constexpr const int DEFAULT_BUCKET_COUNT =       1024;
 
-  struct iter_config{
+  struct itercfg{
     typedef board_impl<T,config> board_type;
   };
-  typedef board_iterator<T, iter_config>                    iterator;
-  typedef board_iterator<T const, iter_config>              const_iterator;
+
+  struct linreg_itercfg{
+    typedef board_impl<T,config> board_type;
+    typedef coordinates_type board_coords;
+  };
+
+  typedef board_iterator<T, itercfg>                  iterator;
+  typedef board_iterator<T const, itercfg>            const_iterator;
+
+  //typedef board_region_iterator<T, iter_config>           region_iterator;
+  //typedef board_region_iterator<T const, iter_config>     const_region_iterator;
 
   typedef typename set_type::iterator                     outer_iterator;
   typedef typename set_type::const_iterator               const_outer_iterator;
   typedef typename tile_type::iterator                    inner_iterator;
   typedef typename tile_type::const_iterator              const_inner_iterator;
+  typedef size_t                                          size_type;
 private:
   std::unique_ptr<bucket_type[]>      buckets;
   set_type                            tile_set;
+  size_type                           count;
 public:
 
   board_impl(size_t bucket_count=DEFAULT_BUCKET_COUNT):
@@ -548,6 +566,7 @@ public:
     outer_iterator oit = find_tile_or_create(cs);
     inner_iterator iit = oit->emplace_back(std::forward<Args>(args)...);
     iterator it(tile_set,oit,iit);
+    ++count;
     return it;
   }
 
@@ -555,6 +574,11 @@ public:
      outer_iterator oit = find_tile_or_die( c );
      assert( oit->end() != oit->find(v) );
      oit->swap_and_delete( v );
+     --count;
+  }
+
+  size_type size() const{
+    return count;
   }
 
   iterator iterator_to( coordinates_type const &cs, T const &v ){
@@ -584,7 +608,11 @@ public:
   const_iterator end() const{
     return const_iterator(false);
   }
-
+  /*
+  region_iterator begin_region(){
+    return region_iterator();
+  }
+*/
 
 
 protected:
@@ -606,6 +634,7 @@ protected:
     }
     return result.first;
   }
+
 };
 
 

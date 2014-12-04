@@ -5,6 +5,8 @@ cmake_minimum_required(VERSION 2.8)
 set( CLI_NAME cli )
 set( CORE_NAME core )
 set( GUI_NAME gui )
+set( MODELS_NAME models )
+
 
 # C++11
 include(CheckCXXCompilerFlag)
@@ -43,6 +45,10 @@ include_directories( ${Boost_INCLUDE_DIR} )
 
 enable_testing()
 
+set( MODELS
+  empty_model
+)
 
-subdirs( core cli gui)
+
+subdirs( core cli gui models)
 

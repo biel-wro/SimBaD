@@ -14,7 +14,7 @@ int hello()
 namespace simbad{
 namespace core{
 
-void Core::writeModel(const Model &model, std::ostream &os) const throw (std::exception)
+void Core::writeModel(const model &model, std::ostream &os) const throw (std::exception)
 {
     os << "# model " << model.modelName() << '\n';
     os << "# dimension " << model.dimension() << '\n';

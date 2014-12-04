@@ -8,6 +8,7 @@
 #include <type_traits>
 #include <random>
 
+#include <model.h>
 
 typedef std::integral_constant<int,2> _2D;
 typedef simbad::core::board_coordinates<int,_2D> tile_coord_type;
@@ -243,3 +244,5 @@ BOOST_AUTO_TEST_CASE( board_remove )
     BOOST_REQUIRE( b );
 
 }
+
+
