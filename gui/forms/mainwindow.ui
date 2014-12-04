@@ -18,7 +18,6 @@
   </property>
   <property name="font">
    <font>
-    <family>Arial</family>
     <pointsize>14</pointsize>
    </font>
   </property>
@@ -29,7 +28,56 @@
    <iconset>
     <normaloff>Resources/paint.bmp</normaloff>Resources/paint.bmp</iconset>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>60</y>
+      <width>600</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string/>
+    </property>
+    <property name="toolTipDuration">
+     <number>-1</number>
+    </property>
+    <property name="statusTip">
+     <string>settings for model and algorithmic approach to simulation</string>
+    </property>
+    <property name="whatsThis">
+     <string extracomment="hhoijo">hohoo</string>
+    </property>
+    <item>
+     <property name="text">
+      <string extracomment="(Birth, Death, Jump, Mutation of the mutiparticles system)">Biological models and Dominated simulation approach</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Biological models and  Forward simulation approach</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>591</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="statusTip">
+     <string>settings for model and algorithmic approach to simulation</string>
+    </property>
+    <property name="text">
+     <string>Please choose a simulation template</string>
+    </property>
+   </widget>
+  </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -37,10 +85,30 @@
      <x>0</x>
      <y>0</y>
      <width>640</width>
-     <height>21</height>
+     <height>28</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>false</bool>
+   </property>
    <widget class="QMenu" name="menuFile">
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>File </string>
     </property>
@@ -51,12 +119,22 @@
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuLog">
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>Simulation</string>
     </property>
     <addaction name="actionNew"/>
    </widget>
    <widget class="QMenu" name="menuStatistics">
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>Statistics</string>
     </property>
@@ -64,6 +142,11 @@
     <addaction name="actionAnalyze"/>
    </widget>
    <widget class="QMenu" name="menuInitial_Configuration">
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>Initial Configuration</string>
     </property>
@@ -81,6 +164,12 @@
    </property>
    <property name="text">
     <string>New File (Model) ...</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>14</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionDownload_Evolutiion">
@@ -113,6 +202,11 @@
    </property>
    <property name="text">
     <string>New ...</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionNew">
