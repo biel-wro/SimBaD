@@ -28,7 +28,7 @@ public:
 
 //operators
     Distribution_of_particle& operator = (const Distribution_of_particle& that);
-    bool operator == (const Distribution_of_particle& that)
+    bool operator == (const Distribution_of_particle& that)    
     {
         if (       (Type_of_particle == that.Type_of_particle) and
                    (Type_of_T_student_distribution == that.Type_of_T_student_distribution) and
@@ -37,6 +37,7 @@ public:
 
               return false;
     }
+
     int get_Type_of_particle();
     int get_Type_of_T_student_distribution();
     float get_scale_paramiter();

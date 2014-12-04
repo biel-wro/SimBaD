@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <model_of_space.h>
+#include <Model\model_of_space.h>
 
 namespace Ui {
 class MainWindow;

@@ -19,23 +19,25 @@ namespace gui{
 
 class Model_of_space
 {
+//File part
     QString FullFileName;
     QString ConfFullFileName;
     QString ResultFullFileName;
-
+//----File part
+//info about model
     QString Name_of_model;
     int dimension_of_model;
     int number_of_types_in_model;
 //dynamics
     long double Global_clock;
     long double Min_time;
-
+    int Saving_step;
 
 
 public:
 
     //Vector of result events
-    QVector<result_of_event> Vector_of_result_event;
+    QVector <result_of_event> Vector_of_result_event;
 
     // All information  about events of model
     // table of component rates
@@ -63,11 +65,12 @@ public:
 // functions for changing the Model_of_space
     void set_result_full_fill_name(QString Result_file_name);
     void set_conf_full_file_name(QString Conf_file_name);
-
     void set_full_file_name(QString File);
     bool set_model_setting_for_model_from_file(QStringList String_list);
     bool set_configiguration_setting_from_file(QStringList String_list);
-    void set_dimension_of_model(int Number);    
+
+
+    void set_dimension_of_model(int Number);
     void set_name_of_model(QString Name_of_the_model);
     void set_number_of_types(int Number);
     void download_model_of_space_from_file(QFile file_sim);
@@ -114,6 +117,10 @@ public:
     // comulative rates of type events (type events)
     typedef QVector <long double> Comulative_rate_for_type_of_event;
     QVector <Comulative_rate_for_type_of_event> Vector_comulative_rate_for_type_of_event;
+
+    //set step for saving in file
+
+    void set_saving_step(int Step);
 
     //seed
 

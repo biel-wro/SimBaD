@@ -137,6 +137,7 @@ void simbad::gui::Simulation_Dialog::on_groupBox_saving_management_clicked(bool 
         ui->pushButton_Save_conf->setEnabled(true);
         ui->pushButton_Save_results->setEnabled(true);
         this->ui->spinBox_saving_step->setEnabled(true);
+        Big_model->set_saving_step(ui->spinBox_saving_step->value());
     } else
     {
         ui->pushButton_Save_conf->setEnabled(false);
@@ -144,6 +145,8 @@ void simbad::gui::Simulation_Dialog::on_groupBox_saving_management_clicked(bool 
         this->ui->spinBox_saving_step->setEnabled(false);
 
     };
+
+    if (checked==false) Big_model->set_saving_step(0);
 }
 
 void simbad::gui::Simulation_Dialog::on_pushButton_Save_results_clicked()
@@ -195,4 +198,9 @@ void simbad::gui::Simulation_Dialog::on_pushButton_Save_results_clicked()
 void simbad::gui::Simulation_Dialog::on_pushButton_Save_conf_clicked()
 {
 
+}
+
+void simbad::gui::Simulation_Dialog::on_spinBox_saving_step_valueChanged(int arg1)
+{
+    Big_model->set_saving_step(arg1);
 }

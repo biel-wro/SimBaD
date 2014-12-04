@@ -51,6 +51,8 @@ private slots:
 
     void on_pushButton_Save_conf_clicked();
 
+    void on_spinBox_saving_step_valueChanged(int arg1);
+
 private:
     Ui::Simulation_Dialog *ui;
     QTimer *Timer_clock;
