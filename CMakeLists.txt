@@ -40,7 +40,7 @@ if( WIN32 )
 endif()
 
 find_package( Boost 1.40 COMPONENTS exception program_options REQUIRED )
-
+add_definitions(-DBOOST_RESULT_OF_USE_DECLTYPE)
 include_directories( ${Boost_INCLUDE_DIR} )
 
 enable_testing()
