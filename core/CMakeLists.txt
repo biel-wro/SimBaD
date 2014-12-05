@@ -17,6 +17,6 @@ set( LIBS
 )
 
 add_library(${PROJECT_NAME} ${SHARED_LIBS} ${SRC} ${HEADERS})
-target_link_libraries( ${PROJECT_NAME} ${LIBS} )
+target_link_libraries( ${PROJECT_NAME} ${MODELS} ${LIBS} )
 
 subdirs( tests )

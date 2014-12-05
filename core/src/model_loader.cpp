@@ -42,7 +42,7 @@ const model_factory &model_loader::get_model(const std::string &name) const
 {
   const_iterator it = factories.find(name);
   if( factories.end() == it )
-    throw std::range_error("");
+    throw std::range_error(std::string("there is no module named ").append(name));
   model_factory const &f = *(it->second );
   return f;
 }
