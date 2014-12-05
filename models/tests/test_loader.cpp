@@ -23,6 +23,10 @@ BOOST_AUTO_TEST_CASE( list_modules )
   }
 
   model_factory const &f = loader.get_model("empty model");
+
+  po::variables_map vm;
+  boost::program_options::variables_map vm2;
+
   std::unique_ptr<model> p_model = f.create_model( po::variables_map() );
 
  }

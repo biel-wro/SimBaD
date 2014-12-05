@@ -9,10 +9,8 @@ set( TEST_SRCS
 foreach( FILENAME ${TEST_SRCS} )
 
   GET_FILENAME_COMPONENT( TEST_NAME ${FILENAME} NAME_WE )
-
   add_executable(${TEST_NAME} ${FILENAME} ${HEADERS} )
-  target_link_libraries( ${TEST_NAME} ${CORE_NAME} ${LIBS} ${MODELS})
-  
+  target_link_libraries( ${TEST_NAME} ${LIBS} ${MODELS})
   add_test( ${TEST_NAME} ${TEST_NAME} )
 
 endforeach()

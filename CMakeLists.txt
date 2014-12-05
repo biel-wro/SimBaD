@@ -47,6 +47,7 @@ enable_testing()
 
 set( MODELS
   empty_model
+  bio2D
 )
 
 
