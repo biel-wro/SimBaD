@@ -16,6 +16,7 @@ typedef simbad::core::board_coordinates<int,_2D> tile_coord_type;
 BOOST_AUTO_TEST_CASE( instantiate )
 {
     tile_coord_type tc;
+    (void) tc;
 }
 
 BOOST_AUTO_TEST_CASE( coord_simple_pass )
@@ -128,7 +129,7 @@ typedef simbad::core::board_tile<int,my_config> tile_type;
 
 BOOST_AUTO_TEST_CASE( board_tile_fill )
 {
-  std::array<int,2> coords = {1,2};
+  std::array<int,2> coords = {{1,2}};
   tile_type tile(coords);
   const int TEST_SIZE = 1024*7;
 
@@ -139,7 +140,7 @@ BOOST_AUTO_TEST_CASE( board_tile_fill )
 
   auto it = tile.begin();
   tile_type const &ctile = tile;
-  auto cit = tile.begin();
+  auto cit = ctile.begin();
 
   for( int i=0; i<TEST_SIZE; ++i)
   {

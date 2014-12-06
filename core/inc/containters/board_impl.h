@@ -306,7 +306,7 @@ class board_region_iterator : public boost::iterator_facade<
         else
         {
           p_tile = p_board->get_tile(c);   // iterator goes to next tile
-          it = p_tile.begin();
+          it = p_tile->begin();
         }
       }
     }
@@ -318,8 +318,8 @@ class board_region_iterator : public boost::iterator_facade<
         if( !valid )
           return;
         else{
-          p_tile = &p_board.get_tile(c);
-          it = p_tile.end();
+          p_tile = &p_board->get_tile(c);
+          it = p_tile->end();
         }
       }
       --it;
