@@ -16,11 +16,6 @@
     <height>640</height>
    </rect>
   </property>
-  <property name="font">
-   <font>
-    <pointsize>14</pointsize>
-   </font>
-  </property>
   <property name="windowTitle">
    <string>Interacting particle systems</string>
   </property>
@@ -35,7 +30,7 @@
       <x>20</x>
       <y>60</y>
       <width>600</width>
-      <height>31</height>
+      <height>26</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -85,14 +80,8 @@
      <x>0</x>
      <y>0</y>
      <width>640</width>
-     <height>28</height>
+     <height>22</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial</family>
-     <pointsize>14</pointsize>
-    </font>
    </property>
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
@@ -104,11 +93,6 @@
     <bool>false</bool>
    </property>
    <widget class="QMenu" name="menuFile">
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
     <property name="title">
      <string>File </string>
     </property>
@@ -119,22 +103,12 @@
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuLog">
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
     <property name="title">
      <string>Simulation</string>
     </property>
     <addaction name="actionNew"/>
    </widget>
    <widget class="QMenu" name="menuStatistics">
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
     <property name="title">
      <string>Statistics</string>
     </property>
@@ -142,11 +116,6 @@
     <addaction name="actionAnalyze"/>
    </widget>
    <widget class="QMenu" name="menuInitial_Configuration">
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
     <property name="title">
      <string>Initial Configuration</string>
     </property>
@@ -164,12 +133,6 @@
    </property>
    <property name="text">
     <string>New File (Model) ...</string>
-   </property>
-   <property name="font">
-    <font>
-     <family>Segoe UI</family>
-     <pointsize>14</pointsize>
-    </font>
    </property>
   </action>
   <action name="actionDownload_Evolutiion">
@@ -202,11 +165,6 @@
    </property>
    <property name="text">
     <string>New ...</string>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>14</pointsize>
-    </font>
    </property>
   </action>
   <action name="actionNew">
