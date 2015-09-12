@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE( list_modules )
     std::cout<< *it << std::endl;
   }
 
-  model_factory const &f = loader.get_model("empty model");
+  model_factory const &f = loader.get_model("empty_model");
 
   po::variables_map vm;
   boost::program_options::variables_map vm2;
