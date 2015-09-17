@@ -6,13 +6,14 @@
 #include <type_traits>
 #include <random>
 
-#include "model_loader.h"
+//#include "model_loader.h"
 
-using namespace simbad::core;
+//using namespace simbad::core;
 
 BOOST_AUTO_TEST_CASE( list_modules )
 
 {
+    /*
   model_loader const &loader = model_loader::get_const_instance();
 
   model_loader::name_iterator end = loader.end_names();
@@ -28,5 +29,5 @@ BOOST_AUTO_TEST_CASE( list_modules )
   boost::program_options::variables_map vm2;
 
   std::unique_ptr<model> p_model = f.create_model( po::variables_map() );
-
+*/
  }

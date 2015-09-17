@@ -6,23 +6,23 @@
 
 #include <cstddef>
 
-
-namespace simbad{
-namespace core{
-
-
-template <class board_coord_type, size_t DIM>
-struct board_coordinates
-    : public std::array<board_coord_type, DIM>,
-      private boost::totally_ordered1<board_coordinates<board_coord_type, DIM>>
+namespace simbad
+{
+namespace core
 {
 
-    using base_array = std::array<board_coord_type, DIM>;
-    // using base_array::base_array;
+template <class board_coord_type, size_t _DIM>
+struct board_coordinates
+    : public std::array<board_coord_type, _DIM>,
+      private boost::totally_ordered1<board_coordinates<board_coord_type, _DIM>>
+{
+    static constexpr size_t DIM = _DIM;
 
+    using base_array = std::array<board_coord_type, DIM>;
+    using scalar_type = board_coord_type;
     /*
-     * Constructors
-     */
+    * Constructors
+    */
     board_coordinates() = default;
 
     board_coordinates(std::initializer_list<board_coord_type> l)
@@ -53,8 +53,7 @@ struct board_coordinates
     }
 
     template <class coord_type, class tile_size_type, size_t>
-    void inline compute(std::array<coord_type, DIM> const &,
-                        tile_size_type,
+    void inline compute(std::array<coord_type, DIM> const &, tile_size_type,
                         std::integral_constant<int, 0> * = nullptr) noexcept
     {
     }
@@ -80,16 +79,47 @@ struct board_coordinates
         return static_cast<base_array const &>(*this) <
                static_cast<base_array const &>(o);
     }
+};
 
-    static bool next(board_coordinates &what,
-                     board_coordinates const &region_min,
-                     board_coordinates const &region_max,
-                     board_coordinates const &board_min,
-                     board_coordinates const &board_max) noexcept
+struct coord_hasher
+{
+
+    template <class board_coord_type, size_t DIM>
+    std::size_t
+    operator()(board_coordinates<board_coord_type, DIM> const &v) const
+    {
+        typedef std::array<board_coord_type, DIM> base_array;
+        boost::hash<base_array> hasher;
+        return hasher(static_cast<base_array const &>(v));
+    }
+};
+
+template <class CV, class RL = CV, class BL = CV>
+class coord_incrementer_wrapped
+{
+  public:
+    using coord_vector_type = CV;
+    using region_limit_type = RL;
+    using board_limit_type = BL;
+
+    using coord_scalar_type = typename coord_vector_type::scalar_type;
+    static constexpr size_t DIM = coord_vector_type::DIM;
+
+    coord_incrementer_wrapped(){}
+    coord_incrementer_wrapped(region_limit_type rmin, region_limit_type rmax,
+                              board_limit_type bmin, region_limit_type bmax)
+        : region_min(rmin), region_max(rmax), board_min(bmin), board_max(bmax)
+    {
+    }
+
+    region_limit_type first() const { return region_min; }
+    region_limit_type last() const { return region_max; }
+
+    inline bool next(coord_vector_type &coords) noexcept
     {
         for (size_t i = 0; i < DIM; i++)
         {
-            board_coord_type &c = what[i];
+            coord_scalar_type &c = coords[i];
 
             if (c == board_max[i])
             {
@@ -107,15 +137,11 @@ struct board_coordinates
         return false;
     }
 
-    static bool prev(board_coordinates &what,
-                     board_coordinates const &region_min,
-                     board_coordinates const &region_max,
-                     board_coordinates const &board_min,
-                     board_coordinates const &board_max) noexcept
+    inline bool prev(coord_vector_type &coords) noexcept
     {
         for (size_t i = 0; i < DIM; i++)
         {
-            board_coord_type &c = what[i];
+            coord_scalar_type &c = coords[i];
 
             if (c == board_min[i])
             {
@@ -132,20 +158,67 @@ struct board_coordinates
         }
         return false;
     }
+
+  private:
+    region_limit_type region_min, region_max;
+    board_limit_type board_min, board_max;
 };
 
-struct coord_hasher
+template <class CV, class RL = CV> class coord_incrementer_box
 {
+  public:
+    using coord_vector_type = CV;
+    using region_limit_type = RL;
 
-    template <class board_coord_type, size_t DIM>
-    std::size_t
-    operator()(board_coordinates<board_coord_type, DIM> const &v) const
+    using coord_scalar_type = typename coord_vector_type::scalar_type;
+    static constexpr size_t DIM = coord_vector_type::DIM;
+
+    coord_incrementer_box() {}
+    coord_incrementer_box(region_limit_type rmin, region_limit_type rmax)
+        : region_min(rmin), region_max(rmax)
     {
-        typedef std::array<board_coord_type, DIM> base_array;
-        boost::hash<base_array> hasher;
-        return hasher(static_cast<base_array const &>(v));
     }
-};
 
-}}
+    region_limit_type first() const { return region_min; }
+    region_limit_type last() const { return region_max; }
+
+    inline bool next(coord_vector_type &coords) noexcept
+    {
+        for (size_t i = 0; i < DIM; i++)
+        {
+            coord_scalar_type &c = coords[i];
+
+            if (c >= region_max[i])
+                c = region_min[i];
+            else
+            {
+                c++;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    inline bool prev(coord_vector_type &coords) noexcept
+    {
+        for (size_t i = 0; i < DIM; i++)
+        {
+            coord_scalar_type &c = coords[i];
+
+            if (c <= region_min[i])
+                c = region_max[i];
+            else
+            {
+                c--;
+                return true;
+            }
+        }
+        return false;
+    }
+
+  private:
+    region_limit_type region_min, region_max;
+};
+}
+}
 #endif // BOARD_COORDINATES_H

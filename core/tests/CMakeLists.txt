@@ -5,6 +5,9 @@ set( TEST_SRCS
   test_lazy_set_chunk.cpp
   test_lazy_set.cpp
   test_board.cpp
+  test_board_coords.cpp
+  test_board_tile.cpp
+  test_template_instantiation.cpp
 )
 
 

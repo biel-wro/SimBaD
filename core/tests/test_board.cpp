@@ -12,144 +12,7 @@
 
 #include <model.h>
 
-typedef simbad::core::board_coordinates<int, 2> tile_coord_type;
-
-BOOST_AUTO_TEST_CASE(instantiate)
-{
-    tile_coord_type tc;
-    (void)tc;
-}
-
-BOOST_AUTO_TEST_CASE(coord_simple_pass)
-{
-    tile_coord_type tc;
-    tc.fill(0);
-    std::array<int, 36> arr;
-    arr.fill(false);
-    tile_coord_type rmin, rmax, bmin, bmax;
-
-    rmin.fill(0);
-    rmax.fill(5);
-    bmin.fill(-10);
-    bmax.fill(+10);
-
-    bool r = true;
-    BOOST_CHECKPOINT("entering the loop");
-    for (int i = 0; i < 36; i++)
-    {
-        // std::cout<<tc[0] <<","<<tc[1]<<":"<<r<<std::endl;
-
-        int &v = arr[tc[0] * 6 + tc[1]];
-
-        BOOST_REQUIRE_EQUAL(v, false);
-        v = true;
-
-        BOOST_REQUIRE(r);
-        r = tile_coord_type::next(tc, rmin, rmax, bmin, bmax);
-    }
-    BOOST_CHECKPOINT("leaving the loop");
-    BOOST_REQUIRE(!r);
-}
-
-BOOST_AUTO_TEST_CASE(coord_wrap_pass)
-{
-    tile_coord_type tc;
-    tc.fill(2);
-
-    tile_coord_type rmin, rmax, bmin, bmax;
-
-    rmin.fill(+2);
-    rmax.fill(-2);
-    bmin.fill(-4);
-    bmax.fill(+4);
-
-    bool r = true;
-    BOOST_CHECKPOINT("entering the loop");
-    for (int i = 0; i < 36; i++)
-    {
-        BOOST_REQUIRE(r);
-        r = tile_coord_type::next(tc, rmin, rmax, bmin, bmax);
-        // std::cout<<tc[0] <<","<<tc[1]<<":"<<r<<std::endl;
-    }
-    BOOST_CHECKPOINT("leaving the loop");
-    BOOST_REQUIRE(!r);
-}
-
-BOOST_AUTO_TEST_CASE(coord_go_and_back)
-{
-    std::vector<tile_coord_type> stack;
-    tile_coord_type tc;
-
-    tile_coord_type rmin, rmax, bmin, bmax;
-
-    rmin.fill(+2);
-    rmax.fill(-2);
-    bmin.fill(-4);
-    bmax.fill(+4);
-
-    tc = rmin;
-    bool r = true;
-    BOOST_CHECKPOINT("entering the loop");
-    for (int i = 0; i < 36; i++)
-    {
-        BOOST_REQUIRE(r);
-        stack.push_back(tc);
-        r = tile_coord_type::next(tc, rmin, rmax, bmin, bmax);
-    }
-    BOOST_CHECKPOINT("leaving the loop");
-    BOOST_REQUIRE(!r);
-
-    tc = rmax;
-    r = true;
-    BOOST_CHECKPOINT("entering the loop");
-    for (int i = 0; i < 36; i++)
-    {
-        BOOST_REQUIRE(r);
-        BOOST_REQUIRE(tc == stack.back());
-        stack.pop_back();
-
-        r = tile_coord_type::prev(tc, rmin, rmax, bmin, bmax);
-    }
-    BOOST_CHECKPOINT("leaving the loop");
-    BOOST_REQUIRE(!r);
-}
-
-struct my_config
-{
-    typedef int board_coord;
-    typedef std::integral_constant<int, 2> int_dimension;
-    typedef std::integral_constant<int, 1000> int_chunk_size;
-};
-
-typedef simbad::core::board_tile<int, tile_coord_type> tile_type;
-
-BOOST_AUTO_TEST_CASE(board_tile_fill)
-{
-    std::array<int, 2> coords = {{1, 2}};
-    tile_type tile(coords);
-    const int TEST_SIZE = 1024 * 7;
-
-    for (int i = 0; i < TEST_SIZE; ++i)
-    {
-        tile.emplace_back(i);
-    }
-
-    auto it = tile.begin();
-    tile_type const &ctile = tile;
-    auto cit = ctile.begin();
-
-    for (int i = 0; i < TEST_SIZE; ++i)
-    {
-        BOOST_REQUIRE_EQUAL(*it, i);
-        BOOST_REQUIRE_EQUAL(*cit, i);
-        ++it;
-        ++cit;
-    }
-    BOOST_REQUIRE(it == tile.end());
-    BOOST_REQUIRE(cit == tile.end());
-}
-
-using int_board =  simbad::core::board<int, 2>;
+using int_board = simbad::core::board<int, 2>;
 using string_board = simbad::core::board<std::string, 2>;
 
 using int_coords = int_board::coordinates_type;
@@ -239,4 +102,41 @@ BOOST_AUTO_TEST_CASE(board_remove)
 
     for (bool b : visited)
         BOOST_REQUIRE(b);
+}
+
+BOOST_AUTO_TEST_CASE(board_box_iteration)
+{
+    const unsigned int TEST_SIZE = 1024;
+    const unsigned AREA = 10;
+
+    int_board ib;
+    int_coords min{{2, 3}}, max{{5, 6}};
+
+    std::vector<int_coords> assigned_tile(TEST_SIZE);
+    std::vector<bool> within_box(TEST_SIZE, false);
+    std::vector<bool> visited(TEST_SIZE, false);
+
+    for (unsigned i = 0; i < TEST_SIZE; ++i)
+    {
+        std::srand(i);
+        int x = std::rand() % AREA;
+        int y = std::rand() % AREA;
+
+        if (min[0] <= x && x <= max[0] && min[1] <= y && y <= max[1])
+            within_box[i] = true;
+
+        int_coords c = {x, y};
+        assigned_tile[i] = c;
+        ib.emplace(c, i);
+    }
+
+    for (int idx : ib.get_box(min,max) )
+    {
+        BOOST_REQUIRE(!visited[idx]);
+        BOOST_REQUIRE(within_box[idx]);
+        visited[idx] = true;
+    }
+
+    for (unsigned i = 0; i < TEST_SIZE; ++i)
+        BOOST_REQUIRE(visited[i] == within_box[i]);
 }
