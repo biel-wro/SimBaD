@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE( fill_and_erase ){
 
   for( unsigned i=0; i<TEST_SIZE; ++i )
   {
-    BOOST_CHECKPOINT("i="<<i );
+    BOOST_TEST_CHECKPOINT("i="<<i );
     is.emplace_back(i);
     ss.emplace_back( std::to_string(i) );
 
@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE( fill_and_erase ){
 
   for( unsigned i=0; i<TEST_SIZE; ++i )
   {
-    BOOST_CHECKPOINT("i="<<i);
+    BOOST_TEST_CHECKPOINT("i="<<i);
 
     BOOST_REQUIRE_EQUAL( is.size(), TEST_SIZE-i);
     is.pop_back();
@@ -66,19 +66,19 @@ BOOST_AUTO_TEST_CASE( iterator_sweep ){
   const unsigned TEST_SIZE = 5*1024;
   string_set ss;
   int_set is;
-  BOOST_CHECKPOINT("filling");
+  BOOST_TEST_CHECKPOINT("filling");
   for( unsigned i=0; i<TEST_SIZE; ++i )
   {
     is.emplace_back(i);
     ss.emplace_back(std::to_string(i));
   }
 
-  BOOST_CHECKPOINT("forward pass");
+  BOOST_TEST_CHECKPOINT("forward pass");
   auto iis = is.begin();
   auto sis = ss.begin();
   for( unsigned i=0; i<TEST_SIZE; ++i)
   {
-    BOOST_CHECKPOINT("forward i="<<i);
+    BOOST_TEST_CHECKPOINT("forward i="<<i);
     BOOST_REQUIRE_EQUAL(*iis, i );
     ++iis;
 
@@ -89,10 +89,10 @@ BOOST_AUTO_TEST_CASE( iterator_sweep ){
   BOOST_REQUIRE( sis == ss.end() );
 
 
-  BOOST_CHECKPOINT("backward pass");
+  BOOST_TEST_CHECKPOINT("backward pass");
   for( unsigned i=0; i<TEST_SIZE; ++i )
   {
-    BOOST_CHECKPOINT("backward i="<<i);
+    BOOST_TEST_CHECKPOINT("backward i="<<i);
     --iis;
     BOOST_REQUIRE_EQUAL(*iis, TEST_SIZE-i-1 );
 
@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_CASE( find ){
   string_set ss;
   int_set is;
 
-  BOOST_CHECKPOINT("filling");
+  BOOST_TEST_CHECKPOINT("filling");
   for( unsigned i=0; i<TEST_SIZE; ++i )
   {
     is.emplace_back(i);

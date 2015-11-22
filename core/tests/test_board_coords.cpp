@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(coord_wrapped_simple_pass)
 
     wrapped_incrementer incrementer(rmin, rmax, bmin, bmax);
 
-    BOOST_CHECKPOINT("entering the loop");
+    BOOST_TEST_CHECKPOINT("entering the loop");
     for (int i = 0; i < 36; i++)
     {
         // std::cout<<tc[0] <<","<<tc[1]<<":"<<r<<std::endl;
@@ -53,8 +53,8 @@ BOOST_AUTO_TEST_CASE(coord_wrapped_simple_pass)
         BOOST_REQUIRE(r);
         r = incrementer.next(tc);
     }
-    BOOST_CHECKPOINT("leaving the loop");
-    BOOST_REQUIRE(!r);
+    BOOST_TEST_CHECKPOINT("leaving the loop");
+    BOOST_TEST_REQUIRE(!r);
 }
 
 BOOST_AUTO_TEST_CASE(coord_infinite_simple_pass)
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(coord_infinite_simple_pass)
 
     infinite_incrementer incrementer(rmin, rmax);
 
-    BOOST_CHECKPOINT("entering the loop");
+    BOOST_TEST_CHECKPOINT("entering the loop");
     for (int i = 0; i < 36; i++)
     {
         // std::cout<<tc[0] <<","<<tc[1]<<":"<<r<<std::endl;
@@ -83,11 +83,11 @@ BOOST_AUTO_TEST_CASE(coord_infinite_simple_pass)
         BOOST_REQUIRE_EQUAL(v, false);
         v = true;
 
-        BOOST_REQUIRE(r);
+        BOOST_TEST_REQUIRE(r);
         r = incrementer.next(tc);
     }
-    BOOST_CHECKPOINT("leaving the loop");
-    BOOST_REQUIRE(!r);
+    BOOST_TEST_CHECKPOINT("leaving the loop");
+    BOOST_TEST_REQUIRE(!r);
 }
 
 BOOST_AUTO_TEST_CASE(coord_wrap_pass)
@@ -104,15 +104,15 @@ BOOST_AUTO_TEST_CASE(coord_wrap_pass)
 
     wrapped_incrementer incrementer(rmin, rmax, bmin, bmax);
     bool r = true;
-    BOOST_CHECKPOINT("entering the loop");
+    BOOST_TEST_CHECKPOINT("entering the loop");
     for (int i = 0; i < 36; i++)
     {
-        BOOST_REQUIRE(r);
+        BOOST_TEST_REQUIRE(r);
         r = incrementer.next(tc);
         // std::cout<<tc[0] <<","<<tc[1]<<":"<<r<<std::endl;
     }
-    BOOST_CHECKPOINT("leaving the loop");
-    BOOST_REQUIRE(!r);
+    BOOST_TEST_CHECKPOINT("leaving the loop");
+    BOOST_TEST_REQUIRE(!r);
 }
 
 BOOST_AUTO_TEST_CASE(coord_go_and_back)
@@ -130,27 +130,27 @@ BOOST_AUTO_TEST_CASE(coord_go_and_back)
     wrapped_incrementer incrementer(rmin, rmax, bmin, bmax);
     tc = rmin;
     bool r = true;
-    BOOST_CHECKPOINT("entering the loop");
+    BOOST_TEST_CHECKPOINT("entering the loop");
     for (int i = 0; i < 36; i++)
     {
-        BOOST_REQUIRE(r);
+        BOOST_TEST_REQUIRE(r);
         stack.push_back(tc);
         r = incrementer.next(tc);
     }
-    BOOST_CHECKPOINT("leaving the loop");
-    BOOST_REQUIRE(!r);
+    BOOST_TEST_CHECKPOINT("leaving the loop");
+    BOOST_TEST_REQUIRE(!r);
 
     tc = rmax;
     r = true;
-    BOOST_CHECKPOINT("entering the loop");
+    BOOST_TEST_CHECKPOINT("entering the loop");
     for (int i = 0; i < 36; i++)
     {
-        BOOST_REQUIRE(r);
-        BOOST_REQUIRE(tc == stack.back());
+        BOOST_TEST_REQUIRE(r);
+        BOOST_TEST_REQUIRE(tc == stack.back());
         stack.pop_back();
 
         r = incrementer.prev(tc);
     }
-    BOOST_CHECKPOINT("leaving the loop");
-    BOOST_REQUIRE(!r);
+    BOOST_TEST_CHECKPOINT("leaving the loop");
+    BOOST_TEST_REQUIRE(!r);
 }
