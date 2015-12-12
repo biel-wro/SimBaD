@@ -21,8 +21,8 @@ BOOST_AUTO_TEST_CASE( fill_and_pop )
     string_chunk schk;
     int_chunk ichk;
 
-    BOOST_TEST_CHECK( ichk.isEmpty());
-    BOOST_TEST_CHECK( schk.isEmpty());
+    BOOST_CHECK( ichk.isEmpty());
+    BOOST_CHECK( schk.isEmpty());
 
     for( unsigned i=0; i<ichk.length(); ++i )
     {
@@ -37,8 +37,8 @@ BOOST_AUTO_TEST_CASE( fill_and_pop )
         BOOST_CHECK_EQUAL( ichk.occupancy(), i+1 );
     }
 
-    BOOST_TEST_CHECK( ichk.isFull() );
-    BOOST_TEST_CHECK( schk.isFull() );
+    BOOST_CHECK( ichk.isFull() );
+    BOOST_CHECK( schk.isFull() );
 
     for( unsigned i=0; i<ichk.length(); ++i)
     {
@@ -57,8 +57,8 @@ BOOST_AUTO_TEST_CASE( fill_and_pop )
     ichk.pop_back();
     schk.pop_back();
 
-    BOOST_TEST_CHECK( ichk.isEmpty() );
-    BOOST_TEST_CHECK( schk.isEmpty() );
+    BOOST_CHECK( ichk.isEmpty() );
+    BOOST_CHECK( schk.isEmpty() );
 }
 
 BOOST_AUTO_TEST_CASE( iterators )
@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_CASE( find )
         BOOST_TEST_CHECKPOINT("i=" << i);
 
         std::string *ptr = &*it;
-        BOOST_TEST_CHECK( chk.containsByAddress(ptr) );
+        BOOST_CHECK( chk.containsByAddress(ptr) );
 
         unsigned idx = chk.findIdx( *ptr );
         BOOST_CHECK_LT( idx, chk.occupancy() );

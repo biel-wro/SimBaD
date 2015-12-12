@@ -8,6 +8,7 @@ set( TEST_SRCS
   test_board_coords.cpp
   test_board_tile.cpp
   test_template_instantiation.cpp
+  test_tracking.cpp
 )
 
 
