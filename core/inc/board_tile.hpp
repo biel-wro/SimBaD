@@ -1,8 +1,8 @@
 #ifndef BOARD_TILE_H
 #define BOARD_TILE_H
 
-#include "board_coordinates.h"
-#include "lazy_set.h"
+#include "board_coordinates.hpp"
+#include "lazy_set.hpp"
 
 #include <boost/intrusive/unordered_set_hook.hpp>
 

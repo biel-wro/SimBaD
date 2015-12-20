@@ -1,22 +1,22 @@
-project(${CORE_NAME})
+set( TARGET_NAME ${CORE_NAME} )
 
-FILE( GLOB_RECURSE HEADERS inc/*.h )  # workaround for headers in QtCreator
 include_directories( inc )
 
-set( SRC
-    src/core.cpp
-#    src/core_old.cpp
-    src/generic_particle.cpp
-    src/model.cpp
-    src/model_loader.cpp
-    src/particle_interface.cpp
+file( GLOB_RECURSE HEADERS inc/*.hpp )  # workaround for headers in QtCreator
+
+set( SOURCES
+  src/core.cpp
+  src/generic_particle.cpp
+  src/model.cpp
+  src/model_loader.cpp
+  src/particle_interface.cpp
 )
 
 set( LIBS
 	${Boost_LIBRARIES}
 )
 
-add_library(${PROJECT_NAME} ${SHARED_LIBS} ${SRC} ${HEADERS})
-target_link_libraries( ${PROJECT_NAME} ${LIBS} )
+add_library(${TARGET_NAME} ${IF_SHARED_LIBS} ${SOURCES} ${HEADERS})
+target_link_libraries( ${TARGET_NAME} ${LIBS} )
 
 subdirs( tests )

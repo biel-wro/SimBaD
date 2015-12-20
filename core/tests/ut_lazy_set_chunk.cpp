@@ -1,14 +1,13 @@
-#define BOOST_TEST_MAIN
+#include "lazy_set_chunk.hpp"
 
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/auto_unit_test.hpp>
+
 #include <string>
-
-#include "containters/lazy_set_chunk.h"
 
 typedef simbad::core::LazySetChunk<std::string> string_chunk;
 typedef simbad::core::LazySetChunk<unsigned> int_chunk;
 
-BOOST_AUTO_TEST_CASE( construct )
+BOOST_AUTO_TEST_CASE( LazySetChunk_construct )
 {
    string_chunk schk;
    (void) schk;
@@ -16,7 +15,7 @@ BOOST_AUTO_TEST_CASE( construct )
    (void) ichk;
 }
 
-BOOST_AUTO_TEST_CASE( fill_and_pop )
+BOOST_AUTO_TEST_CASE( LazySetChunk_fill_and_pop )
 {
     string_chunk schk;
     int_chunk ichk;
@@ -61,7 +60,7 @@ BOOST_AUTO_TEST_CASE( fill_and_pop )
     BOOST_CHECK( schk.isEmpty() );
 }
 
-BOOST_AUTO_TEST_CASE( iterators )
+BOOST_AUTO_TEST_CASE( LazySetChunk_iterators )
 {
     string_chunk chk;
 
@@ -80,7 +79,7 @@ BOOST_AUTO_TEST_CASE( iterators )
     BOOST_CHECK_EQUAL( it, chk.end() );
 }
 
-BOOST_AUTO_TEST_CASE( find )
+BOOST_AUTO_TEST_CASE( LazySetChunk_find )
 {
     string_chunk chk;
 

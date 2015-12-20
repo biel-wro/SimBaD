@@ -1,12 +1,10 @@
-#define BOOST_TEST_MAIN
+#include "board_coordinates.hpp"
 
+#include <boost/test/auto_unit_test.hpp>
 
-#include <boost/test/included/unit_test.hpp>
-
-#include <containters/board_coordinates.h>
-
-#include <type_traits>
 #include <random>
+#include <type_traits>
+
 
 
 typedef simbad::core::board_coordinates<int, 2> tile_coord_type;

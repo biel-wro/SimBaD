@@ -1,8 +1,8 @@
 #ifndef LAZY_SET_H
 #define LAZY_SET_H
 
-#include "lazy_set_chunk.h"
-#include "lazy_set_impl.h"
+#include "lazy_set_chunk.hpp"
+#include "lazy_set_impl.hpp"
 
 namespace simbad
 {

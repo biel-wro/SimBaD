@@ -1,11 +1,9 @@
-#define BOOST_TEST_MAIN
+#include "board.hpp"
+#include "board_coordinates.hpp"
+#include "board_impl.hpp"
+#include "board_tile.hpp"
 
-#include <boost/test/included/unit_test.hpp>
-
-#include <containters/board.h>
-#include <containters/board_coordinates.h>
-#include <containters/board_impl.h>
-#include <containters/board_tile.h>
+#include <boost/test/auto_unit_test.hpp>
 
 #include <type_traits>
 #include <random>

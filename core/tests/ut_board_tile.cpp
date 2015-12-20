@@ -1,12 +1,11 @@
-#define BOOST_TEST_MAIN
+#include "board_coordinates.hpp"
+#include "board_tile.hpp"
 
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/auto_unit_test.hpp>
 
-#include <containters/board_coordinates.h>
-#include <containters/board_tile.h>
-
-#include <type_traits>
 #include <random>
+#include <type_traits>
+
 
 using tile_coord_type = simbad::core::board_coordinates<int, 2>;
 using tile_type = simbad::core::board_tile<int, tile_coord_type>;

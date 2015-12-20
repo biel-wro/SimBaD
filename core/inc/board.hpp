@@ -1,7 +1,7 @@
 #ifndef CONTAINERS_BOARD
 #define CONTAINERS_BOARD
 
-#include "board_impl.h"
+#include "board_impl.hpp"
 
 namespace simbad
 {

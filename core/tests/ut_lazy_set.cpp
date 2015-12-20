@@ -1,17 +1,11 @@
-#define BOOST_TEST_MAIN
+#include "lazy_set_chunk.hpp"
+#include "lazy_set_impl.hpp"
+#include "lazy_set.hpp"
 
-#include <boost/test/included/unit_test.hpp>
+#include <boost/test/auto_unit_test.hpp>
+
 #include <string>
 
-#include "containters/lazy_set_chunk.h"
-#include "containters/lazy_set_impl.h"
-#include "containters/lazy_set.h"
-
-//typedef simbad::core::LazySetChunk<std::string> string_chunk;
-//typedef simbad::core::LazySetChunk<unsigned> int_chunk;
-
-//typedef simbad::core::LazySet_impl<string_chunk> string_set;
-//typedef simbad::core::LazySet_impl<int_chunk> int_set;
 typedef simbad::core::LazySet<unsigned> int_set;
 typedef simbad::core::LazySet<std::string> string_set;
 

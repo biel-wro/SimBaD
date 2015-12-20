@@ -1,6 +1,7 @@
 #ifndef LAZYSETCHUNK_H
 #define LAZYSETCHUNK_H
 
+#include <assert.h>
 #include <array>
 #include <cstddef>
 #include <inttypes.h>

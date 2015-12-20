@@ -27,9 +27,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
 
 # linking
 if( WIN32 )
-    set( SHARED_LIBS " ")
+    set( IF_SHARED_LIBS " ")
 else()
-    set( SHARED_LIBS SHARED )
+    set( IF_SHARED_LIBS SHARED )
 endif()
 
 

@@ -1,9 +1,9 @@
 #ifndef BOARD_IMPL_H
 #define BOARD_IMPL_H
 
-#include "board_tile.h"
-#include "board_linear_iterator.h"
-#include "board_region_iterator.h"
+#include "board_tile.hpp"
+#include "board_linear_iterator.hpp"
+#include "board_region_iterator.hpp"
 
 #include <boost/intrusive/unordered_set.hpp>
 #include <boost/optional.hpp>
