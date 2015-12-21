@@ -18,14 +18,13 @@ struct handle_trackee
     using my_updater = ptr_updater_by_event_handle_base<handle_type>;
     using my_base = uni_trackee<my_updater, Derived>;
 
-    explicit handle_trackee(handle_type handle=handle_type())
+    explicit handle_trackee(handle_type handle = handle_type())
         : my_base(my_updater(std::move(handle)))
     {
     }
 
     void set_handle(handle_type h) { my_base::set_callback(my_updater(h)); }
-    handle_type &get_handle() { return my_base::get_callback().get_handle(); }
-    handle_type const *get_handle() const
+    handle_type get_handle() const
     {
         return my_base::get_callback().get_handle();
     }

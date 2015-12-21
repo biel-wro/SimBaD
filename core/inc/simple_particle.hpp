@@ -1,6 +1,7 @@
 #ifndef SIMPLE_PARTICLE_HPP
 #define SIMPLE_PARTICLE_HPP
 
+#include "handle_trackee.hpp"
 #include "ptr_updater.hpp"
 #include "simple_event_queue.hpp"
 #include "trackee.hpp"
@@ -22,7 +23,7 @@ struct simple_particle : public handle_trackee<simple_event_handle,
     using my_base =
         handle_trackee<handle_type, simple_particle<DIM, coord_type>>;
 
-    explicit simple_particle(handle_type h=handle_type(nullptr),
+    explicit simple_particle(handle_type h = handle_type(nullptr),
                              coord_array_type c = coord_array_type())
         : my_base(std::move(h)), coords(std::move(c))
     {
@@ -32,16 +33,17 @@ struct simple_particle : public handle_trackee<simple_event_handle,
     simple_particle &operator=(simple_particle const &) = delete;
     simple_particle &operator=(simple_particle &&o) = default;
 
-
     template <size_t cdim> void set_coordinate(coord_type c)
     {
         coords[cdim] = c;
     }
-    template <size_t cdim> coord_type get_coordinate() { return coords[cdim]; }
+    template <size_t cdim> coord_type get_coordinate() const
+    {
+        return coords[cdim];
+    }
 
     void set_handle(handle_type handle) { my_base::set_handle(handle); }
-    handle_type &get_handle() { return my_base::get_handle(); }
-    handle_type const &get_handle() const { return my_base::get_handle(); }
+    handle_type get_handle() const { return my_base::get_handle(); }
 
   private:
     coord_array_type coords;

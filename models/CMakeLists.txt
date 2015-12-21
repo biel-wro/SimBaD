@@ -1,10 +1,19 @@
-project(${MODELS_NAME})
 include_directories( ../core/inc )
+
+
+set( MODELS
+#  empty_model
+#  bio2D
+  prototype
+)
 
 set( LIBS
 	${Boost_LIBRARIES}
   ${CORE_NAME}
 )
+
+
+
 
 foreach( MODEL ${MODELS} )
   subdirs( ${MODEL} )
@@ -12,4 +21,5 @@ foreach( MODEL ${MODELS} )
 endforeach()
 
 
-subdirs( tests )
+#subdirs( tests )
+

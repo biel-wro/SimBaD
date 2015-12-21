@@ -23,8 +23,7 @@ template <class handle_type> struct ptr_updater_by_event_handle_base
     }
 
     void set_handle(handle_type h) { handle = std::move(h); }
-    handle_type &get_handle() { return handle; }
-    handle_type const &get_handle() const { return handle; }
+    handle_type get_handle() const { return handle; }
   private:
     handle_type handle;
 };

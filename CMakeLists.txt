@@ -45,14 +45,11 @@ include_directories( ${Boost_INCLUDE_DIR} )
 
 enable_testing()
 
-set( MODELS
-  empty_model
-  bio2D
-)
+
 
 
 add_subdirectory(core)
-add_subdirectory(cli)
+#add_subdirectory(cli)
 #add_subdirectory(gui)
 add_subdirectory(models)
 

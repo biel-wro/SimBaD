@@ -24,6 +24,8 @@ template <class T, int dim, class coord = long, int chunk_sz = 1000> class board
     typedef typename implementation::iterator iterator;
     typedef typename implementation::const_iterator const_iterator;
 
+    using size_type = typename implementation::size_type;
+
     using box_iterator = typename implementation::box_iterator;
     using const_box_iterator = typename implementation::const_box_iterator;
 
@@ -34,7 +36,7 @@ template <class T, int dim, class coord = long, int chunk_sz = 1000> class board
     implementation impl;
 
   public:
-    void rehash(size_t new_szie) { impl.rehash(new_szie); }
+    void rehash(size_t new_size) { impl.rehash(new_size); }
 
     iterator begin() { return impl.begin(); }
 
@@ -71,6 +73,8 @@ template <class T, int dim, class coord = long, int chunk_sz = 1000> class board
     }
 
     void remove(coordinates_type const &c, T &v) { impl.remove(c, v); }
+
+    size_type size() const{return impl.size();}
 };
 }
 }
