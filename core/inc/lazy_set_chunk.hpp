@@ -1,13 +1,16 @@
 #ifndef LAZYSETCHUNK_H
 #define LAZYSETCHUNK_H
 
-#include <assert.h>
+#include <boost/iterator/iterator_adaptor.hpp>
+
+#include <algorithm>
 #include <array>
+#include <assert.h>
 #include <cstddef>
 #include <inttypes.h>
-#include <algorithm>
+#include <functional>
 #include <memory>
-#include <boost/iterator/iterator_adaptor.hpp>
+
 
 namespace simbad
 {
