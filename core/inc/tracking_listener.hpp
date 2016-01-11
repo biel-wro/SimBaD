@@ -26,6 +26,7 @@ template <class Callback> class tracking_listener
     template <class T> void notify_copy_assigned(T *ptr) { callback(ptr); }
     template <class T> void notify_move_assigned(T *ptr) { callback(ptr); }
     template <class T> void notify_destroyed(T *) { callback(nullptr); }
+    template <class T> void notify_forced(T *) {callback(nullptr); }
 
     void set_callback(Callback c){ callback = std::move(c); }
     Callback &get_callback() { return callback; }

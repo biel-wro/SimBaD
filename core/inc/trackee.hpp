@@ -9,7 +9,8 @@ namespace simbad
 namespace core
 {
 
-template <class Listener, class Derived> class trackee
+template <class Listener, class Derived>
+class trackee
 {
   public:
     trackee() : listener() { listener.notify_constructed(raw_ptr()); }
@@ -49,6 +50,8 @@ template <class Listener, class Derived> class trackee
     }
 
     ~trackee() { listener.notify_destroyed(raw_ptr()); }
+
+    void force_listener_update() { listener.nofity_forced(raw_ptr()); }
 
     void set_listener(Listener _new) { listener = std::move(_new); }
     Listener &get_listener() { return listener; }

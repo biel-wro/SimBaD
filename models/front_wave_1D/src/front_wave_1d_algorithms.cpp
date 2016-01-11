@@ -116,6 +116,7 @@ void front_wave_1d_algorithms::update_neighbourhood(Random &rnd, Queue &eq,
 
         EventHandle h = particle.get_handle();
         *h = std::move(event);
+        //particle.force_listener_update();
         (*h).set_particle_ptr(const_cast<particle_1D*>(&*it));
 
         eq.update_lazy(h);
