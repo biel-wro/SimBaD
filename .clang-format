@@ -4,6 +4,7 @@ BasedOnStyle: LLVM
 BreakBeforeBraces: Allman
 ColumnLimit: 80
 IndentWidth: 4
+AlwaysBreakTemplateDeclarations: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 SpaceInEmptyParentheses: false
 SpacesInAngles: false

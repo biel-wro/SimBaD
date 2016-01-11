@@ -4,6 +4,7 @@
 #include <boost/operators.hpp>
 #include <boost/functional/hash.hpp>
 
+#include <array>
 #include <cstddef>
 
 namespace simbad
@@ -88,9 +89,7 @@ struct coord_hasher
     std::size_t
     operator()(board_coordinates<board_coord_type, DIM> const &v) const
     {
-        typedef std::array<board_coord_type, DIM> base_array;
-        boost::hash<base_array> hasher;
-        return hasher(static_cast<base_array const &>(v));
+        return boost::hash_range(v.begin(),v.end());
     }
 };
 

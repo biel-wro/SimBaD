@@ -65,8 +65,7 @@ public:
 
     std::unique_ptr<ParticleInterface> clone() const{
         ParticleInterface *ptr = new ParticleWrapper( base, CoordGetter()... );
-        std::unique_ptr<ParticleInterface> ret(ptr);
-        return std::move(ret);
+        return std::unique_ptr<ParticleInterface>(ptr);
     }
 };
 

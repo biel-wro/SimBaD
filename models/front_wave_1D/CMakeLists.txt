@@ -1,0 +1,23 @@
+set( MODEL_NAME front_wave_1D )
+set( TEST_NAME test_${MODEL_NAME} )
+
+
+file( GLOB_RECURSE HEADERS inc/*.hpp )  # workaround for headers in QtCreator
+include_directories( inc )
+
+set( SOURCES
+    src/front_wave_1d.cpp
+    src/front_wave_1d_algorithms.cpp
+    src/particle_1d.cpp
+)
+
+
+set( TEST_SOURCES
+  test/ut_front_wave_1d.cpp
+)
+add_library(${MODEL_NAME} ${SOURCES} ${HEADERS} )
+target_link_libraries( ${MODEL_NAME} ${LIBS} )
+
+
+add_executable( ${TEST_NAME} ${TEST_SOURCES} ${SOURCES} )
+target_link_libraries( ${TEST_NAME} ${CORE_NAME} ${LIBS} )

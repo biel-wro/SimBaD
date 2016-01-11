@@ -1,5 +1,6 @@
 #ifndef LAZY_SET_H
 #define LAZY_SET_H
+#include "core_fwd.hpp"
 
 #include "lazy_set_chunk.hpp"
 #include "lazy_set_impl.hpp"
@@ -9,7 +10,8 @@ namespace simbad
 namespace core
 {
 
-template <class T, size_t chunk_size = DEFAULT_CHUNK_SIZE> class LazySet
+template <class T, size_t chunk_size = DEFAULT_CHUNK_SIZE>
+class LazySet
 {
   public:
     /*
@@ -56,16 +58,17 @@ template <class T, size_t chunk_size = DEFAULT_CHUNK_SIZE> class LazySet
     /*
      * Modifiers
      */
-    template <class... Args> iterator emplace_back(Args &&... args)
+    template <class... Args>
+    iterator emplace_back(Args &&... args)
     {
         return impl_.emplace_back(std::forward<Args>(args)...);
     }
 
     void pop_back() { impl_.pop_back(); }
 
-    void swap_and_delete(T &ref)
+    void swap_and_delete(const_reference_type cref)
     {
-        std::swap(ref, back());
+        std::swap(const_cast<reference_type>(cref), back());
         pop_back();
     }
     /*

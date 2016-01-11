@@ -4,7 +4,8 @@ include_directories( ../core/inc )
 set( MODELS
 #  empty_model
 #  bio2D
-  prototype
+  front_wave_1D
+#  prototype
 )
 
 set( LIBS
