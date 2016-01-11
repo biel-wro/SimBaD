@@ -30,9 +30,9 @@ front_wave_1d_algorithms::initial_configuration()
     return space;
 }
 
-core::simple_event
-front_wave_1d_algorithms::compute_event(Random &rnd, const particle_1D &p,
-                                        const Space &space)
+core::simple_event front_wave_1d_algorithms::compute_event(Random &rnd,
+                                                           const particle_1D &p,
+                                                           const Space &space)
 {
     death_rate_accumulator death_acc;
     double death_intrange = death_acc.get_range();
