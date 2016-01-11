@@ -24,6 +24,8 @@ public:
   void get_next_event();
   void get_current_configuration();
 
+  void run();
+
 };
 
 

@@ -5,17 +5,11 @@
 
 #include <boost/operators.hpp>
 
+#include "event_kind.hpp"
 namespace simbad
 {
 namespace core
 {
-enum class EVENT_KIND : uint32_t
-{
-    NONE,
-    BIRTH,
-    DEATH,
-    JUMP
-};
 
 class simple_event
     : boost::partially_ordered<simple_event,

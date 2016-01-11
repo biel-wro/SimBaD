@@ -14,6 +14,10 @@ class particle_1D : public ::simbad::core::simple_particle<1, float>,
                     public boost::intrusive::set_base_hook<
                         boost::intrusive::optimize_size<true>>
 {
+    using particle_super = simbad::core::simple_particle<1, float>;
+    using hook_super =
+        boost::intrusive::set_base_hook<boost::intrusive::optimize_size<true>>;
+
     using event_handle = simbad::core::simple_event_queue::handle_type;
 
   public:

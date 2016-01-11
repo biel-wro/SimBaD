@@ -1,6 +1,8 @@
 #include "front_wave_1d_algorithms.hpp"
 
 #include <cmath>
+#include <iostream>
+#include <memory>
 
 #include "birth_rate_accumulator.hpp"
 #include "death_rate_accumulator.hpp"
@@ -17,27 +19,20 @@ namespace simbad
 {
 namespace models
 {
-
-front_wave_1d_algorithms::front_wave_1d_algorithms() {}
-
-std::pair<front_wave_1d_algorithms::Storage, front_wave_1d_algorithms::Space>
+front_wave_1d_algorithms::Space
 front_wave_1d_algorithms::initial_configuration()
 {
+    Space space;
+    std::unique_ptr<particle_1D> p(new particle_1D(0.0f));
+    space.insert(*p);
+    p.release();
 
-    std::pair<Storage, Space> ret;
-
-    Storage &storage = ret.first;
-    Space &space = ret.second;
-
-    Storage::iterator it = storage.emplace_back(0.f);
-    space.insert(*it);
-
-    return ret;
+    return space;
 }
 
-core::simple_event front_wave_1d_algorithms::compute_event(Random &rnd,
-                                                           const particle_1D &p,
-                                                           const Space &space)
+core::simple_event
+front_wave_1d_algorithms::compute_event(Random &rnd, const particle_1D &p,
+                                        const Space &space)
 {
     death_rate_accumulator death_acc;
     double death_intrange = death_acc.get_range();
@@ -116,24 +111,21 @@ void front_wave_1d_algorithms::update_neighbourhood(Random &rnd, Queue &eq,
 
         EventHandle h = particle.get_handle();
         *h = std::move(event);
-        (*h).set_particle_ptr(const_cast<particle_1D*>(&*it));
+        (*h).set_particle_ptr(const_cast<particle_1D *>(&*it));
 
         eq.update_lazy(h);
     }
 }
 
-void front_wave_1d_algorithms::execute_death(Storage &storage, Space &space,
-                                             Queue &eq)
+void front_wave_1d_algorithms::execute_death(Space &space, Queue &eq)
 {
     particle_1D const &p = *eq.top().get_particle_ptr_as<particle_1D>();
 
-    space.erase(p);
-    storage.swap_and_delete(p);
+    space.erase_and_dispose(p, std::default_delete<particle_1D>());
     eq.pop();
 }
 
 particle_1D &front_wave_1d_algorithms::execute_birth(std::mt19937_64 &rnd,
-                                                     Storage &storage,
                                                      Space &space, Queue &eq)
 {
     particle_1D const &parent = *eq.top().get_particle_ptr_as<particle_1D>();
@@ -143,17 +135,19 @@ particle_1D &front_wave_1d_algorithms::execute_birth(std::mt19937_64 &rnd,
 
     EventHandle offspring_event_handle = eq.emplace();
 
-    particle_1D &offspring =
-        *storage.emplace_back(offspring_x, offspring_event_handle);
+    std::unique_ptr<particle_1D> offspring_ptr(
+        new particle_1D(offspring_x, offspring_event_handle));
+    space.insert(*offspring_ptr);
 
-    space.insert(offspring);
+    particle_1D &offspring = *offspring_ptr;
+    offspring_ptr.release();
 
     return offspring;
 }
 
-void front_wave_1d_algorithms::execute_event(double &t, std::mt19937_64 &rnd,
-                                             Storage &storage, Space &space,
-                                             Queue &eq)
+EVENT_KIND front_wave_1d_algorithms::execute_event(double &t,
+                                                   std::mt19937_64 &rnd,
+                                                   Space &space, Queue &eq)
 {
     particle_1D const &point = *eq.top().get_particle_ptr_as<particle_1D>();
 
@@ -166,22 +160,24 @@ void front_wave_1d_algorithms::execute_event(double &t, std::mt19937_64 &rnd,
 
     if (event_kind == EVENT_KIND::DEATH)
     {
-        execute_death(storage, space, eq);
+        execute_death(space, eq);
     }
     else if (event_kind == EVENT_KIND::BIRTH)
     {
-        particle_1D &offspring = execute_birth(rnd, storage, space, eq);
+        particle_1D &offspring = execute_birth(rnd, space, eq);
         double offspring_pos = offspring.get_coordinate<0>();
 
         update_neighbourhood(rnd, eq, offspring_pos, update_range, space, t);
     }
 
     update_neighbourhood(rnd, eq, event_center, update_range, space, t);
-}
 
-int front_wave_1d_algorithms::run()
+    return event_kind;
+}
+/*
+std::pair<Storage,Space> front_wave_1d_algorithms::run()
 {
-    size_t niters = 2;
+    size_t niters = 100;
 
     std::mt19937_64 random_engine;
     std::pair<Storage, Space> state = initial_configuration();
@@ -192,21 +188,15 @@ int front_wave_1d_algorithms::run()
 
     double time = 0.0;
     for (size_t iter = 0; iter < niters; ++iter)
-    {
         execute_event(time, random_engine, storage, space, event_queue);
-    }
 
-    std::cout << "storage size:" << storage.size() << std::endl;
-    std::cout << "space size:" << space.size() << std::endl;
-    std::cout << "queue size:" << event_queue.size() << std::endl;
-
-    for (particle_1D const &p : storage)
+    for(particle_1D const &p: storage )
     {
-        std::cout << p.get_coordinate<0>() << " " << p.get_coordinate<1>()
-                  << std::endl;
+        std::cout<<p.get_coordinate<0>() << p.get_coordinate<1>() << std::endl;
     }
 
     return 0;
 }
+*/
 }
 }

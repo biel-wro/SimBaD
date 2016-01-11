@@ -6,6 +6,7 @@ file( GLOB_RECURSE HEADERS inc/*.hpp )  # workaround for headers in QtCreator
 
 set( SOURCES
   src/core.cpp
+  src/event_kind.cpp
   src/generic_particle.cpp
   src/model.cpp
   src/model_loader.cpp
