@@ -10,7 +10,7 @@
 
 #include "front_wave_1d_fwd.hpp"
 #include "particle_1d.hpp"
-
+/*
 namespace simbad
 {
 namespace models
@@ -22,7 +22,7 @@ class front_wave_1d_algorithms
     using Queue = simbad::core::simple_event_queue;
     using EventHandle = simbad::core::simple_event_handle;
 
-    using Event = simbad::core::simple_event;
+    using Event = simbad::core::simple_event_schedule;
     using EVENT_KIND = simbad::core::EVENT_KIND;
 
     using Random = std::mt19937_64;
@@ -46,9 +46,9 @@ class front_wave_1d_algorithms
     static particle_1D &execute_birth(std::mt19937_64 &rnd, Space &space,
                                       Queue &eq);
 
-    static EVENT_KIND execute_event(double &t, Random &rnd, Space &space,
-                                    Queue &eq);
+    static std::pair<float, EVENT_KIND> execute_event(double &t, Random &rnd,
+                                                      Space &space, Queue &eq);
 };
 }
-}
+}*/
 #endif // FRONT_WAVE_1D_ALGORITHMS_HPP

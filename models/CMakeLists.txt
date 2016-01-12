@@ -11,6 +11,8 @@ set( MODELS
 set( LIBS
 	${Boost_LIBRARIES}
   ${CORE_NAME}
+ -lstdc++
+ -lm
 )
 
 

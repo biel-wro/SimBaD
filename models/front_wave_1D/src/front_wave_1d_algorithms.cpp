@@ -1,8 +1,9 @@
 #include "front_wave_1d_algorithms.hpp"
-
+/*
 #include <cmath>
 #include <iostream>
 #include <memory>
+#include <utility>
 
 #include "birth_rate_accumulator.hpp"
 #include "death_rate_accumulator.hpp"
@@ -12,7 +13,7 @@ using std::mt19937_64;
 
 using simbad::core::simple_event_handle;
 using simbad::core::EVENT_KIND;
-using simbad::core::simple_event;
+using simbad::core::simple_event_schedule;
 using handle_type = simbad::core::simple_event_queue::handle_type;
 
 namespace simbad
@@ -30,9 +31,9 @@ front_wave_1d_algorithms::initial_configuration()
     return space;
 }
 
-core::simple_event front_wave_1d_algorithms::compute_event(Random &rnd,
-                                                           const particle_1D &p,
-                                                           const Space &space)
+core::simple_event_schedule
+front_wave_1d_algorithms::compute_event(Random &rnd, const particle_1D &p,
+                                        const Space &space)
 {
     death_rate_accumulator death_acc;
     double death_intrange = death_acc.get_range();
@@ -145,9 +146,9 @@ particle_1D &front_wave_1d_algorithms::execute_birth(std::mt19937_64 &rnd,
     return offspring;
 }
 
-EVENT_KIND front_wave_1d_algorithms::execute_event(double &t,
-                                                   std::mt19937_64 &rnd,
-                                                   Space &space, Queue &eq)
+std::pair<float, EVENT_KIND>
+front_wave_1d_algorithms::execute_event(double &t, std::mt19937_64 &rnd,
+                                        Space &space, Queue &eq)
 {
     particle_1D const &point = *eq.top().get_particle_ptr_as<particle_1D>();
 
@@ -157,6 +158,7 @@ EVENT_KIND front_wave_1d_algorithms::execute_event(double &t,
     t = eq.top().get_time();
 
     EVENT_KIND const event_kind = eq.top().get_event_kind();
+
 
     if (event_kind == EVENT_KIND::DEATH)
     {
@@ -172,31 +174,9 @@ EVENT_KIND front_wave_1d_algorithms::execute_event(double &t,
 
     update_neighbourhood(rnd, eq, event_center, update_range, space, t);
 
-    return event_kind;
+    return std::make_pair(event_center,event_kind);
 }
-/*
-std::pair<Storage,Space> front_wave_1d_algorithms::run()
-{
-    size_t niters = 100;
 
-    std::mt19937_64 random_engine;
-    std::pair<Storage, Space> state = initial_configuration();
-
-    Storage &storage = state.first;
-    Space &space = state.second;
-    Queue event_queue = init_event_queue(random_engine, space);
-
-    double time = 0.0;
-    for (size_t iter = 0; iter < niters; ++iter)
-        execute_event(time, random_engine, storage, space, event_queue);
-
-    for(particle_1D const &p: storage )
-    {
-        std::cout<<p.get_coordinate<0>() << p.get_coordinate<1>() << std::endl;
-    }
-
-    return 0;
+}
 }
 */
-}
-}

@@ -9,7 +9,7 @@
 #include <front_wave_1d_algorithms.hpp>
 using namespace simbad::models;
 
-using Space = front_wave_1d_algorithms::Space;
+/*using Space = front_wave_1d_algorithms::Space;
 using Queue = front_wave_1d_algorithms::Queue;
 using Event = front_wave_1d_algorithms::Event;
 using EventHandle = front_wave_1d_algorithms::EventHandle;
@@ -64,3 +64,4 @@ BOOST_AUTO_TEST_CASE(more_iterations)
         }
     }
 }
+*/

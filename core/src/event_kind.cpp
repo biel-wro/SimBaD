@@ -1,6 +1,5 @@
 #include "event_kind.hpp"
-
-
+#include <stdexcept>
 std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek)
 {
     using simbad::core::EVENT_KIND;
@@ -21,10 +20,10 @@ std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek)
         break;
     default:
         using num_type =
-        typename std::underlying_type<simbad::core::EVENT_KIND>::type;
+            typename std::underlying_type<simbad::core::EVENT_KIND>::type;
         num_type val = static_cast<num_type>(ek);
-        throw std::runtime_error("bad enum of value " +std::to_string(val) );
+        throw std::runtime_error("bad enum of value " + std::to_string(val));
     }
 
-    return o<< str;
+    return o << str;
 }

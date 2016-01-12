@@ -4,17 +4,24 @@
 
 #include "event_kind.hpp"
 #include "front_wave_1d_impl.hpp"
-#include "simple_event.hpp"
+#include "most_distant_birth_filter.hpp"
+#include "simple_event_schedule.hpp"
 
 int main()
 {
-    simbad::models::front_wave_1d_impl impl;
-    size_t niters = 100;
+    using impl_type = simbad::models::front_wave_1d_impl;
+    impl_type impl;
+    using event_type = impl_type::Event;
+    using filter_type = simbad::models::most_distant_birth_filter<event_type>;
+
+    size_t niters = 1000;
+    filter_type filter(impl);
 
     for (size_t iter = 0; iter < niters; ++iter)
     {
-        std::pair<float, simbad::core::EVENT_KIND> event = impl.next_event();
-        std::cout << event.first << " " << event.second << std::endl;
+        event_type event = impl.next_event();
+        std::cout << event << std::endl;
+        // std::cout << event.time() << " " << event.coordinate(0) << std::endl;
     }
     return 0;
 }

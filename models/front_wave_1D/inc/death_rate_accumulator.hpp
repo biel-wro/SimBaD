@@ -19,7 +19,7 @@ public:
     }
 
     double get_range() const { return 0.0; }
-    double get_intensity() const { return 0.1; }
+    double get_intensity() const { return 0.0; }
 
     double acc;
 };

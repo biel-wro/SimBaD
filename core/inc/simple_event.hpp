@@ -1,80 +1,62 @@
 #ifndef SIMPLE_EVENT_HPP
 #define SIMPLE_EVENT_HPP
-
-#include <cstdint>
-
-#include <boost/operators.hpp>
+#include <ostream>
 
 #include "event_kind.hpp"
+#include "particle_coords.hpp"
 namespace simbad
 {
 namespace core
 {
-
+template <class Time, class Coord, std::size_t DIM>
 class simple_event
-    : boost::partially_ordered<simple_event,
-                               boost::partially_ordered2<simple_event, float>>
 {
   public:
-    explicit simple_event(float t = 0.0f, EVENT_KIND ek = EVENT_KIND::NONE,
-                          void *particle = nullptr)
-        : t(t), event_kind(ek), particle(particle)
+    using time_type = Time;
+    using coord_type = Coord;
+
+    constexpr std::size_t dimension() const { return DIM; }
+
+    void set_time(time_type time) { t = time; }
+    time_type &time() { return t; }
+    time_type time() const { return t; }
+
+    void set_event_kind(EVENT_KIND event_kind) { ek = event_kind; }
+    EVENT_KIND &event_kind() { return ek; }
+    EVENT_KIND event_kind() const { return ek; }
+
+    void set_coordinate(size_t cdim, coord_type c) { coords[cdim] = c; }
+    coord_type &coordinate_ref(size_t cdim) { return coords[cdim]; }
+
+    coord_type coordinate(size_t cdim) const
     {
+        if (cdim >= DIM)
+            return coord_type(0);
+        return coords[cdim];
     }
-    simple_event(simple_event const &) = delete;
-    simple_event(simple_event &&) = default;
-
-    simple_event &operator=(simple_event const &) = delete;
-    simple_event &operator=(simple_event &&) = default;
-
-    float get_time() const { return t; }
-    void set_time(float t) { this->t = t; }
-    void increase_time(double time_offset) { t += time_offset; }
-
-    void set_event_kind(EVENT_KIND ek) { event_kind = ek; }
-    EVENT_KIND get_event_kind() const { return event_kind; }
-
-    void set_particle_ptr(void *ptr) { particle = ptr; }
-    void *get_particle_ptr() { return particle; }
-    void const *get_particle_ptr() const { return particle; }
-
-    template <class P>
-    P *get_particle_ptr_as()
-    {
-        return static_cast<P *>(get_particle_ptr());
-    }
-    template <class P>
-    P const *get_particle_ptr_as() const
-    {
-        return static_cast<P const *>(get_particle_ptr());
-    }
-
-    template <class P>
-    P *get_particle_ptr_as_nonconst() const
-    {
-        return static_cast<P *>(particle);
-    }
-
-    bool operator==(simple_event const &other) const{
-      return t==other.t;
-    }
-    bool operator<(simple_event const &other) const{
-      return t<other.t;
-    }
-    bool operator==(float t2) const{
-      return t < t2;
-    }
-    bool operator<(float t2) const {
-      return t < t2;
-    }
-
 
   private:
-    float t;
-    EVENT_KIND event_kind;
-    void *particle;
+    particle_coords<coord_type, DIM> coords;
+    time_type t;
+    EVENT_KIND ek;
 };
 }
+}
+template <class time_type, class coord_type, std::size_t dim>
+std::ostream &
+operator<<(std::ostream &o,
+           simbad::core::simple_event<time_type, coord_type, dim> const &e)
+{
+    o << "t=" << e.time();
+
+    if (e.dimension() > 0)
+        o << " (" << e.coordinate(0);
+    for (std::size_t i = 1; i < e.dimension(); ++i)
+        o << e.coordinate(i) << ",";
+
+    o << ") " << e.event_kind();
+
+    return o;
 }
 
 #endif // SIMPLE_EVENT_HPP

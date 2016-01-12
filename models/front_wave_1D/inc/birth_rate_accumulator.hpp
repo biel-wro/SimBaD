@@ -9,7 +9,7 @@ namespace models
 {
 class birth_rate_accumulator
 {
-public:
+  public:
     birth_rate_accumulator() : range(1.0), cnt(100) {}
 
     template <class Point>

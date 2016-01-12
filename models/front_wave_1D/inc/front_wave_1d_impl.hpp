@@ -7,6 +7,8 @@
 
 #include "core_fwd.hpp"
 #include "lazy_set.hpp"
+#include "offspring_placer.hpp"
+#include "simple_event.hpp"
 
 #include "front_wave_1d_fwd.hpp"
 #include "particle_1d.hpp"
@@ -21,8 +23,9 @@ class front_wave_1d_impl
     using Queue = simbad::core::simple_event_queue;
     using EventHandle = simbad::core::simple_event_handle;
 
-    using Event = simbad::core::simple_event;
+    using EventSchedule = simbad::core::simple_event_schedule;
     using EVENT_KIND = simbad::core::EVENT_KIND;
+    using Event = core::simple_event<float, float, 1>;
 
     using Random = std::mt19937_64;
     using Space = boost::intrusive::set<particle_1D>;
@@ -31,14 +34,32 @@ class front_wave_1d_impl
     ~front_wave_1d_impl();
 
     void reinitialize();
-    std::pair<float, EVENT_KIND> next_event();
+
+    Event next_event();
 
   protected:
+    double default_interation_range();
+
+    Space initial_configuration();
+    Queue init_event_queue();
+
+    EventSchedule compute_event(particle_1D const &p);
+    void update_neighbourhood(double center);
+
+    Event execute_event();
+
+    particle_1D &execute_birth();
+    void execute_death();
+
+  private:
+    double t;
+    double range;
+
+    offspring_placer op;
     Random rnd;
     Queue queue;
     Space space;
 
-    double t;
 };
 }
 }

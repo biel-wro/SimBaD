@@ -1,8 +1,8 @@
 #include "trackee.hpp"
 
 #include "handle_trackee.hpp"
-#include "simple_event.hpp"
 #include "simple_event_queue.hpp"
+#include "simple_event_schedule.hpp"
 #include "simple_particle.hpp"
 
 #include <boost/test/auto_unit_test.hpp>

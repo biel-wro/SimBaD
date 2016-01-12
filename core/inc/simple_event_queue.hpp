@@ -3,7 +3,7 @@
 
 #include <functional>
 
-#include "simple_event.hpp"
+#include "simple_event_schedule.hpp"
 
 #include <boost/heap/fibonacci_heap.hpp>
 
@@ -21,7 +21,7 @@ struct increasing_time_order
     }
 };
 
-using simple_event_queue_base = boost::heap::fibonacci_heap < simple_event,
+using simple_event_queue_base = boost::heap::fibonacci_heap < simple_event_schedule,
       boost::heap::compare<increasing_time_order>>;
 
 
