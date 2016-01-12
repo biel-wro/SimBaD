@@ -1,7 +1,7 @@
 #ifndef EVENT_KIND_HPP
 #define EVENT_KIND_HPP
 
-#include <ios>
+#include <ostream>
 #include <type_traits>
 
 #include "event_kind.hpp"
