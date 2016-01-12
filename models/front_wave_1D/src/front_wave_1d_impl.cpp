@@ -90,32 +90,32 @@ void front_wave_1d_impl::update_neighbourhood(double center)
 
 front_wave_1d_impl::Event front_wave_1d_impl::execute_event()
 {
+    Event e;
     particle_1D const &point = *queue.top().get_particle_ptr_as<particle_1D>();
 
     double event_center = point.get_coordinate<0>();
 
     t = queue.top().get_time();
+    e.set_time(t);
 
     EVENT_KIND const event_kind = queue.top().get_event_kind();
-
+    e.set_event_kind(event_kind);
     if (event_kind == EVENT_KIND::DEATH)
     {
         execute_death();
+        e.set_coordinate(0,event_center);
     }
     else if (event_kind == EVENT_KIND::BIRTH)
     {
         particle_1D &offspring = execute_birth();
         double offspring_pos = offspring.get_coordinate<0>();
-
+        e.set_coordinate(0,offspring_pos);
         update_neighbourhood(offspring_pos);
     }
 
     update_neighbourhood(event_center);
 
-    Event e;
-    e.set_time(t);
-    e.set_coordinate(0, event_center);
-    e.set_event_kind(event_kind);
+
 
     return e;
 }

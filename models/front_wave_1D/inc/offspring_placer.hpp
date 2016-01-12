@@ -15,12 +15,13 @@ class offspring_placer
     template <class RNG>
     double operator()(RNG &rng,double parent_pos) const
     {
-        //int side = std::uniform_int_distribution<>(0, 1)(rng) * 2 - 1;
+        int side = std::uniform_int_distribution<>(0, 1)(rng) * 2 - 1;
 
         double q = std::uniform_real_distribution<>()(rng);
 
         double v = boost::math::quantile(dist, q);
-        return parent_pos + (v - dist.scale());
+        double x = parent_pos + side*(v - dist.scale());
+        return x;
     }
 
   private:

@@ -1,6 +1,7 @@
 #ifndef MOST_DISTANT_BIRTH_FILTER_HPP
 #define MOST_DISTANT_BIRTH_FILTER_HPP
 
+#include <cmath>
 #include <functional>
 #include <limits>
 #include <simple_event.hpp>
@@ -26,11 +27,15 @@ class most_distant_birth_filter
     event_type next_event()
     {
         event_type e;
+        coord_type dist;
         do
         {
             e = fun();
-        } while (e.coordinate(0) < max_dist ||
+            dist = std::fabs(e.coordinate(0));
+
+        } while ( dist < max_dist ||
                  e.event_kind() != core::EVENT_KIND::BIRTH);
+        max_dist = dist;
         return e;
     }
 

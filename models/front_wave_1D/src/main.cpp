@@ -14,14 +14,14 @@ int main()
     using event_type = impl_type::Event;
     using filter_type = simbad::models::most_distant_birth_filter<event_type>;
 
-    size_t niters = 1000;
+    size_t niters = 100;
     filter_type filter(impl);
 
     for (size_t iter = 0; iter < niters; ++iter)
     {
-        event_type event = impl.next_event();
-        std::cout << event << std::endl;
-        // std::cout << event.time() << " " << event.coordinate(0) << std::endl;
+        event_type event = filter.next_event();
+        //std::cout << event << std::endl;
+        std::cout << event.time() << " " << event.coordinate(0) << std::endl;
     }
     return 0;
 }
