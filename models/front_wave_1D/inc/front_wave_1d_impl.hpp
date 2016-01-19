@@ -3,15 +3,14 @@
 #include <random>
 #include <utility>
 
-#include <boost/intrusive/set.hpp>
-
 #include "core_fwd.hpp"
-#include "lazy_set.hpp"
-#include "offspring_placer.hpp"
-#include "simple_event.hpp"
 
 #include "front_wave_1d_fwd.hpp"
+#include "offspring_placer.hpp"
 #include "particle_1d.hpp"
+#include "simple_event.hpp"
+#include "space_1d.hpp"
+#include "spatial_neighbourhood.hpp"
 
 namespace simbad
 {
@@ -25,41 +24,50 @@ class front_wave_1d_impl
 
     using EventSchedule = simbad::core::simple_event_schedule;
     using EVENT_KIND = simbad::core::EVENT_KIND;
-    using Event = core::simple_event<float, float, 1>;
+    using Event = event_1d;
 
     using Random = std::mt19937_64;
-    using Space = boost::intrusive::set<particle_1D>;
+    using Space = space_1d;
 
     front_wave_1d_impl();
     ~front_wave_1d_impl();
 
+    void clear();
     void reinitialize();
 
     Event next_event();
 
+    Queue::ordered_iterator begin_queue() const;
+    Queue::ordered_iterator end_queue() const;
+
+    std::size_t size() const;
+    double simulation_time() const;
+    Space::const_iterator begin() const;
+    Space::const_iterator end() const;
+
   protected:
-    double default_interation_range();
+    void resample_event(particle_1D &p);
+    void init_configuration();
+    void init_event_queue();
 
-    Space initial_configuration();
-    Queue init_event_queue();
+    void update_neighbourhood(Event const &e);
+    void full_update(particle_1D &p);
 
-    EventSchedule compute_event(particle_1D const &p);
-    void update_neighbourhood(double center);
-
+    void update_simulation_time(double new_time);
     Event execute_event();
 
-    particle_1D &execute_birth();
-    void execute_death();
+    Event execute_birth();
+    Event execute_death();
+
+    spatial_neighbourhood get_neighbourhood(float center);
 
   private:
     double t;
-    double range;
 
-    offspring_placer op;
+    offspring_placer placer;
     Random rnd;
     Queue queue;
     Space space;
-
 };
 }
 }

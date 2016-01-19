@@ -17,6 +17,11 @@ class simple_event
 
     constexpr std::size_t dimension() const { return DIM; }
 
+    explicit simple_event(time_type t = 0.0, EVENT_KIND ek = EVENT_KIND::NONE)
+        : t(t), ek(ek)
+    {
+    }
+
     void set_time(time_type time) { t = time; }
     time_type &time() { return t; }
     time_type time() const { return t; }

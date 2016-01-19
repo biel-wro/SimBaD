@@ -10,6 +10,7 @@ set( MAIN_SOURCE
 )
 
 set( SOURCES
+    src/event_rate_accumulator.cpp
     src/front_wave_1d.cpp
     src/front_wave_1d_impl.cpp
     src/front_wave_1d_algorithms.cpp
@@ -19,6 +20,7 @@ set( SOURCES
 
 set( TEST_SOURCES
   test/ut_front_wave_1d.cpp
+  test/ut_front_wave_1d_impl.cpp
 )
 add_executable(${MODEL_NAME} ${MAIN_SOURCE} ${SOURCES} ${HEADERS} )
 target_link_libraries( ${MODEL_NAME} ${LIBS} )

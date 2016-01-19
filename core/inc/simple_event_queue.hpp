@@ -5,7 +5,8 @@
 
 #include "simple_event_schedule.hpp"
 
-#include <boost/heap/fibonacci_heap.hpp>
+//#include <boost/heap/fibonacci_heap.hpp>
+#include <boost/heap/pairing_heap.hpp>
 
 namespace simbad
 {
@@ -17,18 +18,18 @@ struct increasing_time_order
     template <class Event>
     bool operator()(Event const &lhs, Event const &rhs) const
     {
-        return lhs.get_time() > rhs.get_time();
+        return lhs.get_time() >= rhs.get_time();
     }
 };
 
-using simple_event_queue_base = boost::heap::fibonacci_heap < simple_event_schedule,
+using simple_event_queue_base = boost::heap::pairing_heap < simple_event_schedule,
       boost::heap::compare<increasing_time_order>>;
 
 
 class simple_event_queue : public simple_event_queue_base
 
 {
-  using simple_event_queue_base::fibonacci_heap;
+  using simple_event_queue_base::pairing_heap;
 };
 
 using simple_event_handle = simple_event_queue::handle_type;

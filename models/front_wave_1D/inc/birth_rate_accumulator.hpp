@@ -1,8 +1,11 @@
 #ifndef BIRTH_RATE_ACCUMULATOR_HPP
 #define BIRTH_RATE_ACCUMULATOR_HPP
 
-#include <stdint.h>
+#include "event_1d.hpp"
+#include "event_kind.hpp"
 
+#include <cmath>
+#include <stdint.h>
 namespace simbad
 {
 namespace models
@@ -10,23 +13,54 @@ namespace models
 class birth_rate_accumulator
 {
   public:
-    birth_rate_accumulator() : range(1.0), cnt(100) {}
+    birth_rate_accumulator() : cnt(0) {}
 
-    template <class Point>
-    void accumulate(Point const &p, Point const &other)
+    void reset() { cnt = 0; }
+    template <class Point, class Event>
+    void update(Point const &p, Event const &e)
     {
-        double x0 = static_cast<double>(p.template get_coordinate<0>());
-        double x1 = static_cast<double>(other.template get_coordinate<0>());
-        double dx = std::fabs(x0 - x1);
-        //    double dy = p.get_coordinate<1>() - other.get_coordinate<1>();
-        if (dx < get_range())
-            cnt++;
+        using core::EVENT_KIND;
+
+        EVENT_KIND ek = e.event_kind();
+        double point_pos = p.coordinate(0);
+        double event_pos = e.coordinate(0);
+
+        double distance = std::fabs(point_pos - event_pos);
+        switch (ek)
+        {
+        case EVENT_KIND::BIRTH:
+            update_on_creation(distance);
+            break;
+        case EVENT_KIND::DEATH:
+            update_on_anihillation(distance);
+            break;
+        default:
+            throw std::runtime_error("event not supported");
+        }
+    }
+    template <class Point>
+    void update(Point const &p1, Point const &p2)
+    {
+        double pos1 = p1.coordinate(0);
+        double pos2 = p2.coordinate(0);
+        double distance = std::fabs(pos1 - pos2);
+        update_on_creation(distance);
     }
 
-    double get_intensity() const { return cnt < 0 ? 0 : 1; }
-    double get_range() const { return range; }
+    void update_on_creation(double dist)
+    {
+        if (dist < interaction_range())
+            cnt++;
+    }
+    void update_on_anihillation(double dist)
+    {
+        if (dist < interaction_range())
+            cnt--;
+    }
 
-    double range;
+    double get_intensity() const { return cnt < 100 ? 1 : 0; }
+    static double interaction_range() { return 1.0; }
+
     int32_t cnt;
 };
 }

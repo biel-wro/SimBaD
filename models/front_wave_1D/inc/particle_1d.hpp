@@ -1,9 +1,16 @@
 #ifndef PARTICLE_1D_HPP
 #define PARTICLE_1D_HPP
+
+#include <random>
 #include <boost/intrusive/set_hook.hpp>
 
+#include "birth_rate_accumulator.hpp"
+#include "death_rate_accumulator.hpp"
+#include "event_rate_accumulator.hpp"
 #include "simple_event_queue.hpp"
 #include "simple_particle.hpp"
+
+#include "front_wave_1d_fwd.hpp"
 
 namespace simbad
 {
@@ -22,6 +29,15 @@ class particle_1D : public ::simbad::core::simple_particle<1, float>,
 
   public:
     explicit particle_1D(float pos = 0.f, event_handle h = event_handle());
+    void update_accumulators(event_1d const &e);
+    void update_accumulators(particle_1D const &p);
+
+    static double interaction_range();
+    std::pair<float,simbad::core::EVENT_KIND> sample_event(std::mt19937_64 &r);
+
+protected:
+    event_rate_accumulator acc;
+
 };
 }
 }

@@ -1,17 +1,17 @@
 #ifndef SIMPLE_PARTICLE_HPP
 #define SIMPLE_PARTICLE_HPP
 
-#include "handle_trackee.hpp"
-#include "ptr_updater.hpp"
-#include "simple_event_queue.hpp"
-#include "trackee.hpp"
-
-#include <boost/operators.hpp>
-
 #include <algorithm>
 #include <array>
 #include <cstddef>
 #include <initializer_list>
+
+#include <boost/operators.hpp>
+
+#include "handle_trackee.hpp"
+#include "ptr_updater.hpp"
+#include "simple_event_queue.hpp"
+#include "trackee.hpp"
 
 namespace simbad
 {
@@ -53,6 +53,10 @@ class simple_particle
     simple_particle &operator=(simple_particle const &) = delete;
     simple_particle &operator=(simple_particle &&o) = default;
 
+
+    coord_type coordinate( std::size_t cdim) const{
+        return coords[cdim];
+    }
     template <size_t cdim>
     void set_coordinate(coord_type c)
     {
@@ -80,6 +84,7 @@ class simple_particle
 
   private:
     coord_array_type coords;
+
 };
 }
 }

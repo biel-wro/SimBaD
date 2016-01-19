@@ -17,6 +17,10 @@ class simple_event_schedule
           boost::partially_ordered2<simple_event_schedule, float>>
 {
   public:
+    simple_event_schedule(void *particle)
+        : t(0), event_kind(EVENT_KIND::NONE), particle(particle)
+    {
+    }
     explicit simple_event_schedule(float t = 0.0f,
                                    EVENT_KIND ek = EVENT_KIND::NONE,
                                    void *particle = nullptr)
@@ -31,7 +35,7 @@ class simple_event_schedule
 
     float get_time() const { return t; }
     void set_time(float t) { this->t = t; }
-    void increase_time(double time_offset) { t += time_offset; }
+    void increase_time(double time_offset) { this->t += time_offset; }
 
     void set_event_kind(EVENT_KIND ek) { event_kind = ek; }
     EVENT_KIND get_event_kind() const { return event_kind; }

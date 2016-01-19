@@ -7,22 +7,27 @@
 #include "death_rate_accumulator.hpp"
 //#include "front_wave_1d_algorithms.hpp"
 #include "sort_on_1D.hpp"
+#include "spatial_neighbourhood.hpp"
 
 namespace simbad
 {
 namespace models
 {
 
-front_wave_1d_impl::front_wave_1d_impl() : t(0.0), op(1, 3) { reinitialize(); }
+front_wave_1d_impl::front_wave_1d_impl() : t(0.0), placer(1, 3)
+{
+    reinitialize();
+}
 
 front_wave_1d_impl::~front_wave_1d_impl() { space.clear(); }
 
+void front_wave_1d_impl::clear() {}
+
 void front_wave_1d_impl::reinitialize()
 {
-    range = default_interation_range();
 
-    space = initial_configuration();
-    queue = init_event_queue();
+    init_configuration();
+    init_event_queue();
 }
 
 front_wave_1d_impl::Event front_wave_1d_impl::next_event()
@@ -30,166 +35,152 @@ front_wave_1d_impl::Event front_wave_1d_impl::next_event()
     return execute_event();
 }
 
-double front_wave_1d_impl::default_interation_range()
+front_wave_1d_impl::Queue::ordered_iterator
+front_wave_1d_impl::begin_queue() const
 {
-    double r1 = death_rate_accumulator().get_range();
-    double r2 = birth_rate_accumulator().get_range();
-
-    return std::max(r1, r2);
+    return queue.ordered_begin();
+}
+front_wave_1d_impl::Queue::ordered_iterator
+front_wave_1d_impl::end_queue() const
+{
+    return queue.ordered_end();
 }
 
-front_wave_1d_impl::Space front_wave_1d_impl::initial_configuration()
+std::size_t front_wave_1d_impl::size() const { return space.size(); }
+
+double front_wave_1d_impl::simulation_time() const { return t; }
+front_wave_1d_impl::Space::const_iterator front_wave_1d_impl::begin() const
 {
-    Space space;
+    return space.begin();
+}
+
+front_wave_1d_impl::Space::const_iterator front_wave_1d_impl::end() const
+{
+    return space.end();
+}
+
+void front_wave_1d_impl::resample_event(particle_1D &p)
+{
+    EventHandle h = p.get_handle();
+    std::pair<float, EVENT_KIND> e = p.sample_event(rnd);
+
+    (*h).set_time(e.first + simulation_time());
+    (*h).set_event_kind(e.second);
+    (*h).set_particle_ptr(&p);
+
+    queue.update(h);
+}
+
+void front_wave_1d_impl::full_update(particle_1D &p)
+{
+    double center = p.coordinate(0);
+
+    for (particle_1D const &neighbour : get_neighbourhood(center))
+        p.update_accumulators(neighbour);
+
+    resample_event(p);
+}
+
+void front_wave_1d_impl::update_simulation_time(double new_time)
+{
+    this->t = new_time;
+}
+
+void front_wave_1d_impl::init_configuration()
+{
     std::unique_ptr<particle_1D> p(new particle_1D(0.0f));
     space.insert(*p);
     p.release();
-
-    return space;
 }
 
-front_wave_1d_impl::Queue front_wave_1d_impl::init_event_queue()
+void front_wave_1d_impl::init_event_queue()
 {
-    Queue event_queue;
 
-    for (particle_1D &particle : space)
+    for (particle_1D &p : space)
     {
-        EventSchedule event = compute_event(particle);
-
-        EventHandle h = event_queue.emplace(std::move(event));
-
-        particle.set_handle(h);
-        (*h).set_particle_ptr(&particle);
+        EventHandle h = queue.emplace(&p);
+        p.set_handle(h);
+        full_update(p);
     }
-
-    return event_queue;
 }
 
-void front_wave_1d_impl::update_neighbourhood(double center)
+void front_wave_1d_impl::update_neighbourhood(const Event &e)
 {
-    double lb = center - range;
-    double ub = center + range;
-
-    Space::const_iterator neigh_beg = space.lower_bound(lb, sort_on_1D());
-    Space::const_iterator neigh_end = space.upper_bound(ub, sort_on_1D());
-
-    for (Space::const_iterator it = neigh_beg; it != neigh_end; ++it)
+    double center = e.coordinate(0);
+    spatial_neighbourhood neighbourhood = get_neighbourhood(center);
+    for (particle_1D &particle : neighbourhood)
     {
-        const particle_1D &particle = *it;
-
-        EventSchedule event = compute_event(particle);
-        event.increase_time(t);
-
-        EventHandle h = particle.get_handle();
-        *h = std::move(event);
-        (*h).set_particle_ptr(const_cast<particle_1D *>(&*it));
-
-        queue.update_lazy(h);
+        particle.update_accumulators(e);
+        resample_event(particle);
     }
 }
 
 front_wave_1d_impl::Event front_wave_1d_impl::execute_event()
 {
-    Event e;
-    particle_1D const &point = *queue.top().get_particle_ptr_as<particle_1D>();
-
-    double event_center = point.get_coordinate<0>();
-
-    t = queue.top().get_time();
-    e.set_time(t);
+    double new_time = queue.top().get_time();
+    update_simulation_time(new_time);
 
     EVENT_KIND const event_kind = queue.top().get_event_kind();
-    e.set_event_kind(event_kind);
+
+    Event retval;
     if (event_kind == EVENT_KIND::DEATH)
-    {
-        execute_death();
-        e.set_coordinate(0,event_center);
-    }
+        retval = execute_death();
     else if (event_kind == EVENT_KIND::BIRTH)
-    {
-        particle_1D &offspring = execute_birth();
-        double offspring_pos = offspring.get_coordinate<0>();
-        e.set_coordinate(0,offspring_pos);
-        update_neighbourhood(offspring_pos);
-    }
+        retval = execute_birth();
 
-    update_neighbourhood(event_center);
-
-
-
-    return e;
+    return retval;
 }
 
-particle_1D &front_wave_1d_impl::execute_birth()
+front_wave_1d_impl::Event front_wave_1d_impl::execute_birth()
 {
-    particle_1D const &parent = *queue.top().get_particle_ptr_as<particle_1D>();
+    EventSchedule const &es = queue.top();
+    Event event(es.get_time(), simbad::core::EVENT_KIND::BIRTH);
+
+    particle_1D &parent = *es.get_particle_ptr_as_nonconst<particle_1D>();
 
     double parent_x = parent.get_coordinate<0>();
-    double offspring_x = op(rnd,parent_x);
+    double offspring_x = placer(rnd, parent_x);
+
+    event.set_coordinate(0, offspring_x);
+
+    resample_event(parent);
+    update_neighbourhood(event);
 
     EventHandle offspring_event_handle = queue.emplace();
 
-    std::unique_ptr<particle_1D> offspring_ptr(
-        new particle_1D(offspring_x, offspring_event_handle));
-    space.insert(*offspring_ptr);
+    auto offspring_ptr =
+        std::make_unique<particle_1D>(offspring_x, offspring_event_handle);
 
-    particle_1D &offspring = *offspring_ptr;
-    offspring_ptr.release();
+    particle_1D &offspring = *offspring_ptr.release();
 
-    return offspring;
+    space.insert(offspring);
+
+    full_update(offspring);
+
+    return event;
 }
 
-void front_wave_1d_impl::execute_death()
+front_wave_1d_impl::Event front_wave_1d_impl::execute_death()
 {
-    particle_1D const &p = *queue.top().get_particle_ptr_as<particle_1D>();
+    EventSchedule const &es = queue.top();
+
+    Event event(es.get_time(), simbad::core::EVENT_KIND::DEATH);
+
+    particle_1D const &p = *es.get_particle_ptr_as<particle_1D>();
+    float position = p.coordinate(0);
+    event.set_coordinate(0, position);
 
     space.erase_and_dispose(p, std::default_delete<particle_1D>());
     queue.pop();
+
+    update_neighbourhood(event);
+    return event;
 }
 
-front_wave_1d_impl::EventSchedule
-front_wave_1d_impl::compute_event(particle_1D const &p)
+spatial_neighbourhood front_wave_1d_impl::get_neighbourhood(float center)
 {
-    death_rate_accumulator death_acc;
-    double death_intrange = death_acc.get_range();
-
-    birth_rate_accumulator birth_acc;
-    double birth_intrange = birth_acc.get_range();
-
-    double range = std::max(death_intrange, birth_intrange);
-    double center = p.get_coordinate<0>();
-
-    Space::const_iterator neight_beg =
-        space.lower_bound<float, sort_on_1D>(center - range, sort_on_1D());
-    Space::const_iterator neight_end =
-        space.upper_bound<float, sort_on_1D>(center + range, sort_on_1D());
-
-    for (Space::const_iterator cit = neight_beg; cit != neight_end; ++cit)
-    {
-        death_acc.accumulate(p, *cit);
-        birth_acc.accumulate(p, *cit);
-    }
-
-    double death_intensity = death_acc.get_intensity();
-    double birth_intensity = birth_acc.get_intensity();
-
-    double death_time = std::exponential_distribution<>(death_intensity)(rnd);
-    double birth_time = std::exponential_distribution<>(birth_intensity)(rnd);
-
-    EventSchedule event;
-
-    if (death_time < birth_time)
-    {
-        event.set_time(death_time);
-        event.set_event_kind(EVENT_KIND::DEATH);
-    }
-    else
-    {
-        event.set_time(birth_time);
-        event.set_event_kind(EVENT_KIND::BIRTH);
-    }
-
-    return event;
+    double range = particle_1D::interaction_range();
+    return spatial_neighbourhood(space, center, range);
 }
 }
 }
