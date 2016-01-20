@@ -16,7 +16,7 @@ class event_rate_accumulator
     void reset()
     {
         birth_acc.reset();
-        death_acc.reser();
+        death_acc.reset();
     }
 
     template <class Point, class Event>

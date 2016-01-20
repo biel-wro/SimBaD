@@ -5,7 +5,7 @@
 
 #include "birth_rate_accumulator.hpp"
 #include "death_rate_accumulator.hpp"
-//#include "front_wave_1d_algorithms.hpp"
+
 #include "sort_on_1D.hpp"
 #include "spatial_neighbourhood.hpp"
 
@@ -14,7 +14,7 @@ namespace simbad
 namespace models
 {
 
-front_wave_1d_impl::front_wave_1d_impl() : t(0.0), placer(1, 3)
+front_wave_1d_impl::front_wave_1d_impl() : t(0.0), placer(1, 10)
 {
     reinitialize();
 }
