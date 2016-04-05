@@ -1,67 +1,35 @@
 #ifndef BIRTH_RATE_ACCUMULATOR_HPP
 #define BIRTH_RATE_ACCUMULATOR_HPP
+#include <cmath>
+#include <stdint.h>
 
+#include "density_accumulator.hpp"
 #include "event_1d.hpp"
 #include "event_kind.hpp"
 
-#include <cmath>
-#include <stdint.h>
 namespace simbad
 {
 namespace models
 {
-class birth_rate_accumulator
+class birth_rate_accumulator : public density_accumulator
 {
   public:
-    birth_rate_accumulator() : cnt(0) {}
+    static constexpr int32_t saturation = 20;
 
-    void reset() { cnt = 0; }
-    template <class Point, class Event>
-    void update(Point const &p, Event const &e)
-    {
-        using core::EVENT_KIND;
-
-        EVENT_KIND ek = e.event_kind();
-        double point_pos = p.coordinate(0);
-        double event_pos = e.coordinate(0);
-
-        double distance = std::fabs(point_pos - event_pos);
-        switch (ek)
-        {
-        case EVENT_KIND::BIRTH:
-            update_on_creation(distance);
-            break;
-        case EVENT_KIND::DEATH:
-            update_on_anihillation(distance);
-            break;
-        default:
-            throw std::runtime_error("event not supported");
-        }
+    double get_density() const{
+        return static_cast<double>(get_value() );
     }
-    template <class Point>
-    void update(Point const &p1, Point const &p2)
+    double get_intensity() const
     {
-        double pos1 = p1.coordinate(0);
-        double pos2 = p2.coordinate(0);
-        double distance = std::fabs(pos1 - pos2);
-        update_on_creation(distance);
+        double density = get_density();
+        double saturation = s_saturation_level();
+        return std::min( 1.0, saturation/density);
     }
+    int32_t saturation_level() const { return s_saturation_level(); }
 
-    void update_on_creation(double dist)
-    {
-        if (dist < interaction_range())
-            cnt++;
-    }
-    void update_on_anihillation(double dist)
-    {
-        if (dist < interaction_range())
-            cnt--;
-    }
+    static int32_t s_saturation_level() { return saturation; }
 
-    double get_intensity() const { return cnt < 100 ? 1 : 0; }
-    static double interaction_range() { return 1.0; }
-
-    int32_t cnt;
+    bool is_saturated() const { return get_value() >= saturation_level(); }
 };
 }
 }

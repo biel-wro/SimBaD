@@ -14,12 +14,15 @@ namespace simbad
 namespace models
 {
 
-front_wave_1d_impl::front_wave_1d_impl() : t(0.0), placer(1, 10)
+front_wave_1d_impl::front_wave_1d_impl(double alpha, double x0)
+    : t(0.0), placer(alpha, x0)
 {
     reinitialize();
 }
 
 front_wave_1d_impl::~front_wave_1d_impl() { space.clear(); }
+
+void front_wave_1d_impl::seed(uint32_t s) { rnd.seed(s); }
 
 void front_wave_1d_impl::clear() {}
 

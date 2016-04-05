@@ -10,7 +10,7 @@ namespace models
 class offspring_placer
 {
   public:
-    offspring_placer(double x0, double power) : dist(x0, power - 1) {}
+    offspring_placer(double power, double x0) : dist(x0, power-1) {}
 
     template <class RNG>
     double operator()(RNG &rng,double parent_pos) const

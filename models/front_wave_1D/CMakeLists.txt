@@ -15,6 +15,7 @@ set( SOURCES
     src/front_wave_1d_impl.cpp
     src/front_wave_1d_algorithms.cpp
     src/particle_1d.cpp
+    src/saturation_distance_computer.cpp
 )
 
 

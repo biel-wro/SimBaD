@@ -29,9 +29,10 @@ class front_wave_1d_impl
     using Random = std::mt19937_64;
     using Space = space_1d;
 
-    front_wave_1d_impl();
+    front_wave_1d_impl(double alpha, double x0 = 1.0);
     ~front_wave_1d_impl();
 
+    void seed(uint32_t s);
     void clear();
     void reinitialize();
 

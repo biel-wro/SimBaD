@@ -13,7 +13,7 @@ BOOST_AUTO_TEST_CASE(void_test) {}
 
 BOOST_AUTO_TEST_CASE(front_wave_1d_ordering)
 {
-    front_wave_1d_impl model;
+    front_wave_1d_impl model(3,1);
     unsigned long niters = 1000;
 
     double t = 0.0;
@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(front_wave_1d_ordering)
 
 BOOST_AUTO_TEST_CASE(front_wave_1d_size_check)
 {
-    front_wave_1d_impl model;
+    front_wave_1d_impl model(3,1);
     unsigned long niters = 1000;
 
     int64_t nparticles = boost::numeric_cast<int64_t>(model.size());

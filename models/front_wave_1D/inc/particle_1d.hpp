@@ -29,6 +29,7 @@ class particle_1D : public ::simbad::core::simple_particle<1, float>,
 
   public:
     explicit particle_1D(float pos = 0.f, event_handle h = event_handle());
+    event_rate_accumulator const &get_event_acc() const;
     void update_accumulators(event_1d const &e);
     void update_accumulators(particle_1D const &p);
 
