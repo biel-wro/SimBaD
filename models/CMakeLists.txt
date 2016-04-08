@@ -5,6 +5,7 @@ set( MODELS
 #  empty_model
 #  bio2D
   front_wave_1D
+  integrated_wave_1D
 #  prototype
 )
 

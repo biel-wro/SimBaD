@@ -3,7 +3,7 @@
 #include "handle_trackee.hpp"
 #include "simple_event_queue.hpp"
 #include "simple_event_schedule.hpp"
-#include "simple_particle.hpp"
+#include "simple_tracked_particle.hpp"
 
 #include <boost/test/auto_unit_test.hpp>
 #include <boost/heap/fibonacci_heap.hpp>
@@ -19,7 +19,7 @@ static_assert(sizeof(simple_event_handle) == sizeof(void *),
               "making sure handle is pointer-sized");
 
 
-using Point = simple_particle<2,float>;
+using Point = simple_tracked_particle<2,float>;
 
 BOOST_AUTO_TEST_CASE(tracking_particle_move)
 {

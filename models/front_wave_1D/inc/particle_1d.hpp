@@ -8,7 +8,7 @@
 #include "death_rate_accumulator.hpp"
 #include "event_rate_accumulator.hpp"
 #include "simple_event_queue.hpp"
-#include "simple_particle.hpp"
+#include "simple_tracked_particle.hpp"
 
 #include "front_wave_1d_fwd.hpp"
 
@@ -17,11 +17,11 @@ namespace simbad
 namespace models
 {
 
-class particle_1D : public ::simbad::core::simple_particle<1, float>,
+class particle_1D : public ::simbad::core::simple_tracked_particle<1, float>,
                     public boost::intrusive::set_base_hook<
                         boost::intrusive::optimize_size<true>>
 {
-    using particle_super = simbad::core::simple_particle<1, float>;
+    using particle_super = simbad::core::simple_tracked_particle<1, float>;
     using hook_super =
         boost::intrusive::set_base_hook<boost::intrusive::optimize_size<true>>;
 

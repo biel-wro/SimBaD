@@ -71,6 +71,7 @@ class LazySet
         std::swap(const_cast<reference_type>(cref), back());
         pop_back();
     }
+
     /*
      * Status
      */
