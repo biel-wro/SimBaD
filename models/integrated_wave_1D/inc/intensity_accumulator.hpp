@@ -11,7 +11,7 @@
 
 #include "integrated_wave_1d.hpp"
 #include "integrated_wave_1d_fwd.hpp"
-
+#include "intensity_computer.hpp"
 BEGIN_NAMESPACE_INTEGRATED_WAVE_1D
 
 class intensity_accumulator
@@ -31,10 +31,10 @@ class intensity_accumulator
     void reset() { cnt = 0; }
 
     template <DIRECTION dir, class Point, class Computer>
-    void accumulate(Point const &p, Computer intensity_computer = Computer())
+    void accumulate(Point const &p, Computer computer = Computer())
     {
-        double density = p.get_accumulator().get_value();
-        double intensity = intensity_computer(density);
+//        double density = p.get_accumulator().get_value();
+        double intensity = computer(p);
         if (dir == DIRECTION::INCLUDE)
             cnt += intensity;
         else if (dir == DIRECTION::EXCLUDE)

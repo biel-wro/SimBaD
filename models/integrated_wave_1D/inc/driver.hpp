@@ -29,6 +29,8 @@ class driver
     // setters & getters
   protected:
     void init_configuration();
+    double point_intensity(double x);
+
 
   private:
     double simulation_time;

@@ -1,5 +1,8 @@
 #include "driver.hpp"
 
+#include <algorithm>
+
+#include "intensity_density_computer.hpp"
 #include "particle_1d.hpp"
 
 BEGIN_NAMESPACE_INTEGRATED_WAVE_1D
@@ -16,6 +19,8 @@ driver::Event driver::next_event()
     double dt = std::exponential_distribution<double>(total_intensity)(rnd);
     simulation_time += dt;
 
+    double x; // sampled x
+
     throw std::runtime_error("not implemented yet");
 }
 
@@ -27,6 +32,21 @@ void driver::init_configuration()
     particle_1d &p = storage.back();
 
     birth_acc.accumulate<DIRECTION::INCLUDE>(p, computer);
+}
+
+double driver::point_intensity(double x)
+{
+    intensity_accumulator acc;
+    intensity_density_computer cpu(x);
+
+    auto beg = space.cbegin();
+    auto end = space.cend();
+
+    auto fun = [&acc, cpu](particle_1d const &p) {
+        acc.accumulate<DIRECTION::INCLUDE>(p, cpu);
+    };
+
+    std::for_each(beg, end, fun);
 }
 
 END_NAMESPACE_INTEGRATED_WAVE_1D
