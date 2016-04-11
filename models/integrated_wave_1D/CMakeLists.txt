@@ -10,13 +10,17 @@ set( MAIN_SOURCE
 )
 
 set( SOURCES
-#    src/front_wave_1d_impl.cpp
-#    src/front_wave_1d_algorithms.cpp
     src/driver.cpp
-    src/intensity_density_computer.cpp
+    src/birth_ccdf_computer.cpp
+    src/birth_pdf_computer.cpp
     src/particle_1d.cpp
 #    src/saturation_distance_computer.cpp
 )
+
+add_library(${MODEL_NAME}_obj OBJECT ${SOURCES} ${HEADERS} )
+
+add_executable(${MODEL_NAME} $<TARGET_OBJECTS:${MODEL_NAME}_obj> ${MAIN_SOURCE})
+target_link_libraries( ${MODEL_NAME}  ${LIBS} )
 
 
 set( TEST_MAIN_SOURCE
@@ -26,9 +30,9 @@ set( TEST_SOURCES
   test/ut_space_1d.cpp
   test/ut_intensity_accumulator.cpp
 )
-add_executable(${MODEL_NAME} ${MAIN_SOURCE} ${SOURCES} ${HEADERS} )
-target_link_libraries( ${MODEL_NAME} ${LIBS} )
 
 
-add_executable( ${TEST_NAME} ${TEST_MAIN_SOURCE} ${TEST_SOURCES} ${SOURCES} )
-target_link_libraries( ${TEST_NAME} ${CORE_NAME} ${LIBS} )
+add_executable( ${TEST_NAME}  ${TEST_MAIN_SOURCE}
+  $<TARGET_OBJECTS:${MODEL_NAME}_obj> ${TEST_SOURCES} )
+
+target_link_libraries( ${TEST_NAME}   ${LIBS} )

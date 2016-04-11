@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "intensity_density_computer.hpp"
+#include "birth_pdf_computer.hpp"
 #include "particle_1d.hpp"
 
 BEGIN_NAMESPACE_INTEGRATED_WAVE_1D
@@ -37,7 +37,7 @@ void driver::init_configuration()
 double driver::point_intensity(double x)
 {
     intensity_accumulator acc;
-    intensity_density_computer cpu(x);
+    birth_pdf_computer cpu(x);
 
     auto beg = space.cbegin();
     auto end = space.cend();
@@ -47,6 +47,9 @@ double driver::point_intensity(double x)
     };
 
     std::for_each(beg, end, fun);
+
+    double intensity = acc.get_value();
+    return intensity > 100 ? 100 : intensity;
 }
 
 END_NAMESPACE_INTEGRATED_WAVE_1D
