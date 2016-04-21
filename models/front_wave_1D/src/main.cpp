@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 {
 
     using impl_type = simbad::models::front_wave_1d_impl;
-    impl_type impl(3.0);
+
     using event_type = impl_type::Event;
     // using filter_type =
     // simbad::models::most_distant_birth_filter<event_type>;
@@ -32,12 +32,18 @@ int main(int argc, char **argv)
 
     size_t niters = 10;
 
-    if (argc >= 2)
-        niters = atoi(argv[1]);
+    double alpha = 4.0;
+    if( argc >= 2)
+        alpha = atof(argv[1]);
+
+    impl_type impl(alpha);
 
     if (argc >= 3)
+        niters = atoi(argv[2]);
+
+    if (argc >= 4)
     {
-        uint32_t s = atoi(argv[2]);
+        uint32_t s = atoi(argv[3]);
         impl.seed(s);
     }
 

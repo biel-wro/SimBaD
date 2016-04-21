@@ -14,7 +14,7 @@ namespace models
 class birth_rate_accumulator : public density_accumulator
 {
   public:
-    static constexpr int32_t saturation = 20;
+    static constexpr int32_t saturation = 10;
 
     double get_density() const{
         return static_cast<double>(get_value() );
