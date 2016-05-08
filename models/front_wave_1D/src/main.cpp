@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     using event_type = impl_type::Event;
     // using filter_type =
     // simbad::models::most_distant_birth_filter<event_type>;
-    using saturation_distance = simbad::models::saturation_distance_computer;
+    // using saturation_distance = simbad::models::saturation_distance_computer;
 
     size_t niters = 10;
 
@@ -52,11 +52,11 @@ int main(int argc, char **argv)
     for (size_t iter = 0; iter < niters; ++iter)
     {
         event_type event = impl.next_event();
-        // std::cout << event << std::endl;
-        double sat_dist = saturation_distance().observe(impl);
+        std::cout << event.time() << " " << event.coordinate(0);
 
-        std::cout << event.time() << " " << event.coordinate(0) << " "
-                  << sat_dist << std::endl;
+        //double sat_dist = saturation_distance().observe(impl);
+
+        std::cout << std::endl;
     }
     //print_configuration(impl);
 
