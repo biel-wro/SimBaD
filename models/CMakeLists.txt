@@ -4,6 +4,7 @@ include_directories( ../core/inc )
 set( MODELS
 #  empty_model
 #  bio2D
+  discrete_wave_1D
   front_wave_1D
   integrated_wave_1D
 #  prototype
