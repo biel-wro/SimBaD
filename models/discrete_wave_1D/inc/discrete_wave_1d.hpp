@@ -15,18 +15,28 @@ class discrete_wave_1d
 public:
   using Event = event_1d;
 
-  discrete_wave_1d(double alpha, double spacing, std::size_t length, std::size_t seed);
+  discrete_wave_1d(double alpha, double intenisty_cap, std::size_t length,
+                   double spacing = 1.0, std::size_t seed = 0);
+
+  Event initial_event();
 
   Event next_event();
 
 protected:
-  void update_birth_density(const Event &e);
-  void update_birth_cumulated_density();
+  void update_birth_uncapped_density(const Event &e);
+  void recompute_birth_cumulated_density();
+  std::size_t sample_birth_pos(std::mt19937_64 &engine) const;
 
+  double capped_intensity(double uncapped_density) const;
   double distance_from_origin(size_t cell) const;
+  double total_birth_intensity() const;
+
 private:
-  double grid_spacing;
+  double time;
+  const double intensity_cap;
+  const double grid_spacing;
   std::mt19937_64 random_engine;
+
   simbad::core::power_law_distribution<double> birth_power_law;
 
   std::vector<std::size_t> grid_count;
