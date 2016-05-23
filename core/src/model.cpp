@@ -1,11 +1,7 @@
-#include "model.h"
-namespace simbad {
-namespace core{
+#include "model.hpp"
 
-model::model() noexcept
-{}
+BEGIN_NAMESPACE_CORE
 
-model::~model() noexcept
-{}
+model::~model() {}
 
-}}
+END_NAMESPACE_CORE

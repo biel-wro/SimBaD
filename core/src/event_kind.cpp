@@ -1,5 +1,9 @@
 #include "event_kind.hpp"
+
+#include <iostream>
 #include <stdexcept>
+#include <type_traits>
+
 std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek)
 {
     using simbad::core::EVENT_KIND;
@@ -15,9 +19,9 @@ std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek)
     case EVENT_KIND::DEATH:
         str = "DEATH";
         break;
-    case EVENT_KIND::JUMP:
-        str = "JUMP";
-        break;
+//    case EVENT_KIND::JUMP:
+//        str = "JUMP";
+//        break;
     default:
         using num_type =
             typename std::underlying_type<simbad::core::EVENT_KIND>::type;

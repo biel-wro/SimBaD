@@ -6,7 +6,7 @@
 BEGIN_NAMESPACE_DISCRETE_WAVE_1D
 
 class event_1d;
-class discrete_wave_1d;
+class discrete_wave_1d_impl;
 
 END_NAMESPACE_DISCRETE_WAVE_1D
 

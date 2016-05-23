@@ -1,23 +1,25 @@
 #ifndef EVENT_KIND_HPP
 #define EVENT_KIND_HPP
 
-#include <ostream>
-#include <type_traits>
+#include "core_fwd.hpp"
 
-#include "event_kind.hpp"
-namespace simbad
-{
-namespace core
-{
+#include <iosfwd>
+
+
+BEGIN_NAMESPACE_CORE
+
+
 enum class EVENT_KIND : uint32_t
 {
     NONE,
     BIRTH,
     DEATH,
-    JUMP
+//    JUMP
 };
-}
-}
+
+END_NAMESPACE_CORE
+
+
 
 std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek);
 

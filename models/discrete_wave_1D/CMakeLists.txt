@@ -11,11 +11,7 @@ set( MAIN_SOURCE
 
 set( SOURCES
   src/discrete_wave_1d.cpp
-  #src/driver.cpp
-    #src/birth_ccdf_computer.cpp
-    #src/birth_pdf_computer.cpp
-    #src/particle_1d.cpp
-#    src/saturation_distance_computer.cpp
+  src/discrete_wave_1d_impl.cpp
 )
 
 add_library(${MODEL_NAME}_obj OBJECT ${SOURCES} ${HEADERS} )
@@ -28,8 +24,7 @@ set( TEST_MAIN_SOURCE
   test/test_main.cpp)
 
 set( TEST_SOURCES
-  #test/ut_space_1d.cpp
-  #test/ut_intensity_accumulator.cpp
+
 )
 
 add_executable( ${TEST_NAME}  ${TEST_MAIN_SOURCE}

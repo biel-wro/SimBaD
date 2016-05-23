@@ -1,21 +1,34 @@
 #ifndef CORE_FWD_HPP
 #define CORE_FWD_HPP
+
 #include <cstddef>
 #include <cstdint>
 
-namespace simbad
-{
-namespace core
-{
-enum class EVENT_KIND : uint32_t;
+#include "core_def.hpp"
 
-template<class, size_t> class LazySet;
+BEGIN_NAMESPACE_CORE
+
+enum class EVENT_KIND : uint32_t;
+class event;
+class event_partial;
+
+class model;
+class model_factory;
+
+class model_loader;
+class model_register;
+
+class particle;
+
+template <class, size_t>
+class LazySet;
 
 class simple_event_schedule;
 class simple_event_queue;
 
 template <size_t, class>
 class simple_particle;
-}
-}
+
+END_NAMESPACE_CORE
+
 #endif // CORE_FWD_HPP
