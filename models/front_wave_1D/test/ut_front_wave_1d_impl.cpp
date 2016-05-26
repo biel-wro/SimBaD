@@ -6,7 +6,7 @@
 
 #include "event_kind.hpp"
 #include "front_wave_1d_impl.hpp"
-using namespace simbad::models;
+using namespace simbad::models::front_wave_1d;
 using namespace simbad::core;
 
 BOOST_AUTO_TEST_CASE(void_test) {}

@@ -1,12 +1,11 @@
 #ifndef OFFSPRING_PLACER_HPP
 #define OFFSPRING_PLACER_HPP
+#include "front_wave_1d_fwd.hpp"
+
 #include <boost/math/distributions/pareto.hpp>
 #include <random>
 
-namespace simbad
-{
-namespace models
-{
+BEGIN_NAMESPACE_FRONT_WAVE_1D
 class offspring_placer
 {
   public:
@@ -27,7 +26,6 @@ class offspring_placer
   private:
     boost::math::pareto_distribution<> dist;
 };
-}
-}
+END_NAMESPACE_FRONT_WAVE_1D
 
 #endif // OFFSPRING_PLACER_HPP

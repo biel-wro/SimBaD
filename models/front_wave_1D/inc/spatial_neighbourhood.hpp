@@ -1,25 +1,18 @@
 #ifndef SPATIAL_NEIGHBOURHOOD_HPP
 #define SPATIAL_NEIGHBOURHOOD_HPP
-#include "sort_on_1D.hpp"
+
 #include "space_1d.hpp"
-namespace simbad
-{
-namespace models
-{
+
+BEGIN_NAMESPACE_FRONT_WAVE_1D
+
 class spatial_neighbourhood
 {
   public:
     using iterator = space_1d::iterator;
     using const_iterator = space_1d::const_iterator;
 
-    spatial_neighbourhood(iterator beg, iterator end) : m_beg(beg), m_end(end)
-    {
-    }
-    spatial_neighbourhood(space_1d &space, float center, float range)
-        : m_beg(space.lower_bound(center - range, sort_on_1D())),
-          m_end(space.upper_bound(center + range, sort_on_1D()))
-    {
-    }
+    spatial_neighbourhood(iterator beg, iterator end);
+    spatial_neighbourhood(space_1d &space, float center, float range);
 
     iterator begin() { return m_beg; }
     iterator end() { return m_end; }
@@ -29,6 +22,6 @@ class spatial_neighbourhood
     iterator m_beg;
     iterator m_end;
 };
-}
-}
+
+END_NAMESPACE_FRONT_WAVE_1D
 #endif // SPATIAL_NEIGHBOURHOOD_HPP

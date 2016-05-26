@@ -1,36 +1,26 @@
 #ifndef BIRTH_RATE_ACCUMULATOR_HPP
 #define BIRTH_RATE_ACCUMULATOR_HPP
-#include <cmath>
-#include <stdint.h>
+
+#include "front_wave_1d_fwd.hpp"
 
 #include "density_accumulator.hpp"
-#include "event_1d.hpp"
-#include "event_kind.hpp"
 
-namespace simbad
-{
-namespace models
-{
+BEGIN_NAMESPACE_FRONT_WAVE_1D
+
 class birth_rate_accumulator : public density_accumulator
 {
-  public:
-    static constexpr int32_t saturation = 10;
+public:
+  static constexpr int32_t saturation = 10;
 
-    double get_density() const{
-        return static_cast<double>(get_value() );
-    }
-    double get_intensity() const
-    {
-        double density = get_density();
-        double saturation = s_saturation_level();
-        return std::min( 1.0, saturation/density);
-    }
-    int32_t saturation_level() const { return s_saturation_level(); }
+  double get_density() const;
+  double get_intensity() const;
+  int32_t saturation_level() const;
 
-    static int32_t s_saturation_level() { return saturation; }
+  static int32_t s_saturation_level();
 
-    bool is_saturated() const { return get_value() >= saturation_level(); }
+  bool is_saturated() const;
 };
-}
-}
+
+END_NAMESPACE_FRONT_WAVE_1D
+
 #endif // BIRTH_RATE_ACCUMULATOR_HPP

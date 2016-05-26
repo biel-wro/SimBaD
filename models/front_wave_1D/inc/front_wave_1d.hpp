@@ -1,34 +1,24 @@
 #ifndef FRONT_WAVE_1D_HPP
 #define FRONT_WAVE_1D_HPP
 
-#include <random>
-#include <utility>
+#include "front_wave_1d_fwd.hpp"
 
-#include <boost/intrusive/set.hpp>
+#include "model.hpp"
+#include <memory>
 
-#include "handle_trackee.hpp"
-#include "lazy_set.hpp"
-#include "simple_event_queue.hpp"
+BEGIN_NAMESPACE_FRONT_WAVE_1D
 
-
-#include "particle_1d.hpp"
-
-namespace simbad
+class front_wave_1d : public simbad::core::model
 {
-namespace models
-{
-class front_wave_1d{
 public:
-  front_wave_1d();
-  void set_configuration(void);
-  void get_next_event();
-  void get_current_configuration();
+  front_wave_1d(double alpha, double x0);
+  void generate_events(event_visitor visitor, size_t nevents) const override;
+  std::size_t configuration_size() const override;
+  void visit_configuration(particle_visitor visitor) const override;
 
-  void run();
-
+protected:
+  std::unique_ptr<front_wave_1d_impl> impl;
 };
 
-
-}
-}
+END_NAMESPACE_FRONT_WAVE_1D
 #endif // FRONT_WAVE_1D_HPP

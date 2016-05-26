@@ -8,10 +8,13 @@
 #include "most_distant_birth_filter.hpp"
 #include "saturation_distance_computer.hpp"
 #include "simple_event_schedule.hpp"
-void print_configuration(simbad::models::front_wave_1d_impl const &impl)
+
+USING_NAMEPSPACE_FRONT_WAVE_1D
+
+void print_configuration(front_wave_1d_impl const &impl)
 {
     std::cout << "conf ";
-    for (simbad::models::particle_1D const &p : impl)
+    for (particle_1D const &p : impl)
     {
         std::cout << "(" << p.coordinate(0) << " "
                   << p.get_event_acc().get_density() << " "
@@ -23,7 +26,7 @@ void print_configuration(simbad::models::front_wave_1d_impl const &impl)
 int main(int argc, char **argv)
 {
 
-    using impl_type = simbad::models::front_wave_1d_impl;
+    using impl_type = front_wave_1d_impl;
 
     using event_type = impl_type::Event;
     // using filter_type =

@@ -6,10 +6,7 @@
 #include "particle_1d.hpp"
 
 
-namespace simbad
-{
-namespace models
-{
+BEGIN_NAMESPACE_FRONT_WAVE_1D
 double
 saturation_distance_computer::observe(const front_wave_1d_impl &model) const
 {
@@ -26,5 +23,4 @@ saturation_distance_computer::observe(const front_wave_1d_impl &model) const
 
     return top_dist;
 }
-}
-}
+END_NAMESPACE_FRONT_WAVE_1D

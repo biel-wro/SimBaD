@@ -26,6 +26,12 @@ class LazySet;
 class simple_event_schedule;
 class simple_event_queue;
 
+template<class>
+class simple_event_view;
+
+template<class>
+class simple_particle_view;
+
 template <size_t, class>
 class simple_particle;
 

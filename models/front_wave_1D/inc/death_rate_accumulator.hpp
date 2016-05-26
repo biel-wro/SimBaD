@@ -1,10 +1,10 @@
 #ifndef DEATH_RATE_ACCUMULATOR_HPP
 #define DEATH_RATE_ACCUMULATOR_HPP
 
-namespace simbad
-{
-namespace models
-{
+#include "front_wave_1d_fwd.hpp"
+
+BEGIN_NAMESPACE_FRONT_WAVE_1D
+
 
 class death_rate_accumulator
 {
@@ -34,6 +34,6 @@ class death_rate_accumulator
     static double interaction_range() { return 0.0; }
     double get_intensity() const { return 0.0; }
 };
-}
-}
+END_NAMESPACE_FRONT_WAVE_1D
+
 #endif // DEATH_RATE_ACCUMULATOR_HPP

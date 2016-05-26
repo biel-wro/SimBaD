@@ -1,12 +1,9 @@
 #ifndef SORT_ON_1D_HPP
 #define SORT_ON_1D_HPP
 
-#include <cstddef>
+#include "front_wave_1d_fwd.hpp"
 
-namespace simbad
-{
-namespace models
-{
+BEGIN_NAMESPACE_FRONT_WAVE_1D
 
 struct sort_on_1D
 {
@@ -28,6 +25,5 @@ struct sort_on_1D
         return pos < p.template get_coordinate<DIM>();
     }
 };
-}
-}
+END_NAMESPACE_FRONT_WAVE_1D
 #endif // SORT_ON_1D_HPP
