@@ -10,6 +10,7 @@ set( TEST_SOURCES
   ut_lazy_set.cpp
   ut_lazy_set_chunk.cpp
   ut_power_law_distribution.cpp
+  ut_properties.cpp
   ut_simple_point_and_event.cpp
   ut_trackee.cpp
 )

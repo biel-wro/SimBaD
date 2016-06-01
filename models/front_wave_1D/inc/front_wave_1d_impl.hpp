@@ -26,7 +26,7 @@ public:
   using Space = space_1d;
   using Particle = Space::value_type;
 
-  front_wave_1d_impl(double alpha, double x0 = 1.0);
+  front_wave_1d_impl(double alpha, double x0 = 1.0, std::size_t seed=0);
   ~front_wave_1d_impl();
 
   void seed(uint32_t s);

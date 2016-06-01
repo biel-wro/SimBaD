@@ -11,6 +11,7 @@ class event_1d;
 class event_rate_accumulator;
 class front_wave_1d;
 class front_wave_1d_impl;
+class front_wave_1d_factory;
 class offspring_placer;
 class particle_1D;
 class saturation_distance_computer;

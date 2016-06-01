@@ -18,9 +18,10 @@
 
 BEGIN_NAMESPACE_FRONT_WAVE_1D
 
-front_wave_1d_impl::front_wave_1d_impl(double alpha, double x0)
+front_wave_1d_impl::front_wave_1d_impl(double alpha, double x0, std::size_t seed)
     : t(0.0), placer(alpha, x0)
 {
+  this->seed(seed);
   reinitialize();
 }
 

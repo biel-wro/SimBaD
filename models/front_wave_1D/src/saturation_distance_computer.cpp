@@ -5,22 +5,21 @@
 #include "front_wave_1d_impl.hpp"
 #include "particle_1d.hpp"
 
-
 BEGIN_NAMESPACE_FRONT_WAVE_1D
 double
 saturation_distance_computer::observe(const front_wave_1d_impl &model) const
 {
-    double top_dist = -std::numeric_limits<double>::infinity();
-    for (particle_1D const &particle : model)
-    {
-        double dist = (particle.get_coordinate<0>());
+  double top_dist = -std::numeric_limits<double>::infinity();
+  for (particle_1D const &particle : model)
+  {
+    double dist = (particle.get_coordinate<0>());
 
-        bool is_saturated = particle.get_event_acc().is_saturated();
+    bool is_saturated = particle.get_event_acc().is_saturated();
 
-        if (dist > top_dist && is_saturated)
-            top_dist = dist;
-    }
+    if (dist > top_dist && is_saturated)
+      top_dist = dist;
+  }
 
-    return top_dist;
+  return top_dist;
 }
 END_NAMESPACE_FRONT_WAVE_1D
