@@ -1,8 +1,9 @@
 #ifndef EVENT_ACCUMULATOR_HPP
 #define EVENT_ACCUMULATOR_HPP
 
-#include "front_wave_1d_fwd.hpp"
 
+#include "front_wave_1d_fwd.hpp"
+#include <random>
 #include "birth_rate_accumulator.hpp"
 
 BEGIN_NAMESPACE_FRONT_WAVE_1D

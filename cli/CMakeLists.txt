@@ -1,17 +1,34 @@
 project( ${CLI_NAME})
 
-
 include_directories( inc )
-include_directories( ${core_SOURCE_DIR}/inc )
+include_directories( ${CMAKE_SOURCE_DIR}/core/inc )
+include_directories( ${CMAKE_SOURCE_DIR}/models/common/inc )
+include_directories( ${Boost_INCLUDE_DIR} )
 
-FILE( GLOB HEADERS inc/*.h )  # workaround for headers in QtCreator
+set( MAIN_SOURCE src/main.cpp)
 
-set(SRC
-    src/main.cpp
-    src/launcher.cpp
+set(SOURCES
+  src/argument_parser.cpp
+  src/launcher.cpp
 )
 
-add_executable(${PROJECT_NAME} ${SRC} ${HEADERS} )
-target_link_libraries( ${PROJECT_NAME} ${Boost_LIBRARIES} )
-target_link_libraries(${PROJECT_NAME} ${CORE_NAME})
+set( LIBS
+  ${Boost_LIBRARIES}
+  ${MODEL_COMMON}
+  ${CORE_NAME}
+)
 
+add_library(${PROJECT_NAME}_obj OBJECT ${SOURCES} )
+
+add_executable(${PROJECT_NAME} ${MAIN_SOURCE} $<TARGET_OBJECTS:${PROJECT_NAME}_obj> )
+target_link_libraries( ${PROJECT_NAME} ${LIBS} )
+
+set( TEST_MAIN_SOURCE  test/test_main.cpp)
+
+set( TEST_SOURCES
+    test/ut_argument_parser.cpp
+    test/ut_model_chooser.cpp
+    )
+
+add_executable( ${PROJECT_NAME}_test ${TEST_MAIN_SOURCE} $<TARGET_OBJECTS:${PROJECT_NAME}_obj> ${TEST_SOURCES} )
+target_link_libraries( ${PROJECT_NAME}_test ${LIBS} )

@@ -23,10 +23,7 @@ BOOST_AUTO_TEST_CASE(ptree_experiments)
   tree.put("output.file","test.txt");
   tree.put("output.compression",false);
 
-  pt::ptree subtree = tree.get_child("model");
-
-  pt::xml_writer_settings<char> xml_settings(' ',4);
-  //pt::xml_parser::write_xml(std::cout, subtree, xml_settings);
+  //pt::xml_parser::write_xml(std::cout, tree, pt::xml_writer_make_settings<pt::ptree::key_type>(' ',4) );
 
   //std::cout<< subtree.get<double>("parameters.alpha") << std::endl;
 }

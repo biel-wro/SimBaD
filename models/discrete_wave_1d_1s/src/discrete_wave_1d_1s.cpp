@@ -1,33 +1,32 @@
-#include "discrete_wave_1d_2s.hpp"
+#include "discrete_wave_1d_1s.hpp"
 
+#include "discrete_wave_1d_1s_impl.hpp"
+#include "particle.hpp"
 #include "simple_event_view.hpp"
 
-#include "discrete_wave_1d_2s_impl.hpp"
-#include "particle.hpp"
+BEGIN_NAMESPACE_DISCRETE_WAVE_1D_1S
 
-BEGIN_NAMESPACE_DISCRETE_WAVE_1D_2S
-
-discrete_wave_1d_2s::discrete_wave_1d_2s(double alpha, double intensity_cap,
+discrete_wave_1d_1s::discrete_wave_1d_1s(double alpha, double intensity_cap,
                                          std::size_t length, double x0,
                                          double spacing, std::size_t seed)
-    : impl(std::make_unique<discrete_wave_1d_2s_impl>(
+    : impl(std::make_unique<discrete_wave_1d_1s_impl>(
           alpha, intensity_cap, length, x0, spacing, seed)) {
   impl->initial_event();
 }
 
-discrete_wave_1d_2s::~discrete_wave_1d_2s() {}
+discrete_wave_1d_1s::~discrete_wave_1d_1s() {}
 
-void discrete_wave_1d_2s::generate_events(event_visitor visitor,
+void discrete_wave_1d_1s::generate_events(event_visitor visitor,
                                           size_t nevents) const {
-  CORE_NAMESPACE::simple_event_view<discrete_wave_1d_2s_impl::Event> event_view;
+  CORE_NAMESPACE::simple_event_view<discrete_wave_1d_1s_impl::Event> event_view;
   for (size_t i = 0; i < nevents; ++i) {
-    discrete_wave_1d_2s_impl::Event event = impl->next_event();
+    discrete_wave_1d_1s_impl::Event event = impl->next_event();
     event_view = event;
     visitor(event_view);
   }
 }
 
-std::size_t discrete_wave_1d_2s::configuration_size() const {
+std::size_t discrete_wave_1d_1s::configuration_size() const {
   uint64_t total_count = 0;
   for (std::size_t site_count : impl->get_counts())
     total_count += site_count;
@@ -43,7 +42,7 @@ struct particle_view : public CORE_NAMESPACE::particle {
 };
 }
 
-void discrete_wave_1d_2s::visit_configuration(particle_visitor v) const {
+void discrete_wave_1d_1s::visit_configuration(particle_visitor v) const {
   double spacing = impl->get_spacing();
   particle_view view;
   std::size_t siteno = 0;
@@ -57,4 +56,4 @@ void discrete_wave_1d_2s::visit_configuration(particle_visitor v) const {
   }
 }
 
-END_NAMESPACE_DISCRETE_WAVE_1D_2S
+END_NAMESPACE_DISCRETE_WAVE_1D_1S

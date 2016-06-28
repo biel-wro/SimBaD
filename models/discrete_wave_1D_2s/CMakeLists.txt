@@ -1,22 +1,18 @@
-set( MODEL_NAME discrete_wave_1D_2s )
+set( MODEL_NAME discrete_wave_1d_2s )
 set( TEST_NAME test_${MODEL_NAME} )
 
-
-file( GLOB_RECURSE HEADERS inc/*.hpp )  # workaround for headers in QtCreator
 include_directories( inc )
-
-set( MAIN_SOURCE
-    src/main.cpp
-)
+include_directories( ../templates/discrete_wave_1D )
 
 set( SOURCES
   src/discrete_wave_1d_2s.cpp
+  src/discrete_wave_1d_2s_factory.cpp
   src/discrete_wave_1d_2s_impl.cpp
 )
 
 add_library(${MODEL_NAME}_obj OBJECT ${SOURCES} ${HEADERS} )
 
-add_executable(${MODEL_NAME} $<TARGET_OBJECTS:${MODEL_NAME}_obj> ${MAIN_SOURCE})
+add_library(${MODEL_NAME} $<TARGET_OBJECTS:${MODEL_NAME}_obj>)
 target_link_libraries( ${MODEL_NAME}  ${LIBS} )
 
 

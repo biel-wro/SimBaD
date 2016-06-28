@@ -7,7 +7,7 @@
 
 BEGIN_NAMESPACE_FRONT_WAVE_1D
 
-class front_wave_1d_factory : public core::model_factory
+class front_wave_1d_factory : public simbad::core::model_factory
 {
 public:
   front_wave_1d_factory();

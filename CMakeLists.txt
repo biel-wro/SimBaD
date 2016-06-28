@@ -1,12 +1,11 @@
 project(SimBaD)
 cmake_minimum_required(VERSION 3.0)
 
-
 set( CLI_NAME cli )
 set( CORE_NAME core )
 set( GUI_NAME gui )
 set( MODELS_NAME models )
-
+set( MODEL_COMMON model_common )
 
 # C++11
 include(CheckCXXCompilerFlag)
@@ -28,14 +27,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
 
 message("compiler=" ${CMAKE_CXX_COMPILER})
 
-
 # linking
 if( WIN32 )
     set( IF_SHARED_LIBS " ")
 else()
     set( IF_SHARED_LIBS SHARED )
 endif()
-
 
 # Boost	
 if( WIN32 )
@@ -49,11 +46,10 @@ include_directories( ${Boost_INCLUDE_DIR} )
 
 enable_testing()
 
-
-
+file( GLOB_RECURSE ALL_HEADERS ./*.hpp )                            # workaround for headers in QtCreator
+add_custom_target(dummy_header_target SOURCES ${ALL_HEADERS})       #
 
 add_subdirectory(core)
-#add_subdirectory(cli)
+add_subdirectory(cli)
 #add_subdirectory(gui)
 add_subdirectory(models)
-

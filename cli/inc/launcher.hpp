@@ -1,7 +1,8 @@
 #ifndef LAUNCHER_H
 #define LAUNCHER_H
-namespace simbad{
-namespace cli{
+#include "cli_fwd.hpp"
+
+BEGIN_NAMEMESPACE_CLI
 
 class Launcher{
 public:
@@ -16,6 +17,5 @@ public:
     void launch();
 };
 
-}
-}
+END_NAMESPACE_CLI
 #endif

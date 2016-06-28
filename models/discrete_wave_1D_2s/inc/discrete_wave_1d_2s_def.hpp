@@ -1,5 +1,5 @@
-#ifndef INTEGRATED_WAVE_1D_HPP
-#define INTEGRATED_WAVE_1D_HPP
+#ifndef INTEGRATED_WAVE_1D_2S_HPP
+#define INTEGRATED_WAVE_1D_2S_HPP
 
 #define BEGIN_NAMESPACE_DISCRETE_WAVE_1D_2S                                       \
     namespace simbad                                                           \

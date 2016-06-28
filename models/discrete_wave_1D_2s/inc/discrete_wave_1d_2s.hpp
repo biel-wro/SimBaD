@@ -8,11 +8,10 @@
 
 BEGIN_NAMESPACE_DISCRETE_WAVE_1D_2S
 
-class discrete_wave_1d_2s : public CORE_NAMESPACE::model
-{
+class discrete_wave_1d_2s : public CORE_NAMESPACE::model {
 public:
   discrete_wave_1d_2s(double alpha, double intensity_cap, std::size_t length,
-                      double spacing, std::size_t seed);
+                      double x0, double spacing, std::size_t seed);
   ~discrete_wave_1d_2s();
   void generate_events(event_visitor visitor, size_t nevents) const override;
   std::size_t configuration_size() const override;

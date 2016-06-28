@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <random>
 
-#include <model.h>
+//#include <model.h>
 
 using int_board = simbad::core::board<int, 2>;
 using string_board = simbad::core::board<std::string, 2>;

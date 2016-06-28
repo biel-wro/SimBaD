@@ -1,6 +1,6 @@
 set(TARGET_NAME test_${CORE_NAME})
 
-set( TEST_MAIN_SOURCE core_test_main.cpp )
+set( TEST_MAIN_SOURCE test_main.cpp )
 
 set( TEST_SOURCES
   #test_fixed.cpp
@@ -14,7 +14,6 @@ set( TEST_SOURCES
   ut_simple_point_and_event.cpp
   ut_trackee.cpp
 )
-
 
 add_executable( ${TARGET_NAME} ${TEST_MAIN_SOURCE} ${TEST_SOURCES} )
 target_link_libraries( ${TARGET_NAME} ${CORE_NAME} ${LIBS} )

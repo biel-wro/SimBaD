@@ -1,8 +1,6 @@
-#include "launcher.h"
+#include "launcher.hpp"
 
-namespace simbad{
-namespace cli{
-
+BEGIN_NAMEMESPACE_CLI
 Launcher::Launcher(){}
 
 
@@ -10,5 +8,4 @@ void Launcher::launch(){
     (void) true;
 }
 
-}
-}
+END_NAMESPACE_CLI

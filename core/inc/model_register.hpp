@@ -14,8 +14,7 @@
 
 BEGIN_NAMESPACE_CORE
 
-class model_register
-{
+class model_register {
 public:
   // types
   using key_type = std::string;
@@ -25,12 +24,9 @@ public:
   using factory_map = std::unordered_map<key_type, mapped_type>;
   using factory_iterator = factory_map::const_iterator;
 
-  struct name_list
-  {
-    struct name_getter
-    {
-      key_type const &operator()(mapped_pair_type const &p) const
-      {
+  struct name_list {
+    struct name_getter {
+      key_type const &operator()(mapped_pair_type const &p) const {
         return p.first;
       }
     };
@@ -45,7 +41,7 @@ public:
     name_iterator m_beg, m_end;
   };
 
-  // memger functions
+  // member functions
   name_list get_model_names() const;
 
   model_factory &get_model_factory(std::string const &model_name);
@@ -59,6 +55,5 @@ private:
 };
 
 END_NAMESPACE_CORE
-
 
 #endif // MODEL_REGISTER_HPP
