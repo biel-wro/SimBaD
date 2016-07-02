@@ -34,7 +34,7 @@ template <class Factory> static void register_factory(model_register &reg) {
 #define SIMBAD_REGISTER_FACTORY(z, n, _ )                                       \
   register_factory<SIMBAD_MAKE_FACTORY_FULL_TYPE( SIMBAD_MODEL##n )>(reg);
 
-const model_register &get_buiildin_models() {
+const model_register &get_builtin_models() {
   static std::unique_ptr<model_register> p_reg(nullptr);
   if (!p_reg) {
     p_reg.reset(new model_register);

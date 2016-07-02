@@ -3,10 +3,13 @@ set( TARGET_NAME ${CORE_NAME} )
 include_directories( inc )
 
 set( SOURCES
+  src/argument_parser.cpp
   src/core.cpp
   src/event.cpp
   src/event_kind.cpp
   src/event_partial.cpp
+  src/launch_utils.cpp
+  src/properties.cpp
   src/model.cpp
   src/model_factory.cpp
   src/model_loader.cpp

@@ -2,9 +2,8 @@
 #define CLI_FWD_HPP
 
 #include "cli_def.hpp"
-BEGIN_NAMEMESPACE_CLI
+BEGIN_NAMESPACE_CLI
 
-class argument_parser;
 class launcher;
 
 END_NAMESPACE_CLI

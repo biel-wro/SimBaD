@@ -18,8 +18,7 @@ public:
   model_factory();
   virtual ~model_factory();
 
-  virtual std::unique_ptr<model>
-  create_instance(params const &mp) const = 0;
+  virtual std::unique_ptr<model> create_instance(params const &mp) const = 0;
   virtual std::string model_name() const = 0;
   virtual std::size_t dimension() const = 0;
 };

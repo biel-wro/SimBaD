@@ -8,7 +8,6 @@ include_directories( ${Boost_INCLUDE_DIR} )
 set( MAIN_SOURCE src/main.cpp)
 
 set(SOURCES
-  src/argument_parser.cpp
   src/launcher.cpp
 )
 
@@ -26,7 +25,6 @@ target_link_libraries( ${PROJECT_NAME} ${LIBS} )
 set( TEST_MAIN_SOURCE  test/test_main.cpp)
 
 set( TEST_SOURCES
-    test/ut_argument_parser.cpp
     test/ut_model_chooser.cpp
     )
 

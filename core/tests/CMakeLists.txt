@@ -4,6 +4,7 @@ set( TEST_MAIN_SOURCE test_main.cpp )
 
 set( TEST_SOURCES
   #test_fixed.cpp
+  ut_argument_parser.cpp
   ut_board.cpp
   ut_board_coords.cpp
   ut_board_tile.cpp

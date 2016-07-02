@@ -1,20 +1,20 @@
 #ifndef LAUNCHER_H
 #define LAUNCHER_H
+
 #include "cli_fwd.hpp"
+#include "core_fwd.hpp"
 
-BEGIN_NAMEMESPACE_CLI
+#include <boost/property_tree/ptree_fwd.hpp>
+#include <memory>
 
-class Launcher{
+BEGIN_NAMESPACE_CLI
+
+class Launcher {
 public:
-    Launcher();
 
-    Launcher( Launcher &) = delete;
-    Launcher( Launcher &&) = delete;
 
-    Launcher& operator=(Launcher &) = delete;
-    Launcher& operator=(Launcher &&) = delete;
+  Launcher();
 
-    void launch();
 };
 
 END_NAMESPACE_CLI

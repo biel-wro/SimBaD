@@ -8,6 +8,9 @@
 
 BEGIN_NAMESPACE_CORE
 
+class argument_parser;
+class properties;
+
 enum class EVENT_KIND : uint32_t;
 class event;
 class event_partial;

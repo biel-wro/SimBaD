@@ -44,7 +44,7 @@ public:
   // member functions
   name_list get_model_names() const;
 
-  model_factory &get_model_factory(std::string const &model_name);
+  //model_factory &get_model_factory(std::string const &model_name);
   model_factory const &get_model_factory(std::string const &model_name) const;
 
   bool register_factory(mapped_type f);
