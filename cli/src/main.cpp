@@ -43,7 +43,7 @@ int main(int argc, const char **argv) {
   size_t nevents = tree.get<size_t>("run.nevents");
 
   auto event_visitor = [](event const &e) {
-    std::cerr << e.time() << " " << e.coord(0, 0) << std::endl;
+    std::cout << e.time() << " " << e.coord(0, 0) << std::endl;
   };
 
   p_model->generate_events(event_visitor, nevents);
