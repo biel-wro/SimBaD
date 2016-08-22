@@ -1,20 +1,17 @@
-#ifndef FRONT_WAVE_1D_DEF_HPP
-#define FRONT_WAVE_1D_DEF_HPP
+#ifndef SIMPLE_EXP_2D_DEF_HPP
+#define SIMPLE_EXP_2D_DEF_HPP
 
-#define BEGIN_NAMESPACE_FRONT_WAVE_1D                                          \
+#define BEGIN_NAMESPACE_SIMPLE_EXP_2D                                          \
   namespace simbad                                                             \
   {                                                                            \
   namespace models                                                             \
   {                                                                            \
-  namespace front_wave_1d                                                      \
+  namespace simple_exp_2d                                                      \
   {
 
-#define END_NAMESPACE_FRONT_WAVE_1D                                            \
+#define END_NAMESPACE_SIMPLE_EXP_2D                                            \
   }                                                                            \
   }                                                                            \
   }
 
-#define USING_NAMEPSPACE_FRONT_WAVE_1D                                         \
-  using namespace simbad::models::front_wave_1d;
-
-#endif // FRONT_WAVE_1D_DEF_HPP
+#endif // SIMPLE_EXP_2D_DEF_HPP

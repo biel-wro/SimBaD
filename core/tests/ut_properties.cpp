@@ -34,11 +34,11 @@ BOOST_AUTO_TEST_CASE(ptree_experiments_arrays)
     tree.add("test.array","element1");
     tree.add("test.array","element2");
 
-    pt::write_xml( std::cout, tree, pt::xml_writer_make_settings<std::string>(' ',2) );
+    //pt::write_xml( std::cout, tree, pt::xml_writer_make_settings<char>(' ',2) );
 
     size_t counter = 0;
 
-    for( auto const &node : tree.get_child("array") )
+    for( auto const &node : tree.get_child("test") )
     {
         if( counter== 1)
             BOOST_REQUIRE_EQUAL(node.second.data(),"element2");

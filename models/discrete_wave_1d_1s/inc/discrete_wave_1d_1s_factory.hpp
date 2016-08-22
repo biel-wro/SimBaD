@@ -5,6 +5,7 @@
 #include "model_factory.hpp"
 
 BEGIN_NAMESPACE_DISCRETE_WAVE_1D_1S
+
 class discrete_wave_1d_1s_factory : public simbad::core::model_factory{
 public:
   discrete_wave_1d_1s_factory();
@@ -14,6 +15,7 @@ public:
   std::string model_name() const override;
   std::size_t dimension() const override;
 };
+
 END_NAMESPACE_DISCRETE_WAVE_1D_1S
 
 #endif // DISCRETE_WAVE_1D_1S_FACTORY_H

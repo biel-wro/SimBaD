@@ -30,4 +30,9 @@ std::string front_wave_1d_factory::model_name() const
 
 std::size_t front_wave_1d_factory::dimension() const { return 1; }
 
+std::unique_ptr<core::model_factory> get_factory()
+{
+  return std::unique_ptr<core::model_factory>(new front_wave_1d_factory);
+}
+
 END_NAMESPACE_FRONT_WAVE_1D

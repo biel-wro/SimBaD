@@ -1,0 +1,20 @@
+nevents 10
+model
+{
+  class discrete_wave_1d_2s
+  parameters
+  {
+    dispersion
+    {
+      alpha 2.8
+      x0 1
+    }
+    grid
+    {
+      spacing 1
+      length 20000
+    }
+    k 1
+    seed 0
+  }
+}

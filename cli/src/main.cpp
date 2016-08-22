@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 
+#include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 
@@ -16,7 +17,8 @@
 #include "model_register.hpp"
 #include "properties.hpp"
 
-int main(int argc, const char **argv) {
+int main(int argc, const char **argv)
+{
 
   using namespace std;
   using namespace boost::property_tree;
@@ -36,11 +38,19 @@ int main(int argc, const char **argv) {
   if (param_fname)
     prop.add_properties_auto(param_fname.get());
 
-  json_parser::write_json(std::cerr, tree);
+  std::string mode = tree.get<std::string>("mode");
+
+  if (mode == "print")
+  {
+    info_parser::write_info(std::cerr, tree);
+    return 0;
+  }
+  else if (mode != "run")
+    throw std::runtime_error("unrecognized mode \"" + mode + "\"");
 
   unique_ptr<model> p_model = load_model(tree.get_child("model"), reg);
 
-  size_t nevents = tree.get<size_t>("run.nevents");
+  size_t nevents = tree.get<size_t>("nevents");
 
   auto event_visitor = [](event const &e) {
     std::cout << e.time() << " " << e.coord(0, 0) << std::endl;
