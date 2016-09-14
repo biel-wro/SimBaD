@@ -13,6 +13,8 @@ set( TEST_SOURCES
   ut_power_law_distribution.cpp
   ut_properties.cpp
   ut_simple_point_and_event.cpp
+  ut_space.cpp
+  ut_tilers.cpp
   ut_trackee.cpp
 )
 

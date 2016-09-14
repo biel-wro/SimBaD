@@ -3,7 +3,7 @@
 
 #include <boost/intrusive/unordered_set.hpp>
 #include <boost/iterator.hpp>
-
+#include <boost/iterator/iterator_facade.hpp>
 namespace simbad
 {
 namespace core

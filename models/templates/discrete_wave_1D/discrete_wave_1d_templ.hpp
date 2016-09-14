@@ -16,8 +16,8 @@ namespace discrete_wave_1d {
 
 template <class Derived> class discrete_wave_1d_impl {
 public:
-  class Event : public core::simple_event<long, long, 1> {
-    using simple_event<long, long, 1>::simple_event;
+  class Event : public core::simple_event<double, long, 1> {
+    using simple_event<double, long, 1>::simple_event;
   };
 
   discrete_wave_1d_impl(double alpha, double intensity_cap, std::size_t length,

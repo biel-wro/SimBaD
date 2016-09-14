@@ -1,4 +1,4 @@
-#include "board_coordinates.hpp"
+#include "coordinates.hpp"
 #include "board_tile.hpp"
 
 #include <boost/test/auto_unit_test.hpp>
@@ -7,7 +7,7 @@
 #include <type_traits>
 
 
-using tile_coord_type = simbad::core::board_coordinates<int, 2>;
+using tile_coord_type = simbad::core::coordinates<int, 2>;
 using tile_type = simbad::core::board_tile<int, tile_coord_type>;
 
 BOOST_AUTO_TEST_CASE(board_tile_fill)

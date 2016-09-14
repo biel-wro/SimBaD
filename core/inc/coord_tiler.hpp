@@ -1,4 +1,0 @@
-#ifndef COORD_TILER_HPP
-#define COORD_TILER_HPP
-
-#endif // COORD_TILER_HPP
