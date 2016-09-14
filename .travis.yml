@@ -3,17 +3,15 @@ language: cpp
 compiler:
   - gcc
   - clang
-
-addons:
-  apt:
-    sources:
-      - sourceline: 'ppa:george-edison55/precise-backports'
-    packages:
-      - cmake
   
 before_script:
+  - mkdir ~/cmake
+  - cd ~/cmake
+  - wget http://www.cmake.org/files/v3.2/cmake-3.2.2-Linux-x86_64.tar.gz -O cmake.tar.gz --no-check-certificate
+  - tar -xzf cmake.tar.gz --strip-components 1
+  - cd $HOME
   - mkdir build
   - cd build
-  - cmake ..
+  - ~/cmake/bin/cmake ..
   
 script: make
