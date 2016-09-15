@@ -43,26 +43,26 @@ matrix:
             - clang-3.7
             - libboost-all-dev
       env: COMPILER=clang++-3.7              
-    - compiler: clang
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.8
-          packages:
-            - clang-3.8
-            - libboost-all-dev
-      env: COMPILER=clang++-3.8
-    - compiler: clang
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.9
-          packages:
-            - clang-3.9
-            - libboost-all-dev
-      env: COMPILER=clang++-3.9  
+#    - compiler: clang
+#      addons:
+#        apt:
+#          sources:
+#            - ubuntu-toolchain-r-test
+#            - llvm-toolchain-precise-3.8
+#          packages:
+#            - clang-3.8
+#            - libboost-all-dev
+#      env: COMPILER=clang++-3.8
+#    - compiler: clang
+#      addons:
+#        apt:
+#          sources:
+#            - ubuntu-toolchain-r-test
+#            - llvm-toolchain-precise-3.9
+#          packages:
+#            - clang-3.9
+#            - libboost-all-dev
+#      env: COMPILER=clang++-3.9  
             
 before_script:
 #  - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
@@ -74,6 +74,12 @@ before_script:
   - cd build
   
 script:
-  - cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make  
-  - ctest
+  - cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make && ctest
+  
+notifications:
+  email:
+    recipients:
+      - secure: "F0C5a1KsXGDgX7ylsgXJj8v7EWSrJuJyX5yEiEFwJt5iXv7Oc3UYX7SOarUA7slD+ywe66q+ZmnCLjwOqu8FEW47T8orCyL4Cko7gCqC0k+oyw1/7ji819p7k2oOUJ2NS8DO8olOqbJUZ02gq37efWP47wm5M7b+jGw3MoJUGWfX7am5aeSVxzEizQeSRnIU/nryh6oSwIjVFzIjDG3DNKTHAl09cEO1RjJYH9iY3w8pcGAVUvxrp8G41Wf2uw6lixM6hMSR3IKPhiWM+wfN+TJDjeN+sAgT4NWt/fUPgkjoGZS7BgOczDxIH5jDPC2qvtcdQQIuVDJlBjSJefqhcmDwkaI/WC3u3arocFnLYcTR/ZyPthlZBAQK0mvLQ27fcU8/4vjwokfVuccLq3nmVOK0A3nR0Mj92MOwwYk/ssU07HcRl6/PenaQAClOF/n5vLMANdM95UbLEkaMxy9Y75gKuX26MqG/7Pjx7YLZedYDePlt0ZjYry7niVeV6HO91TcAeqex+hWAotK9dr2cxD6YnwKJ5RwfTuPsUE3UR3R9HfoIAU8aNUUS5rkrr6QyigmjEFkDMLONC3kY4EyYaSaYL8ISTdc3tYbSz2b1Lev9MhVF1fGFyIqTfhVWun+6lS90r1lEtZo96nTgsYEN/56vQ97JtgYKwQjyT+SqJXQ="
+    on_success: always 
+    on_failure: always
       
