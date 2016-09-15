@@ -40,7 +40,7 @@ if( WIN32 )
  set(Boost_USE_MULTITHREADED ON)
 endif()
 
-find_package( Boost 1.55 COMPONENTS exception program_options REQUIRED )
+find_package( Boost 1.54 COMPONENTS exception program_options REQUIRED )
 add_definitions(-DBOOST_RESULT_OF_USE_DECLTYPE)
 include_directories( ${Boost_INCLUDE_DIR} )
 
