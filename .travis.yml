@@ -31,6 +31,7 @@ matrix:
             - llvm-toolchain-precise-3.6
           packages:
             - clang-3.6
+            - libboost-all-dev
       env: COMPILER=clang++-3.6
     - compiler: clang
       addons:
@@ -40,6 +41,7 @@ matrix:
             - llvm-toolchain-precise-3.7
           packages:
             - clang-3.7
+            - libboost-all-dev
       env: COMPILER=clang++-3.7              
     - compiler: clang
       addons:
@@ -49,6 +51,7 @@ matrix:
             - llvm-toolchain-precise-3.8
           packages:
             - clang-3.8
+            - libboost-all-dev
       env: COMPILER=clang++-3.8
     - compiler: clang
       addons:
@@ -58,6 +61,7 @@ matrix:
             - llvm-toolchain-precise-3.9
           packages:
             - clang-3.9
+            - libboost-all-dev
       env: COMPILER=clang++-3.9  
             
 before_script:
