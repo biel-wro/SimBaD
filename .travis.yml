@@ -16,6 +16,8 @@ before_script:
   - sudo apt-get update
   - sudo apt-get -y remove llvm-3.4
   - sudo apt-get install clang-3.9 lldb-3.9
+  - mkdir build
+  - cd build
   - cmake ..
   
 script: make
