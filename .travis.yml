@@ -4,7 +4,7 @@ sudo: required
 dist: trusty
 
 compiler:
-  - gcc
+  - clang
       
 before_script:
   - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
