@@ -3,7 +3,12 @@ language: cpp
 compiler:
   - gcc
   - clang
-  
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:boost-latest/ppa'
+    packages:
+      - boost1.55
 before_script:
   - SRC_DIR=$PWD
   - mkdir ~/cmake
