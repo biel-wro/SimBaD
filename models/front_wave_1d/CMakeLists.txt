@@ -30,3 +30,5 @@ set( TEST_SOURCES
 
 add_executable( ${TEST_NAME} ${TEST_SOURCES} ${SOURCES} )
 target_link_libraries( ${TEST_NAME} ${CORE_NAME} ${LIBS} )
+
+add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME} )

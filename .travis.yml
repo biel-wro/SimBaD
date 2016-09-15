@@ -3,16 +3,26 @@ language: cpp
 sudo: required
 dist: trusty
 
-compiler:
-  - gcc
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-5
-      - libboost-all-dev
-env: COMPILER=g++-5    
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+            - libboost-all-dev
+      env: COMPILER=g++-4.9
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+            - libboost-all-dev
+      env: COMPILER=g++-5
       
 before_script:
 #  - wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
@@ -25,4 +35,5 @@ before_script:
   
 script:
   - cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make  
+  - ctest
       
