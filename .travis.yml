@@ -23,7 +23,5 @@ before_script:
   - cd build
   
 script:
-  - cmake ..
-  - make
-  
+  - cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make  
       
