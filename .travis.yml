@@ -1,14 +1,16 @@
 language: cpp
 
+sudo: required
+dist: trusty
+
 compiler:
   - gcc
   - clang
 addons:
   apt:
-    sources:
-      - sourceline: 'ppa:boost-latest/ppa'
     packages:
-      - boost1.55
+      - libboost-all-dev
+      
 before_script:
   - SRC_DIR=$PWD
   - mkdir ~/cmake
