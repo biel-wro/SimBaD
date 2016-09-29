@@ -4,6 +4,7 @@
 #include <boost/functional/hash.hpp>
 #include <boost/operators.hpp>
 
+#include <algorithm>
 #include <array>
 #include <cstddef>
 #include <functional>
