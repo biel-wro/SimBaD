@@ -8,7 +8,10 @@ set( MAIN_SOURCE
 )
 
 set( SOURCES
-  src/particle.cpp
+  src/dispersion.cpp
+  src/kernel.cpp
+  src/particle_2d.cpp
+  src/saturation_intensity.cpp
   src/simple_exp_2d.cpp
   src/simple_exp_2d_factory.cpp
 )
@@ -22,7 +25,9 @@ set( TEST_MAIN_SOURCE
   test/test_main.cpp)
 
 set( TEST_SOURCES
+  test/ut_simple_exp_2d.cpp
   test/ut_simple_exp_2d_structures.cpp
+  test/ut_kernel.cpp
 )
 
 add_executable( ${TEST_NAME} ${TEST_MAIN_SOURCE}

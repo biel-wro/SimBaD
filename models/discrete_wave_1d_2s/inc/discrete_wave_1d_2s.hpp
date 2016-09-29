@@ -13,7 +13,7 @@ public:
   discrete_wave_1d_2s(double alpha, double intensity_cap, std::size_t length,
                       double x0, double spacing, std::size_t seed);
   ~discrete_wave_1d_2s();
-  void generate_events(event_visitor visitor, size_t nevents) const override;
+  void generate_events(event_visitor visitor, size_t nevents) override;
   std::size_t configuration_size() const override;
   void visit_configuration(particle_visitor v) const override;
 

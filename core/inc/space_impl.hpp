@@ -18,9 +18,18 @@ public:
   // dependent types
   using iterator = typename board_impl_type::iterator;
   /*
+   * constructors
+   */
+
+  explicit space_impl(coord_tiler tiler = coord_tiler())
+      : m_coord_tiler(tiler)
+  {
+  }
+
+  /*
    *  accessors
    */
-  std::size_t size() const { return board.size(); }
+  std::size_t size() const { return m_board.size(); }
 
   /*
    *  modifiers
@@ -29,14 +38,16 @@ public:
   iterator emplace(space_coords const &sc, Args... args)
   {
     board_coords bc(m_coord_tiler(sc));
-    board.emplace(bc, args...);
+    return m_board.emplace(bc, args...);
   }
 
   void remove(space_coords const &sc, T &v)
   {
     board_coords bc(m_coord_tiler(sc));
-    board.remove(bc, v);
+    m_board.remove(bc, v);
   }
+
+  void clear() { m_board.clear(); }
 
   /*
    * visitors
@@ -44,25 +55,45 @@ public:
   template <class Visitor>
   void visit(Visitor v = Visitor())
   {
-    board.visit(v);
+    m_board.visit(v);
   }
 
   template <class Visitor>
   void visit(Visitor v = Visitor()) const
   {
-    board.visit(v);
+    m_board.visit(v);
   }
 
   template <class Inc, class Visitor>
   void visit_region(Inc inc = Inc(), Visitor v = Visitor())
   {
-    board.visit_region(inc, v);
+    m_board.visit_region(inc, v);
   }
 
   template <class Inc, class Visitor>
   void visit_region(Inc inc = Inc(), Visitor v = Visitor()) const
   {
-    board.visit_region(inc, v);
+    m_board.visit_region(inc, v);
+  }
+
+  template <class Visitor>
+  void visit_box(space_coords const &cmin, space_coords const &cmax,
+                 Visitor v = Visitor())
+  {
+    board_coords rmin(m_coord_tiler(cmin));
+    board_coords rmax(m_coord_tiler(cmax));
+    coord_incrementer_box<board_coords> box_incrementer(rmin, rmax);
+    visit_region(box_incrementer, v);
+  }
+
+  template <class Visitor>
+  void visit_box(space_coords const &cmin, space_coords const &cmax,
+                 Visitor v = Visitor()) const
+  {
+    board_coords rmin(m_coord_tiler(cmin));
+    board_coords rmax(m_coord_tiler(cmax));
+    coord_incrementer_box<board_coords> box_incrementer(rmin, rmax);
+    visit_region(box_incrementer, v);
   }
 
   /*
@@ -71,7 +102,7 @@ public:
 
 protected:
   coord_tiler m_coord_tiler;
-  board_impl_type board;
+  board_impl_type m_board;
 };
 
 END_NAMESPACE_CORE

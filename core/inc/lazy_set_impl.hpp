@@ -241,6 +241,10 @@ public:
 
     --size_;
   }
+  void clear()
+  {
+    *this = LazySet_impl();
+  }
 
   /*
    * Visitors

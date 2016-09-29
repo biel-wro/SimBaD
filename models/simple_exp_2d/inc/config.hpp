@@ -4,6 +4,7 @@
 #include "simple_exp_2d_def.hpp"
 
 #include "coordinates.hpp"
+#include "scale_coord_tiler.hpp"
 
 BEGIN_NAMESPACE_SIMPLE_EXP_2D
 struct config
@@ -16,6 +17,10 @@ struct config
 
   using space_coords = simbad::core::coordinates<space_coord_scalar, dimension>;
   using board_coords = simbad::core::coordinates<board_coord_scalar, dimension>;
+
+  using coord_tiler =
+      simbad::core::scale_coord_tiler<space_coord_scalar, board_coord_scalar,
+                                      dimension>;
 };
 
 END_NAMESPACE_SIMPLE_EXP_2D

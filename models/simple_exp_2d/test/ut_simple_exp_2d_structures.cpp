@@ -1,7 +1,7 @@
 #include <boost/test/auto_unit_test.hpp>
 
 #include "config.hpp"
-#include "particle.hpp"
+#include "particle_2d.hpp"
 #include "simple_event_queue.hpp"
 
 using namespace simbad::models::simple_exp_2d;
@@ -34,6 +34,11 @@ BOOST_AUTO_TEST_CASE(particle_tracking)
 
   BOOST_REQUIRE((*h1).get_particle_ptr_as<particle>() == &p2 );
   BOOST_REQUIRE((*h2).get_particle_ptr_as<particle>() == &p1 );
+}
+
+BOOST_AUTO_TEST_CASE(from_property_tree)
+{
+
 }
 
 BOOST_AUTO_TEST_SUITE_END()

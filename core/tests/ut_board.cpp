@@ -21,6 +21,7 @@ BOOST_AUTO_TEST_CASE(board_init)
   int_board ib;
   string_board sb;
 
+  string_board sb2(std::move(sb));
   ib.begin();
 }
 

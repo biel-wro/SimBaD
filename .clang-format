@@ -5,9 +5,13 @@ BasedOnStyle: LLVM
 BreakBeforeBraces: Allman
 ColumnLimit: 80
 IndentWidth: 2
-AlwaysBreakTemplateDeclarations: true
-ConstructorInitializerAllOnOneLineOrOnePerLine: true
+AlwaysBreakTemplateDeclarations: false
+BinPackArguments: true
 BreakConstructorInitializersBeforeComma: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+#SpaceAfterTemplateKeyword: true
+SpaceBeforeParens: Never
 SpaceInEmptyParentheses: false
 SpacesInAngles: false
 SpacesInCStyleCastParentheses: false
@@ -15,5 +19,5 @@ SpacesInContainerLiterals: false
 SpacesInParentheses: false
 Standard: Cpp11
 TabWidth: 2
-...
+UseTab: Never
 

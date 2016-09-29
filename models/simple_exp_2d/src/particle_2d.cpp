@@ -1,8 +1,10 @@
-#include "particle.hpp"
+#include "particle_2d.hpp"
 
 BEGIN_NAMESPACE_SIMPLE_EXP_2D
 
-particle::particle(particle::queue_handle_type h) : self_base_type(std::move(h)) {}
+particle::particle(particle::queue_handle_type h) : self_base_type(std::move(h))
+{
+}
 
 particle::particle(particle::space_coords sc, particle::queue_handle_type h)
     : self_base_type(std::move(h)), m_coords(std::move(sc))
@@ -22,5 +24,15 @@ particle::queue_handle_type particle::get_handle() const
 particle::space_coords &particle::coords() { return m_coords; }
 
 const particle::space_coords &particle::coords() const { return m_coords; }
+
+density_accumulator &particle::get_density_accumulator()
+{
+  return m_density_accumulator;
+}
+
+const density_accumulator &particle::get_density_accumulator() const
+{
+  return m_density_accumulator;
+}
 
 END_NAMESPACE_SIMPLE_EXP_2D

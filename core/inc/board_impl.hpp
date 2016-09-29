@@ -95,7 +95,7 @@ public:
   {
     iter b, e;
     basic_region(iter beg, iter end) : b(beg), e(end) {}
-    iter begin() const{ return b; }
+    iter begin() const { return b; }
     iter end() const { return e; }
   };
 
@@ -110,17 +110,15 @@ private:
 public:
   board_impl(size_t bucket_count = MINIMAL_BUCKET_COUNT)
       : buckets(new bucket_type[bucket_count]),
-        tile_set(bucket_traits(buckets.get(), bucket_count))
+        tile_set(bucket_traits(buckets.get(), bucket_count)),
+        count(0)
   {
   }
   board_impl(board_impl const &) = delete;
   board_impl(board_impl &&) = default;
   board_impl &operator=(board_impl const &) = delete;
   board_impl &operator=(board_impl &&) = default;
-  ~board_impl()
-  {
-    tile_set.clear_and_dispose(std::default_delete<tile_type>());
-  }
+  ~board_impl() { clear(); }
   size_t bucket_count() const { return tile_set.bucket_count(); }
   std::size_t tile_count() const { return tile_set.size(); }
   void rehash(size_t new_bucket_count)
@@ -170,6 +168,12 @@ public:
     --count;
   }
 
+  void clear()
+  {
+    tile_set.clear_and_dispose(std::default_delete<tile_type>());
+    count = 0;
+  }
+
   size_type size() const { return count; }
   /*
    * Visitors
@@ -177,13 +181,15 @@ public:
   template <class Visitor>
   void visit(Visitor v = Visitor())
   {
-    std::for_each(tile_set.begin(), tile_set.end(), v);
+    for( tile_type &tile: tile_set)
+      tile.visit(v);
   }
 
   template <class ConstVisitor>
   void visit(ConstVisitor v = ConstVisitor()) const
   {
-    std::for_each(tile_set.begin(), tile_set.end(), v);
+    for( tile_type const &tile: tile_set)
+      tile.visit(v);
   }
 
   template <class Self, class Incrementer, class Visitor>

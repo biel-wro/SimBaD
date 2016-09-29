@@ -1,5 +1,5 @@
-#ifndef PARTICLE_HPP
-#define PARTICLE_HPP
+#ifndef CORE_PARTICLE_HPP
+#define CORE_PARTICLE_HPP
 
 #include "core_fwd.hpp"
 
@@ -14,4 +14,4 @@ public:
 
 };
 END_NAMESPACE_CORE
-#endif // PARTICLE_HPP
+#endif

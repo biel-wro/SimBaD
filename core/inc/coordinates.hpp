@@ -1,28 +1,33 @@
 #ifndef CORE_COORDINATES_HPP
 #define CORE_COORDINATES_HPP
 
-
 #include <boost/functional/hash.hpp>
 #include <boost/operators.hpp>
 
 #include <array>
 #include <cstddef>
+#include <functional>
+#include <numeric>
 #include <type_traits>
-namespace simbad
-{
-namespace core
-{
 
+#include "core_def.hpp"
+
+BEGIN_NAMESPACE_CORE
+
+// clang-format off
 template <class scalar_type_, size_t dimension_>
-struct coordinates
-    : public std::array<scalar_type_, dimension_>,
-      private boost::totally_ordered1<coordinates<scalar_type_, dimension_>>
+struct coordinates:
+    public std::array<scalar_type_, dimension_>,
+    boost::totally_ordered1<coordinates<scalar_type_, dimension_>,
+    boost::additive1<coordinates<scalar_type_, dimension_>,
+    boost::field_operators2<coordinates<scalar_type_, dimension_>,scalar_type_
+    >>>
+// clang-format on
 {
   static constexpr size_t dimension = dimension_;
   using scalar_type = scalar_type_;
 
   using base_array = std::array<scalar_type_, dimension_>;
-
 
   static constexpr bool is_discrete = std::is_integral<scalar_type>();
   /*
@@ -39,7 +44,7 @@ struct coordinates
 
   template <class coord_type, class tile_size_type>
   coordinates(std::array<coord_type, dimension> const &c,
-                    scalar_type const &tile_size)
+              scalar_type const &tile_size)
   {
     compute<coord_type, tile_size_type, dimension>(c, tile_size);
   }
@@ -83,14 +88,71 @@ struct coordinates
     return static_cast<base_array const &>(*this) <
            static_cast<base_array const &>(o);
   }
+  /*
+   * additive operators
+   */
+  coordinates operator+=(coordinates const &o)
+  {
+    for (size_t idx = 0; idx < dimension; ++idx)
+      this->operator[](idx) += o[idx];
+
+    return *this;
+  }
+
+  coordinates operator-=(coordinates const &o)
+  {
+    for (size_t idx = 0; idx < dimension; ++idx)
+      this->operator[](idx) -= o[idx];
+
+    return *this;
+  }
+
+  coordinates operator+=(scalar_type_ const &o)
+  {
+    std::for_each(this->begin(), this->end(), [&o](scalar_type &c) { c += o; });
+    return *this;
+  }
+
+  coordinates operator-=(scalar_type_ const &o)
+  {
+    std::for_each(this->begin(), this->end(), [&o](scalar_type &c) { c -= o; });
+    return *this;
+  }
+
+  coordinates operator*=(scalar_type_ const &o)
+  {
+    std::for_each(this->begin(), this->end(), [&o](scalar_type &c) { c *= o; });
+    return *this;
+  }
+  coordinates operator/=(scalar_type_ const &o)
+  {
+    std::for_each(this->begin(), this->end(), [&o](scalar_type &c) { c /= o; });
+    return *this;
+  }
+  /*
+   * other functions
+   */
+  static scalar_type distance_square(coordinates const &c1,
+                                     coordinates const &c2)
+  {
+    return std::inner_product(c1.begin(), c1.end(), c2.begin(), 0,
+                              std::plus<scalar_type>(),
+                              [](scalar_type const &s1, scalar_type const &s2) {
+                                return (s1 - s2) * (s1 - s2);
+                              });
+  }
+
+  scalar_type distance_square_to(coordinates const &o) const
+  {
+    return distance_square(*this, o);
+  }
 };
 
 struct coord_hasher
 {
 
   template <class board_coord_type, size_t DIM>
-  std::size_t
-  operator()(coordinates<board_coord_type, DIM> const &v) const
+  std::size_t operator()(coordinates<board_coord_type, DIM> const &v) const
   {
     return boost::hash_range(v.begin(), v.end());
   }
@@ -222,6 +284,6 @@ public:
 private:
   region_limit_type region_min, region_max;
 };
-}
-}
+END_NAMESPACE_CORE
+
 #endif

@@ -8,6 +8,10 @@ BEGIN_NAMESPACE_SIMPLE_EXP_2D
 class simple_exp_2d;
 class simple_exp_2d_factory;
 
+class dispersion;
+class kernel;
+class particle;
+
 END_NAMESPACE_SIMPLE_EXP_2D
 
 #endif // SIMPLE_EXP_2D_FWD_HPP

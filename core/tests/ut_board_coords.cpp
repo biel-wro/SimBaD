@@ -1,12 +1,12 @@
 #include <boost/test/auto_unit_test.hpp>
 
-
 #include <random>
 #include <type_traits>
 
 #include "coordinates.hpp"
 
 typedef simbad::core::coordinates<int, 2> tile_coord_type;
+using float_coord_type = simbad::core::coordinates<float, 3>;
 
 using wrapped_incrementer =
     simbad::core::coord_incrementer_wrapped<tile_coord_type>;
@@ -148,4 +148,11 @@ BOOST_AUTO_TEST_CASE(coord_go_and_back)
   }
   BOOST_TEST_CHECKPOINT("leaving the loop");
   BOOST_REQUIRE(!r);
+}
+BOOST_AUTO_TEST_CASE(distance)
+{
+  float_coord_type c1 = {1.0f, 2.0, 3};
+  float_coord_type c2 = { 3, 2.0, 1.0f };
+
+  BOOST_REQUIRE_CLOSE( c1.distance_square_to(c2), 8.0f,0.0001 );
 }

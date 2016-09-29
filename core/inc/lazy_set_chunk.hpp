@@ -3,6 +3,8 @@
 
 #include <boost/iterator/iterator_adaptor.hpp>
 
+#include "core_def.hpp"
+
 #include <algorithm>
 #include <algorithm>
 #include <array>
@@ -12,10 +14,7 @@
 #include <inttypes.h>
 #include <memory>
 
-namespace simbad
-{
-namespace core
-{
+BEGIN_NAMESPACE_CORE
 
 constexpr size_t DEFAULT_CHUNK_SIZE = 1000;
 
@@ -86,6 +85,13 @@ public:
     at(occupied - 1).~D();
     --occupied;
   }
+
+  void clear()
+  {
+    for (size_t occ = occupancy(); occ > 0; --occ)
+      pop_back();
+  }
+
   /*
    * status queries
    */
@@ -201,6 +207,7 @@ private:
   size_type occupied;
   array_type array;
 };
-}
-}
+
+END_NAMESPACE_CORE
+
 #endif

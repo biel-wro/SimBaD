@@ -40,86 +40,88 @@ public:
   using const_box_region = typename implementation::const_box_region;
 
 protected:
-  implementation impl;
+  implementation m_impl;
 
 public:
-  void rehash(size_t new_size) { impl.rehash(new_size); }
+  void rehash(size_t new_size) { m_impl.rehash(new_size); }
 
-  iterator begin() { return impl.begin(); }
+  iterator begin() { return m_impl.begin(); }
 
-  iterator end() { return impl.end(); }
+  iterator end() { return m_impl.end(); }
 
-  const_iterator begin() const { return impl.begin(); }
+  const_iterator begin() const { return m_impl.begin(); }
 
-  const_iterator end() const { return impl.end(); }
+  const_iterator end() const { return m_impl.end(); }
 
   box_region get_box(coordinates_type min, coordinates_type max)
   {
-    return impl.get_box(min, max);
+    return m_impl.get_box(min, max);
   }
 
   const_box_region get_box(coordinates_type min, coordinates_type max) const
   {
-    return impl.get_box(min, max);
+    return m_impl.get_box(min, max);
   }
 
   iterator iterator_to(coordinates_type const &cs, T const &v)
   {
-    return impl.iterator_to(cs, v);
+    return m_impl.iterator_to(cs, v);
   }
 
   const_iterator iterator_to(coordinates_type const &cs, T const &v) const
   {
-    return impl.iterator_to(cs, v);
+    return m_impl.iterator_to(cs, v);
   }
 
   template <class... Args>
   iterator emplace(coordinates_type const &c, Args... args)
   {
-    return impl.emplace(c, std::forward<Args>(args)...);
+    return m_impl.emplace(c, std::forward<Args>(args)...);
   }
 
-  void remove(coordinates_type const &c, T &v) { impl.remove(c, v); }
+  void remove(coordinates_type const &c, T &v) { m_impl.remove(c, v); }
 
-  size_type size() const { return impl.size(); }
+  void clear() { m_impl.clear(); }
+
+  size_type size() const { return m_impl.size(); }
 
   template <class Visitor>
   void visit(Visitor v = Visitor())
   {
-    impl.visit(v);
+    m_impl.visit(v);
   }
 
   template <class ConstVisitor>
   void visit(ConstVisitor v = ConstVisitor()) const
   {
-    impl.visit(v);
+    m_impl.visit(v);
   }
 
   template <class Incrementer, class Visitor>
   void visit_region(Incrementer inc = Incrementer(), Visitor v = Visitor())
   {
-    impl.visit_region(inc, v);
+    m_impl.visit_region(inc, v);
   }
 
   template <class Incrementer, class Visitor>
   void visit_region(Incrementer inc = Incrementer(),
                     Visitor v = Visitor()) const
   {
-    impl.visit_region(inc, v);
+    m_impl.visit_region(inc, v);
   }
 
   template <class Visitor>
   void visit_box(coordinates_type bmin, coordinates_type bmax,
                  Visitor v = Visitor())
   {
-    impl.visit_box(bmin, bmax, v);
+    m_impl.visit_box(bmin, bmax, v);
   }
 
   template <class ConstVisitor>
   void visit_box(coordinates_type bmin, coordinates_type bmax,
                  ConstVisitor v = ConstVisitor()) const
   {
-    impl.visit_box(bmin, bmax, v);
+    m_impl.visit_box(bmin, bmax, v);
   }
 };
 }

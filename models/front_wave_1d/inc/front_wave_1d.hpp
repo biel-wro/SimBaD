@@ -12,7 +12,7 @@ class front_wave_1d : public simbad::core::model
 {
 public:
   front_wave_1d(double alpha, double x0);
-  void generate_events(event_visitor visitor, size_t nevents) const override;
+  void generate_events(event_visitor visitor, size_t nevents) override;
   std::size_t configuration_size() const override;
   void visit_configuration(particle_visitor visitor) const override;
 

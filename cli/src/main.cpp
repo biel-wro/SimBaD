@@ -38,19 +38,15 @@ int main(int argc, const char **argv)
   if (param_fname)
     prop.add_properties_auto(param_fname.get());
 
-  std::string mode = tree.get<std::string>("mode");
+  boost::optional<const ptree&> simtree_opt = tree.get_child_optional("simulation");
 
-  if (mode == "print")
-  {
-    info_parser::write_info(std::cerr, tree);
-    return 0;
-  }
-  else if (mode != "run")
-    throw std::runtime_error("unrecognized mode \"" + mode + "\"");
+  if( !simtree_opt)
+    throw std::runtime_error("no simulation specified");
 
-  unique_ptr<model> p_model = load_model(tree.get_child("model"), reg);
+  ptree const &simtree = simtree_opt.get();
+  unique_ptr<model> p_model = load_model(simtree.get_child("model"), reg);
 
-  size_t nevents = tree.get<size_t>("nevents");
+  size_t nevents = simtree.get<size_t>("nevents");
 
   auto event_visitor = [](event const &e) {
     std::cout << e.time() << " " << e.coord(0, 0) << std::endl;

@@ -17,7 +17,7 @@ discrete_wave_1d_1s::discrete_wave_1d_1s(double alpha, double intensity_cap,
 discrete_wave_1d_1s::~discrete_wave_1d_1s() {}
 
 void discrete_wave_1d_1s::generate_events(event_visitor visitor,
-                                          size_t nevents) const {
+                                          size_t nevents) {
   CORE_NAMESPACE::simple_event_view<discrete_wave_1d_1s_impl::Event> event_view;
   for (size_t i = 0; i < nevents; ++i) {
     discrete_wave_1d_1s_impl::Event event = impl->next_event();

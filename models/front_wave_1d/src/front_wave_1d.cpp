@@ -10,7 +10,7 @@ front_wave_1d::front_wave_1d(double alpha, double x0 = 1.0)
 {
 }
 
-void front_wave_1d::generate_events(event_visitor visitor, size_t nevents) const
+void front_wave_1d::generate_events(event_visitor visitor, size_t nevents)
 {
   CORE_NAMESPACE::simple_event_view<front_wave_1d_impl::Event> event_view;
   for (size_t i = 0; i < nevents; ++i)

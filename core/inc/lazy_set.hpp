@@ -40,18 +40,18 @@ public:
   /*
    * Accessors
    */
-  reference_type front() { return *impl_.begin(); }
-  const_reference_type front() const { return *impl_.begin(); }
+  reference_type front() { return *m_impl.begin(); }
+  const_reference_type front() const { return *m_impl.begin(); }
 
   reference_type back()
   {
-    iterator it = impl_.end();
+    iterator it = m_impl.end();
     return *(--it);
   }
 
   const_reference_type back() const
   {
-    const_iterator it = impl_.end();
+    const_iterator it = m_impl.end();
     return *(--it);
   }
 
@@ -61,10 +61,10 @@ public:
   template <class... Args>
   iterator emplace_back(Args &&... args)
   {
-    return impl_.emplace_back(std::forward<Args>(args)...);
+    return m_impl.emplace_back(std::forward<Args>(args)...);
   }
 
-  void pop_back() { impl_.pop_back(); }
+  void pop_back() { m_impl.pop_back(); }
 
   void swap_and_delete(const_reference_type cref)
   {
@@ -72,11 +72,16 @@ public:
     pop_back();
   }
 
+  void clear()
+  {
+    m_impl.clear();
+  }
+
   /*
    * Status
    */
-  size_t size() const { return impl_.size(); }
-  bool empty() const { return 0 == impl_.size(); }
+  size_t size() const { return m_impl.size(); }
+  bool empty() const { return 0 == m_impl.size(); }
 
   /*
    * Visitors
@@ -85,32 +90,32 @@ public:
   template <class Visitor>
   void visit(Visitor v = Visitor())
   {
-    impl_.visit(v);
+    m_impl.visit(v);
   }
 
   template <class ConstVisitor>
   void visit(ConstVisitor v = ConstVisitor()) const
   {
-    impl_.visit(v);
+    m_impl.visit(v);
   }
 
   /*
    * Iterators
    */
-  iterator begin() { return impl_.begin(); }
+  iterator begin() { return m_impl.begin(); }
 
-  iterator end() { return impl_.end(); }
+  iterator end() { return m_impl.end(); }
 
-  const_iterator begin() const { return impl_.begin(); }
+  const_iterator begin() const { return m_impl.begin(); }
 
-  const_iterator end() const { return impl_.end(); }
+  const_iterator end() const { return m_impl.end(); }
 
-  iterator find(value_type const &v) { return impl_.find(v); }
+  iterator find(value_type const &v) { return m_impl.find(v); }
 
-  const_iterator find(value_type const &v) const { return impl_.find(v); }
+  const_iterator find(value_type const &v) const { return m_impl.find(v); }
 
 private:
-  impl impl_;
+  impl m_impl;
 };
 }
 }

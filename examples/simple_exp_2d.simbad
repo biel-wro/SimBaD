@@ -1,0 +1,40 @@
+simulation
+{
+  model
+  {
+    class simple_exp_2d
+    parameters
+    {
+      dispersion
+      {
+        sigma 1
+      }
+      interaction
+      {
+         sigma 1
+         gamma 2
+         tolerance 1e-6
+      }
+      saturation
+      {
+        sigma 10
+        gamma 2
+        scale 1
+      }
+      death
+      {
+        rate 0.1
+      }
+    
+      space
+      {
+        tile
+        {
+          size 1
+        }
+      }
+      seed 0
+    }
+  }
+  nevents 1000000
+}
