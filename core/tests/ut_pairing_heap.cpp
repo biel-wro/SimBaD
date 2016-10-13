@@ -144,14 +144,13 @@ BOOST_AUTO_TEST_CASE(sort)
 {
   int NNODES = 1000;
   std::vector<MyNode> nodes(NNODES);
-  std::for_each(nodes.begin(), nodes.end(), [](MyNode &n) { algo::init(&n); });
-
-  MyNode *root = nullptr;
 
   for(int i = 0; i < NNODES; ++i)
-    nodes[i] = MyNode(i);
+    nodes[i].t = i, algo::init(&nodes[i]);
 
-  std::shuffle(nodes.begin(), nodes.end(), std::mt19937_64());
+  std::mt19937_64 rng;
+  MyNode *root = nullptr;
+  std::shuffle(nodes.begin(), nodes.end(), rng);
 
   for(int i = 0; i < NNODES; ++i)
   {
@@ -194,7 +193,7 @@ BOOST_AUTO_TEST_CASE(remove_all)
   for(int i = 0; i < NNODES; ++i)
   {
     root = algo::remove(root, &nodes[i], MyCompare());
-    BOOST_REQUIRE_EQUAL(algo::count_nodes(root), NNODES-i-1);
+    BOOST_REQUIRE_EQUAL(algo::count_nodes(root), NNODES - i - 1);
     BOOST_REQUIRE(algo::check_heap_property<MyCompare>(root));
   }
 }
