@@ -90,9 +90,7 @@ BOOST_AUTO_TEST_CASE(merge_few_single)
 {
   int NNODES = 10;
   std::vector<MyNode> nodes(NNODES);
-  std::for_each(nodes.begin(),nodes.end(),[](MyNode &n){
-    algo::init(&n);
-  });
+  std::for_each(nodes.begin(), nodes.end(), [](MyNode &n) { algo::init(&n); });
 
   MyNode *root = nullptr;
   double mint = 100;
@@ -146,9 +144,7 @@ BOOST_AUTO_TEST_CASE(sort)
 {
   int NNODES = 1000;
   std::vector<MyNode> nodes(NNODES);
-  std::for_each(nodes.begin(),nodes.end(),[](MyNode &n){
-    algo::init(&n);
-  });
+  std::for_each(nodes.begin(), nodes.end(), [](MyNode &n) { algo::init(&n); });
 
   MyNode *root = nullptr;
 
@@ -174,6 +170,71 @@ BOOST_AUTO_TEST_CASE(sort)
 
     BOOST_REQUIRE_EQUAL(algo::count_nodes(root), NNODES - i - 1);
     assert(algo::check_heap_property<MyCompare>(root));
+    BOOST_REQUIRE(algo::check_heap_property<MyCompare>(root));
+  }
+
+  BOOST_REQUIRE(std::is_sorted(output.rbegin(), output.rend(), MyCompare()));
+}
+
+BOOST_AUTO_TEST_CASE(remove_all)
+{
+  int NNODES = 10;
+  std::vector<MyNode> nodes(NNODES);
+
+  for(int i = 0; i < NNODES; ++i)
+    nodes[i].t = i, algo::init(&nodes[i]);
+
+  std::mt19937_64 rng;
+  MyNode *root = nullptr;
+  std::shuffle(nodes.begin(), nodes.end(), rng);
+
+  for(MyNode &n : nodes)
+    root = algo::merge<MyCompare>(root, &n);
+
+  for(int i = 0; i < NNODES; ++i)
+  {
+    root = algo::remove(root, &nodes[i], MyCompare());
+    BOOST_REQUIRE_EQUAL(algo::count_nodes(root), NNODES-i-1);
+    BOOST_REQUIRE(algo::check_heap_property<MyCompare>(root));
+  }
+}
+
+BOOST_AUTO_TEST_CASE(full_update)
+{
+  int NNODES = 10;
+  std::vector<MyNode> nodes(NNODES);
+
+  for(int i = 0; i < NNODES; ++i)
+    nodes[i].t = i, algo::init(&nodes[i]);
+
+  std::mt19937_64 rng;
+  MyNode *root = nullptr;
+  std::shuffle(nodes.begin(), nodes.end(), rng);
+
+  for(MyNode &n : nodes)
+    root = algo::merge<MyCompare>(root, &n);
+
+  std::vector<int> updates(NNODES);
+  std::iota(updates.begin(), updates.end(), 0);
+  std::shuffle(updates.begin(), updates.end(), rng);
+
+  for(int i = 0; i < NNODES; ++i)
+  {
+    nodes[i].t = updates[i];
+    root = algo::update(root, &nodes[i], MyCompare());
+    BOOST_REQUIRE_EQUAL(algo::count_nodes(root), NNODES);
+    BOOST_REQUIRE(algo::check_heap_property<MyCompare>(root));
+  }
+
+  std::vector<MyNode> output;
+  for(int i = 0; i < NNODES; ++i)
+  {
+    output.push_back(*algo::top(root));
+    BOOST_REQUIRE_EQUAL(algo::count_nodes(root), NNODES - i);
+
+    root = algo::pop<MyCompare>(root);
+
+    BOOST_REQUIRE_EQUAL(algo::count_nodes(root), NNODES - i - 1);
     BOOST_REQUIRE(algo::check_heap_property<MyCompare>(root));
   }
 
