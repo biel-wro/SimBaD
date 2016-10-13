@@ -7,6 +7,7 @@
 
 #include <boost/test/auto_unit_test.hpp>
 #include <boost/heap/fibonacci_heap.hpp>
+#include <boost/heap/pairing_heap.hpp>
 #include <boost/heap/d_ary_heap.hpp>
 
 #include <array>

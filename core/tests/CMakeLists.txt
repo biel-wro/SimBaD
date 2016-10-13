@@ -5,11 +5,13 @@ set( TEST_MAIN_SOURCE test_main.cpp )
 set( TEST_SOURCES
   #test_fixed.cpp
   ut_argument_parser.cpp
+  ut_binary_tree.cpp
   ut_board.cpp
   ut_board_coords.cpp
   ut_board_tile.cpp
   ut_lazy_set.cpp
   ut_lazy_set_chunk.cpp
+  ut_pairing_heap.cpp
   ut_power_law_distribution.cpp
   ut_properties.cpp
   ut_simple_point_and_event.cpp
