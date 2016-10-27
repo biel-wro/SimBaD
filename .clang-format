@@ -2,15 +2,20 @@
 Language: Cpp
 BasedOnStyle: LLVM
 
-BreakBeforeBraces: Allman
-ColumnLimit: 80
-IndentWidth: 2
+AlignAfterOpenBracket: Align
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+
 AlwaysBreakTemplateDeclarations: false
 BinPackArguments: true
+BreakBeforeBraces: Allman
 BreakConstructorInitializersBeforeComma: false
+ColumnLimit: 80
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
+IndentWidth: 2
 KeepEmptyLinesAtTheStartOfBlocks: false
-#SpaceAfterTemplateKeyword: true
+#SpaceAfterTemplateKeyword: false
 SpaceBeforeParens: Never
 SpaceInEmptyParentheses: false
 SpacesInAngles: false

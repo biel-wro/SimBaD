@@ -1,8 +1,11 @@
 #include <boost/test/auto_unit_test.hpp>
 
+#include <functional>
+#include <iostream>
 #include <random>
 #include <type_traits>
 
+#include "coord_generators.hpp"
 #include "coordinates.hpp"
 
 typedef simbad::core::coordinates<int, 2> tile_coord_type;
@@ -12,6 +15,9 @@ using wrapped_incrementer =
     simbad::core::coord_incrementer_wrapped<tile_coord_type>;
 using infinite_incrementer =
     simbad::core::coord_incrementer_box<tile_coord_type>;
+
+using box_generator = simbad::core::coord_generator_box<tile_coord_type>;
+BOOST_AUTO_TEST_SUITE(coords)
 
 BOOST_AUTO_TEST_CASE(instantiate)
 {
@@ -37,7 +43,7 @@ BOOST_AUTO_TEST_CASE(coord_wrapped_simple_pass)
   wrapped_incrementer incrementer(rmin, rmax, bmin, bmax);
 
   BOOST_TEST_CHECKPOINT("entering the loop");
-  for (int i = 0; i < 36; i++)
+  for(int i = 0; i < 36; i++)
   {
     // std::cout<<tc[0] <<","<<tc[1]<<":"<<r<<std::endl;
 
@@ -69,7 +75,7 @@ BOOST_AUTO_TEST_CASE(coord_infinite_simple_pass)
   infinite_incrementer incrementer(rmin, rmax);
 
   BOOST_TEST_CHECKPOINT("entering the loop");
-  for (int i = 0; i < 36; i++)
+  for(int i = 0; i < 36; i++)
   {
     // std::cout<<tc[0] <<","<<tc[1]<<":"<<r<<std::endl;
 
@@ -100,7 +106,7 @@ BOOST_AUTO_TEST_CASE(coord_wrap_pass)
   wrapped_incrementer incrementer(rmin, rmax, bmin, bmax);
   bool r = true;
   BOOST_TEST_CHECKPOINT("entering the loop");
-  for (int i = 0; i < 36; i++)
+  for(int i = 0; i < 36; i++)
   {
     BOOST_REQUIRE(r);
     r = incrementer.next(tc);
@@ -126,7 +132,7 @@ BOOST_AUTO_TEST_CASE(coord_go_and_back)
   tc = rmin;
   bool r = true;
   BOOST_TEST_CHECKPOINT("entering the loop");
-  for (int i = 0; i < 36; i++)
+  for(int i = 0; i < 36; i++)
   {
     BOOST_REQUIRE(r);
     stack.push_back(tc);
@@ -138,7 +144,7 @@ BOOST_AUTO_TEST_CASE(coord_go_and_back)
   tc = rmax;
   r = true;
   BOOST_TEST_CHECKPOINT("entering the loop");
-  for (int i = 0; i < 36; i++)
+  for(int i = 0; i < 36; i++)
   {
     BOOST_REQUIRE(r);
     BOOST_REQUIRE(tc == stack.back());
@@ -149,10 +155,83 @@ BOOST_AUTO_TEST_CASE(coord_go_and_back)
   BOOST_TEST_CHECKPOINT("leaving the loop");
   BOOST_REQUIRE(!r);
 }
+
+BOOST_AUTO_TEST_CASE(box_coord_generator)
+{
+  tile_coord_type rmin{0, 0};
+  tile_coord_type rmax{4, 4};
+
+  box_generator gen(rmin, rmax);
+  std::vector<bool> visited(25, false);
+
+  while(!gen.is_end())
+  {
+    tile_coord_type c = *gen;
+    ++gen;
+    size_t tileno = c[0] + 5 * c[1];
+    BOOST_REQUIRE(!visited[tileno]);
+    visited[tileno] = true;
+  }
+
+  BOOST_REQUIRE(
+      std::all_of(visited.begin(), visited.end(), [](bool b) { return b; }));
+}
+
+BOOST_AUTO_TEST_CASE(box_coord_generator_bound_by_ref)
+{
+  tile_coord_type rmin{0, 0};
+  tile_coord_type rmax{4, 4};
+
+  box_generator gen(std::cref(rmin), std::cref(rmax));
+  std::vector<bool> visited(25, false);
+
+  while(!gen.is_end())
+  {
+    tile_coord_type c = *gen;
+    ++gen;
+    size_t tileno = c[0] + 5 * c[1];
+    BOOST_REQUIRE(!visited[tileno]);
+    visited[tileno] = true;
+  }
+
+  BOOST_REQUIRE(
+      std::all_of(visited.begin(), visited.end(), [](bool b) { return b; }));
+}
+
+BOOST_AUTO_TEST_CASE(wrapped_coord_generator)
+{
+  tile_coord_type rmin{0, 0};
+  tile_coord_type rmax{4, 4};
+  tile_coord_type bmin{4, 4};
+  tile_coord_type bmax{0, 0};
+
+  simbad::core::coord_generator_grid<tile_coord_type> gen(rmin, rmax, bmin,
+                                                          bmax);
+  std::vector<bool> visited(25, false);
+
+  int visited_count = 0;
+  while(!gen.is_end())
+  {
+    tile_coord_type c = *gen;
+    ++gen;
+    size_t tileno = c[0] + 5 * c[1];
+    BOOST_REQUIRE(!visited[tileno]);
+    visited[tileno] = true;
+    visited_count++;
+  }
+
+  BOOST_CHECK(visited[0]);
+  BOOST_CHECK(visited[4]);
+  BOOST_CHECK(visited[20]);
+  BOOST_CHECK(visited[24]);
+  BOOST_REQUIRE_EQUAL(visited_count, 4);
+}
+
 BOOST_AUTO_TEST_CASE(distance)
 {
   float_coord_type c1 = {1.0f, 2.0, 3};
-  float_coord_type c2 = { 3, 2.0, 1.0f };
+  float_coord_type c2 = {3, 2.0, 1.0f};
 
-  BOOST_REQUIRE_CLOSE( c1.distance_square_to(c2), 8.0f,0.0001 );
+  BOOST_REQUIRE_CLOSE(c1.distance_square_to(c2), 8.0f, 0.0001);
 }
+BOOST_AUTO_TEST_SUITE_END()

@@ -25,11 +25,10 @@ struct coordinates:
     >>>
 // clang-format on
 {
-  static constexpr size_t dimension = dimension_;
+  using dimension_type = std::size_t;
+  static constexpr dimension_type dimension = dimension_;
   using scalar_type = scalar_type_;
-
   using base_array = std::array<scalar_type_, dimension_>;
-
   static constexpr bool is_discrete = std::is_integral<scalar_type>();
   /*
    * Constructors
@@ -42,7 +41,6 @@ struct coordinates:
   }
 
   coordinates(base_array const &arr) : base_array(arr) {}
-
   template <class coord_type, class tile_size_type>
   coordinates(std::array<coord_type, dimension> const &c,
               scalar_type const &tile_size)
@@ -77,6 +75,11 @@ struct coordinates:
   }
 
   /*
+   * call operators
+   */
+  scalar_type const &operator()(size_t dim) const { return (*this)[dim]; }
+  scalar_type &operator()(size_t dim) { return (*this)[dim]; }
+  /*
    * comparison operators
    */
   bool operator==(coordinates const &o)
@@ -94,7 +97,7 @@ struct coordinates:
    */
   coordinates operator+=(coordinates const &o)
   {
-    for (size_t idx = 0; idx < dimension; ++idx)
+    for(size_t idx = 0; idx < dimension; ++idx)
       this->operator[](idx) += o[idx];
 
     return *this;
@@ -102,7 +105,7 @@ struct coordinates:
 
   coordinates operator-=(coordinates const &o)
   {
-    for (size_t idx = 0; idx < dimension; ++idx)
+    for(size_t idx = 0; idx < dimension; ++idx)
       this->operator[](idx) -= o[idx];
 
     return *this;
@@ -151,7 +154,6 @@ struct coordinates:
 
 struct coord_hasher
 {
-
   template <class board_coord_type, size_t DIM>
   std::size_t operator()(coordinates<board_coord_type, DIM> const &v) const
   {
@@ -179,19 +181,18 @@ public:
 
   region_limit_type first() const { return region_min; }
   region_limit_type last() const { return region_max; }
-
   inline bool next(coord_vector_type &coords) noexcept
   {
-    for (size_t i = 0; i < dimension; i++)
+    for(size_t i = 0; i < dimension; i++)
     {
       coord_scalar_type &c = coords[i];
 
-      if (c == board_max[i])
+      if(c == board_max[i])
       {
         c = board_min[i];
         return true;
       }
-      else if (c == region_max[i])
+      else if(c == region_max[i])
         c = region_min[i];
       else
       {
@@ -204,16 +205,16 @@ public:
 
   inline bool prev(coord_vector_type &coords) noexcept
   {
-    for (size_t i = 0; i < dimension; i++)
+    for(size_t i = 0; i < dimension; i++)
     {
       coord_scalar_type &c = coords[i];
 
-      if (c == board_min[i])
+      if(c == board_min[i])
       {
         c = board_max[i];
         return true;
       }
-      else if (c == region_min[i])
+      else if(c == region_min[i])
         c = region_max[i];
       else
       {
@@ -229,8 +230,7 @@ private:
   board_limit_type board_min, board_max;
 };
 
-template <class CV, class RL = CV>
-class coord_incrementer_box
+template <class CV, class RL = CV> class coord_incrementer_box
 {
 public:
   using coord_vector_type = CV;
@@ -247,14 +247,13 @@ public:
 
   region_limit_type first() const { return region_min; }
   region_limit_type last() const { return region_max; }
-
   inline bool next(coord_vector_type &coords) const noexcept
   {
-    for (size_t i = 0; i < dimension; i++)
+    for(size_t i = 0; i < dimension; i++)
     {
       coord_scalar_type &c = coords[i];
 
-      if (c >= region_max[i])
+      if(c >= region_max[i])
         c = region_min[i];
       else
       {
@@ -264,14 +263,13 @@ public:
     }
     return false;
   }
-
   inline bool prev(coord_vector_type &coords) const noexcept
   {
-    for (size_t i = 0; i < dimension; i++)
+    for(size_t i = 0; i < dimension; i++)
     {
       coord_scalar_type &c = coords[i];
 
-      if (c <= region_min[i])
+      if(c <= region_min[i])
         c = region_max[i];
       else
       {
@@ -285,6 +283,21 @@ public:
 private:
   region_limit_type region_min, region_max;
 };
+
 END_NAMESPACE_CORE
+
+namespace std
+{
+template <class scalar_type_, size_t dimension_>
+struct hash<simbad::core::coordinates<scalar_type_, dimension_>>
+{
+  using result_type = std::size_t;
+  using arg_type = simbad::core::coordinates<scalar_type_, dimension_>;
+  std::size_t operator()(arg_type const &c)
+  {
+    return boost::hash_range(c.begin(), c.end());
+  }
+};
+}
 
 #endif
