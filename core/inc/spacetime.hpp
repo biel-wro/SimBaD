@@ -13,7 +13,7 @@ spacetime<SpacetimeTraits>::spacetime(order_pred po, tiler tiler,
       m_nparticles(0),
       m_board(1024, std::move(tke), std::move(tkh),
               typename ordered_board_traits::data_order_pred(po),
-              typename ordered_board_traits::auto_rehash())
+              typename ordered_board_traits::rehash_watchdog())
 {
 }
 template <class Traits>

@@ -33,7 +33,7 @@ public:
   using key_equal_pred = typename ordered_board_traits::key_equal_pred;
   using key_hash_pred = typename ordered_board_traits::key_hash_pred;
   using data_order_pred = typename ordered_board_traits::data_order_pred;
-  using rehash_watchdog = typename ordered_board_traits::auto_rehash;
+  using rehash_watchdog = typename ordered_board_traits::rehash_watchdog;
 
   using node_hash_pred = ordered_board_node_hasher<key_hash_pred>;
   using node_equal_pred = ordered_board_node_equal<key_type, key_equal_pred>;
@@ -61,7 +61,7 @@ public:
   using bucket_type = typename tile_set_type::bucket_type;
   using bucket_traits = typename tile_set_type::bucket_traits;
 
-  using pairing_heap_algorithms = pairing_heap_algorithms<
+  using pairing_heap_algo = pairing_heap_algorithms<
       ordered_board_node_pairing_heap_traits<node_type>>;
 
   // Constructors

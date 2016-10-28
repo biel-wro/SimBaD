@@ -68,8 +68,8 @@ ordered_board<Traits>::emplace_dirty(Args &&... args)
   }
   node_pointer rptr = ptr.release();
 
-  pairing_heap_algorithms::init(rptr);
-  m_heap_root = pairing_heap_algorithms::merge(m_heap_root, rptr, m_order_pred);
+  pairing_heap_algo::init(rptr);
+  m_heap_root = pairing_heap_algo::merge(m_heap_root, rptr, m_order_pred);
   m_auto_rehash(*this);
   m_tile_list.push_back(*rptr);
   return dirty_handle_type(rptr);
@@ -80,7 +80,7 @@ template <class Traits> void ordered_board<Traits>::pop_dirty()
 {
   m_tile_set.erase(*m_heap_root);
   m_tile_list.erase(m_tile_list.iterator_to(*m_heap_root));
-  m_heap_root = pairing_heap_algorithms::pop(m_heap_root, m_order_pred);
+  m_heap_root = pairing_heap_algo::pop(m_heap_root, m_order_pred);
 }
 
 template <class Traits> void ordered_board<Traits>::remove(const_handle_type d)
@@ -93,7 +93,7 @@ void ordered_board<Traits>::remove_dirty(const_handle_type d)
   const_node_pointer ptr = &get_node_reference(d);
   m_tile_set.erase(ptr);
   m_tile_list.erase(ptr);
-  m_heap_root = pairing_heap_algorithms::remove(m_heap_root, ptr, m_order_pred);
+  m_heap_root = pairing_heap_algo::remove(m_heap_root, ptr, m_order_pred);
   delete ptr;
 }
 
@@ -219,16 +219,16 @@ template <class Traits> void ordered_board<Traits>::repair_order()
   m_heap_root = nullptr;
   for(node_reference ref : m_tile_set)
   {
-    pairing_heap_algorithms::init(&ref);
+    pairing_heap_algo::init(&ref);
     m_heap_root =
-        pairing_heap_algorithms::merge(m_heap_root, &ref, m_order_pred);
+        pairing_heap_algo::merge(m_heap_root, &ref, m_order_pred);
   }
 }
 
 template <class Traits>
 void ordered_board<Traits>::repair_order(const_handle_type v)
 {
-  m_heap_root = pairing_heap_algorithms::update(
+  m_heap_root = pairing_heap_algo::update(
       m_heap_root, get_dirty_handle(v).get_object_ptr(), m_order_pred);
 }
 

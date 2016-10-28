@@ -71,7 +71,7 @@ public:
 
     using key_hash_pred = tile_key_hash;
     using key_equal_pred = tile_key_equal;
-    using auto_rehash = auto_rehash<float>;
+    using rehash_watchdog = auto_rehash<float>;
   };
 
   using board_type = ordered_board<ordered_board_traits>;

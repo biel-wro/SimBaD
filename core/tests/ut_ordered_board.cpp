@@ -36,7 +36,7 @@ struct OrderedBoardTraits
   using key_hash_pred = coord_hasher;
   using key_equal_pred = std::equal_to<key_type>;
   using data_order_pred = queued_set_compare<ParticleOrder>;
-  using auto_rehash = auto_rehash<float>;
+  using rehash_watchdog = auto_rehash<float>;
 };
 
 using OrderedBoard = ordered_board<OrderedBoardTraits>;
