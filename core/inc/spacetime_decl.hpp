@@ -56,7 +56,7 @@ public:
   using dirty_subset_handle = typename subset_type::dirty_handle_type;
   using const_subset_handle = typename subset_type::const_handle_type;
 
-  using tiler = typename particle_traits::tiler;
+  //using tiler = typename particle_traits::tiler;
   using tile_key = typename particle_traits::tile_key;
   using tile_key_equal = typename particle_traits::tile_key_equal;
   using tile_key_hash = typename particle_traits::tile_key_hash;
@@ -84,7 +84,7 @@ public:
   using const_handle_type =
       spacetime_handle<const_tile_handle, const_subset_handle>;
 
-  spacetime(order_pred po = order_pred(), tiler t = tiler(),
+  spacetime(order_pred po = order_pred(), //tiler t = tiler(),
             tile_key_equal tke = tile_key_equal(),
             tile_key_hash tkh = tile_key_hash());
 
@@ -129,7 +129,7 @@ public:
 
 protected:
   order_pred m_order_pred;
-  tiler m_tiler;
+  //tiler m_tiler;
   size_type m_nparticles;
   board_type m_board;
 };

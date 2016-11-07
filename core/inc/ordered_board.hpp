@@ -134,8 +134,11 @@ template <class Traits>
 typename ordered_board<Traits>::const_handle_type
 ordered_board<Traits>::find(key_type const &key) const
 {
-  return *m_tile_set.find(key, m_key_hash_pred,
+  set_const_iterator it = m_tile_set.find(key, m_key_hash_pred,
                           node_equal_pred(m_key_equal_pred));
+  if(m_tile_set.end() == it)
+    return const_handle_type();
+  return const_handle_type(&*it);
 }
 template <class Traits>
 typename ordered_board<Traits>::dirty_handle_type
@@ -185,7 +188,7 @@ void ordered_board<Traits>::visit_region(KeyGen gen, Visitor visitor) const
   {
     const_handle_type handle = find(*gen);
     if(handle)
-      visitor(handle->get_data());
+      visitor(handle.get_data());
   }
 }
 template <class Traits>
@@ -196,7 +199,7 @@ void ordered_board<Traits>::visit_region_dirty(KeyGen gen, Visitor visitor)
   {
     dirty_handle_type handle = find(*gen);
     if(handle)
-      visitor(handle->get_data());
+      visitor(handle.get_data());
   }
 }
 template <class Traits>
@@ -209,7 +212,7 @@ void ordered_board<Traits>::visit_region_guarded_order(KeyGen gen,
     dirty_handle_type handle = find(*gen);
     if(!handle)
       continue;
-    visitor(handle->get_data());
+    visitor(handle.get_data());
     repair_order(handle);
   }
 }

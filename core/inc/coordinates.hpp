@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <cstddef>
 #include <functional>
 #include <numeric>
@@ -46,6 +47,23 @@ struct coordinates:
               scalar_type const &tile_size)
   {
     compute<coord_type, tile_size_type, dimension>(c, tile_size);
+  }
+
+  template <class coord_vector>
+  static coordinates from_indexed(coord_vector const &vec)
+  {
+    coordinates c;
+    for(size_t d = 0; d < dimension; ++d)
+      c[d] = vec[d];
+    return c;
+  }
+  template <class coord_vector>
+  static coordinates from_callable(coord_vector const &vec)
+  {
+    coordinates c;
+    for(size_t d = 0; d < dimension; ++d)
+      c[d] = vec(d);
+    return c;
   }
 
   /*
@@ -139,16 +157,28 @@ struct coordinates:
   static scalar_type distance_square(coordinates const &c1,
                                      coordinates const &c2)
   {
-    return std::inner_product(c1.begin(), c1.end(), c2.begin(), 0,
+    return std::inner_product(c1.begin(), c1.end(), c2.begin(), scalar_type(0),
                               std::plus<scalar_type>(),
                               [](scalar_type const &s1, scalar_type const &s2) {
                                 return (s1 - s2) * (s1 - s2);
                               });
   }
 
+  static scalar_type distance(coordinates const &c1, coordinates const &c2)
+  {
+    return std::inner_product(c1.begin(), c1.end(), c2.begin(), scalar_type(0),
+                              [](scalar_type const &c1, scalar_type const &c2) {
+                                return std::hypot(c1, c2);
+                              },
+                              std::minus<scalar_type>());
+  }
   scalar_type distance_square_to(coordinates const &o) const
   {
     return distance_square(*this, o);
+  }
+  scalar_type distance_to(coordinates const &o) const
+  {
+    return distance(*this, o);
   }
 };
 

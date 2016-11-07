@@ -6,10 +6,10 @@
 BEGIN_NAMESPACE_CORE
 
 template <class SpacetimeTraits>
-spacetime<SpacetimeTraits>::spacetime(order_pred po, tiler tiler,
+spacetime<SpacetimeTraits>::spacetime(order_pred po, //tiler tiler,
                                       tile_key_equal tke, tile_key_hash tkh)
     : m_order_pred(po),
-      m_tiler(tiler),
+      //m_tiler(tiler),
       m_nparticles(0),
       m_board(1024, std::move(tke), std::move(tkh),
               typename ordered_board_traits::data_order_pred(po),
@@ -25,7 +25,6 @@ spacetime<Traits>::emplace(tile_key const &tk, Args... args)
   dirty_subset_handle sh = h.get_subset_handle();
   dirty_tile_handle th = h.get_tile_handle();
   th->repair_order(sh, m_order_pred);
-  //  h.get_tile_handle()->repair_order(h.get_subset_handle());
   m_board.repair_order(h.get_tile_handle());
 
   return h;
@@ -150,7 +149,7 @@ template <class Traits>
 template <class KeyGenerator, class Visitor>
 void spacetime<Traits>::visit_region(KeyGenerator gen, Visitor v) const
 {
-  m_board.visit_region(gen, [v](subset_type &ss) { ss.visit(v); });
+  m_board.visit_region(gen, [v](subset_type const &ss) { ss.visit(v); });
 }
 template <class Traits>
 template <class KeyGenerator, class Visitor>

@@ -9,6 +9,7 @@ set( TEST_SOURCES
   ut_board.cpp
   ut_board_coords.cpp
   ut_board_tile.cpp
+  ut_cartesian_spacetime.cpp
   ut_lazy_set.cpp
   ut_lazy_set_chunk.cpp
   ut_ordered_board.cpp

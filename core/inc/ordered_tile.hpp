@@ -37,6 +37,8 @@ public:
   using data_type = Data;
   using data_reference = data_type &;
   using const_data_reference = data_type const &;
+  using data_pointer = Data *;
+  using const_data_pointer = Data const *;
 
   using unordered_set_hook = boost::intrusive::unordered_set_base_hook<>;
   using list_hook = boost::intrusive::list_base_hook<>;
@@ -78,7 +80,6 @@ private:
   ordered_board_node *m_left, *m_right;
 };
 
-
 template <class Node> class ordered_board_node_handle
 {
   struct enabler
@@ -88,23 +89,34 @@ template <class Node> class ordered_board_node_handle
 public:
   using tile_type = Node;
   using data_type = typename tile_type::data_type;
+  using data_reference =
+      typename std::conditional<std::is_const<tile_type>::value,
+                                typename tile_type::const_data_reference,
+                                typename tile_type::data_reference>::type;
+  using data_pointer =
+      typename std::conditional<std::is_const<tile_type>::value,
+                                typename tile_type::const_data_pointer,
+                                typename tile_type::data_pointer>::type;
   using key_type = typename tile_type::key_type;
+  using key_reference =
+      typename std::conditional<std::is_const<tile_type>::value,
+                                typename tile_type::const_key_reference,
+                                typename tile_type::key_reference>::type;
 
   explicit ordered_board_node_handle(tile_type *ptr = nullptr) : m_ptr(ptr) {}
   template <class OtherNode>
   ordered_board_node_handle(
       ordered_board_node_handle<OtherNode> const &ot,
-      typename std::enable_if<
-          std::is_convertible<OtherNode *, Node *>::value, enabler>::type =
-          enabler())
+      typename std::enable_if<std::is_convertible<OtherNode *, Node *>::value,
+                              enabler>::type = enabler())
       : ordered_board_node_handle(ot.get_object_ptr())
   {
   }
   Node *get_object_ptr() const { return m_ptr; }
-  data_type &get_data() const { return m_ptr->get_data(); }
-  key_type &get_key() const { return m_ptr->get_key(); }
-  data_type *operator->() const { return &m_ptr->get_data(); }
-  data_type &operator*() const { return m_ptr->get_data(); }
+  data_reference get_data() const { return m_ptr->get_data(); }
+  key_reference get_key() const { return m_ptr->get_key(); }
+  data_pointer operator->() const { return &m_ptr->get_data(); }
+  data_reference &operator*() const { return m_ptr->get_data(); }
   operator bool() const { return nullptr != m_ptr; }
 private:
   Node *m_ptr;
