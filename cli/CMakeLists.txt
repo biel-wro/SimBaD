@@ -31,3 +31,4 @@ set( TEST_SOURCES
 
 add_executable( ${PROJECT_NAME}_test ${TEST_MAIN_SOURCE} $<TARGET_OBJECTS:${PROJECT_NAME}_obj> ${TEST_SOURCES} )
 target_link_libraries( ${PROJECT_NAME}_test ${LIBS} )
+add_test(NAME adhesion_2d COMMAND ${PROJECT_NAME}_test )

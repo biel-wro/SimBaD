@@ -29,3 +29,4 @@ add_executable( ${TEST_NAME} ${TEST_MAIN_SOURCE}
   $<TARGET_OBJECTS:${MODEL_NAME}_obj> ${TEST_SOURCES} )
 
 target_link_libraries( ${TEST_NAME} ${LIBS} )
+add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME} )
