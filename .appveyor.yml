@@ -1,9 +1,8 @@
-# Operating system (build VM template)
-  
+
 image: Visual Studio 2015
 
 environment:
-  - BOOST_ROOT: C:\Libraries\boost_1_58_0
+  BOOST_ROOT: C:\Libraries\boost_1_58_0
 
 clone_folder: c:\SimBaD
 
