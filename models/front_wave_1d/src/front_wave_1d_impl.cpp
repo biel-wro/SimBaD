@@ -147,9 +147,9 @@ front_wave_1d_impl::Event front_wave_1d_impl::execute_birth()
   particle_1D &parent = *es.get_particle_ptr_as_nonconst<particle_1D>();
 
   double parent_x = parent.get_coordinate<0>();
-  double offspring_x = placer(rnd, parent_x);
+  float offspring_x = placer(rnd, parent_x);
 
-  event.set_coordinate(0, float(offspring_x));
+  event.set_coordinate(0, offspring_x);
 
   resample_event(parent);
   update_neighbourhood(event);

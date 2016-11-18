@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(LazySetChunk_iterators)
 
   for (unsigned i = 0; i < chk.length(); ++i, ++it)
   {
-    BOOST_CHECK_NE(it, chk.end());
+    BOOST_CHECK_NE(it-chk.begin(), chk.end() - chk.begin());
     BOOST_CHECK_EQUAL(*it, std::to_string(i));
   }
   BOOST_CHECK_EQUAL(it, chk.end());
