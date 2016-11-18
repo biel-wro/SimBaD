@@ -38,7 +38,7 @@ endif()
 # Boost	
 if( WIN32 )
  set(Boost_USE_STATIC_LIBS ON)
- set(Boost_USE_MULTITHREADED ON)
+ #set(Boost_USE_MULTITHREADED ON)
 endif()
 
 find_package( Boost 1.54 COMPONENTS exception program_options REQUIRED )
