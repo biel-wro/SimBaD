@@ -17,7 +17,7 @@ using my_tiler = scale_coord_tiler<space_coord_type, board_coord_type, dim>;
 
 BOOST_AUTO_TEST_CASE(tiler_simple_test)
 {
-  my_space_coordinates sc{123.4, -98.76};
+  my_space_coordinates sc{123.4f, -98.76f};
   my_tiler tiler(10);
   my_board_coordinates bc = tiler(sc);
   my_board_coordinates expected_result{12, -10};
@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(tiler_simple_test)
 
 BOOST_AUTO_TEST_CASE(tiler_small_coords)
 {
-  my_space_coordinates sc{0.4, -0.76};
+  my_space_coordinates sc{0.4f, -0.76f};
   my_tiler tiler(10);
   my_board_coordinates bc = tiler(sc);
   my_board_coordinates expected_result{0, -1};

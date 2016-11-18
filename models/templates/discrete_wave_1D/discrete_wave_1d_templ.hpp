@@ -31,7 +31,7 @@ public:
         intensity_cap(intensity_cap),
         grid_spacing(spacing),
         random_engine(seed),
-        birth_power_law(1.0, alpha),
+        birth_power_law(x0, alpha),
         grid_length(length),
         grid_count(grid_length, 0),
         birth_density(grid_length, 0.0),
@@ -59,14 +59,14 @@ public:
     time += waitinig_time_dist(random_engine);
 
     std::size_t birth_position =
-        double(static_cast<Derived *>(this)->sample_birth_pos(random_engine));
+        size_t(static_cast<Derived *>(this)->sample_birth_pos(random_engine));
 
     ++grid_count[birth_position];
 
     Event e(time, simbad::core::EVENT_KIND::BIRTH);
 
-    e.set_coordinate(
-        0, static_cast<Derived *>(this)->distance_from_origin(birth_position));
+    e.set_coordinate(0, long(static_cast<Derived *>(this)->distance_from_origin(
+                            birth_position)));
 
     static_cast<Derived *>(this)->update_birth_uncapped_density(e);
     static_cast<Derived *>(this)->recompute_birth_cumulated_density();
