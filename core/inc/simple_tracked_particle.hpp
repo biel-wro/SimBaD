@@ -64,8 +64,8 @@ public:
   template <size_t cdim>
   coord_type get_coordinate() const
   {
-    if (cdim >= DIM)
-      return coord_type(0);
+//    if (cdim >= DIM)
+//      return coord_type(0);
 
     return coords[cdim];
   }

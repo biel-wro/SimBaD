@@ -29,12 +29,12 @@ event_rate_accumulator::sample_event(std::mt19937_64 &r)
 
   if (death_time < birth_time)
   {
-    retval.first = death_time;
+    retval.first = float(death_time);
     retval.second = EVENT_KIND::DEATH;
   }
   else
   {
-    retval.first = birth_time;
+    retval.first = float(birth_time);
     retval.second = EVENT_KIND::BIRTH;
   }
 

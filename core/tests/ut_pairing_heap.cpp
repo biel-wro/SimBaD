@@ -1,6 +1,7 @@
 #include <boost/test/auto_unit_test.hpp>
 
 #include <algorithm>
+#include <numeric>
 #include <random>
 
 #include "heap/pairing_heap_algorithms.hpp"

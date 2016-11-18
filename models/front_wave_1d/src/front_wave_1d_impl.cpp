@@ -27,7 +27,7 @@ front_wave_1d_impl::front_wave_1d_impl(double alpha, double x0, std::size_t seed
 
 front_wave_1d_impl::~front_wave_1d_impl() { space.clear(); }
 
-void front_wave_1d_impl::seed(uint32_t s) { rnd.seed(s); }
+void front_wave_1d_impl::seed(uint64_t s) { rnd.seed(s); }
 
 void front_wave_1d_impl::clear() {}
 
@@ -72,7 +72,7 @@ void front_wave_1d_impl::resample_event(particle_1D &p)
   EventHandle h = p.get_handle();
   std::pair<float, EVENT_KIND> e = p.sample_event(rnd);
 
-  (*h).set_time(e.first + simulation_time());
+  (*h).set_time( float( e.first + simulation_time()) );
   (*h).set_event_kind(e.second);
   (*h).set_particle_ptr(&p);
 
@@ -83,7 +83,7 @@ void front_wave_1d_impl::full_update(particle_1D &p)
 {
   double center = p.coordinate(0);
 
-  for (particle_1D const &neighbour : get_neighbourhood(center))
+  for (particle_1D const &neighbour : get_neighbourhood(float(center)))
     p.update_accumulators(neighbour);
 
   resample_event(p);
@@ -115,7 +115,7 @@ void front_wave_1d_impl::init_event_queue()
 void front_wave_1d_impl::update_neighbourhood(const Event &e)
 {
   double center = e.coordinate(0);
-  spatial_neighbourhood neighbourhood = get_neighbourhood(center);
+  spatial_neighbourhood neighbourhood = get_neighbourhood(float(center));
   for (particle_1D &particle : neighbourhood)
   {
     particle.update_accumulators(e);
@@ -149,7 +149,7 @@ front_wave_1d_impl::Event front_wave_1d_impl::execute_birth()
   double parent_x = parent.get_coordinate<0>();
   double offspring_x = placer(rnd, parent_x);
 
-  event.set_coordinate(0, offspring_x);
+  event.set_coordinate(0, float(offspring_x));
 
   resample_event(parent);
   update_neighbourhood(event);
@@ -187,7 +187,7 @@ front_wave_1d_impl::Event front_wave_1d_impl::execute_death()
 
 spatial_neighbourhood front_wave_1d_impl::get_neighbourhood(float center)
 {
-  double range = particle_1D::interaction_range();
-  return spatial_neighbourhood(space, center, range);
+  float range = particle_1D::interaction_range();
+  return spatial_neighbourhood(space, float(center), range);
 }
 END_NAMESPACE_FRONT_WAVE_1D

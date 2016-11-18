@@ -15,8 +15,7 @@ double birth_rate_accumulator::get_density() const
 double birth_rate_accumulator::get_intensity() const
 {
   double density = get_density();
-  double saturation = s_saturation_level();
-  return std::min(1.0, saturation / density);
+  return std::min(1.0, s_saturation_level() / density);
 }
 
 int32_t birth_rate_accumulator::saturation_level() const
