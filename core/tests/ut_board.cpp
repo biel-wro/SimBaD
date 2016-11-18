@@ -1,7 +1,7 @@
 #include "board.hpp"
 #include "board_impl.hpp"
 #include "board_tile.hpp"
-#include "coordinates.hpp"
+#include "coordinates/coordinates.hpp"
 
 #include <boost/test/auto_unit_test.hpp>
 

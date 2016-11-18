@@ -1,4 +1,4 @@
-#include "particle.hpp"
+#include "interface/particle.hpp"
 
 BEGIN_NAMESPACE_CORE
 

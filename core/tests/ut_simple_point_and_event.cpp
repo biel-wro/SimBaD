@@ -1,6 +1,6 @@
-#include "trackee.hpp"
+#include "object_tracking/trackee.hpp"
+#include "object_tracking/handle_trackee.hpp"
 
-#include "handle_trackee.hpp"
 #include "simple_event_queue.hpp"
 #include "simple_event_schedule.hpp"
 #include "simple_tracked_particle.hpp"

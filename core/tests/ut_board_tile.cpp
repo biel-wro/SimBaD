@@ -1,4 +1,4 @@
-#include "coordinates.hpp"
+#include "coordinates/coordinates.hpp"
 #include "board_tile.hpp"
 
 #include <boost/test/auto_unit_test.hpp>

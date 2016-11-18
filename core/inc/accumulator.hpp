@@ -4,12 +4,14 @@
 #include <utility>
 
 BEGIN_NAMESPACE_CORE
-template <class Accumulated> class accumulator
+
+
+template <class Accumulated> class additive_accumulator
 {
 public:
   using accumulated_type = Accumulated;
 
-  explicit accumulator(accumulated_type initval = accumulated_type(0))
+  additive_accumulator(accumulated_type initval = accumulated_type(0))
       : m_acc(initval)
   {
   }
@@ -27,6 +29,7 @@ public:
   }
 
   accumulated_type current_value() const { return m_acc; }
+  operator accumulated_type() const { return m_acc; }
 protected:
   accumulated_type m_acc;
 };

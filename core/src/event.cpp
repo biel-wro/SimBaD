@@ -1,4 +1,4 @@
-#include "event.hpp"
+#include "interface/event.hpp"
 
 #include "event_kind.hpp"
 #include <ostream>

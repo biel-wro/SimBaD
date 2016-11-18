@@ -3,7 +3,7 @@
 #include "core_def.hpp"
 #include <algorithm>
 
-#include "coordinates.hpp"
+#include "coordinates/coordinates.hpp"
 
 BEGIN_NAMESPACE_CORE
 

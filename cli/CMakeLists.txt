@@ -26,6 +26,7 @@ set( TEST_MAIN_SOURCE  test/test_main.cpp)
 
 set( TEST_SOURCES
     test/ut_model_chooser.cpp
+    test/ut_snapshotting.cpp
     )
 
 add_executable( ${PROJECT_NAME}_test ${TEST_MAIN_SOURCE} $<TARGET_OBJECTS:${PROJECT_NAME}_obj> ${TEST_SOURCES} )

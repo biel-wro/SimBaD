@@ -2,7 +2,7 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-#include "model.hpp"
+#include "interface/model.hpp"
 #include "model_factory.hpp"
 #include "model_register.hpp"
 

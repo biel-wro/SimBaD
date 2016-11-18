@@ -5,6 +5,8 @@
 #include "model_factory.hpp"
 #include "model_register.hpp"
 
+
+
 #define SIMBAD_MAKE_MODEL_NAMESPACE(model_name) model_name
 
 #define SIMBAD_MAKE_FACTORY_TYPENAME(model_name) model_name##_factory

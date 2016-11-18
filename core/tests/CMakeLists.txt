@@ -15,6 +15,7 @@ set( TEST_SOURCES
   ut_ordered_board.cpp
   ut_pairing_heap.cpp
   ut_parent_from_member.cpp
+  ut_poisson_configuration.cpp
   ut_power_law_distribution.cpp
   ut_properties.cpp
   ut_simple_point_and_event.cpp

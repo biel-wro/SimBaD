@@ -2,9 +2,9 @@
 #define SIMPLE_EXP_2D_PARTICLE_HPP
 
 #include "config.hpp"
-#include "coordinates.hpp"
+#include "coordinates/coordinates.hpp"
 #include "density_accumulator.hpp"
-#include "handle_trackee.hpp"
+#include "object_tracking/handle_trackee.hpp"
 #include "simple_event_queue.hpp"
 #include "simple_exp_2d_fwd.hpp"
 

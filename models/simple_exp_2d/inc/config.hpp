@@ -3,8 +3,8 @@
 
 #include "simple_exp_2d_def.hpp"
 
-#include "coordinates.hpp"
-#include "scale_coord_tiler.hpp"
+#include "coordinates/coordinates.hpp"
+#include "coordinates/scale_coord_tiler.hpp"
 
 BEGIN_NAMESPACE_SIMPLE_EXP_2D
 struct config

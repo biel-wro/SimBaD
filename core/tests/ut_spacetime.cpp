@@ -1,9 +1,10 @@
-#include "spacetime.hpp"
+
 #include <boost/intrusive/unordered_set_hook.hpp>
 #include <boost/test/auto_unit_test.hpp>
 
-#include "coordinates.hpp"
-#include "scale_coord_tiler.hpp"
+#include "coordinates/coordinates.hpp"
+#include "coordinates/scale_coord_tiler.hpp"
+#include "spacetime/spacetime.hpp"
 
 using namespace simbad::core;
 namespace

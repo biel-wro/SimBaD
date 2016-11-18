@@ -2,7 +2,7 @@
 #define SIMPLE_PARTICLE_VIEW_HPP
 
 #include "core_fwd.hpp"
-#include "particle.hpp"
+#include "interface/particle.hpp"
 BEGIN_NAMESPACE_CORE
 
 template <class Particle>

@@ -2,7 +2,7 @@
 #define SIMPLE_EVENT_VIEW_HPP
 
 #include "core_fwd.hpp"
-#include "event.hpp"
+#include "interface/event.hpp"
 
 
 BEGIN_NAMESPACE_CORE

@@ -2,7 +2,7 @@
 #define BOARD_HPP
 
 #include "board_impl.hpp"
-#include "coordinates.hpp"
+#include "coordinates/coordinates.hpp"
 
 namespace simbad
 {

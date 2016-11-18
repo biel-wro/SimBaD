@@ -6,15 +6,12 @@
 #include <memory>
 #include <string>
 
-#include <boost/property_tree/ptree_fwd.hpp>
-
 BEGIN_NAMESPACE_CORE
 
 class model_factory
 {
 public:
-  using params = boost::property_tree::ptree;
-
+  using params = property_tree;
   model_factory();
   virtual ~model_factory();
 
@@ -24,4 +21,34 @@ public:
 };
 END_NAMESPACE_CORE
 
-#endif // MODEL_FACTORY_HPP
+#define SIMBAD_MAKE_MODEL_FACTORY(modelname, DIMENSION)                        \
+  namespace simbad                                                             \
+  {                                                                            \
+  namespace models                                                             \
+  {                                                                            \
+  namespace modelname                                                          \
+  {                                                                            \
+  class modelname##_factory : public simbad::core::model_factory               \
+  {                                                                            \
+  public:                                                                      \
+    modelname##_factory() {}                                                   \
+    ~modelname##_factory() override {}                                         \
+    std::unique_ptr<simbad::core::model>                                       \
+    create_instance(simbad::core::property_tree const &mp) const override      \
+    {                                                                          \
+      modelname *p_model = new modelname(mp);                                  \
+      return std::unique_ptr<simbad::core::model>(p_model);                    \
+    }                                                                          \
+    std::string model_name() const override { return #modelname; }             \
+    std::size_t dimension() const override { return DIMENSION; }               \
+  };                                                                           \
+  std::unique_ptr<simbad::core::model_factory> get_factory()                   \
+  {                                                                            \
+    return std::unique_ptr<simbad::core::model_factory>(                       \
+        new modelname##_factory);                                              \
+  }                                                                            \
+  }                                                                            \
+  }                                                                            \
+  }
+
+#endif

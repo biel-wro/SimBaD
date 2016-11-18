@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <boost/property_tree/ptree.hpp>
+#include "property_tree.hpp"
 
 #include "front_wave_1d.hpp"
 

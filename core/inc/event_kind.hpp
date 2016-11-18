@@ -1,5 +1,5 @@
-#ifndef EVENT_KIND_HPP
-#define EVENT_KIND_HPP
+#ifndef CORE_EVENT_KIND_HPP
+#define CORE_EVENT_KIND_HPP
 
 #include "core_fwd.hpp"
 
@@ -23,4 +23,4 @@ END_NAMESPACE_CORE
 
 std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek);
 
-#endif // EVENT_KIND_HPP
+#endif

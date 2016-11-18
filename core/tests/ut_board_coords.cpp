@@ -5,8 +5,8 @@
 #include <random>
 #include <type_traits>
 
-#include "coord_generators.hpp"
-#include "coordinates.hpp"
+#include "coordinates/coord_generators.hpp"
+#include "coordinates/coordinates.hpp"
 
 typedef simbad::core::coordinates<int, 2> tile_coord_type;
 using float_coord_type = simbad::core::coordinates<float, 3>;

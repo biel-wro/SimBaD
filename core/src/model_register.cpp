@@ -1,7 +1,8 @@
 //#define BOOST_RESULT_OF_USE_DECLTYPE
 
-#include "model_register.hpp"
 #include "model_factory.hpp"
+#include "model_register.hpp"
+
 
 BEGIN_NAMESPACE_CORE
 
@@ -25,7 +26,7 @@ const model_factory &
 model_register::get_model_factory(const std::string &name) const
 {
   factory_iterator it = factories.find(name);
-  if (factories.end() == it)
+  if(factories.end() == it)
     throw std::range_error(std::string("no module named ") + name +
                            " was found");
 

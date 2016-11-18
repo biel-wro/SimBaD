@@ -1,18 +1,18 @@
 #include <iostream>
 
-#include <boost/property_tree/ptree.hpp>
 #include <boost/test/auto_unit_test.hpp>
 
-#include "event.hpp"
+#include "interface/event.hpp"
 #include "event_kind.hpp"
-#include "model.hpp"
+#include "interface/model.hpp"
+#include "property_tree.hpp"
 #include "simple_exp_2d_factory.hpp"
 
 BOOST_AUTO_TEST_CASE(config_run)
 {
   simbad::models::simple_exp_2d::simple_exp_2d_factory factory;
 
-  boost::property_tree::ptree mp;
+  simbad::core::property_tree mp;
 
   mp.put("dispersion.sigma", 1);
 

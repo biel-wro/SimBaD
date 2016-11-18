@@ -1,5 +1,5 @@
-#include "uni_trackee.hpp"
-#include "ptr_updater.hpp"
+#include "object_tracking/uni_trackee.hpp"
+#include "object_tracking/ptr_updater.hpp"
 
 #include <boost/test/auto_unit_test.hpp>
 

@@ -3,9 +3,9 @@
 #include <boost/intrusive/unordered_set_hook.hpp>
 #include <boost/test/auto_unit_test.hpp>
 
-#include "coordinates.hpp"
-#include "ordered_board.hpp"
-#include "queued_set.hpp"
+#include "coordinates/coordinates.hpp"
+#include "spacetime/ordered_board.hpp"
+#include "spacetime/queued_set.hpp"
 
 using namespace simbad::core;
 

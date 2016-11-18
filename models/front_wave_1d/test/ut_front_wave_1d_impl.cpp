@@ -37,19 +37,19 @@ BOOST_AUTO_TEST_CASE(front_wave_1d_ordering)
 
 BOOST_AUTO_TEST_CASE(front_wave_1d_size_check)
 {
-    front_wave_1d_impl model(3,1);
+    front_wave_1d_impl model_pt(3,1);
     unsigned long niters = 1000;
 
-    int64_t nparticles = boost::numeric_cast<int64_t>(model.size());
+    int64_t nparticles = boost::numeric_cast<int64_t>(model_pt.size());
     for (unsigned long iter = 0; iter < niters; ++iter)
     {
-        auto event = model.next_event();
+        auto event = model_pt.next_event();
         EVENT_KIND event_kind = event.event_kind();
         if (event_kind == EVENT_KIND::BIRTH)
             nparticles++;
         if (event_kind == EVENT_KIND::DEATH)
             nparticles--;
         BOOST_CHECK_GT(nparticles, 0);
-        BOOST_REQUIRE_EQUAL(nparticles, model.size());
+        BOOST_REQUIRE_EQUAL(nparticles, model_pt.size());
     }
 }

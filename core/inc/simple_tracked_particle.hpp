@@ -8,10 +8,12 @@
 
 #include <boost/operators.hpp>
 
-#include "handle_trackee.hpp"
-#include "ptr_updater.hpp"
+#include "object_tracking/handle_trackee.hpp"
+#include "object_tracking/ptr_updater.hpp"
+#include "object_tracking/trackee.hpp"
+
 #include "simple_event_queue.hpp"
-#include "trackee.hpp"
+
 
 BEGIN_NAMESPACE_CORE
 // TODO should be derived from simple_particle

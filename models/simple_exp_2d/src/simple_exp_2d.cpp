@@ -3,14 +3,14 @@
 
 #include <boost/property_tree/ptree.hpp>
 
-#include "particle.hpp"
+#include "interface/particle.hpp"
 #include "simple_event_queue.hpp"
 #include "simple_event_schedule.hpp"
 
 #include "density_accumulator.hpp"
 #include "kernel.hpp"
 
-#include "event.hpp"
+#include "interface/event.hpp"
 
 BEGIN_NAMESPACE_SIMPLE_EXP_2D
 
@@ -128,6 +128,11 @@ struct my_particle_view : public simbad::core::particle
 }
 
 std::size_t simple_exp_2d::configuration_size() const { return m_space.size(); }
+
+std::size_t simple_exp_2d::dimension() const
+{
+  return 2;
+}
 void simple_exp_2d::visit_configuration(
     core::model::particle_visitor visitor) const
 {
@@ -135,6 +140,11 @@ void simple_exp_2d::visit_configuration(
     my_particle_view particle_view(p.coords());
     visitor(particle_view);
   });
+}
+
+void simple_exp_2d::read_configuration(const core::configuration_view &)
+{
+  assert(false);
 }
 
 void simple_exp_2d::set_configuration()

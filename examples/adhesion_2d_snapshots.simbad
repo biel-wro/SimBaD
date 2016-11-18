@@ -1,0 +1,53 @@
+snapshots
+{
+  model
+  {
+    class adhesion_2d
+    parameters
+    {
+      max_jump 0.001
+      time_steps
+      {
+        min 0
+        max inf
+      }
+      viscosity 0.1
+      diffusion 0.01
+      potential
+      {
+        depth 1
+        order 6
+        groundstate_location 1
+        tolerance 0.0001
+      }
+      space
+      {
+        tile_size 1
+      }
+      seed 0
+    }
+    initial_configuration
+    {
+      class poisson_configuration
+      parameters
+      {
+        dimension 2
+        lambda 10
+        ball true
+        radius 10
+        seed 0
+      }
+    }
+  }
+  time_step 0.1
+  max_steps 10
+  reader
+  {
+    class text_configuration_printer
+    parameters
+    {
+      output stdout
+    }
+    stream stdout
+  }
+}

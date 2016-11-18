@@ -1,15 +1,13 @@
 #ifndef BOARD_TILE_H
 #define BOARD_TILE_H
 
-#include "coordinates.hpp"
+#include "coordinates/coordinates.hpp"
 #include "lazy_set.hpp"
 
 #include <boost/intrusive/unordered_set_hook.hpp>
 
-namespace simbad
-{
-namespace core
-{
+BEGIN_NAMESPACE_CORE
+
 /*
  * Board Tile contains particles which belongs to some cube in space
  */
@@ -81,6 +79,6 @@ struct tile_hasher
     return coord_hasher()(tile.get_coords());
   }
 };
-}
-}
+
+END_NAMESPACE_CORE
 #endif // BOARD_TILE_H

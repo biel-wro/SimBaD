@@ -6,10 +6,10 @@
 #include "kernel.hpp"
 
 BEGIN_NAMESPACE_SIMPLE_EXP_2D
-class density_accumulator : public simbad::core::accumulator<float>
+class density_accumulator : public simbad::core::additive_accumulator<float>
 {
 public:
-  using base_type = simbad::core::accumulator<float>;
+  using base_type = simbad::core::additive_accumulator<float>;
   void include(kernel k,particle const &p1, particle const &p2)
   {
     base_type::include(k,p1,p2);

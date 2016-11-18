@@ -1,7 +1,8 @@
 #include "discrete_wave_1d_1s_factory.hpp"
 #include "discrete_wave_1d_1s.hpp"
 
-#include <boost/property_tree/ptree.hpp>
+#include "property_tree.hpp"
+
 BEGIN_NAMESPACE_DISCRETE_WAVE_1D_1S
 
 discrete_wave_1d_1s_factory::discrete_wave_1d_1s_factory() {}
