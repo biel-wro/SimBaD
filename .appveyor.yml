@@ -28,4 +28,5 @@ before_build:
   - cmd: dir
   
 
-build: off
+build:
+  project: SimBaD.sln
