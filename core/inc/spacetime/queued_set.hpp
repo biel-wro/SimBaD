@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <utility>
+#include <vector>
 
 BEGIN_NAMESPACE_CORE
 
