@@ -7,7 +7,10 @@ environment:
   BOOST_LIBRARYDIR_WIN64: C:\Libraries\boost_1_62_0\lib64-msvc-14.0
 
 platform: x64
-configuration: Release
+  
+configuration: 
+  - Debug
+  - Release
 
 branches:
   except:
@@ -30,3 +33,7 @@ before_build:
 
 build:
   project: C:\SimBaD\build\ALL_BUILD.vcxproj
+  parallel: true
+  
+matrix:
+  fast_finish: true
