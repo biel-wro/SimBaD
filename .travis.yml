@@ -5,7 +5,7 @@ dist: trusty
 
 branches:
   except:
-    - parameter_evolution
+    - parameter_evolution_3d
 
 matrix:
   include:
