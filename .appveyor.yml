@@ -4,15 +4,23 @@ image: Visual Studio 2015
 environment:
   BOOST_ROOT: C:\Libraries\boost_1_58_0
 
-clone_folder: c:\SimBaD
-
 platform: x64
 configuration: Release
 
+branches:
+  except:
+    - gh-pages
+
+clone_folder: c:\SimBaD
+
 before_build:
-  - echo Running cmake...
-  - cd c:\SimBaD
-  - cmake -G "Visual Studio 14 2015 Win64"
+  - cmd: cd C:\SimBaD
+  - cmd: md build
+  - cmd: cd build
+  # We generate project files for Visual Studio 12 because the boost binaries installed on the test server are for Visual Studio 12.
+  - cmd: if "%platform%"=="Win32" set CMAKE_GENERATOR_NAME=Visual Studio 14 2015
+  - cmd: if "%platform%"=="x64"   set CMAKE_GENERATOR_NAME=Visual Studio 14 2015 Win64
+  - cmd: cmake -G "%CMAKE_GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%configuration% -DBOOST_ROOT="%BOOST_ROOT%" -DBoost_USE_STATIC_LIBS="ON" 
   
 
 build_script:
