@@ -24,7 +24,6 @@ if( !msvc )
     -lm)
 endif()
 
-#subdirs(adhesion_2d)
 subdirs(common)
 
 subdirs(parameter_evolution_3d)

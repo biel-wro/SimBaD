@@ -37,7 +37,7 @@ build:
   verbosity: minimal
 
 test_script:
-  - ctest -C %configuration% --VV -output-on-failure
+  - ctest -C %configuration% --VV --output-on-failure
 
 matrix:
   fast_finish: true
