@@ -25,7 +25,7 @@ ordered_board<Traits>::ordered_board(size_type nbuckets, key_equal_pred equal,
 {
 }
 template <class Traits>
-void ordered_board<Traits>::ordered_board::rehash(size_type sz)
+void ordered_board<Traits>::ordered_board::rehash(size_type)
 {
   throw std::runtime_error("not implemented yet");
 }

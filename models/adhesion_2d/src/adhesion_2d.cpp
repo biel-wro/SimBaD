@@ -77,7 +77,7 @@ void adhesion_2d::generate_events(event_visitor v, size_type nevents)
   {
     if(m_spacetime.empty())
       return;
-    //print_nicely("entering loop");
+    // print_nicely("entering loop");
 
     // get next particle
     cell &particle_out = m_spacetime.top_dirty();
@@ -213,10 +213,11 @@ void adhesion_2d::update_time(cell &p) const
   double rt = std::sqrt(t);
   for(int i = 0; i < 10; ++i)
   {
-    double t = rt * rt, t2 = t * t;
+    double t1 = rt * rt;
+    double t2 = t1 * t1;
 
-    double val = acc * t2 / 2 + speed * t + diffusion * rt - max_dist;
-    double deriv = 2 * acc * rt * t + 2 * speed * rt + diffusion;
+    double val = acc * t2 / 2 + speed * t1 + diffusion * rt - max_dist;
+    double deriv = 2 * acc * rt * t1 + 2 * speed * rt + diffusion;
     rt -= val / deriv;
   }
   assert(rt > 0);
@@ -277,13 +278,12 @@ void adhesion_2d::resample_all()
     position_type const &center = p.position();
     p.acceleration() = acceleration_type(0);
     double radius = m_parameters.interaction_range();
-    m_spacetime.visit_ball(
-        center, radius, [this, &p](cell const &neighbor) {
-          if(std::addressof(p) == std::addressof(neighbor))
-            return;
-          acceleration_type acc = compute_acceleration(p, neighbor);
-          include(p, acc);
-        });
+    m_spacetime.visit_ball(center, radius, [this, &p](cell const &neighbor) {
+      if(std::addressof(p) == std::addressof(neighbor))
+        return;
+      acceleration_type acc = compute_acceleration(p, neighbor);
+      include(p, acc);
+    });
     update_time(p);
   });
 }

@@ -14,13 +14,13 @@ public:
   using board_coords = coordinates<board_scalar_type, DIM>;
   // using space_coords = coordinates<space_scalar_type, DIM>;
 
-  scale_coord_tiler(board_scalar_type tile_size = 1) : m_tile_size(tile_size) {}
+  scale_coord_tiler(space_scalar_type tile_size = 1) : m_tile_size(tile_size) {}
   template <class space_coord_vector>
   board_coords operator()(space_coord_vector const &scv) const
   {
     board_coords bc;
     for(size_t d = 0; d < DIM; ++d)
-      bc[d] = std::floor(scv[d] / m_tile_size);
+      bc[d] = board_scalar_type( std::floor(scv[d] / m_tile_size) );
     return bc;
   }
 

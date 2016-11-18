@@ -44,7 +44,7 @@ struct particle_view : public CORE_NAMESPACE::particle
 {
   double pos;
   std::size_t dimension() const override { return 1; }
-  double coord(std::size_t d) const override { return pos; }
+  double coord(std::size_t) const override { return pos; }
 };
 }
 
