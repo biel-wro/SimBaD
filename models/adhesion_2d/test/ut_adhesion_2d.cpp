@@ -12,7 +12,7 @@
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
-#include <boost/test/auto_unit_test.hpp>
+#include <boost/test/unit_test.hpp>
 
 #include <iostream>
 
@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(model_params_load)
 {
   property_tree params = make_test_model_parameters();
 
-  property_tree model_pt = make_test_model_properties();
+  property_tree model_pt = make_test_model_parameters();
   //xml_parser::write_xml(std::cout, static_cast<property_tree::super>(model_pt),
   //                      xml_writer_make_settings<ptree::key_type>(' ', 4));
   std::unique_ptr<model> ptr(reinterpret_cast<model *>(
@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE(particle_size_check)
 
 BOOST_AUTO_TEST_CASE(single_particle)
 {
-  adhesion_2d model(make_test_model_properties());
+  adhesion_2d model(make_test_model_parameters());
   poisson_configuration initial_configuration = make_initial_configuration(1);
   model.read_configuration(initial_configuration);
 

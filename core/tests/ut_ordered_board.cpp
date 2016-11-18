@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(one_nonempty_tile)
     board.emplace(BoardCoords{int(i), int(i)});
 
   OrderedHashSet &tile = *board.find_dirty(BoardCoords{6, 6});
-  tile.emplace(ParticleOrder(), 0, 0, 7);
+  tile.emplace(ParticleOrder(), 0.f, 0.f, 7.f);
   board.repair_order();
 
   BOOST_REQUIRE(!board.empty());

@@ -34,7 +34,7 @@ before_build:
 
 build:
   project: C:\SimBaD\build\ALL_BUILD.vcxproj
-  #parallel: true
-  #verbosity: minimal
+  parallel: true
+  verbosity: minimal
 matrix:
   fast_finish: true

@@ -50,7 +50,12 @@ if( WIN32 )
  set(Boost_USE_MULTITHREADED ON)
 endif()
 
-find_package( Boost 1.54 COMPONENTS exception program_options unit_test_framework REQUIRED )
+find_package( Boost 1.54 COMPONENTS
+  exception
+  program_options
+  #unit_test_framework
+REQUIRED )
+
 add_definitions(-DBOOST_RESULT_OF_USE_DECLTYPE)
 include_directories( ${Boost_INCLUDE_DIR} )
 
