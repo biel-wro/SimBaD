@@ -3,6 +3,7 @@ image: Visual Studio 2015
 
 environment:
   BOOST_ROOT: C:\Libraries\boost_1_58_0
+  BOOST_LIBRARYDIR: C:\Libraries\boost_1_59_0\lib32-msvc-14.0
 
 platform: x64
 configuration: Release
@@ -17,6 +18,7 @@ before_build:
   - cmd: cd C:\SimBaD
   - cmd: md build
   - cmd: cd build
+  - cmd: dir C:\Libraries\boost_1_59_0\
   # We generate project files for Visual Studio 12 because the boost binaries installed on the test server are for Visual Studio 12.
   - cmd: if "%platform%"=="Win32" set CMAKE_GENERATOR_NAME=Visual Studio 14 2015
   - cmd: if "%platform%"=="x64"   set CMAKE_GENERATOR_NAME=Visual Studio 14 2015 Win64
