@@ -26,7 +26,8 @@ std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek)
         using num_type =
             typename std::underlying_type<simbad::core::EVENT_KIND>::type;
         num_type val = static_cast<num_type>(ek);
-        throw std::runtime_error("bad enum of value " + std::to_string(val));
+        std::string msg = "bad enum of value " + std::to_string(val);
+        throw std::runtime_error(msg);
     }
 
     return o << str;

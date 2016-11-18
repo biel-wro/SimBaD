@@ -22,31 +22,28 @@ include(CheckCXXCompilerFlag)
 
 #set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "-std=c++14")
+message("compiler=" ${CMAKE_CXX_COMPILER})
+
 
 #warnings
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
+if( MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+else()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
+endif()
 
-message("compiler=" ${CMAKE_CXX_COMPILER})
 
 # linking
 if( WIN32 )
-    set( IF_SHARED_LIBS " ")
+  set( IF_SHARED_LIBS " ")
 else()
-    set( IF_SHARED_LIBS SHARED )
+  set( IF_SHARED_LIBS SHARED )
 endif()
 
 # Boost	
 if( WIN32 )
  set(Boost_USE_STATIC_LIBS ON)
  set(Boost_USE_MULTITHREADED ON)
- set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
-#   /wd4371 #packaging might have changed
-#   /wd4514 #unreference inline fun
-#   /wd4619 #no warning number xxxx
-#   /wd4668 #is not defined as a macro
-#   /wd4710 #function not inlined
-#   /wd4820 #padding
-
 endif()
 
 find_package( Boost 1.54 COMPONENTS exception program_options REQUIRED )
