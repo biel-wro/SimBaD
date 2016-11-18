@@ -4,7 +4,7 @@
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 
 struct model_parameters;
-class particle;
+class cell;
 class parameter_evolution_3d;
 
 END_NAMESPACE_PARAMETER_EVOLUTION_3D

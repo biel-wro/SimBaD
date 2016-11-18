@@ -7,7 +7,7 @@
 #include "event_kind.hpp"
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
-class particle
+class cell
 {
 public:
   using coord_scalar = float;
@@ -21,15 +21,15 @@ public:
     float m_birth_coef;
     float m_interaction_coef;
   };
-  particle();
-  ~particle();
+  cell();
+  ~cell();
 
   coords const &get_coords() const;
   float get_time() const;
   EVENT_KIND get_event_kind() const;
 
-  void include_interaction(particle const &p, model_parameters const &mp);
-  void exclude_interaction(particle const &p, model_parameters const &mp);
+  void include_interaction(cell const &p, model_parameters const &mp);
+  void exclude_interaction(cell const &p, model_parameters const &mp);
 
   intrinsic_params &get_params();
   intrinsic_params const &get_params() const;

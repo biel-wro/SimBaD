@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_CASE(empty)
 
 BOOST_AUTO_TEST_CASE(particle_size_check)
 {
-  BOOST_REQUIRE_EQUAL( sizeof(particle), 4*sizeof(float) + 4*sizeof(float) );
+  BOOST_REQUIRE_EQUAL( sizeof(cell), 4*sizeof(float) + 4*sizeof(float) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

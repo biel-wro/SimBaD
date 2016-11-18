@@ -21,7 +21,7 @@ public:
   void visit_configuration(particle_visitor) const override;
 
 protected:
-  void resample_event(particle &p);
+  void resample_event(cell &p);
   void generate_event(event_visitor v);
   void execute_death(event_visitor v);
   void execute_birth(event_visitor v);

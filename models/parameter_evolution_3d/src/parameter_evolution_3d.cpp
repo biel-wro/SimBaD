@@ -31,9 +31,9 @@ void parameter_evolution_3d::visit_configuration(particle_visitor) const
   throw std::runtime_error("not implemented yet");
 }
 
-void parameter_evolution_3d::resample_event(particle &p)
+void parameter_evolution_3d::resample_event(cell &p)
 {
-  particle::intrinsic_params const &intinisc_params = p.get_params();
+  cell::intrinsic_params const &intinisc_params = p.get_params();
 
 }
 
@@ -41,17 +41,17 @@ void parameter_evolution_3d::generate_event(event_visitor v)
 {
   switch(m_spacetime.top().get_event_kind())
   {
-  case particle::EVENT_KIND::BIRTH: execute_birth(v); break;
-  case particle::EVENT_KIND::DEATH: execute_birth(v); break;
+  case cell::EVENT_KIND::BIRTH: execute_birth(v); break;
+  case cell::EVENT_KIND::DEATH: execute_birth(v); break;
   default: throw std::runtime_error("empty event in queue");
   }
 }
 
 void parameter_evolution_3d::execute_death(event_visitor v)
 {
-  particle const &p = m_spacetime.top();
+  cell const &p = m_spacetime.top();
 
-  auto neighbor_visitor = [&p](particle &neighbor) {
+  auto neighbor_visitor = [&p](cell &neighbor) {
     //neighbor.exclude_interaction(p);
     //neighbor.resample_event();
   };
