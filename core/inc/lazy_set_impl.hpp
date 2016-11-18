@@ -35,7 +35,10 @@ class LazySetIterator_
           boost::bidirectional_traversal_tag // travelsal type
           >
 {
-  using value_type = typename std::remove_const<D_>::type;
+  struct enabler
+  {
+  }; // for std::enable_if
+
   static constexpr bool is_const = std::is_const<D_>::value;
   using node_type = Node;
   using inner_iter =
@@ -45,13 +48,11 @@ class LazySetIterator_
   using outer_iter =
       typename std::conditional<is_const, typename list_type::const_iterator,
                                 typename list_type::iterator>::type;
-
+public:
+  using value_type = typename std::remove_const<D_>::type;
   using size_type = size_t;
 
-  struct enabler
-  {
-  }; // for std::enable_if
-public:
+
   LazySetIterator_() : oit(), idx(0) {}
 
   LazySetIterator_(outer_iter oit, size_type idx) : oit(oit), idx(idx) {}

@@ -5,7 +5,6 @@
 
 #include <iosfwd>
 
-
 BEGIN_NAMESPACE_CORE
 
 

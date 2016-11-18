@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <string>
 #include <type_traits>
 
 std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek)

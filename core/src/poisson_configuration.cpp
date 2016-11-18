@@ -2,7 +2,7 @@
 #include "interface/particle.hpp"
 
 #include <cmath>
-//#include <functional>
+#include <numeric>
 BEGIN_NAMESPACE_CORE
 
 namespace
