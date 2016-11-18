@@ -4,7 +4,7 @@
 BEGIN_NAMESPACE_ADHESION_2D
 
 struct model_parameters;
-class particle;
+class cell;
 class adhesion_2d;
 
 END_NAMESPACE_ADHESION_2D

@@ -32,19 +32,19 @@ public:
   double time() const;
 
 protected:
-  using position_type = particle::position_type;
-  using velocity_type = particle::velocity_type;
-  using acceleration_type = particle::acceleration_type;
+  using position_type = cell::position_type;
+  using velocity_type = cell::velocity_type;
+  using acceleration_type = cell::acceleration_type;
 
-  acceleration_type compute_acceleration(particle const &p1,
-                                         particle const &p2) const;
+  acceleration_type compute_acceleration(cell const &p1,
+                                         cell const &p2) const;
   velocity_type viscosus_velocity(double dt, velocity_type v) const;
 
-  void update_time(particle &p) const;
-  void include(particle &p, acceleration_type const &acc) const;
-  void exclude(particle &p, acceleration_type const &acc) const;
-  void include_all_twosided(particle &p);
-  void exclude_all_onesided(const particle &particle_tmp);
+  void update_time(cell &p) const;
+  void include(cell &p, acceleration_type const &acc) const;
+  void exclude(cell &p, acceleration_type const &acc) const;
+  void include_all_twosided(cell &p);
+  void exclude_all_onesided(const cell &particle_tmp);
   void resample_all();
 
 private:

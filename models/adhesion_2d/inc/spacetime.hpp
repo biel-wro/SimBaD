@@ -10,7 +10,7 @@
 BEGIN_NAMESPACE_ADHESION_2D
 struct spacetime_traits
 {
-  using particle = particle;
+  using particle = cell;
   struct ordering
   {
     bool operator()(particle const &p1, particle const &p2) const

@@ -28,13 +28,13 @@ namespace
 class event_view : public simbad::core::event
 {
 public:
-  explicit event_view(particle const *ptr = nullptr,
-                      particle::position_type const *newpos_ptr = nullptr)
+  explicit event_view(cell const *ptr = nullptr,
+                      cell::position_type const *newpos_ptr = nullptr)
       : m_particle_ptr(ptr), m_newpos_ptr(newpos_ptr)
   {
   }
   double time() const override { return m_particle_ptr->event_time(); }
-  std::size_t dimension() const override { return particle::dimension; }
+  std::size_t dimension() const override { return cell::dimension; }
   std::size_t npartials() const override { return 2; }
   core::EVENT_KIND partial_type(std::size_t partialno) const override
   {
@@ -54,8 +54,8 @@ public:
   }
 
 private:
-  particle const *m_particle_ptr;
-  particle::position_type const *m_newpos_ptr;
+  cell const *m_particle_ptr;
+  cell::position_type const *m_newpos_ptr;
 };
 }
 
@@ -80,7 +80,7 @@ void adhesion_2d::generate_events(event_visitor v, size_type nevents)
     //print_nicely("entering loop");
 
     // get next particle
-    particle &particle_out = m_spacetime.top_dirty();
+    cell &particle_out = m_spacetime.top_dirty();
 
     // update global clock
     m_time = particle_out.event_time();
@@ -108,7 +108,7 @@ void adhesion_2d::generate_events(event_visitor v, size_type nevents)
     v(view);
 
     // create new temparary particle
-    particle particle_tmp(new_position, velocity);
+    cell particle_tmp(new_position, velocity);
     m_spacetime.pop();
 
     // exclude all interactions
@@ -136,7 +136,7 @@ adhesion_2d::size_type adhesion_2d::configuration_size() const
 void adhesion_2d::visit_configuration(particle_visitor v) const
 {
   particle_view view;
-  m_spacetime.visit([this, v, &view](const particle &p) {
+  m_spacetime.visit([this, v, &view](const cell &p) {
     view.set_orig(&p);
     v(view);
   });
@@ -149,7 +149,7 @@ void adhesion_2d::read_configuration(const configuration_view &configuration)
   m_spacetime.clear();
 
   configuration.visit_configuration([this](simbad::core::particle const &p) {
-    m_spacetime.insert_dirty(particle(position_type{p.coord(0), p.coord(1)}));
+    m_spacetime.insert_dirty(cell(position_type{p.coord(0), p.coord(1)}));
   });
 
   m_time = 0;
@@ -157,7 +157,7 @@ void adhesion_2d::read_configuration(const configuration_view &configuration)
 }
 double adhesion_2d::time() const { return m_time; }
 adhesion_2d::acceleration_type
-adhesion_2d::compute_acceleration(const particle &p1, const particle &p2) const
+adhesion_2d::compute_acceleration(const cell &p1, const cell &p2) const
 {
   position_type displacement = p2.position() - p1.position();
   double distance = displacement.hypot();
@@ -179,7 +179,7 @@ adhesion_2d::viscosus_velocity(double dt, adhesion_2d::velocity_type v) const
 
   return v * factor;
 }
-void adhesion_2d::update_time(particle &p) const
+void adhesion_2d::update_time(cell &p) const
 {
   if(m_parameters.max_time_step() == m_parameters.min_time_step())
   {
@@ -230,21 +230,21 @@ void adhesion_2d::update_time(particle &p) const
   assert(p.event_time() >= m_time);
 }
 
-void adhesion_2d::exclude(particle &p, const acceleration_type &acc) const
+void adhesion_2d::exclude(cell &p, const acceleration_type &acc) const
 {
   p.acceleration() -= acc;
 }
-void adhesion_2d::include(particle &p, const acceleration_type &acc) const
+void adhesion_2d::include(cell &p, const acceleration_type &acc) const
 {
   p.acceleration() += acc;
 }
 
-void adhesion_2d::exclude_all_onesided(particle const &p)
+void adhesion_2d::exclude_all_onesided(cell const &p)
 {
-  particle::position_type const &pos = p.position();
+  cell::position_type const &pos = p.position();
   double interaction_range = m_parameters.interaction_range();
 
-  auto exclude_particle = [this, &p](particle &neighbor) {
+  auto exclude_particle = [this, &p](cell &neighbor) {
     assert(std::addressof(neighbor) != std::addressof(p));
 
     acceleration_type acc = compute_acceleration(p, neighbor);
@@ -255,12 +255,12 @@ void adhesion_2d::exclude_all_onesided(particle const &p)
                                        exclude_particle);
 }
 
-void adhesion_2d::include_all_twosided(particle &p)
+void adhesion_2d::include_all_twosided(cell &p)
 {
   position_type const &new_position = p.position();
   double interaction_range = m_parameters.interaction_range();
 
-  auto include_interaction = [this, &p](particle &neighbor) {
+  auto include_interaction = [this, &p](cell &neighbor) {
     if(std::addressof(p) == std::addressof(neighbor))
       return;
     acceleration_type acc = compute_acceleration(p, neighbor);
@@ -273,12 +273,12 @@ void adhesion_2d::include_all_twosided(particle &p)
 }
 void adhesion_2d::resample_all()
 {
-  m_spacetime.visit_guarded_order([this](particle &p) {
+  m_spacetime.visit_guarded_order([this](cell &p) {
     position_type const &center = p.position();
     p.acceleration() = acceleration_type(0);
     double radius = m_parameters.interaction_range();
     m_spacetime.visit_ball(
-        center, radius, [this, &p](particle const &neighbor) {
+        center, radius, [this, &p](cell const &neighbor) {
           if(std::addressof(p) == std::addressof(neighbor))
             return;
           acceleration_type acc = compute_acceleration(p, neighbor);
@@ -288,10 +288,10 @@ void adhesion_2d::resample_all()
   });
 }
 
-void adhesion_2d::print_nicely(std::__1::string header)
+void adhesion_2d::print_nicely(std::string header)
 {
   std::cout << header << std::endl;
-  m_spacetime.visit([](particle const &p) {
+  m_spacetime.visit([](cell const &p) {
     std::cout << "(" << p.position()[0] << ", " << p.position()[1] << "); "
               << "(" << p.velocity()[0] << ", " << p.velocity()[1] << "); "
               << "(" << p.acceleration()[0] << "," << p.acceleration()[1] << ")"

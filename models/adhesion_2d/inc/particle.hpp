@@ -9,7 +9,7 @@
 
 BEGIN_NAMESPACE_ADHESION_2D
 
-class particle
+class cell
 {
 public:
   static constexpr size_t dimension = 2;
@@ -19,12 +19,12 @@ public:
   using velocity_type = simbad::core::coordinates<double, dimension>;
   using acceleration_type = simbad::core::coordinates<double, dimension>;
 
-  explicit particle(position_type pos = position_type(),
+  explicit cell(position_type pos = position_type(),
                     velocity_type v = velocity_type(0),
                     acceleration_type acc = acceleration_type(0),
                     time_type et = std::numeric_limits<time_type>::infinity(),
                     time_type dt = std::numeric_limits<time_type>::infinity());
-  ~particle();
+  ~cell();
 
   position_type const &position() const;
   position_type &position();
@@ -52,7 +52,7 @@ private:
 class particle_view : public simbad::core::particle
 {
 public:
-  using orig = simbad::models::adhesion_2d::particle;
+  using orig = simbad::models::adhesion_2d::cell;
   explicit particle_view(orig const *ptr=nullptr);
   void set_orig(const orig *ptr);
   std::size_t dimension() const override;

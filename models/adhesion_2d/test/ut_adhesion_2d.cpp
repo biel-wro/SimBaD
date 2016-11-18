@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(model_params_load)
 
 BOOST_AUTO_TEST_CASE(particle_size_check)
 {
-  BOOST_REQUIRE_EQUAL(sizeof(particle), 8 * sizeof(double));
+  BOOST_REQUIRE_EQUAL(sizeof(cell), 8 * sizeof(double));
 }
 
 BOOST_AUTO_TEST_CASE(single_particle)
