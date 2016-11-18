@@ -48,14 +48,13 @@ endif()
 if( WIN32 )
  set(Boost_USE_STATIC_LIBS ON)
  set(Boost_USE_MULTITHREADED ON)
- find_package( Boost 1.54 REQUIRED COMPONENTS
-   unit_test_framework
- )
+
 endif()
 
 find_package( Boost 1.54 REQUIRED COMPONENTS
   exception
   program_options
+  unit_test_framework
 )
 
 
