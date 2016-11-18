@@ -1,0 +1,17 @@
+# Operating system (build VM template)
+  
+image: Visual Studio 2015
+
+clone_folder: c:\SimBaD
+
+platform: x64
+configuration: Release
+
+before_build:
+  - echo Running cmake...
+  - cd c:\SimBaD
+  - cmake -G "Visual Studio 14 2015 Win64"
+  
+
+build:
+  - project: INSTALL.vcxproj 
