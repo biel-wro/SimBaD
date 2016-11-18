@@ -144,6 +144,6 @@ BOOST_AUTO_TEST_CASE(LazySetChunk_find)
     BOOST_CHECK_LT(idx, chk.occupancy());
     BOOST_CHECK_EQUAL(idx, i);
 
-    BOOST_CHECK_EQUAL(chk.begin() + idx, it);
+    BOOST_CHECK_EQUAL(idx, it - chk.begin());
   }
 }

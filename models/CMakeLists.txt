@@ -16,9 +16,13 @@ set( MODELS
 set( LIBS
   ${Boost_LIBRARIES}
   ${CORE_NAME}
- -lstdc++
- -lm
 )
+
+if( !msvc )
+  set(LIBS $(LIBS)
+    -lstdc++
+    -lm)
+endif()
 
 #subdirs(adhesion_2d)
 subdirs(common)

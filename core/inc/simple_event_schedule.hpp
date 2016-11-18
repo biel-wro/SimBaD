@@ -35,7 +35,7 @@ public:
 
   float get_time() const { return m_time; }
   void set_time(float t) { this->m_time = t; }
-  void increase_time(double time_offset) { m_time = m_time + time_offset; }
+  void increase_time(double time_offset) { m_time = float(m_time + time_offset); }
   void set_event_kind(EVENT_KIND ek) { m_event_kind = ek; }
   EVENT_KIND get_event_kind() const { return m_event_kind; }
   void set_particle_ptr(void *ptr) { m_particle_ptr = ptr; }

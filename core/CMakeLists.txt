@@ -13,7 +13,6 @@ set( SOURCES
   src/property_tree.cpp
   src/model.cpp
   src/model_factory.cpp
-  src/model_loader.cpp
   src/model_register.cpp
   src/particle.cpp
   src/poisson_configuration.cpp
