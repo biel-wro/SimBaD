@@ -21,8 +21,9 @@ using Point = simple_tracked_particle<2, float>;
 
 BOOST_AUTO_TEST_CASE(tracking_particle_move)
 {
+  BOOST_TEST_CHECKPOINT("before queue construction");
   simple_event_queue eq;
-
+  BOOST_TEST_CHECKPOINT("before point creation");
   Point p0;
   BOOST_TEST_CHECKPOINT("before get");
   simple_event_handle empty_handle = p0.get_handle();
