@@ -23,33 +23,36 @@ BOOST_AUTO_TEST_CASE(tracking_particle_move)
 {
   simple_event_queue eq;
 
-  simple_event_handle h1 = eq.emplace();
-  BOOST_REQUIRE((*h1).get_particle_ptr_as<Point>()==nullptr);
+  simple_event_handle handle = eq.emplace();
+  BOOST_REQUIRE((*handle).get_particle_ptr_as<Point>() == nullptr);
 
-  Point p0(h1);
-  BOOST_REQUIRE_EQUAL((*h1).get_particle_ptr_as<Point>(), &p0);
+  Point p0(handle);
+  BOOST_REQUIRE_EQUAL(std::addressof(*handle),
+                      std::addressof(*p0.get_handle()));
+  BOOST_REQUIRE_EQUAL((*p0.get_handle()).get_particle_ptr_as<Point>(), &p0);
+  BOOST_REQUIRE_EQUAL((*handle).get_particle_ptr_as<Point>(), &p0);
 
   Point p1(std::move(p0));
-  BOOST_REQUIRE_EQUAL((*h1).get_particle_ptr_as<Point>(), &p1);
+  BOOST_REQUIRE_EQUAL((*handle).get_particle_ptr_as<Point>(), &p1);
 }
 
 BOOST_AUTO_TEST_CASE(tracking_particle_swap)
 {
   simple_event_queue eq;
-  simple_event_handle h1 = eq.emplace();
+  simple_event_handle handle = eq.emplace();
   simple_event_handle h2 = eq.emplace();
 
-  Point p1(h1);
-  BOOST_REQUIRE_EQUAL(static_cast<Point *>((*h1).get_particle_ptr()), &p1);
+  Point p1(handle);
+  BOOST_REQUIRE_EQUAL(static_cast<Point *>((*handle).get_particle_ptr()), &p1);
 
   Point p2(h2);
   BOOST_REQUIRE_EQUAL(static_cast<Point *>((*h2).get_particle_ptr()), &p2);
 
   std::swap(p1, p2);
   BOOST_REQUIRE_EQUAL(static_cast<Point *>((*h2).get_particle_ptr()), &p1);
-  BOOST_REQUIRE_EQUAL(static_cast<Point *>((*h1).get_particle_ptr()), &p2);
+  BOOST_REQUIRE_EQUAL(static_cast<Point *>((*handle).get_particle_ptr()), &p2);
 
   std::swap(p1, p2);
-  BOOST_REQUIRE_EQUAL(static_cast<Point *>((*h1).get_particle_ptr()), &p1);
+  BOOST_REQUIRE_EQUAL(static_cast<Point *>((*handle).get_particle_ptr()), &p1);
   BOOST_REQUIRE_EQUAL(static_cast<Point *>((*h2).get_particle_ptr()), &p2);
 }
