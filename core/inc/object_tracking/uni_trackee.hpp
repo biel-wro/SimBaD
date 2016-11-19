@@ -33,11 +33,13 @@ public:
   }
   callback_type &get_callback()
   {
-    return my_base::get_listener().get_callback();
+    my_listener &listener = my_base::get_listener();
+    return listener.get_callback();
   }
   callback_type const &get_callback() const
   {
-    return my_base::get_listener().get_callback();
+    my_listener const &listener = my_base::get_listener();
+    return listener.get_callback();
   }
 };
 }

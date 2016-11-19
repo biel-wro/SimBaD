@@ -14,20 +14,22 @@ template <class Handle, class Derived>
 struct handle_trackee
     : public uni_trackee<ptr_updater_by_event_handle_base<Handle>, Derived>
 {
-    using handle_type = Handle;
-    using my_updater = ptr_updater_by_event_handle_base<handle_type>;
-    using my_base = uni_trackee<my_updater, Derived>;
+  using handle_type = Handle;
+  using my_updater = ptr_updater_by_event_handle_base<handle_type>;
+  using my_base = uni_trackee<my_updater, Derived>;
 
-    explicit handle_trackee(handle_type handle = handle_type())
-        : my_base(my_updater(std::move(handle)))
-    {
-    }
+  explicit handle_trackee(handle_type handle = handle_type())
+      : my_base(my_updater(std::move(handle)))
+  {
+  }
 
-    void set_handle(handle_type h) { my_base::set_callback(my_updater(h)); }
-    handle_type get_handle() const
-    {
-        return my_base::get_callback().get_handle();
-    }
+  void set_handle(handle_type h) { my_base::set_callback(my_updater(h)); }
+  handle_type get_handle() const
+  {
+    my_updater const &updater = my_base::get_callback();
+    handle_type handle = updater.get_handle();
+    return handle;
+  }
 };
 }
 }
