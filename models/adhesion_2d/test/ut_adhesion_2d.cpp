@@ -38,7 +38,7 @@ static property_tree make_test_model_parameters()
   pt.put("seed", 0);
   return pt;
 }
-
+/*
 static property_tree make_test_model_properties()
 {
   property_tree model_pt;
@@ -46,7 +46,7 @@ static property_tree make_test_model_properties()
   model_pt.add_child("parameters", make_test_model_parameters());
   return model_pt;
 }
-
+*/
 static poisson_configuration make_initial_configuration(size_t sz)
 {
   property_tree pt;

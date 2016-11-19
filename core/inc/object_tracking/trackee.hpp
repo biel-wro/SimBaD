@@ -13,28 +13,28 @@ template <class Listener, class Derived>
 class trackee
 {
 public:
-  trackee() : listener() { listener.notify_constructed(raw_ptr()); }
-  explicit trackee(Listener c) : listener(std::move(c))
+  //trackee() : m_listener() { m_listener.notify_constructed(raw_ptr()); }
+  explicit trackee(Listener c=Listener()) : m_listener(std::move(c))
   {
     c.notify_constructed(raw_ptr());
   }
 
-  trackee(const trackee &o) : listener(o.listener)
+  trackee(const trackee &o) : m_listener(o.m_listener)
   {
-    listener.notify_copy_constructed(raw_ptr());
+    m_listener.notify_copy_constructed(raw_ptr());
   }
-  trackee(trackee &&o) : listener(std::move(o.listener))
+  trackee(trackee &&o) : m_listener(std::move(o.m_listener))
   {
-    o.listener = Listener();
-    listener.notify_move_constructed(raw_ptr());
+    o.m_listener = Listener();
+    m_listener.notify_move_constructed(raw_ptr());
   }
 
   trackee &operator=(trackee const &o)
   {
     if (&o != this)
     {
-      listener = o.listener;
-      listener.notify_copy_assigned(raw_ptr());
+      m_listener = o.m_listener;
+      m_listener.notify_copy_assigned(raw_ptr());
     }
     return *this;
   }
@@ -43,25 +43,25 @@ public:
   {
     if (&o != this)
     {
-      std::swap(listener, o.listener);
-      listener.notify_move_assigned(raw_ptr());
+      std::swap(m_listener, o.m_listener);
+      m_listener.notify_move_assigned(raw_ptr());
     }
     return *this;
   }
 
-  ~trackee() { listener.notify_destroyed(raw_ptr()); }
+  ~trackee() { m_listener.notify_destroyed(raw_ptr()); }
 
-  void force_listener_update() { listener.notify_forced(raw_ptr()); }
+  void force_listener_update() { m_listener.notify_forced(raw_ptr()); }
 
-  void set_listener(Listener _new) { listener = std::move(_new); }
-  Listener &get_listener() { return listener; }
-  Listener const &get_listener() const { return listener; }
+  void set_listener(Listener _new) { m_listener = std::move(_new); }
+  Listener &get_listener() { return m_listener; }
+  Listener const &get_listener() const { return m_listener; }
 
   Derived const *raw_ptr() const { return static_cast<Derived *>(this); }
   Derived *raw_ptr() { return static_cast<Derived *>(this); }
 
 protected:
-  Listener listener;
+  Listener m_listener;
 };
 }
 }

@@ -149,7 +149,8 @@ void adhesion_2d::read_configuration(const configuration_view &configuration)
   m_spacetime.clear();
 
   configuration.visit_configuration([this](simbad::core::particle const &p) {
-    m_spacetime.insert_dirty(cell(position_type{p.coord(0), p.coord(1)}));
+    assert(dimension() == p.dimension());
+    m_spacetime.insert(cell(position_type{p.coord(0), p.coord(1)}));
   });
 
   m_time = 0;

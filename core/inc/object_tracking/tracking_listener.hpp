@@ -10,8 +10,8 @@ namespace core
 template <class Callback> class tracking_listener
 {
 public:
-  tracking_listener() : callback() {}
-  explicit tracking_listener(Callback c) : callback(std::move(c)) {}
+//  tracking_listener() : callback() {}
+  explicit tracking_listener(Callback c=Callback()) : callback(std::move(c)) {}
   tracking_listener(tracking_listener &&) = default;
   tracking_listener(tracking_listener const &) = delete;
 
