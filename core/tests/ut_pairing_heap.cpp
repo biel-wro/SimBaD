@@ -99,7 +99,8 @@ BOOST_AUTO_TEST_CASE(merge_few_single)
   {
     double t = std::rand() % 100;
     mint = std::min(t, mint);
-    nodes[i] = MyNode(t);
+    nodes[i].t = t;
+
     BOOST_TEST_CHECKPOINT("before merge i=" << i << " t=" << t);
     root = algo::merge<MyCompare>(root, &nodes[i]);
     BOOST_TEST_CHECKPOINT("after merge i=" << i << " t=" << t);
