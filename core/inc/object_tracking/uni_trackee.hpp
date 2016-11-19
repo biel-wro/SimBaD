@@ -16,8 +16,8 @@ class uni_trackee : public trackee<tracking_listener<Callback>, Derived>
     using callback_type = Callback;
     using my_listener = tracking_listener<callback_type>;
     using my_base = trackee<my_listener, Derived>;
-    uni_trackee() = default;
-    explicit uni_trackee(Callback c) : my_base(my_listener(std::move(c))) {}
+    //uni_trackee() = default;
+    explicit uni_trackee(Callback c=Callback()) : my_base(my_listener(std::move(c))) {}
 
     uni_trackee(uni_trackee &&) = default;
     uni_trackee(uni_trackee const &) = delete;

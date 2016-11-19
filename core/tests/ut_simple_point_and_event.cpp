@@ -23,17 +23,20 @@ BOOST_AUTO_TEST_CASE(tracking_particle_move)
 {
   simple_event_queue eq;
 
+  Point p0;
+  BOOST_REQUIRE(p0.get_handle() == simple_event_handle(nullptr));
+
   simple_event_handle handle = eq.emplace();
   BOOST_REQUIRE((*handle).get_particle_ptr_as<Point>() == nullptr);
 
-  Point p0(handle);
+  Point p1(handle);
   BOOST_REQUIRE_EQUAL(std::addressof(*handle),
-                      std::addressof(*p0.get_handle()));
-  BOOST_REQUIRE_EQUAL((*p0.get_handle()).get_particle_ptr_as<Point>(), &p0);
-  BOOST_REQUIRE_EQUAL((*handle).get_particle_ptr_as<Point>(), &p0);
-
-  Point p1(std::move(p0));
+                      std::addressof(*p1.get_handle()));
+  BOOST_REQUIRE_EQUAL((*p1.get_handle()).get_particle_ptr_as<Point>(), &p1);
   BOOST_REQUIRE_EQUAL((*handle).get_particle_ptr_as<Point>(), &p1);
+
+  Point p2(std::move(p1));
+  BOOST_REQUIRE_EQUAL((*handle).get_particle_ptr_as<Point>(), &p2);
 }
 
 BOOST_AUTO_TEST_CASE(tracking_particle_swap)
