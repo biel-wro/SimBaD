@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE(parent_automatic)
   BOOST_REQUIRE_EQUAL(parent_from_member(&p.member2, &Parent::member2), &p);
   BOOST_REQUIRE_EQUAL(parent_from_member(&p.bits, &Parent::bits), &p);
   BOOST_REQUIRE_EQUAL(parent_from_member(&p.pdata1, &Parent::pdata1), &p);
-}*/
+}
 
 BOOST_AUTO_TEST_CASE(parent_on_heap)
 {
@@ -78,5 +78,5 @@ BOOST_AUTO_TEST_CASE(parent_on_heap_by_arrow)
   BOOST_REQUIRE_EQUAL(parent_from_member(&p->pdata1, &Parent::pdata1), p);
   delete p;
 }
-
+*/
 BOOST_AUTO_TEST_SUITE_END()

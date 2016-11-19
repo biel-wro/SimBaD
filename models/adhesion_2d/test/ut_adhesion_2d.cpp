@@ -66,7 +66,8 @@ BOOST_AUTO_TEST_CASE(model_params_load)
   property_tree params = make_test_model_parameters();
 
   property_tree model_pt = make_test_model_parameters();
-  //xml_parser::write_xml(std::cout, static_cast<property_tree::super>(model_pt),
+  // xml_parser::write_xml(std::cout,
+  // static_cast<property_tree::super>(model_pt),
   //                      xml_writer_make_settings<ptree::key_type>(' ', 4));
   std::unique_ptr<model> ptr(reinterpret_cast<model *>(
       simbad::core::create_from_property_tree<adhesion_2d>(model_pt)));
@@ -80,13 +81,13 @@ BOOST_AUTO_TEST_CASE(particle_size_check)
 BOOST_AUTO_TEST_CASE(single_particle)
 {
   adhesion_2d model(make_test_model_parameters());
+  BOOST_TEST_CHECKPOINT("created model");
   poisson_configuration initial_configuration = make_initial_configuration(1);
+  BOOST_TEST_CHECKPOINT("created configuration");
   model.read_configuration(initial_configuration);
-
+  BOOST_TEST_CHECKPOINT("read configuration");
 
   BOOST_REQUIRE_EQUAL(model.configuration_size(), 1);
 }
-
-
 
 BOOST_AUTO_TEST_SUITE_END()

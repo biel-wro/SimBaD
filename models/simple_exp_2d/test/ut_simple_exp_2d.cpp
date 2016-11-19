@@ -12,6 +12,7 @@ BOOST_AUTO_TEST_CASE(config_run)
 {
   simbad::models::simple_exp_2d::simple_exp_2d_factory factory;
 
+  BOOST_TEST_CHECKPOINT("factory created");
   simbad::core::property_tree mp;
 
   mp.put("dispersion.sigma", 1);
@@ -28,20 +29,23 @@ BOOST_AUTO_TEST_CASE(config_run)
 
   mp.put("space.tile.size", 3);
   mp.put("seed", 1);
-
+BOOST_TEST_CHECKPOINT("property tree created");
   std::unique_ptr<simbad::core::model> up_model = factory.create_instance(mp);
 
-  simbad::core::model *p_model = up_model.get();
-  auto visitor = [](simbad::core::event const &e) {
+  BOOST_TEST_CHECKPOINT("created instance");
 
-    std::cout << "t = " << e.time();
+  auto visitor = [](simbad::core::event const &e) {
+    BOOST_TEST_CHECKPOINT("entering visitor");
+    BOOST_TEST_CHECKPOINT("event t="<<e.time() << " partials=" << e.npartials() );
+
     for(size_t p = 0; p < e.npartials(); ++p)
     {
+
       std::cout << ", " << e.partial_type(p) << " (" << e.coord(p, 0) << ", "
                 << e.coord(p, 1) << ")";
     }
     std::cout<<std::endl;
   };
 
-  p_model->generate_events(visitor, 100);
+  up_model->generate_events(visitor, 100);
 }
