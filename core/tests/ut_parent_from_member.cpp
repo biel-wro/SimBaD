@@ -50,6 +50,7 @@ protected:
 using namespace simbad::core;
 BOOST_AUTO_TEST_SUITE(ut_parent_from_member)
 
+/*
 BOOST_AUTO_TEST_CASE(parent_automatic)
 {
   Parent p;
@@ -57,7 +58,7 @@ BOOST_AUTO_TEST_CASE(parent_automatic)
   BOOST_REQUIRE_EQUAL(parent_from_member(&p.member2, &Parent::member2), &p);
   BOOST_REQUIRE_EQUAL(parent_from_member(&p.bits, &Parent::bits), &p);
   BOOST_REQUIRE_EQUAL(parent_from_member(&p.pdata1, &Parent::pdata1), &p);
-}
+}*/
 
 BOOST_AUTO_TEST_CASE(parent_on_heap)
 {
