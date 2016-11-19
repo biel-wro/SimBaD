@@ -21,7 +21,7 @@ struct spacetime_traits
   using coord_scalar = particle::coord_scalar;
   using coord_vector = particle::position_type;
   using dimension_type = std::size_t;
-  constexpr static dimension_type dimension = 3;
+  constexpr static dimension_type dimension = 2;
   struct coord_getter
   {
     coord_vector operator()(particle const &p) const { return p.position(); }

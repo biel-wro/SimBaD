@@ -106,8 +106,26 @@ struct coordinates:
   /*
    * call operators
    */
-  scalar_type const &operator()(size_t dim) const { return (*this)[dim]; }
-  scalar_type &operator()(size_t dim) { return (*this)[dim]; }
+  scalar_type const &operator()(size_t dim) const
+  {
+    assert(dim < dimension);
+    return (*this)[dim];
+  }
+  scalar_type &operator()(size_t dim)
+  {
+    assert(dim< dimension);
+    return (*this)[dim];
+  }
+  scalar_type const &operator[](size_t dim) const
+  {
+    assert(dim < dimension);
+    return base_array::operator [](dim);
+  }
+  scalar_type &operator[](size_t dim)
+  {
+    assert(dim< dimension);
+    return base_array::operator [](dim);
+  }
   /*
    * comparison operators
    */
@@ -191,10 +209,8 @@ struct coordinates:
   }
   scalar_type hypot() const
   {
-    return std::accumulate(this->begin(), this->end(), scalar_type(0),
-                           [](scalar_type const &c1, scalar_type const &c2) {
-                             return std::hypot(c1, c2);
-                           });
+    scalar_type (*hypot)(scalar_type, scalar_type) = std::hypot;
+    return std::accumulate(this->begin(), this->end(), scalar_type(0), hypot);
   }
 };
 
