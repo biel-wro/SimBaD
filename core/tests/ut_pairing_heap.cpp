@@ -103,7 +103,8 @@ BOOST_AUTO_TEST_CASE(merge_few_single)
     BOOST_TEST_CHECKPOINT("before merge i=" << i << " t=" << t);
     root = algo::merge<MyCompare>(root, &nodes[i]);
     BOOST_TEST_CHECKPOINT("after merge i=" << i << " t=" << t);
-    BOOST_REQUIRE_EQUAL(algo::count_nodes(root), i + 1);
+    std::size_t count = algo::count_nodes(root);
+    BOOST_REQUIRE_EQUAL(count, i + 1);
   }
 
   BOOST_REQUIRE_LE(root->t, root->left->t);
