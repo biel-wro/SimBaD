@@ -36,8 +36,6 @@ template <class NodeTraits> struct binary_tree_algorithms
     set_has_left(n, false);
   }
 
-
-
   static node_ptr get_parent(node_ptr n)
   {
     if(nullptr == n)
@@ -75,6 +73,7 @@ template <class NodeTraits> struct binary_tree_algorithms
 
     if(!get_has_left(n))
     {
+      assert(n == get_right(left));
       return nullptr;
     }
 
@@ -85,7 +84,10 @@ template <class NodeTraits> struct binary_tree_algorithms
   {
     node_ptr left = get_left(n);
     if(nullptr == left)
+    {
+      assert(!get_has_left(n));
       return nullptr;
+    }
 
     node_ptr left_right = get_right(left);
     if(n == left_right) // n has only one child
@@ -97,7 +99,9 @@ template <class NodeTraits> struct binary_tree_algorithms
 
   static void link_left_child(node_ptr parent, node_ptr child)
   {
-    assert(nullptr == get_right(child));
+    assert(nullptr == get_right(child)); // child must be unlinked
+    assert(!get_has_left(parent));       // it doesn't left child in particular
+
     node_ptr old_child = get_left(parent);
 
     if(nullptr == old_child) // parent does not have children yet
@@ -109,7 +113,6 @@ template <class NodeTraits> struct binary_tree_algorithms
     }
 
     // parent has a child but it has to be a right child
-    assert(!get_has_left(parent));
     assert(get_right(old_child) == parent);
 
     set_left(parent, child);
@@ -118,10 +121,13 @@ template <class NodeTraits> struct binary_tree_algorithms
   }
   static void link_right_child(node_ptr parent, node_ptr child)
   {
-    assert(nullptr == get_right(child));
+    assert(nullptr == get_right(child)); // child is unlinked
     node_ptr old_child = get_left(parent);
-    if(nullptr == old_child) // parent doesn't have children yet
+    if(nullptr == old_child) // parent doesn't have any children yet
     {
+      // parent doesn't have a left child in particular
+      assert(!get_has_left(parent));
+
       set_left(parent, child);
       set_has_left(parent, false);
       set_right(child, parent);
@@ -156,11 +162,14 @@ template <class NodeTraits> struct binary_tree_algorithms
     if(nullptr != right_left)
     {
       node_ptr right_left_right = get_right(right_left);
-      if(n == right_left_right) // n is the right child of its parent
+
+      // n is the right child of its parent and has a left sibling
+      if(n == right_left_right)
       {
         node_ptr parent = right;
         node_ptr left_sibling = right_left;
 
+        // parent has a left child in particular
         assert(get_has_left(parent));
 
         set_right(left_sibling, parent);
@@ -169,16 +178,17 @@ template <class NodeTraits> struct binary_tree_algorithms
       }
     }
 
-    // n is the left child of its parent
+    // n is the left child of its parent and has a right sibling
     node_ptr right_right = get_right(right);
 
-    assert(nullptr != right_right);
+    // you can gat to yourself by going you->right_sibling -> parent -> you
     assert(n == get_left(right_right));
 
     node_ptr parent = right_right;
-    node_ptr right_sibling = right;
+    assert(nullptr != parent);    // parent exists
+    assert(get_has_left(parent)); // and has a left sibling
 
-    assert(get_has_left(parent));
+    node_ptr right_sibling = right;
 
     set_left(parent, right_sibling);
     set_has_left(parent, false);
@@ -200,8 +210,6 @@ template <class NodeTraits> struct binary_tree_algorithms
     visit(n, [&sz](node &) { ++sz; });
     return sz;
   }
-
-
 };
 
 END_NAMESPACE_CORE
