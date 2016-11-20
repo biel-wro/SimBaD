@@ -16,7 +16,7 @@ public:
   //trackee() : m_listener() { m_listener.notify_constructed(raw_ptr()); }
   explicit trackee(Listener c=Listener()) : m_listener(std::move(c))
   {
-    c.notify_constructed(raw_ptr());
+    m_listener.notify_constructed(raw_ptr());
   }
 
   trackee(const trackee &o) : m_listener(o.m_listener)
