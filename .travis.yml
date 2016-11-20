@@ -3,10 +3,6 @@ language: generic
 sudo: required
 dist: trusty
 
-branches:
-  except:
-    - parameter_evolution_3d
-
 matrix:
   include:
     - compiler: gcc

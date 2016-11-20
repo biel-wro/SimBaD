@@ -26,7 +26,7 @@ before_build:
   - cmd: if "%platform%"=="x64"   set CMAKE_GENERATOR_NAME=Visual Studio 14 2015 Win64  
   - cmd: if "%platform%"=="Win32" set BOOST_LIBRARYDIR=%BOOST_LIBRARYDIR_WIN32%
   - cmd: if "%platform%"=="x64"   set BOOST_LIBRARYDIR=%BOOST_LIBRARYDIR_WIN64%
-  - cmd: dir %BOOST_LIBRARYDIR%
+#  - cmd: dir %BOOST_LIBRARYDIR%
   - cmd: cmake -G "%CMAKE_GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%configuration% -DBOOST_ROOT="%BOOST_ROOT%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%" ..
 
   
@@ -41,3 +41,13 @@ test_script:
 
 matrix:
   fast_finish: true
+
+after_build:
+  - cmd: dir %APPVEYOR_BUILD_FOLDER%
+  - cmd: 7z a SimBaD.zip %APPVEYOR_BUILD_FOLDER%\build\cli\cli.exe %APPVEYOR_BUILD_FOLDER%\examples\ 
+
+artifacts:
+  - path: SimBad.zip
+  - name: BuildBinary
+
+  
