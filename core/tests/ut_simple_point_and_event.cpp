@@ -45,6 +45,7 @@ BOOST_AUTO_TEST_CASE(tracking_particle_move)
   Point p1(handle);
   BOOST_REQUIRE_EQUAL(std::addressof(*handle),
                       std::addressof(*p1.get_handle()));
+  BOOST_REQUIRE_EQUAL((*handle).get_particle_ptr_as<Point>(), &p1);
   BOOST_REQUIRE_EQUAL((*p1.get_handle()).get_particle_ptr_as<Point>(), &p1);
   BOOST_REQUIRE_EQUAL((*handle).get_particle_ptr_as<Point>(), &p1);
 
