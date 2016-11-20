@@ -47,6 +47,6 @@ after_build:
   - cmd: 7z a SimBaD.zip %APPVEYOR_BUILD_FOLDER%\build\cli\%configuration%\cli.exe %APPVEYOR_BUILD_FOLDER%\examples\ 
 
 artifacts:
-  path: SimBad.zip
+  path: build\SimBaD.zip
   name: Binary
   
