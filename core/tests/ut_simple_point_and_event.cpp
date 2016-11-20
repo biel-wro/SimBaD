@@ -19,38 +19,52 @@ static_assert(sizeof(simple_event_handle) == sizeof(void *),
 
 using Point = simple_tracked_particle<2, float>;
 
-BOOST_AUTO_TEST_CASE(tracking_particle_move)
+BOOST_AUTO_TEST_CASE(tracking_empty)
 {
   BOOST_TEST_CHECKPOINT("before queue construction");
+
   simple_event_queue eq;
-  BOOST_TEST_CHECKPOINT("before point creation");
+  BOOST_TEST_CHECKPOINT("after queue construction");
+
   Point p0;
-  BOOST_TEST_CHECKPOINT("before get");
-  simple_event_handle empty_handle = p0.get_handle();
+  BOOST_TEST_CHECKPOINT("after point construction");
+
+  simple_event_handle empty_event_handle = p0.get_handle();
   BOOST_TEST_CHECKPOINT("after get");
+  BOOST_REQUIRE(*empty_event_handle != nullptr);
+
   simple_event_handle null_handle(nullptr);
   BOOST_TEST_CHECKPOINT("before check");
-  BOOST_REQUIRE(empty_handle == null_handle);
+  BOOST_REQUIRE(empty_event_handle == null_handle);
 
-  simple_event_handle handle = eq.emplace();
+  simple_event_handle event_handle = eq.emplace();
 
-  simple_event_handle handle_copy = handle;
-  BOOST_REQUIRE_EQUAL(std::addressof(*handle), std::addressof(*handle_copy));
+  simple_event_handle event_handle_copy = event_handle;
+  BOOST_REQUIRE_EQUAL(std::addressof(*event_handle),
+                      std::addressof(*event_handle_copy));
 
-  simple_event_handle handle_moved = std::move(handle_copy);
-  BOOST_REQUIRE_EQUAL(std::addressof(*handle), std::addressof(*handle_moved));
+  simple_event_handle handle_moved = std::move(event_handle_copy);
 
-  BOOST_REQUIRE((*handle).get_particle_ptr_as<Point>() == nullptr);
+  BOOST_REQUIRE((*handle_moved).get_particle_ptr_as<Point>() == nullptr);
+  BOOST_REQUIRE((*event_handle_copy).get_particle_ptr_as<Point>() == nullptr);
+}
 
-  Point p1(handle);
-  BOOST_REQUIRE_EQUAL(std::addressof(*handle),
+BOOST_AUTO_TEST_CASE(tracking_particle_move)
+{
+  simple_event_queue eq;
+  simple_event_handle event_handle = eq.emplace();
+  BOOST_REQUIRE(std::addressof(*event_handle) != nullptr);
+
+  Point p1(event_handle);
+  BOOST_REQUIRE_EQUAL(std::addressof(*event_handle),
                       std::addressof(*p1.get_handle()));
-  BOOST_REQUIRE_EQUAL((*handle).get_particle_ptr_as<Point>(), &p1);
+
+  BOOST_REQUIRE_EQUAL((*event_handle).get_particle_ptr_as<Point>(), &p1);
   BOOST_REQUIRE_EQUAL((*p1.get_handle()).get_particle_ptr_as<Point>(), &p1);
-  BOOST_REQUIRE_EQUAL((*handle).get_particle_ptr_as<Point>(), &p1);
+  BOOST_REQUIRE_EQUAL((*event_handle).get_particle_ptr_as<Point>(), &p1);
 
   Point p2(std::move(p1));
-  BOOST_REQUIRE_EQUAL((*handle).get_particle_ptr_as<Point>(), &p2);
+  BOOST_REQUIRE_EQUAL((*event_handle).get_particle_ptr_as<Point>(), &p2);
 }
 
 BOOST_AUTO_TEST_CASE(tracking_particle_swap)
