@@ -40,14 +40,13 @@ test_script:
   - ctest -C %configuration% --VV --output-on-failure
 
 matrix:
-  fast_finish: true
+  fast_finish: false
 
 after_build:
   - cmd: dir %APPVEYOR_BUILD_FOLDER%
   - cmd: 7z a SimBaD.zip %APPVEYOR_BUILD_FOLDER%\build\cli\cli.exe %APPVEYOR_BUILD_FOLDER%\examples\ 
 
 artifacts:
-  - path: SimBad.zip
-  - name: BuildBinary
-
+  path: SimBad.zip
+  name: Binary
   
