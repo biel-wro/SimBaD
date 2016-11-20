@@ -14,8 +14,9 @@ template <class handle_type> struct ptr_updater_by_event_handle_base
 
     template <class P> void operator()(P *ptr)
     {
-        if (handle != handle_type(nullptr))
+        if (handle != handle_type(nullptr)){
             (*handle).set_particle_ptr(ptr);
+        }
     }
     void operator()(std::nullptr_t)
     {
