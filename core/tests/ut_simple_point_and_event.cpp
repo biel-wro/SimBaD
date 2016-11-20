@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(tracking_empty)
 
   simple_event_handle empty_event_handle = p0.get_handle();
   BOOST_TEST_CHECKPOINT("after get");
-  BOOST_REQUIRE(*empty_event_handle != nullptr);
+  BOOST_REQUIRE(std::addressof(*empty_event_handle) != nullptr);
 
   simple_event_handle null_handle(nullptr);
   BOOST_TEST_CHECKPOINT("before check");
