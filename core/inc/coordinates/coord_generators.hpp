@@ -40,20 +40,16 @@ public:
     for(dimension_type d = 0; d < dimension; d++)
     {
       coord_scalar_type &c = m_coords(d);
-      if(m_board_ub(d) == c)
+      if(m_region_ub(d) != c)
       {
-        c = m_board_lb(d);
+        if(m_board_ub(d) == c)
+          c = m_board_lb(d);
+        else
+          c++;
         return;
       }
-      else if(m_region_ub(d) == c)
-        c = m_region_lb(d);
-      else
-      {
-        c++;
-        return;
-      }
+      c = m_region_lb(d);
     }
-
     m_end = true;
   }
   coord_vector_type operator()() const

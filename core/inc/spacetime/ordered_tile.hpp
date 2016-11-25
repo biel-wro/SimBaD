@@ -63,6 +63,7 @@ public:
   key_reference get_key() { return m_key; }
   const_data_reference get_data() const { return m_data; }
   data_reference get_data() { return m_data; }
+  /*
   static const_self_reference node_from_data(const_data_reference cref)
   {
     return *parent_from_member(&cref, &self_type::m_data);
@@ -70,7 +71,7 @@ public:
   static self_reference node_from_data(data_reference ref)
   {
     return *parent_from_member(&ref, &self_type::m_data);
-  }
+  }*/
 
 private:
   key_type m_key;

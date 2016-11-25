@@ -24,6 +24,8 @@ ordered_board<Traits>::ordered_board(size_type nbuckets, key_equal_pred equal,
 
 {
 }
+
+template <class Traits> ordered_board<Traits>::~ordered_board() { clear(); }
 template <class Traits>
 void ordered_board<Traits>::ordered_board::rehash(size_type)
 {
@@ -78,6 +80,8 @@ ordered_board<Traits>::emplace_dirty(Args &&... args)
 template <class Traits> void ordered_board<Traits>::pop() { pop_dirty(); }
 template <class Traits> void ordered_board<Traits>::pop_dirty()
 {
+  assert(nullptr != m_heap_root);
+
   node_pointer to_delete = m_heap_root;
   m_tile_set.erase(*m_heap_root);
   m_tile_list.erase(m_tile_list.iterator_to(*m_heap_root));
@@ -92,7 +96,7 @@ template <class Traits> void ordered_board<Traits>::remove(const_handle_type d)
 template <class Traits>
 void ordered_board<Traits>::remove_dirty(const_handle_type d)
 {
-  const_node_pointer ptr = &get_node_reference(d);
+  const_node_pointer ptr = d.get_object_ptr(); //&get_node_reference(d);
   m_tile_set.erase(ptr);
   m_tile_list.erase(ptr);
   m_heap_root = pairing_heap_algo::remove(m_heap_root, ptr, m_order_pred);
@@ -136,8 +140,8 @@ template <class Traits>
 typename ordered_board<Traits>::const_handle_type
 ordered_board<Traits>::find(key_type const &key) const
 {
-  set_const_iterator it = m_tile_set.find(key, m_key_hash_pred,
-                          node_equal_pred(m_key_equal_pred));
+  set_const_iterator it =
+      m_tile_set.find(key, m_key_hash_pred, node_equal_pred(m_key_equal_pred));
   if(m_tile_set.end() == it)
     return const_handle_type();
   return const_handle_type(&*it);
@@ -188,7 +192,8 @@ void ordered_board<Traits>::visit_region(KeyGen gen, Visitor visitor) const
 {
   for(; gen; ++gen)
   {
-    const_handle_type handle = find(*gen);
+    key_type key = *gen;
+    const_handle_type handle = find(key);
     if(handle)
       visitor(handle.get_data());
   }
@@ -199,7 +204,9 @@ void ordered_board<Traits>::visit_region_dirty(KeyGen gen, Visitor visitor)
 {
   for(; gen; ++gen)
   {
-    dirty_handle_type handle = get_dirty_handle(find(*gen));
+    key_type key = *gen;
+    const_handle_type ch = find(key);
+    dirty_handle_type handle = get_dirty_handle(ch);
     if(handle)
       visitor(handle.get_data());
   }
@@ -222,11 +229,10 @@ void ordered_board<Traits>::visit_region_guarded_order(KeyGen gen,
 template <class Traits> void ordered_board<Traits>::repair_order()
 {
   m_heap_root = nullptr;
-  for(node_reference ref : m_tile_set)
+  for(node_reference ref : m_tile_list)
   {
     pairing_heap_algo::init(&ref);
-    m_heap_root =
-        pairing_heap_algo::merge(m_heap_root, &ref, m_order_pred);
+    m_heap_root = pairing_heap_algo::merge(m_heap_root, &ref, m_order_pred);
   }
 }
 
@@ -255,19 +261,6 @@ typename ordered_board<Traits>::dirty_handle_type
 ordered_board<Traits>::get_dirty_handle(const_handle_type ch)
 {
   return dirty_handle_type(const_cast<node_pointer>(ch.get_object_ptr()));
-}
-
-template <class Traits>
-typename ordered_board<Traits>::node_reference
-ordered_board<Traits>::get_node_reference(data_reference vr)
-{
-  return node_type::node_from_data(vr);
-}
-template <class Traits>
-typename ordered_board<Traits>::const_node_reference
-ordered_board<Traits>::get_node_reference(const_data_reference vr) const
-{
-  return node_type::node_from_data(vr);
 }
 
 END_NAMESPACE_CORE

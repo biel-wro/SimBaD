@@ -48,7 +48,7 @@ double model_parameters::range_from_tolerance(double reltol, double ground_pos,
 {
   if(reltol == 0)
     return std::numeric_limits<double>::infinity();
-  double normrange = (std::sqrt(reltol + 1.0) - 1.0) / reltol;
+  double normrange = (std::sqrt(1.0-reltol ) + 1.0) / reltol;
   return std::pow(normrange, 1.0 / order) * ground_pos;
 }
 

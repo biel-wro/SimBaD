@@ -1,4 +1,4 @@
-#include "poisson_configuration.hpp"
+#include "configurations/poisson_configuration.hpp"
 #include "interface/particle.hpp"
 
 #include <cmath>

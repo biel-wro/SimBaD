@@ -21,7 +21,7 @@ public:
 
   explicit cell(position_type pos = position_type(),
                     velocity_type v = velocity_type(0),
-                    acceleration_type acc = acceleration_type(0),
+                    //acceleration_type acc = acceleration_type(0),
                     time_type et = std::numeric_limits<time_type>::infinity(),
                     time_type dt = std::numeric_limits<time_type>::infinity());
   ~cell();
@@ -38,15 +38,15 @@ public:
   velocity_type const &velocity() const;
   velocity_type &velocity();
 
-  acceleration_type const &acceleration() const;
-  acceleration_type &acceleration();
+//  acceleration_type const &acceleration() const;
+//  acceleration_type &acceleration();
 
 private:
   position_type m_position;
   time_type m_event_time;
   time_type m_delta_time;
   velocity_type m_velocity;
-  acceleration_type m_acceleration;
+//  acceleration_type m_acceleration;
 };
 
 class particle_view : public simbad::core::particle
@@ -57,6 +57,7 @@ public:
   void set_orig(const orig *ptr);
   std::size_t dimension() const override;
   double coord(std::size_t d) const override;
+  simbad::core::attribute extra_attribute(std::string const &attribute_name) const override;
 
 private:
   orig const *m_ptr;

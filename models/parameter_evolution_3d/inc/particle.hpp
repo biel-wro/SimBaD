@@ -5,6 +5,8 @@
 #include "accumulator.hpp"
 #include "coordinates/coordinates.hpp"
 #include "event_kind.hpp"
+#include "intrinsic_params.hpp"
+#include <random>
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 class cell
@@ -14,13 +16,6 @@ public:
   using coords = simbad::core::coordinates<float, 3>;
   using interaction_accumulator = simbad::core::additive_accumulator<float>;
   using EVENT_KIND = simbad::core::EVENT_KIND;
-  struct intrinsic_params
-  {
-    float m_lifespan;
-    float m_mutation_prob;
-    float m_birth_coef;
-    float m_interaction_coef;
-  };
   cell();
   ~cell();
 
@@ -28,16 +23,18 @@ public:
   float get_time() const;
   EVENT_KIND get_event_kind() const;
 
-  void include_interaction(cell const &p, model_parameters const &mp);
-  void exclude_interaction(cell const &p, model_parameters const &mp);
+  void include_interaction(cell const &p, model_params const &mp);
+  void exclude_interaction(cell const &p, model_params const &mp);
 
-  intrinsic_params &get_params();
-  intrinsic_params const &get_params() const;
+  cell_params &get_params();
+  cell_params const &get_params() const;
+
+  void mutate(model_params const &,std::mt19937_64 &rng);
 
 private:
   coords m_coords;
   float m_time;
-  intrinsic_params m_intrinsic_params;
+  cell_params m_intrinsic_params;
   interaction_accumulator m_interaction_acc;
   EVENT_KIND m_event_kind;
 };

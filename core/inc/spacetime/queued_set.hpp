@@ -4,6 +4,7 @@
 #include "core_def.hpp"
 
 #include <algorithm>
+#include <iterator>
 #include <utility>
 #include <vector>
 
@@ -49,29 +50,34 @@ public:
   template <class Compare, class... Args>
   const_iterator emplace(Compare cmp, Args &&... args)
   {
-    if(m_subcontainer.end() == m_top_it)
+    if(empty())
     {
-      dirty_iterator it = emplace_dirty(std::forward<Args>(args)...);
-      m_top_it = it;
-      return it;
+      m_subcontainer.emplace_back(std::forward<Args>(args)...);
+      m_top_it = m_subcontainer.begin();
+      return m_subcontainer.begin();
     }
 
-    difference_type idx = m_top_it - m_subcontainer.begin();
-    const_iterator it = emplace_dirty(std::forward<Args>(args)...);
+    difference_type const idx = std::distance(m_subcontainer.begin(), m_top_it);
 
-    const_iterator top_it =
-        std::max(begin() + idx, it, iterator_compare<Compare>(cmp));
-    m_top_it = dirty_iter(top_it);
+    m_subcontainer.emplace_back(std::forward<Args>(args)...);
+
+    dirty_iterator restored_top_it = std::next(m_subcontainer.begin(), idx);
+
+    dirty_iterator it = std::prev(m_subcontainer.end());
+    m_top_it = std::max(restored_top_it, it, iterator_compare<Compare>(cmp));
 
     return it;
   }
   template <class... Args> dirty_iterator emplace_dirty(Args &&... args)
   {
-    bool was_empty = empty();
+    difference_type const idx = std::distance(m_subcontainer.begin(), m_top_it);
+
+    assert(empty() ? 0 == idx : idx >= 0);
+
     m_subcontainer.emplace_back(std::forward<Args>(args)...);
-    if(was_empty)
-      m_top_it = begin_dirty();
-    return --m_subcontainer.end();
+    m_top_it = std::next(begin_dirty(), idx);
+
+    return std::prev(m_subcontainer.end());
   }
 
   template <class Compare>
@@ -86,24 +92,35 @@ public:
 
     difference_type idx;
 
-    if(m_top_it == --end())
-      idx = it - m_subcontainer.begin();
-    else
-      idx = m_top_it - m_subcontainer.begin();
+    if(std::distance(const_iterator(m_top_it), it) > 0) // m_top_it is on left
+      idx = std::distance(m_subcontainer.begin(), m_top_it);
+    else // m_top_it is on the right of it
+      idx = std::distance(m_subcontainer.begin(), m_top_it) - 1;
 
     remove_dirty(it);
-    m_top_it = begin_dirty() + idx;
+    m_top_it = std::next(m_subcontainer.begin(), idx);
   }
   void remove_dirty(const_iterator it)
   {
-    if(it != --m_subcontainer.end())
+    assert(std::distance(m_subcontainer.begin(), m_top_it) >= 0);
+    assert(std::distance(m_top_it, m_subcontainer.end()) > 0);
+    assert(!m_subcontainer.empty());
+
+    if(it != std::prev(m_subcontainer.end()))
       std::swap(*dirty_iter(it), m_subcontainer.back());
+
+    m_top_it = m_subcontainer.begin();
 
     m_subcontainer.pop_back();
   }
   template <class Compare> void pop(Compare cmp = Compare())
   {
-    remove(m_top_it, std::move(cmp));
+    assert(std::distance(m_subcontainer.begin(), m_top_it) >= 0);
+    assert(std::distance(m_top_it, m_subcontainer.end()) > 0);
+    assert(!m_subcontainer.empty());
+
+    pop_dirty();
+    find_top(std::move(cmp));
   }
   void pop_dirty() { remove_dirty(m_top_it); }
   void clear()
@@ -125,11 +142,15 @@ public:
   }
   template <class Compare> void repair_order(Compare cmp = Compare())
   {
-    m_top_it = dirty_iter(std::max_element(begin(), end(), cmp));
+    find_top(std::move(cmp));
   }
   template <class Compare>
   void repair_order(const_iterator it, Compare cmp = Compare())
   {
+    assert(std::distance(m_subcontainer.begin(), m_top_it) >= 0);
+    assert(std::distance(m_top_it, m_subcontainer.end()) > 0);
+    assert(!m_subcontainer.empty());
+
     if(it == m_top_it)
       repair_order(cmp);
     iterator_compare<Compare> it_cmp(cmp);
@@ -150,10 +171,11 @@ public:
   template <class Visitor, class Cmp>
   void visit_guarded_order(Visitor v = Visitor(), Cmp cmp = Cmp())
   {
-    dirty_iterator it = m_top_it = begin_dirty();
-
     if(empty())
       return;
+
+    m_top_it = begin_dirty();
+    dirty_iterator it = begin_dirty();
 
     iterator_compare<Cmp> icmp(cmp);
     for(dirty_iterator end = end_dirty(); it != end; ++it)
@@ -172,8 +194,9 @@ public:
   }
   dirty_iterator dirty_iter(const_iterator cit)
   {
-    difference_type diff = cit - m_subcontainer.begin();
-    return m_subcontainer.begin() + diff;
+    difference_type diff =
+        std::distance(const_iterator(m_subcontainer.begin()), cit);
+    return std::next(m_subcontainer.begin(), diff);
   }
   const_iterator begin() const { return m_subcontainer.begin(); }
   dirty_iterator begin_dirty() { return m_subcontainer.begin(); }

@@ -13,7 +13,6 @@ template <class Listener, class Derived>
 class trackee
 {
 public:
-  //trackee() : m_listener() { m_listener.notify_constructed(raw_ptr()); }
   explicit trackee(Listener c=Listener()) : m_listener(std::move(c))
   {
     m_listener.notify_constructed(raw_ptr());

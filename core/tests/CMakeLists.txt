@@ -6,10 +6,11 @@ set( TEST_SOURCES
   #test_fixed.cpp
   ut_argument_parser.cpp
   ut_binary_tree.cpp
-  ut_board.cpp
+  #ut_board.cpp
   ut_board_coords.cpp
   ut_board_tile.cpp
   ut_cartesian_spacetime.cpp
+  ut_cubic_crystal_configuration.cpp
   ut_lazy_set.cpp
   ut_lazy_set_chunk.cpp
   ut_ordered_board.cpp
@@ -20,7 +21,7 @@ set( TEST_SOURCES
   ut_properties.cpp
   ut_simple_point_and_event.cpp
   ut_space.cpp
-  ut_spacetime.cpp
+  #ut_spacetime.cpp
   ut_tilers.cpp
   ut_trackee.cpp
 )

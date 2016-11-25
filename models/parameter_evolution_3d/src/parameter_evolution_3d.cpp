@@ -8,33 +8,46 @@ std::string parameter_evolution_3d::model_name()
   return "parameter_evolution_3d";
 }
 std::size_t parameter_evolution_3d::s_dimension() { return 3; }
-
-std::size_t parameter_evolution_3d::dimension() const
-{
-  return s_dimension();
-}
+std::size_t parameter_evolution_3d::dimension() const { return s_dimension(); }
 void parameter_evolution_3d::generate_events(event_visitor, size_type nevents)
 {
   if(m_spacetime.empty())
     return;
-  throw std::runtime_error("not implemented yet");
+  NOT_IMPLEMENTED_YET
 }
 
 parameter_evolution_3d::size_type
 parameter_evolution_3d::configuration_size() const
 {
-  throw std::runtime_error("not implemented yet");
+  NOT_IMPLEMENTED_YET
 }
 
 void parameter_evolution_3d::visit_configuration(particle_visitor) const
 {
-  throw std::runtime_error("not implemented yet");
+  NOT_IMPLEMENTED_YET
+}
+
+double parameter_evolution_3d::compute_birth_rate(const cell_params &,
+                                                  const model_params &)
+{
+  NOT_IMPLEMENTED_YET
+}
+
+double parameter_evolution_3d::compute_death_rate(const cell_params &,
+                                                  const model_params &)
+{
+  NOT_IMPLEMENTED_YET
+}
+
+double parameter_evolution_3d::compute_failure_rate(const cell_params &,
+                                                    const model_params &)
+{
+  NOT_IMPLEMENTED_YET
 }
 
 void parameter_evolution_3d::resample_event(cell &p)
 {
-  cell::intrinsic_params const &intinisc_params = p.get_params();
-
+  cell_params const &intinisc_params = p.get_params();
 }
 
 void parameter_evolution_3d::generate_event(event_visitor v)
@@ -52,8 +65,8 @@ void parameter_evolution_3d::execute_death(event_visitor v)
   cell const &p = m_spacetime.top();
 
   auto neighbor_visitor = [&p](cell &neighbor) {
-    //neighbor.exclude_interaction(p);
-    //neighbor.resample_event();
+    // neighbor.exclude_interaction(p);
+    // neighbor.resample_event();
   };
   m_spacetime.visit_ball_guarded_order(p.get_coords(), m_interaction_range,
                                        neighbor_visitor);

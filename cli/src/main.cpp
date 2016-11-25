@@ -2,12 +2,14 @@
 #include "builtin_models.hpp"
 #include "launcher.hpp"
 
+#include "configurations/cubic_crystal_configuration.hpp"
+#include "configurations/poisson_configuration.hpp"
 #include "interface/event.hpp"
 #include "interface/model.hpp"
 #include "launch_utils.hpp"
 #include "model_factory.hpp"
 #include "model_register.hpp"
-#include "poisson_configuration.hpp"
+
 #include "properties.hpp"
 #include "property_tree.hpp"
 #include "snapshotter.hpp"
@@ -42,9 +44,11 @@ get_initial_config(property_tree const &pt)
 {
   std::unique_ptr<configuration_view> p_configuraiton;
   std::string config_name = pt.get<std::string>("class");
+  property_tree const &parameters = pt.get_child("parameters");
   if("poisson_configuration" == config_name)
-    p_configuraiton.reset(
-        new poisson_configuration(pt.get_child("parameters")));
+    p_configuraiton.reset(new poisson_configuration(parameters));
+  else if("cubic_crystal_configuration" == config_name)
+    p_configuraiton.reset(new cubic_crystal_configuration(parameters));
   else
     throw std::runtime_error("unrecognized configuration " + config_name);
   return p_configuraiton;
@@ -96,8 +100,8 @@ int main(int argc, const char **argv)
   if(param_fname)
     prop.add_properties_auto(param_fname.get());
 
- // xml_parser::write_xml(std::cout, static_cast<property_tree::super>(tree),
- //                       xml_writer_make_settings<ptree::key_type>(' ', 0));
+  // xml_parser::write_xml(std::cout, static_cast<property_tree::super>(tree),
+  //                       xml_writer_make_settings<ptree::key_type>(' ', 0));
 
   if(tree.count("simulation"))
     simulation(tree.get_child("simulation"));

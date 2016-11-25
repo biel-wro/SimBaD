@@ -15,10 +15,11 @@ set( SOURCES
   src/model_factory.cpp
   src/model_register.cpp
   src/particle.cpp
-  src/poisson_configuration.cpp
   src/simple_event_view.cpp
   src/snapshotter.cpp
   src/text_configuration_printer.cpp
+  src/configurations/poisson_configuration.cpp
+  src/configurations/cubic_crystal_configuration.cpp
 )
 
 set( LIBS

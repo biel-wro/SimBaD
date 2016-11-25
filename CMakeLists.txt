@@ -24,6 +24,12 @@ include(CheckCXXCompilerFlag)
 set(CMAKE_CXX_FLAGS "-std=c++14")
 message("compiler=" ${CMAKE_CXX_COMPILER})
 
+#sanitizer
+if ( unix )
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer")
+  endif()
+endif()
 
 #warnings
 if( MSVC)

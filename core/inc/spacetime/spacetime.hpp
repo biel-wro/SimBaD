@@ -21,13 +21,27 @@ template <class... Args>
 typename spacetime<Traits>::const_handle_type
 spacetime<Traits>::emplace(tile_key const &tk, Args... args)
 {
-  dirty_handle_type h = emplace_dirty(tk, std::forward<Args>(args)...);
-  dirty_subset_handle sh = h.get_subset_handle();
-  dirty_tile_handle th = h.get_tile_handle();
-  th->repair_order(sh, m_order_pred);
-  m_board.repair_order(h.get_tile_handle());
+  dirty_tile_handle tile_handle = m_board.find_dirty(tk);
 
-  return h;
+  if(!tile_handle)
+    tile_handle = m_board.emplace_dirty(tk);
+
+  const_subset_handle set_handle =
+      tile_handle->emplace(m_order_pred, std::forward<Args>(args)...);
+
+  m_board.repair_order(tile_handle);
+  ++m_nparticles;
+
+  return const_handle_type(tile_handle, set_handle);
+  /*
+    dirty_handle_type h = emplace_dirty(tk, std::forward<Args>(args)...);
+    dirty_subset_handle sh = h.get_subset_handle();
+    dirty_tile_handle th = h.get_tile_handle();
+    th->repair_order(sh, m_order_pred);
+    m_board.repair_order(h.get_tile_handle());
+
+    return h;
+  */
 }
 
 template <class Traits>
@@ -48,10 +62,12 @@ spacetime<Traits>::emplace_dirty(tile_key const &tk, Args... args)
 
 template <class Traits> void spacetime<Traits>::pop()
 {
+  assert(m_nparticles > 0);
   dirty_tile_handle th = m_board.first_dirty();
   th->pop(m_order_pred);
-  if(th->empty())
-    m_board.pop();
+  m_board.repair_order(th);
+  //if(th->empty())
+  //  m_board.pop();
   m_nparticles--;
 }
 template <class Traits> void spacetime<Traits>::pop_dirty() { pop(); }
@@ -150,7 +166,7 @@ template <class Visitor>
 void spacetime<Traits>::visit_guarded_order(Visitor v)
 {
   m_board.visit_guarded_order(
-      [this,v](subset_type &ss) { ss.visit_guarded_order(v,m_order_pred); });
+      [this, v](subset_type &ss) { ss.visit_guarded_order(v, m_order_pred); });
 }
 
 template <class Traits>

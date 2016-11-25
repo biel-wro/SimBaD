@@ -70,6 +70,7 @@ public:
                          data_order_pred order = data_order_pred(),
                          rehash_watchdog ar = rehash_watchdog());
 
+  ~ordered_board();
   void rehash(size_type sz);
   size_type bucket_count() const;
   size_type size() const;

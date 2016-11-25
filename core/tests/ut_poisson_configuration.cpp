@@ -1,4 +1,4 @@
-#include "poisson_configuration.hpp"
+#include "configurations/poisson_configuration.hpp"
 #include <boost/test/auto_unit_test.hpp>
 #include <iostream>
 

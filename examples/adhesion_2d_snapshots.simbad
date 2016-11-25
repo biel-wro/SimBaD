@@ -12,7 +12,7 @@ snapshots
         max inf
       }
       viscosity 0.1
-      diffusion 0.01
+      diffusion 1
       potential
       {
         depth 1
@@ -28,14 +28,12 @@ snapshots
     }
     initial_configuration
     {
-      class poisson_configuration
+      class cubic_crystal_configuration
       parameters
       {
         dimension 2
-        lambda 10
-        ball true
-        radius 10
-        seed 0
+        radius 2
+        spacing 1
       }
     }
   }

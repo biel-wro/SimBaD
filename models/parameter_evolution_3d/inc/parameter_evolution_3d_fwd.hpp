@@ -3,7 +3,8 @@
 #include "parameter_evolution_3d_def.hpp"
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 
-struct model_parameters;
+struct cell_params;
+struct model_params;
 class cell;
 class parameter_evolution_3d;
 

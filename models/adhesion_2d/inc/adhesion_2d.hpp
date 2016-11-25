@@ -30,27 +30,33 @@ public:
   void read_configuration(configuration_view const &configuration) override;
 
   double time() const;
+  void print_nicely(std::string header);
 
 protected:
+  using time_type = double;
   using position_type = cell::position_type;
   using velocity_type = cell::velocity_type;
   using acceleration_type = cell::acceleration_type;
 
-  acceleration_type compute_acceleration(cell const &p1,
-                                         cell const &p2) const;
+  acceleration_type compute_acceleration(cell const &p1, cell const &p2) const;
+  acceleration_type compute_acceleration(cell const &p) const;
   velocity_type viscosus_velocity(double dt, velocity_type v) const;
 
+  cell pop_particle();
+  void push_particle(cell particle_tmp);
+
+  double optimal_time_step(const cell &p) const;
   void update_time(cell &p) const;
+  void update_velocity(cell &p, double dt) const;
   void include(cell &p, acceleration_type const &acc) const;
   void exclude(cell &p, acceleration_type const &acc) const;
-  void include_all_twosided(cell &p);
-  void exclude_all_onesided(const cell &particle_tmp);
+  // void include_all_twosided(cell &p);
+  // void exclude_all_onesided(const cell &particle_tmp);
+
   void resample_all();
 
 private:
-  void print_nicely(std::string header);
-
-  double m_time;
+  time_type m_time;
   model_parameters m_parameters;
   spacetime m_spacetime;
   std::mt19937_64 rng;

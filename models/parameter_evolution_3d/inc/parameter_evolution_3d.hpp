@@ -21,6 +21,14 @@ public:
   void visit_configuration(particle_visitor) const override;
 
 protected:
+  double compute_birth_rate(cell_params const &, model_params const &);
+  double compute_death_rate(cell_params const &, model_params const &);
+  double compute_failure_rate(cell_params const &, model_params const &);
+
+  void mutate_birth_rate(cell_params &, model_params const &);
+  void mutate_death_rate(cell_params &, model_params const &);
+  void mutate_failure_rate(cell_params &, model_params const &);
+
   void resample_event(cell &p);
   void generate_event(event_visitor v);
   void execute_death(event_visitor v);

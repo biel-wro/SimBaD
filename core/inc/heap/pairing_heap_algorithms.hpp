@@ -121,6 +121,7 @@ template <class NodeTraits> struct pairing_heap_algorithms
   template <class Compare>
   static node_ptr pop(node_ptr root, Compare cmp = Compare())
   {
+    assert(nullptr != root);
     assert(nullptr == get_older_sibling(root));
     node_ptr first_child = get_last_child(root);
     if(nullptr == first_child)

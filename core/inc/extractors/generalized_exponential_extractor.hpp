@@ -12,6 +12,13 @@ template <class Scalar> class generalized_exponential_extractor
 {
 public:
   using scalar_type = Scalar;
+  explicit generalized_exponential_extractor(property_tree const &pt)
+      : m_sigma(pt.get<scalar_type>("sigma")),
+        m_gamma(pt.get<scalar_type>("gamma")),
+        m_scale(pt.get<scalar_type>("scale"))
+  {
+  }
+
   explicit generalized_exponential_extractor(
       scalar_type sigma = 1,
       scalar_type gamma = std::numeric_limits<scalar_type>::infinity(),
@@ -23,11 +30,7 @@ public:
   static generalized_exponential_extractor
   from_property_tree(property_tree const &ptree)
   {
-    scalar_type sigma = ptree.get<scalar_type>("sigma");
-    scalar_type gamma = ptree.get<scalar_type>("gamma");
-    scalar_type scale = ptree.get<scalar_type>("scale");
-
-    return generalized_exponential_extractor(sigma, gamma, scale);
+    return generalized_exponential_extractor(ptree);
   }
 
   scalar_type operator()(scalar_type val) const

@@ -30,7 +30,7 @@ class event_view : public simbad::core::event
 public:
   explicit event_view(cell const *ptr = nullptr,
                       cell::position_type const *newpos_ptr = nullptr)
-      : m_particle_ptr(ptr), m_newpos_ptr(newpos_ptr)
+      : m_particle_ptr(ptr), m_oldpos_ptr(newpos_ptr)
   {
   }
   double time() const override { return m_particle_ptr->event_time(); }
@@ -47,15 +47,16 @@ public:
   double coord(std::size_t partialno, std::size_t dimno) const override
   {
     assert(partialno < 2);
+    assert(dimno < dimension());
     if(0 == partialno)
-      return m_particle_ptr->position()[dimno];
+      return (*m_oldpos_ptr)[dimno];
     else // if(1 == partialno)
-      return (*m_newpos_ptr)[dimno];
+      return m_particle_ptr->position()[dimno];
   }
 
 private:
   cell const *m_particle_ptr;
-  cell::position_type const *m_newpos_ptr;
+  cell::position_type const *m_oldpos_ptr;
 };
 }
 
@@ -67,7 +68,10 @@ adhesion_2d::adhesion_2d(simbad::core::property_tree const &pt)
 
 adhesion_2d::adhesion_2d(model_parameters mp, double tile_size,
                          std::uint64_t seed)
-    : m_parameters(std::move(mp)), m_spacetime(tile_size), rng(seed)
+    : m_time(0.0),
+      m_parameters(std::move(mp)),
+      m_spacetime(tile_size),
+      rng(seed)
 {
 }
 
@@ -77,53 +81,36 @@ void adhesion_2d::generate_events(event_visitor v, size_type nevents)
   {
     if(m_spacetime.empty())
       return;
-    // print_nicely("entering loop");
 
-    // get next particle
-    cell &particle_out = m_spacetime.top_dirty();
+    cell particle = pop_particle();
 
-    // update global clock
-    m_time = particle_out.event_time();
+    m_time = particle.event_time();
 
     // extract properties
-    double delta_time = particle_out.delta_time();
-    velocity_type &velocity = particle_out.velocity();
-    acceleration_type &acceleration = particle_out.acceleration();
+    double delta_time = particle.delta_time();
+    position_type old_position = particle.position();
 
-    velocity = viscosus_velocity(delta_time, velocity);
-    velocity += delta_time * acceleration;
+    particle.velocity() = viscosus_velocity(delta_time, particle.velocity());
 
     // compute brownian term
     position_type brownian_displacement{
         m_parameters.brownian_displacement(rng, delta_time),
         m_parameters.brownian_displacement(rng, delta_time)};
 
+    // compute displacement
+    position_type displacement =
+        position_type(delta_time * particle.velocity());
+
     // compute new position
-    position_type new_position = particle_out.position() +
-                                 brownian_displacement +
-                                 position_type(delta_time * velocity);
+    particle.position() += brownian_displacement + displacement;
 
     // create and call visitor
-    event_view view(&particle_out, &new_position);
-    v(view);
+    {
+      event_view view(&particle, &old_position);
+      v(view);
+    }
 
-    // create new temparary particle
-    cell particle_tmp(new_position, velocity);
-    m_spacetime.pop();
-
-    // exclude all interactions
-    exclude_all_onesided(particle_tmp);
-
-    // create in new position
-    spacetime::dirty_handle_type particle_in_handle =
-        m_spacetime.insert_dirty(particle_tmp);
-
-    // include all interaction
-    include_all_twosided(*particle_in_handle);
-
-    // resample time & repair ordering
-    update_time(*particle_in_handle);
-    m_spacetime.repair_order(particle_in_handle);
+    push_particle(particle);
   }
 }
 
@@ -150,11 +137,11 @@ void adhesion_2d::read_configuration(const configuration_view &configuration)
 
   configuration.visit_configuration([this](simbad::core::particle const &p) {
     assert(dimension() == p.dimension());
-    m_spacetime.insert(cell(position_type{p.coord(0), p.coord(1)}));
-  });
 
-  m_time = 0;
-  resample_all();
+    position_type position{p.coord(0), p.coord(1)};
+    velocity_type velocity(0);
+    push_particle(cell(position, velocity, time_type(0), time_type(0)));
+  });
 }
 double adhesion_2d::time() const { return m_time; }
 adhesion_2d::acceleration_type
@@ -162,11 +149,29 @@ adhesion_2d::compute_acceleration(const cell &p1, const cell &p2) const
 {
   position_type displacement = p2.position() - p1.position();
   double distance = displacement.hypot();
-  double acc_scalar = m_parameters.compute_force(distance);
+  double acc_scalar = -m_parameters.compute_force(distance);
   double factor = acc_scalar / distance;
   if(std::isnan(factor))
     factor = 0;
-  return factor * displacement;
+  acceleration_type acc = factor * displacement;
+  return acc;
+}
+
+adhesion_2d::acceleration_type
+adhesion_2d::compute_acceleration(const cell &p) const
+{
+  position_type const &position = p.position();
+  double interaction_range = m_parameters.interaction_range();
+
+  acceleration_type acc(0);
+
+  m_spacetime.visit_ball(position, interaction_range,
+                         [this, &p, &acc](cell const &neighbor) {
+                           if(std::addressof(p) == std::addressof(neighbor))
+                             return;
+                           acc += compute_acceleration(p, neighbor);
+                         });
+  return acc;
 }
 
 adhesion_2d::velocity_type
@@ -180,113 +185,62 @@ adhesion_2d::viscosus_velocity(double dt, adhesion_2d::velocity_type v) const
 
   return v * factor;
 }
-void adhesion_2d::update_time(cell &p) const
-{
-  if(m_parameters.max_time_step() == m_parameters.min_time_step())
-  {
-    p.delta_time() = m_parameters.min_time_step();
-    p.event_time() = time() + p.delta_time();
-    return;
-  }
 
-  double acc = p.acceleration().hypot();
+cell adhesion_2d::pop_particle()
+{
+  cell p = m_spacetime.top();
+  m_spacetime.pop();
+  return p;
+}
+
+void adhesion_2d::push_particle(cell particle_tmp)
+{
+  update_velocity(particle_tmp, particle_tmp.delta_time());
+  update_time(particle_tmp);
+
+  m_spacetime.insert(particle_tmp);
+}
+
+double adhesion_2d::optimal_time_step(cell const &p) const
+{
+  // double acc = p.acceleration().hypot();
   double speed = p.velocity().hypot();
   double max_dist = m_parameters.max_jump();
   double diffusion = m_parameters.diffusion();
-  // optimally dt would be a solution of the following equation
-  // dist == dt^2 * acceleration/2 + dt*speed + diffusion*sqrt(dt)
 
-  assert(acc >= 0);
+  // optimally dt would be a solution of the following equation
+  // dist == dt*speed + diffusion*sqrt(dt)
+
   assert(speed >= 0);
   assert(max_dist > 0);
   assert(diffusion > 0);
 
-  // make 3 initial estimates
-  double t_est0 = std::sqrt(2 * max_dist / acc);
-  double t_est1 = max_dist / speed;
-  double t_est2 = (max_dist / diffusion) * (max_dist / diffusion);
+  double delta_sqrt = std::sqrt(diffusion * diffusion + 4 * max_dist * speed);
+  double rt = (delta_sqrt - max_dist) / (2 * speed);
 
-  // take the smallest out of 3 to get a nicer initial estimate
-  double t = std::min(std::min(t_est0, t_est1), t_est2);
+  if(0 == speed || !std::isfinite(rt))
+    rt = max_dist / diffusion;
 
-  // run Newton's method on the equation for square root of t,
-  // for say 10 iterations
-  double rt = std::sqrt(t);
-  for(int i = 0; i < 10; ++i)
-  {
-    double t1 = rt * rt;
-    double t2 = t1 * t1;
-
-    double val = acc * t2 / 2 + speed * t1 + diffusion * rt - max_dist;
-    double deriv = 2 * acc * rt * t1 + 2 * speed * rt + diffusion;
-    rt -= val / deriv;
-  }
   assert(rt > 0);
 
   double dt = rt * rt;
-  dt = std::min(dt, m_parameters.max_time_step());
-  dt = std::max(dt, m_parameters.min_time_step());
+  return dt;
+}
+
+void adhesion_2d::update_time(cell &p) const
+{
+  time_type dt = optimal_time_step(p);
+  dt = std::max(m_parameters.min_time_step(), dt);
+  dt = std::min(m_parameters.max_time_step(), dt);
 
   p.delta_time() = dt;
-  p.event_time() = time() + p.delta_time();
-  assert(p.event_time() >= m_time);
+  p.event_time() = time() + dt;
 }
 
-void adhesion_2d::exclude(cell &p, const acceleration_type &acc) const
+void adhesion_2d::update_velocity(cell &p, double dt) const
 {
-  p.acceleration() -= acc;
-}
-void adhesion_2d::include(cell &p, const acceleration_type &acc) const
-{
-  p.acceleration() += acc;
-}
-
-void adhesion_2d::exclude_all_onesided(cell const &p)
-{
-  cell::position_type const &pos = p.position();
-  double interaction_range = m_parameters.interaction_range();
-
-  auto exclude_particle = [this, &p](cell &neighbor) {
-    assert(std::addressof(neighbor) != std::addressof(p));
-
-    acceleration_type acc = compute_acceleration(p, neighbor);
-    exclude(neighbor, -acc);
-    update_time(neighbor);
-  };
-  m_spacetime.visit_ball_guarded_order(pos, interaction_range,
-                                       exclude_particle);
-}
-
-void adhesion_2d::include_all_twosided(cell &p)
-{
-  position_type const &new_position = p.position();
-  double interaction_range = m_parameters.interaction_range();
-
-  auto include_interaction = [this, &p](cell &neighbor) {
-    if(std::addressof(p) == std::addressof(neighbor))
-      return;
-    acceleration_type acc = compute_acceleration(p, neighbor);
-    include(p, acc);
-    include(neighbor, -acc);
-    update_time(neighbor);
-  };
-  m_spacetime.visit_ball_guarded_order(new_position, interaction_range,
-                                       include_interaction);
-}
-void adhesion_2d::resample_all()
-{
-  m_spacetime.visit_guarded_order([this](cell &p) {
-    position_type const &center = p.position();
-    p.acceleration() = acceleration_type(0);
-    double radius = m_parameters.interaction_range();
-    m_spacetime.visit_ball(center, radius, [this, &p](cell const &neighbor) {
-      if(std::addressof(p) == std::addressof(neighbor))
-        return;
-      acceleration_type acc = compute_acceleration(p, neighbor);
-      include(p, acc);
-    });
-    update_time(p);
-  });
+  acceleration_type acc = compute_acceleration(p);
+  p.velocity() += acc * dt;
 }
 
 void adhesion_2d::print_nicely(std::string header)
@@ -295,7 +249,9 @@ void adhesion_2d::print_nicely(std::string header)
   m_spacetime.visit([](cell const &p) {
     std::cout << "(" << p.position()[0] << ", " << p.position()[1] << "); "
               << "(" << p.velocity()[0] << ", " << p.velocity()[1] << "); "
-              << "(" << p.acceleration()[0] << "," << p.acceleration()[1] << ")"
+              << "dt=" << p.delta_time() << "; t=" << p.event_time()
+              //          << "(" << p.acceleration()[0] << "," <<
+              //          p.acceleration()[1] << ")"
               << std::endl;
   });
 }

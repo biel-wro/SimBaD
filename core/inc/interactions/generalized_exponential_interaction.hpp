@@ -6,64 +6,72 @@
 #include <cmath>
 
 BEGIN_NAMESPACE_CORE
-class generalized_exponential_interaction
+
+template <class scalar_type>
+static scalar_type compute_cutoff(scalar_type sigma, scalar_type gamma,
+                                  scalar_type tolerance)
+{
+  if(std::numeric_limits<scalar_type>::infinity() == gamma)
+    return sigma * sigma;
+
+  scalar_type base = -gamma * std::log(tolerance);
+  scalar_type range = std::pow(base, scalar_type(1) / gamma) * sigma;
+  return range;
+}
+
+template <class ScalarType> class generalized_exponential_interaction
 {
 public:
-  using scalar_type = config::space_coord_scalar;
+  using scalar_type = ScalarType;
 
   generalized_exponential_interaction(scalar_type sigma, scalar_type gamma = 2,
-         scalar_type cutoff_tolerance = 0.001)
-      : m_power(gamma / 2.f),
-        m_factor(-1.f / (gamma * std::pow(sigma, gamma))),
-        m_cutoff_squared(compute_cutoff_squared(sigma, gamma, cutoff_tolerance))
+                                      scalar_type cutoff_tolerance = 0.001)
+      : m_gamma(gamma),
+        m_factor(scalar_type(-1) / (gamma * std::pow(sigma, gamma))),
+        m_cutoff(compute_cutoff(sigma, gamma, cutoff_tolerance))
   {
   }
-
-  static generalized_exponential_interaction from_property_tree(property_tree const &ptree)
+  generalized_exponential_interaction(property_tree const &pt)
+      : generalized_exponential_interaction(pt.get<scalar_type>("sigma"),
+                                            pt.get<scalar_type>("gamma"),
+                                            pt.get<scalar_type>("tolerance"))
   {
-    scalar_type sigma = ptree.get<scalar_type>("sigma");
-    scalar_type gamma = ptree.get<scalar_type>("gamma");
-    scalar_type tolerance = ptree.get<scalar_type>("tolerance");
-    return generalized_exponential_interaction(sigma, gamma, tolerance);
   }
-  scalar_type operator()(scalar_type distance_squared) const
+  static generalized_exponential_interaction
+  from_property_tree(property_tree const &ptree)
   {
-    if(distance_squared <= 0)
-      return 1;
+    return generalized_exponential_interaction(ptree);
+  }
+  scalar_type operator()(scalar_type distance) const
+  {
+    if(distance <= 0)
+      return scalar_type(1);
 
-    if(distance_squared > m_cutoff_squared)
-      return 0;
+    if(distance > m_cutoff)
+      return scalar_type(0);
 
-    if(std::numeric_limits<scalar_type>::infinity() == m_power)
-      return distance_squared <= m_cutoff_squared ? 1 : 0;
+    if(std::numeric_limits<scalar_type>::infinity() == m_gamma)
+      return distance <= m_cutoff ? scalar_type(1) : scalar_type(0);
 
-    scalar_type exponent = std::pow(distance_squared, m_power) * m_factor;
+    scalar_type exponent = std::pow(distance, m_gamma) * m_factor;
     return std::exp(exponent);
   }
-  scalar_type operator()(particle const &p1, particle const &p2) const
-  {
-    scalar_type distance_square = p1.coords().distance_square_to(p2.coords());
-    return operator()(distance_square);
-  }
-  scalar_type range() const
-  {
-    return std::sqrt(m_cutoff_squared);
-  }
 
-  scalar_type range_squared() const { return m_cutoff_squared; }
+  scalar_type range() const { return m_cutoff; }
+  scalar_type range_squared() const { return m_cutoff * m_cutoff; }
   scalar_type get_sigma() const
   {
-    if(std::numeric_limits<scalar_type>::infinity() == m_power)
-      return std::sqrt(m_cutoff_squared);
-    scalar_type gamma = get_gamma();
-    return std::pow(-m_factor, -1.f / gamma) / std::pow(gamma, 1.f / gamma);
+    if(std::numeric_limits<scalar_type>::infinity() == m_gamma)
+      return m_cutoff;
+    return std::pow(scalar_type(-1) / (m_factor * m_gamma),
+                    scalar_type(1) / m_gamma);
   }
-  scalar_type get_gamma() const { return m_power * 2; }
-
+  scalar_type get_gamma() const { return m_gamma; }
+  scalar_type get_tolerance() const { return operator()(m_cutoff); }
 private:
-  scalar_type m_power;
+  scalar_type m_gamma;
   scalar_type m_factor;
-  scalar_type m_cutoff_squared;
+  scalar_type m_cutoff;
 };
 
 END_NAMESPACE_CORE

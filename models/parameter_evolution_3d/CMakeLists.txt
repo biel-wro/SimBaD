@@ -8,6 +8,7 @@ set( MAIN_SOURCE
 )
 
 set( SOURCES
+  src/intrinsic_params.cpp
   src/model_parameters.cpp
   src/parameter_evolution_3d.cpp
   src/particle.cpp

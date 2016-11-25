@@ -200,31 +200,46 @@ BOOST_AUTO_TEST_CASE(box_coord_generator_bound_by_ref)
 
 BOOST_AUTO_TEST_CASE(wrapped_coord_generator)
 {
-  tile_coord_type rmin{0, 0};
-  tile_coord_type rmax{4, 4};
-  tile_coord_type bmin{4, 4};
-  tile_coord_type bmax{0, 0};
+  tile_coord_type rmin{4, 4};
+  tile_coord_type rmax{1, 1};
+  tile_coord_type bmin{0, 0};
+  tile_coord_type bmax{5, 5};
 
   simbad::core::coord_generator_grid<tile_coord_type> gen(rmin, rmax, bmin,
                                                           bmax);
-  std::vector<bool> visited(25, false);
+  std::vector<bool> visited(36, false);
 
   int visited_count = 0;
   while(!gen.is_end())
   {
     tile_coord_type c = *gen;
     ++gen;
-    size_t tileno = c[0] + 5 * c[1];
+    size_t tileno = c[0] + 6 * c[1];
     BOOST_REQUIRE(!visited[tileno]);
     visited[tileno] = true;
     visited_count++;
   }
 
   BOOST_CHECK(visited[0]);
+  BOOST_CHECK(visited[1]);
+  BOOST_CHECK(visited[6]);
+  BOOST_CHECK(visited[7]);
+
   BOOST_CHECK(visited[4]);
-  BOOST_CHECK(visited[20]);
+  BOOST_CHECK(visited[5]);
+  BOOST_CHECK(visited[10]);
+  BOOST_CHECK(visited[11]);
+
   BOOST_CHECK(visited[24]);
-  BOOST_REQUIRE_EQUAL(visited_count, 4);
+  BOOST_CHECK(visited[25]);
+  BOOST_CHECK(visited[30]);
+  BOOST_CHECK(visited[31]);
+
+  BOOST_CHECK(visited[28]);
+  BOOST_CHECK(visited[29]);
+  BOOST_CHECK(visited[34]);
+  BOOST_CHECK(visited[35]);
+  BOOST_REQUIRE_EQUAL(visited_count, 16);
 }
 
 BOOST_AUTO_TEST_CASE(distance)
