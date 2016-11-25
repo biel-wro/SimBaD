@@ -20,6 +20,7 @@ parameter_evolution_3d::size_type
 parameter_evolution_3d::configuration_size() const
 {
   NOT_IMPLEMENTED_YET
+  return 0;
 }
 
 void parameter_evolution_3d::visit_configuration(particle_visitor) const
@@ -31,18 +32,21 @@ double parameter_evolution_3d::compute_birth_rate(const cell_params &,
                                                   const model_params &)
 {
   NOT_IMPLEMENTED_YET
+      return 0;
 }
 
 double parameter_evolution_3d::compute_death_rate(const cell_params &,
                                                   const model_params &)
 {
   NOT_IMPLEMENTED_YET
+      return 0;
 }
 
 double parameter_evolution_3d::compute_failure_rate(const cell_params &,
                                                     const model_params &)
 {
   NOT_IMPLEMENTED_YET
+      return 0;
 }
 
 void parameter_evolution_3d::resample_event(cell &p)
