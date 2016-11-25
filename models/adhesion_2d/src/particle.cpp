@@ -1,12 +1,11 @@
 #include "particle.hpp"
+#include "interface/property.hpp"
 #include "model_parameters.hpp"
-
 #include <random>
 
 BEGIN_NAMESPACE_ADHESION_2D
 
-cell::cell(position_type p, velocity_type v,
-           time_type et, time_type dt)
+cell::cell(position_type p, velocity_type v, time_type et, time_type dt)
     : m_position(std::move(p)),
       m_event_time(std::move(et)),
       m_delta_time(std::move(dt)),
@@ -38,13 +37,18 @@ double particle_view::coord(std::size_t d) const
 simbad::core::attribute
 particle_view::extra_attribute(const std::string &attribute_name) const
 {
+  /*
   if("velocity_x" == attribute_name)
-    return m_ptr->velocity()[0];
-  else if("velocity_y" == attribute_name)
-    return m_ptr->velocity()[1];
-
+  {
+    double vx = m_ptr->velocity()[0];
+    return vx;
+  }else if("velocity_y" == attribute_name)
+  {
+    double vy = m_ptr->velocity()[1];
+    return vy;
+  }*/
   std::string msg = "attribute '" + attribute_name + "' not found";
   throw std::runtime_error(std::move(msg));
-}
+  }
 
-END_NAMESPACE_ADHESION_2D
+  END_NAMESPACE_ADHESION_2D
