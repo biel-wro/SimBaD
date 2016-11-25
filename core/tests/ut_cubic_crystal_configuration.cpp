@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE(grid_check)
 
   std::vector<bool> visited(nparticles, false);
 
-  configuration.visit_configuration([&visited](particle const &p) {
+  configuration.visit_configuration([&visited,radius,side](particle const &p) {
     std::size_t id0 = p.coord(0) + radius;
     std::size_t id1 = side * (p.coord(1) + radius);
     std::size_t id2 = side * side * (p.coord(2) + radius);
