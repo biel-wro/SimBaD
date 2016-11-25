@@ -1,5 +1,6 @@
 #include "interface/particle.hpp"
 
+#include<stdexcept>
 BEGIN_NAMESPACE_CORE
 
 particle::~particle() {}
