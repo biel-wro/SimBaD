@@ -9,21 +9,7 @@ model_parameters::~model_parameters() {}
 model_parameters
 model_parameters::from_property_tree(const simbad::core::property_tree &ptree)
 {
-  model_parameters mp;
-  mp.m_max_jump = ptree.get<double>("max_jump");
-  mp.m_viscosity = ptree.get<double>("viscosity");
-  mp.m_diffusion = ptree.get<double>("diffusion");
-
-  mp.m_potential_depth = ptree.get<double>("potential.depth");
-  mp.m_potential_ground_pos =
-      ptree.get<double>("potential.groundstate_location");
-  mp.m_potential_order = ptree.get<int>("potential.order", 6);
-
-  double reltol = ptree.get<double>("potential.tolerance");
-  mp.m_potential_cutoff = range_from_tolerance(
-      reltol, mp.m_potential_ground_pos, mp.m_potential_order);
-
-  return mp;
+  return model_parameters(ptree);
 }
 
 model_parameters::model_parameters(const simbad::core::property_tree &ptree)
@@ -33,6 +19,7 @@ model_parameters::model_parameters(const simbad::core::property_tree &ptree)
           "time_steps.max", std::numeric_limits<double>::infinity())),
       m_viscosity(ptree.get<double>("viscosity")),
       m_diffusion(ptree.get<double>("diffusion")),
+      m_max_friction(ptree.get<double>("max_friction")),
       m_potential_order(ptree.get<int>("potential.order", 6)),
       m_potential_depth(ptree.get<double>("potential.depth")),
       m_potential_ground_pos(
@@ -48,7 +35,7 @@ double model_parameters::range_from_tolerance(double reltol, double ground_pos,
 {
   if(reltol == 0)
     return std::numeric_limits<double>::infinity();
-  double normrange = (std::sqrt(1.0-reltol ) + 1.0) / reltol;
+  double normrange = (std::sqrt(1.0 - reltol) + 1.0) / reltol;
   return std::pow(normrange, 1.0 / order) * ground_pos;
 }
 
@@ -87,7 +74,7 @@ double model_parameters::brownian_displacement(std::mt19937_64 &rng,
   std::normal_distribution<double> dist(0, t * m_diffusion);
   return dist(rng);
 }
-
+double model_parameters::viscosity() const { return m_viscosity; }
 double model_parameters::viscosus_speed(double dt, double old_speed) const
 {
   return std::exp(-m_viscosity * dt) * old_speed;
@@ -95,4 +82,9 @@ double model_parameters::viscosus_speed(double dt, double old_speed) const
 
 double model_parameters::min_time_step() const { return m_min_time_step; }
 double model_parameters::max_time_step() const { return m_max_time_step; }
+double model_parameters::acceleration_with_friction(double f) const
+{
+  return std::max(0.0, f - m_max_friction);
+}
+
 END_NAMESPACE_ADHESION_2D

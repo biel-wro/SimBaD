@@ -60,7 +60,7 @@ void snapshots(property_tree const &pt)
 
   std::unique_ptr<configuration_view> p_init_config =
       get_initial_config(pt.get_child("model.initial_configuration"));
-  p_model->read_configuration(*p_init_config);
+  p_model->set_configuration(*p_init_config);
 
   snapshotter processor(p_model.get(), pt.get<double>("time_step"));
   std::size_t nsteps = pt.get<std::size_t>("max_steps");
@@ -70,7 +70,7 @@ void snapshots(property_tree const &pt)
   {
     configuration_view const &configuration = processor();
     std::cout << "time = " << processor.get_current_time() << std::endl;
-    printer.read_configuration(configuration);
+    printer.set_configuration(configuration);
   }
 }
 

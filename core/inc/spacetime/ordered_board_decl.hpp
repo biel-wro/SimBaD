@@ -10,7 +10,7 @@
 
 #include "core_def.hpp"
 #include "heap/pairing_heap_algorithms.hpp"
-#include "ordered_tile.hpp"
+#include "ordered_board_node.hpp"
 
 BEGIN_NAMESPACE_CORE
 template <class OrderedBoardTraits> class ordered_board
@@ -79,6 +79,7 @@ public:
   template <class... Args> const_handle_type emplace(Args &&... args);
   template <class... Args> dirty_handle_type emplace_dirty(Args &&... args);
   void pop();
+  data_type pop_value();
   void pop_dirty();
   void remove(const_handle_type v);
   void remove_dirty(const_handle_type v);
@@ -112,7 +113,7 @@ public:
   void repair_region_order(KeyGenerator gen);
 
   dirty_handle_type get_dirty_handle(const_handle_type h);
-
+  bool check_order();
 protected:
   node_reference get_node_reference(data_reference vr);
   const_node_reference get_node_reference(const_data_reference vr) const;

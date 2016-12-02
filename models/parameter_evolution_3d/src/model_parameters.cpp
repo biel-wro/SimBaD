@@ -1,64 +1,98 @@
 #include "model_parameters.hpp"
+#include "intrinsic_params.hpp"
+
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 model_params::model_params(const simbad::core::property_tree &pt)
-    : m_interaction(pt.get_child("interaction")),
+    : m_mutation_prob(pt.get<double>("mutation.probability")),
+      m_interaction(pt.get_child("interaction")),
+      m_dispersion(pt.get_child("birth.dispersion")),
       m_birth_extractor(pt.get_child("birth.saturation")),
-      m_lifetime_extractor(pt.get_child("lifetime.saturation")),
-      m_failure_extractor(pt.get_child("failure.saturation"))
+      m_lifespan_extractor(pt.get_child("lifespan.saturation")),
+      m_success_extractor(pt.get_child("success.saturation")),
+      m_birth_eff_mutator(pt.get_child("birth.efficiency.mutator")),
+      m_birth_res_mutator(pt.get_child("birth.resistance.mutator")),
+      m_lifespan_eff_mutator(pt.get_child("lifespan.efficiency.mutator")),
+      m_lifespan_res_mutator(pt.get_child("lifespan.resistance.mutator")),
+      m_success_eff_mutator(pt.get_child("success.efficiency.mutator")),
+      m_success_res_mutator(pt.get_child("success.resistance.mutator"))
 {
 }
 model_params::~model_params() {}
-double model_params::birth_rate(double density, double eff,
-                                double suscept) const
+double model_params::birth_rate(double density, double eff, double res) const
 {
-  double val = eff * birth_saturation(density * suscept);
+  double val = eff * birth_saturation(density / res);
   return val;
 }
 
-double model_params::lifetime(double density, double eff, double suscept) const
+double model_params::lifespan(double density, double eff, double res) const
 {
-  double val = eff * lifetime_saturation(density * suscept);
+  double val = eff * lifespan_saturation(density / res);
   return val;
 }
 
-double model_params::failure_prob(double density, double eff,
-                                  double suscept) const
+double model_params::success_prob(double density, double eff, double res) const
 {
-  double val = eff * failure_saturation(density * suscept);
+  double val = eff * success_saturation(density / res);
   return val;
 }
 
-void model_params::mutate(cell_params &cp, std::mt19937_64 &rnd) const
+void model_params::mutate(cell_params &cp, std::mt19937_64 &rng) const
 {
-  mutate_birth(cp, rnd);
-  mutate_death(cp, rnd);
-  mutate_failure(cp, rnd);
+  if(m_mutation_prob >= std::uniform_real_distribution<>()(rng))
+    return;
+
+  mutate_birth(cp, rng);
+  mutate_lifespan(cp, rng);
+  mutate_success(cp, rng);
+}
+
+const model_params::interaction_type &model_params::interaction() const
+{
+  return m_interaction;
+}
+
+template <class RealType, class Mutator, class RNG>
+static void apply_mutator(RealType &val, Mutator const &mutator, RNG &rng)
+{
+  using StoreRealType = typename Mutator::real_type;
+  RealType res = mutator(StoreRealType(val), rng);
+  val = StoreRealType(res);
 }
 
 double model_params::birth_saturation(double x) const
 {
   return m_birth_extractor(x);
 }
-double model_params::lifetime_saturation(double x) const
+double model_params::lifespan_saturation(double x) const
 {
-  return m_lifetime_extractor(x);
+  return m_lifespan_extractor(x);
 }
-double model_params::failure_saturation(double x) const
+double model_params::success_saturation(double x) const
 {
-  return m_failure_extractor(x);
+  return m_success_extractor(x);
 }
 
 void model_params::mutate_birth(cell_params &cp, std::mt19937_64 &rnd) const
 {
-  NOT_IMPLEMENTED_YET
+  apply_mutator(cp.birth_eff(), m_birth_eff_mutator, rnd);
+  apply_mutator(cp.birth_res(), m_birth_res_mutator, rnd);
 }
-void model_params::mutate_death(cell_params &cp, std::mt19937_64 &rnd) const
+void model_params::mutate_lifespan(cell_params &cp, std::mt19937_64 &rnd) const
 {
-  NOT_IMPLEMENTED_YET
+  apply_mutator(cp.lifespan_eff(), m_lifespan_eff_mutator, rnd);
+  apply_mutator(cp.lifespan_res(), m_lifespan_eff_mutator, rnd);
 }
 
-void model_params::mutate_failure(cell_params &cp, std::mt19937_64 &rnd) const
+void model_params::mutate_success(cell_params &cp, std::mt19937_64 &rnd) const
 {
-  NOT_IMPLEMENTED_YET
+  apply_mutator(cp.success_eff(), m_success_eff_mutator, rnd);
+  apply_mutator(cp.success_res(), m_success_res_mutator, rnd);
 }
+
+const simbad::models::parameter_evolution_3d::model_params::dispersion_type &
+simbad::models::parameter_evolution_3d::model_params::dispersion() const
+{
+  return m_dispersion;
+}
+
 END_NAMESPACE_PARAMETER_EVOLUTION_3D

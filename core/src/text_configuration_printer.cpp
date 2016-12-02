@@ -32,7 +32,7 @@ void text_configuration_printer::set_ostream(std::ostream &ostream)
   m_ostream_ptr = &ostream;
 }
 void text_configuration_printer::read_configuration(
-    const configuration_view &conf)
+    const configuration_view &conf, property_tree const &)
 {
   conf.visit_configuration([this](particle const &p) {
     *m_ostream_ptr << p.coord(0) << " " << p.coord(1) << std::endl;

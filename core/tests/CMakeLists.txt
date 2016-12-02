@@ -19,6 +19,7 @@ set( TEST_SOURCES
   ut_poisson_configuration.cpp
   ut_power_law_distribution.cpp
   ut_properties.cpp
+  ut_skewed_beta_mutation.cpp
   ut_simple_point_and_event.cpp
   ut_space.cpp
   #ut_spacetime.cpp

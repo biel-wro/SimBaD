@@ -1,4 +1,4 @@
-#include "lazy_set_chunk.hpp"
+#include "space/lazy_set_chunk.hpp"
 
 #include <boost/test/auto_unit_test.hpp>
 

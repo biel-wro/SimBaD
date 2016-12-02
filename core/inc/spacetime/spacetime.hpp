@@ -9,7 +9,6 @@ template <class SpacetimeTraits>
 spacetime<SpacetimeTraits>::spacetime(order_pred po, // tiler tiler,
                                       tile_key_equal tke, tile_key_hash tkh)
     : m_order_pred(po),
-      // m_tiler(tiler),
       m_nparticles(0),
       m_board(1024, std::move(tke), std::move(tkh),
               typename ordered_board_traits::data_order_pred(po),
@@ -63,27 +62,54 @@ spacetime<Traits>::emplace_dirty(tile_key const &tk, Args... args)
 template <class Traits> void spacetime<Traits>::pop()
 {
   assert(m_nparticles > 0);
+
   dirty_tile_handle th = m_board.first_dirty();
+  m_nparticles--;
+  if(!allow_empty_tiles && th->size() == 1)
+    return m_board.pop();
+
   th->pop(m_order_pred);
   m_board.repair_order(th);
-  //if(th->empty())
-  //  m_board.pop();
-  m_nparticles--;
 }
+template <class Traits>
+typename spacetime<Traits>::particle spacetime<Traits>::pop_value()
+{
+  assert(m_nparticles > 0);
+  dirty_tile_handle th = m_board.first_dirty();
+  m_nparticles--;
+  particle p = th->pop_value(m_order_pred);
+
+  if(!allow_empty_tiles && th->empty())
+    m_board.pop();
+  else
+    m_board.repair_order(th);
+
+  return p;
+}
+
 template <class Traits> void spacetime<Traits>::pop_dirty() { pop(); }
 template <class Traits> void spacetime<Traits>::remove(const_handle_type h)
 {
-  remove_dirty(h);
-  m_board.repair_order(h.get_tile_handle());
+  assert(m_nparticles > 0);
+  dirty_tile_handle th = h.get_tile_handle();
+  m_nparticles--;
+
+  if(!allow_empty_tiles && th->size() == 1)
+    return m_board.remove(th);
+
+  th->remove(h.get_subset_handle());
+  m_board.repair_order(th);
 }
 template <class Trait> void spacetime<Trait>::remove_dirty(const_handle_type h)
 {
+  assert(m_nparticles > 0);
   const_tile_handle th = h.get_tile_handle();
-  th->remove(h.get_subset_handle());
-  if(th->empty())
-    m_board.remove(th);
-
   m_nparticles--;
+
+  if(!allow_empty_tiles && th->size() == 1)
+    return m_board.remove_dirty(h.get_tile_handle());
+
+  th->remove_dirty(h.get_subset_handle());
 }
 
 template <class Traits> void spacetime<Traits>::clear()
@@ -197,6 +223,22 @@ spacetime<Traits>::get_dirty_handle(const_handle_type ch)
   dirty_tile_handle th = m_board.get_dirty_handle(ch.get_tile_handle());
   dirty_subset_handle sh = th->get_dirty_handle(ch.get_subset_handle());
   return dirty_handle_type(th, sh);
+}
+
+template <class Traits> bool spacetime<Traits>::check_order()
+{
+  return m_board.check_order();
+}
+
+template <class Traits>
+typename spacetime<Traits>::board_type const &spacetime<Traits>::board() const
+{
+  return m_board;
+}
+template <class Traits>
+typename spacetime<Traits>::board_type &spacetime<Traits>::board()
+{
+  return m_board;
 }
 
 END_NAMESPACE_CORE

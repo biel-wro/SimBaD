@@ -17,47 +17,49 @@ public:
   using position_type = simbad::core::coordinates<coord_scalar, dimension>;
   using time_type = double;
   using velocity_type = simbad::core::coordinates<double, dimension>;
-  using acceleration_type = simbad::core::coordinates<double, dimension>;
+  using force_type = simbad::core::coordinates<double, dimension>;
+  using pressure_type = float;
 
   explicit cell(position_type pos = position_type(),
-                    velocity_type v = velocity_type(0),
-                    //acceleration_type acc = acceleration_type(0),
-                    time_type et = std::numeric_limits<time_type>::infinity(),
-                    time_type dt = std::numeric_limits<time_type>::infinity());
+                velocity_type v = velocity_type(0),
+                time_type et = std::numeric_limits<time_type>::infinity(),
+                time_type dt = std::numeric_limits<time_type>::infinity());
   ~cell();
 
   position_type const &position() const;
   position_type &position();
-
-  time_type event_time() const;
-  time_type &event_time();
-
+  time_type next_jump_time() const;
+  time_type &next_jump_time();
+  time_type prev_jump_time() const;
+  time_type &prev_jump_time();
   time_type delta_time() const;
-  time_type &delta_time();
 
   velocity_type const &velocity() const;
   velocity_type &velocity();
-
-//  acceleration_type const &acceleration() const;
-//  acceleration_type &acceleration();
-
+  force_type const &force() const;
+  force_type &force();
+  pressure_type pressure() const;
+  pressure_type &pressure();
 private:
   position_type m_position;
-  time_type m_event_time;
-  time_type m_delta_time;
   velocity_type m_velocity;
-//  acceleration_type m_acceleration;
+  force_type m_force;
+  time_type m_next_time;
+  time_type m_prev_time;
+  time_type m_delta_time;
+  pressure_type m_pressure;
 };
 
 class particle_view : public simbad::core::particle
 {
 public:
   using orig = simbad::models::adhesion_2d::cell;
-  explicit particle_view(orig const *ptr=nullptr);
+  explicit particle_view(orig const *ptr = nullptr);
   void set_orig(const orig *ptr);
   std::size_t dimension() const override;
   double coord(std::size_t d) const override;
-  simbad::core::attribute extra_attribute(std::string const &attribute_name) const override;
+  simbad::core::attribute
+  extra_attribute(std::string const &attribute_name) const override;
 
 private:
   orig const *m_ptr;

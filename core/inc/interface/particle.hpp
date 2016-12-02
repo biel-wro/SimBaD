@@ -17,7 +17,6 @@ public:
   virtual std::size_t dimension() const = 0;
   virtual double coord(std::size_t d) const = 0;
   virtual attribute extra_attribute(std::string const &msg) const;
-
 };
 END_NAMESPACE_CORE
 #endif

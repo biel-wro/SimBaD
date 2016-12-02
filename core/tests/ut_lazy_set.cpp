@@ -1,6 +1,6 @@
-#include "lazy_set.hpp"
-#include "lazy_set_chunk.hpp"
-#include "lazy_set_impl.hpp"
+#include "space/lazy_set.hpp"
+#include "space/lazy_set_chunk.hpp"
+#include "space/lazy_set_impl.hpp"
 
 #include <boost/test/auto_unit_test.hpp>
 

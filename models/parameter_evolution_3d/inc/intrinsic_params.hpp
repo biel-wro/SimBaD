@@ -2,32 +2,37 @@
 #define INTRINSIC_PARAMS_HPP
 
 #include "parameter_evolution_3d_fwd.hpp"
+
+#include "core_fwd.hpp"
 #include <random>
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 
 struct cell_params
 {
 public:
-  float death_coef() const;
-  float &death_coef();
-  float death_susceptibility() const;
-  float &death_susceptibility();
-  float birth_coef() const;
-  float &birth_coef();
-  float birth_susceptibility() const;
-  float &birth_susceptibility();
-  float failure_coef() const;
-  float &failure_coef();
-  float failure_susceptibility() const;
-  float &failure_susceptibility();
+  cell_params(simbad::core::property_tree const &pt);
+  cell_params(float birth_eff, float birth_res, float lifespan_eff,
+              float lifespan_res, float success_eff, float success_res);
+  float lifespan_eff() const;
+  float &lifespan_eff();
+  float lifespan_res() const;
+  float &lifespan_res();
+  float birth_eff() const;
+  float &birth_eff();
+  float birth_res() const;
+  float &birth_res();
+  float success_eff() const;
+  float &success_eff();
+  float success_res() const;
+  float &success_res();
 
 private:
-  float m_lifespan_coef;
-  float m_lifespan_susceptibility;
-  float m_birth_coef;
-  float m_birth_susceptibility;
-  float m_failure_coef;
-  float m_failure_susceptibility;
+  float m_birth_eff;
+  float m_birth_res;
+  float m_lifespan_eff;
+  float m_lifespan_res;
+  float m_success_eff;
+  float m_success_res;
 };
 
 END_NAMESPACE_PARAMETER_EVOLUTION_3D

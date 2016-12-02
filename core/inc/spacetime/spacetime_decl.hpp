@@ -57,13 +57,13 @@ public:
   using dirty_subset_handle = typename subset_type::dirty_handle_type;
   using const_subset_handle = typename subset_type::const_handle_type;
 
-  // using tiler = typename particle_traits::tiler;
   using tile_key = typename particle_traits::tile_key;
   using tile_key_equal = typename particle_traits::tile_key_equal;
   using tile_key_hash = typename particle_traits::tile_key_hash;
 
   using size_type = std::size_t;
 
+  static constexpr bool allow_empty_tiles = particle_traits::allow_empty_tiles;
   struct ordered_board_traits
   {
     using key_type = tile_key;
@@ -95,6 +95,7 @@ public:
   dirty_handle_type emplace_dirty(tile_key const &tk, Args... args);
 
   void pop();
+  particle pop_value();
   void pop_dirty();
 
   void remove(const_handle_type handle);
@@ -111,7 +112,7 @@ public:
   size_type size() const;
   bool empty() const;
 
-  void repair_order(); //TODO
+  void repair_order(); // TODO
   void repair_order(const_handle_type h);
   template <class KeyGenerator> void repair_region_order(KeyGenerator gen);
 
@@ -130,6 +131,9 @@ public:
                                   Visitor v = Visitor());
 
   dirty_handle_type get_dirty_handle(const_handle_type ch);
+  bool check_order();
+  board_type const &board() const;
+  board_type &board();
 
 protected:
   order_pred m_order_pred;

@@ -30,6 +30,7 @@ static property_tree make_test_model_parameters()
   pt.put("max_jump", 0.001);
   pt.put("viscosity", 0.1);
   pt.put("diffusion", 0.01);
+  pt.put("max_friction", 0);
   pt.put("potential.depth", 1);
   pt.put("potential.order", 6);
   pt.put("potential.groundstate_location", 1);
@@ -65,7 +66,7 @@ BOOST_AUTO_TEST_CASE(model_params_load)
 
 BOOST_AUTO_TEST_CASE(particle_size_check)
 {
-  // BOOST_REQUIRE_EQUAL(sizeof(cell), 8 * sizeof(double));
+  BOOST_REQUIRE_EQUAL(sizeof(cell), 6 * sizeof(double));
 }
 
 BOOST_AUTO_TEST_CASE(single_particle)
@@ -75,7 +76,7 @@ BOOST_AUTO_TEST_CASE(single_particle)
   cubic_crystal_configuration initial_configuration =
       make_initial_configuration(0);
   BOOST_TEST_CHECKPOINT("created configuration");
-  model.read_configuration(initial_configuration);
+  model.set_configuration(initial_configuration);
   BOOST_TEST_CHECKPOINT("read configuration");
 
   BOOST_REQUIRE_EQUAL(model.configuration_size(), 1);
@@ -99,7 +100,7 @@ BOOST_AUTO_TEST_CASE(nine_particles)
   adhesion_2d model(make_test_model_parameters());
   cubic_crystal_configuration initial_configuration =
       make_initial_configuration(1);
-  model.read_configuration(initial_configuration);
+  model.set_configuration(initial_configuration);
 
   BOOST_REQUIRE_EQUAL(model.configuration_size(), 9);
   model.print_nicely("before");
@@ -109,7 +110,7 @@ BOOST_AUTO_TEST_CASE(nine_particles)
                   << "(" << e.coord(0, 0) << ", " << e.coord(0, 1) << ") => ("
                   << e.coord(1, 0) << ", " << e.coord(1, 1) << ")" << std::endl;
       },
-      1000);
+      10);
   model.print_nicely("after");
 }
 

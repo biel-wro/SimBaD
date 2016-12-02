@@ -28,7 +28,7 @@ simple_exp_2d::simple_exp_2d(dispersion disp, kernel interaction_kernel,
       m_saturation_intensity(std::move(s)),
       m_random_engine(std::move(random_engine))
 {
-  set_configuration();
+  starting_configuration();
 }
 
 namespace
@@ -128,11 +128,7 @@ struct my_particle_view : public simbad::core::particle
 }
 
 std::size_t simple_exp_2d::configuration_size() const { return m_space.size(); }
-
-std::size_t simple_exp_2d::dimension() const
-{
-  return 2;
-}
+std::size_t simple_exp_2d::dimension() const { return 2; }
 void simple_exp_2d::visit_configuration(
     core::model::particle_visitor visitor) const
 {
@@ -142,12 +138,14 @@ void simple_exp_2d::visit_configuration(
   });
 }
 
-void simple_exp_2d::read_configuration(const core::configuration_view &)
+void simple_exp_2d::read_configuration(
+    const core::configuration_view &,
+    const simbad::core::property_tree &)
 {
   assert(false);
 }
 
-void simple_exp_2d::set_configuration()
+void simple_exp_2d::starting_configuration()
 {
   m_space.clear();
   m_queue.clear();

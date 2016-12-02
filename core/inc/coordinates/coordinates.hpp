@@ -17,7 +17,7 @@
 BEGIN_NAMESPACE_CORE
 
 // clang-format off
-template <class scalar_type_, size_t dimension_>
+template <class scalar_type_, std::size_t dimension_>
 struct coordinates:
     public std::array<scalar_type_, dimension_>,
     boost::totally_ordered1<coordinates<scalar_type_, dimension_>,
@@ -205,7 +205,14 @@ struct coordinates:
     return std::accumulate(this->begin(), this->end(), scalar_type(0), hypot);
   }
 };
+/*
+ * std::min std::max
+ */
 
+
+/*
+ *  Hash
+ */
 struct coord_hasher
 {
   template <class board_coord_type, size_t DIM>
@@ -352,6 +359,28 @@ struct hash<simbad::core::coordinates<scalar_type_, dimension_>>
     return boost::hash_range(c.begin(), c.end());
   }
 };
+
+template <class Scalar, size_t dim>
+simbad::core::coordinates<Scalar, dim>
+min(simbad::core::coordinates<Scalar, dim> const &c1,
+    simbad::core::coordinates<Scalar, dim> const &c2)
+{
+  simbad::core::coordinates<Scalar, dim> ret;
+  for(size_t d = 0; d < dim; ++d)
+    ret[d] = std::min(c1[d], c2[d]);
+  return ret;
+}
+template <class Scalar, std::size_t dim>
+simbad::core::coordinates<Scalar, dim>
+max(simbad::core::coordinates<Scalar, dim> const &c1,
+    simbad::core::coordinates<Scalar, dim> const &c2)
+{
+  simbad::core::coordinates<Scalar, dim> ret;
+  for(std::size_t d = 0; d < dim; ++d)
+    ret[d] = std::max(c1[d], c2[d]);
+  return ret;
+}
+
 }
 
 #endif

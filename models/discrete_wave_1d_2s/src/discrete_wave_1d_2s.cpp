@@ -64,7 +64,9 @@ void discrete_wave_1d_2s::visit_configuration(particle_visitor v) const
   }
 }
 
-void discrete_wave_1d_2s::read_configuration(const simbad::core::configuration_view &)
+void discrete_wave_1d_2s::read_configuration(
+    const simbad::core::configuration_view &,
+    const simbad::core::property_tree &)
 {
   assert(false);
 }

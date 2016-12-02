@@ -1,4 +1,4 @@
-#include "scale_coord_tiler.hpp"
+#include "coordinates/scale_coord_tiler.hpp"
 
 #include <boost/test/auto_unit_test.hpp>
 #include <iostream>

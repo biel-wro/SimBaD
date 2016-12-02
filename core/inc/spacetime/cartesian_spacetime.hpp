@@ -45,6 +45,26 @@ cartesian_spacetime<Traits>::insert_dirty(P &&p)
 
 template <class Traits>
 template <class Visitor>
+void cartesian_spacetime<Traits>::visit_top_guarded(Visitor v)
+{
+  typename super::dirty_tile_handle th = super::board().first_dirty();
+  typename super::dirty_subset_handle sh = th->first_dirty();
+
+  assert(m_tiler(m_coord_getter(*sh)) == th.get_key());
+  v(*sh);
+  tile_coord_vector tile_vec = m_tiler(m_coord_getter(*sh));
+  if(tile_vec == th.get_key())
+  {
+    super::repair_order(dirty_handle_type(th, sh));
+    return;
+  }
+
+  particle p = super::pop_value();
+  insert(std::move(p));
+}
+
+template <class Traits>
+template <class Visitor>
 void cartesian_spacetime<Traits>::visit_ball(coord_vector center_,
                                              coord_scalar r, Visitor v) const
 {
@@ -90,6 +110,68 @@ void cartesian_spacetime<Traits>::visit_ball_guarded_order(coord_vector center_,
           v(p);
       });
 }
+
+template <class Traits>
+template <class Visitor>
+void cartesian_spacetime<Traits>::visit_double_ball(coord_vector c1_,
+                                                    coord_vector c2_,
+                                                    coord_scalar r,
+                                                    Visitor v) const
+{
+  generic_coords c1 = generic_coords::from_indexed(c1_);
+  generic_coords c2 = generic_coords::from_indexed(c2_);
+
+  coord_generator_box<tile_coord_vector> tile_generator(
+      m_tiler(std::min(c1, c2) - r), m_tiler(std::max(c1, c2) + r));
+
+  super::visit_region(
+      tile_generator, [this, v, &c1, &c2, r](particle const &p) {
+        generic_coords pc = generic_coords::from_indexed(m_coord_getter(p));
+        if(c1.distance_to(pc) <= r || c2.distance_top(pc))
+          v(p);
+      });
+}
+
+template <class Traits>
+template <class Visitor>
+void cartesian_spacetime<Traits>::visit_double_ball_dirty(coord_vector c1_,
+                                                          coord_vector c2_,
+                                                          coord_scalar r,
+                                                          Visitor v)
+{
+  generic_coords c1 = generic_coords::from_indexed(c1_);
+  generic_coords c2 = generic_coords::from_indexed(c2_);
+
+  coord_generator_box<tile_coord_vector> tile_generator(
+      m_tiler(std::min(c1, c2) - r), m_tiler(std::max(c1, c2) + r));
+
+  super::visit_region_dirty(
+      tile_generator, [this, v, &c1, &c2, r](particle &p) {
+        generic_coords pc = generic_coords::from_indexed(m_coord_getter(p));
+        if(c1.distance_to(pc) <= r || c2.distance_to(pc))
+          v(p);
+      });
+}
+
+template <class Traits>
+template <class Visitor>
+void cartesian_spacetime<Traits>::visit_double_ball_guarded_order(
+    coord_vector c1_, coord_vector c2_, coord_scalar r, Visitor v)
+{
+  generic_coords c1 = generic_coords::from_indexed(c1_);
+  generic_coords c2 = generic_coords::from_indexed(c2_);
+
+  coord_generator_box<tile_coord_vector> tile_generator(
+      m_tiler(std::min(c1, c2) - r), m_tiler(std::max(c1, c2) + r));
+
+  super::visit_region_guarded_order(
+      tile_generator, [this, v, &c1, &c2, r](particle &p) {
+        generic_coords pc = generic_coords::from_indexed(m_coord_getter(p));
+        if(c1.distance_to(pc) <= r || c2.distance_to(pc))
+          v(p);
+      });
+}
+
 END_NAMESPACE_CORE
 
 #endif // CARTESIAN_SPACETIME_HPP

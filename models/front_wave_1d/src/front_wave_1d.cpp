@@ -31,7 +31,8 @@ void front_wave_1d::visit_configuration(particle_visitor visitor) const
     visitor(view(p));
 }
 
-void front_wave_1d::read_configuration(const simbad::core::configuration_view &)
+void front_wave_1d::read_configuration(const simbad::core::configuration_view &,
+                                       const simbad::core::property_tree &)
 {
   assert(false);
 }

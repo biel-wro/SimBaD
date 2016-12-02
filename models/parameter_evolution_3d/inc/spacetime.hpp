@@ -15,16 +15,17 @@ struct spacetime_traits
   {
     bool operator()(particle const &p1, particle const &p2) const
     {
-      return p2.get_time() < p1.get_time();
+      return p2.event_time() < p1.event_time();
     }
   };
-  using coord_scalar = particle::coord_scalar;
-  using coord_vector = particle::coords;
+  using coord_scalar = particle::position_scalar;
+  using coord_vector = particle::position_type;
   using dimension_type = std::size_t;
   constexpr static dimension_type dimension = 3;
+  constexpr static bool allow_empty_tiles = true;
   struct coord_getter
   {
-    coord_vector operator()(particle const &p) const { return p.get_coords(); }
+    coord_vector operator()(particle const &p) const { return p.position(); }
   };
 };
 

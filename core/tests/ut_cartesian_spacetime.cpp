@@ -5,7 +5,7 @@
 
 
 #include "coordinates/coordinates.hpp"
-#include "scale_coord_tiler.hpp"
+#include "coordinates/scale_coord_tiler.hpp"
 #include "spacetime/cartesian_spacetime.hpp"
 
 using namespace simbad::core;
@@ -40,6 +40,7 @@ struct ParticleTraits
   using coord_getter = CoordGetter;
   using dimension_type = std::size_t;
   constexpr static dimension_type dimension = 3;
+  constexpr static bool allow_empty_tiles = false;
 };
 
 using CartesianSpacetime = cartesian_spacetime<ParticleTraits>;

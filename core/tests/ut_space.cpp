@@ -1,6 +1,6 @@
-#include "scale_coord_tiler.hpp"
-#include "space.hpp"
-#include "space_impl.hpp"
+#include "coordinates/scale_coord_tiler.hpp"
+#include "space/space.hpp"
+#include "space/space_impl.hpp"
 
 #include <boost/test/auto_unit_test.hpp>
 

@@ -2,38 +2,58 @@
 #define PARAMETERS_HPP
 #include "parameter_evolution_3d_fwd.hpp"
 
+#include "dispersions/gaussian_dispersion.hpp"
 #include "extractors/generalized_exponential_extractor.hpp"
 #include "interactions/generalized_exponential_interaction.hpp"
 #include "property_tree.hpp"
+#include "skewed_beta_mutation.hpp"
+
 #include <random>
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 struct model_params
 {
+  using interaction_type =
+      simbad::core::generalized_exponential_interaction<double>;
+  using dispersion_type = simbad::core::gaussian_dispersion<double>;
+
   model_params(simbad::core::property_tree const &pt);
   ~model_params();
 
-  double birth_rate(double density, double efficiency, double suscept) const;
-  double lifetime(double density, double efficiency, double suscept) const;
-  double failure_prob(double density, double efficiency, double suscept) const;
+  double birth_rate(double density, double efficiency, double resistance) const;
+  double lifespan(double density, double efficiency, double resistance) const;
+  double success_prob(double density, double efficiency, double resistan) const;
 
-  void mutate(cell_params &cp, std::mt19937_64 &rnd) const;
+  void mutate(cell_params &cp, std::mt19937_64 &rng) const;
+  interaction_type const &interaction() const;
+  dispersion_type const &dispersion() const;
 
 protected:
   double birth_saturation(double x) const;
-  double lifetime_saturation(double x) const;
-  double failure_saturation(double x) const;
+  double lifespan_saturation(double x) const;
+  double success_saturation(double x) const;
 
   void mutate_birth(cell_params &cp, std::mt19937_64 &rnd) const;
-  void mutate_death(cell_params &cp, std::mt19937_64 &rnd) const;
-  void mutate_failure(cell_params &cp, std::mt19937_64 &rnd) const;
+  void mutate_lifespan(cell_params &cp, std::mt19937_64 &rnd) const;
+  void mutate_success(cell_params &cp, std::mt19937_64 &rnd) const;
 
 private:
-  using interaction = simbad::core::generalized_exponential_interaction<double>;
-  interaction m_interaction;
-  using extractor = simbad::core::generalized_exponential_extractor<double>;
-  extractor m_birth_extractor;
-  extractor m_lifetime_extractor;
-  extractor m_failure_extractor;
+  double m_mutation_prob;
+
+  interaction_type m_interaction;
+  dispersion_type m_dispersion;
+  using extractor_type =
+      simbad::core::generalized_exponential_extractor<double>;
+  extractor_type m_birth_extractor;
+  extractor_type m_lifespan_extractor;
+  extractor_type m_success_extractor;
+
+  using mutator_type = simbad::core::skewed_beta_mutator<double>;
+  mutator_type m_birth_eff_mutator;
+  mutator_type m_birth_res_mutator;
+  mutator_type m_lifespan_eff_mutator;
+  mutator_type m_lifespan_res_mutator;
+  mutator_type m_success_eff_mutator;
+  mutator_type m_success_res_mutator;
 };
 END_NAMESPACE_PARAMETER_EVOLUTION_3D
 #endif // PARAMETERS_HPP

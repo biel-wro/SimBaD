@@ -54,7 +54,8 @@ template <class... Args>
 typename ordered_board<Traits>::const_handle_type
 ordered_board<Traits>::emplace(Args &&... args)
 {
-  return emplace_dirty(std::forward<Args>(args)...);
+  const_handle_type h = emplace_dirty(std::forward<Args>(args)...);
+  return h;
 }
 template <class Traits>
 template <class... Args>
@@ -77,18 +78,36 @@ ordered_board<Traits>::emplace_dirty(Args &&... args)
   return dirty_handle_type(rptr);
 }
 
-template <class Traits> void ordered_board<Traits>::pop() { pop_dirty(); }
-template <class Traits> void ordered_board<Traits>::pop_dirty()
+template <class Traits> void ordered_board<Traits>::pop()
 {
   assert(nullptr != m_heap_root);
-
+  assert(m_tile_list.size() > 0);
   node_pointer to_delete = m_heap_root;
-  m_tile_set.erase(*m_heap_root);
-  m_tile_list.erase(m_tile_list.iterator_to(*m_heap_root));
   m_heap_root = pairing_heap_algo::pop(m_heap_root, m_order_pred);
+
+  m_tile_set.erase(*to_delete);
+  m_tile_list.erase(m_tile_list.iterator_to(*to_delete));
+
   delete to_delete;
 }
+template <class Traits>
+typename ordered_board<Traits>::data_type ordered_board<Traits>::pop_value()
+{
+  assert(nullptr != m_heap_root);
+  assert(m_tile_list.size() > 0);
 
+  node_pointer to_delete = m_heap_root;
+  m_heap_root = pairing_heap_algo::pop(m_heap_root, m_order_pred);
+  m_tile_set.erase(*to_delete);
+  m_tile_list.erase(m_tile_list.iterator_to(*to_delete));
+
+  data_type val = std::move(to_delete->get_data());
+
+  delete to_delete;
+  return val;
+}
+
+template <class Traits> void ordered_board<Traits>::pop_dirty() { pop(); }
 template <class Traits> void ordered_board<Traits>::remove(const_handle_type d)
 {
   remove_dirty(d);
@@ -114,12 +133,16 @@ template <class Traits>
 typename ordered_board<Traits>::const_data_reference
 ordered_board<Traits>::top() const
 {
+  assert(nullptr != m_heap_root);
+  assert(!m_tile_list.empty());
   return m_heap_root->get_data();
 }
 template <class Traits>
 typename ordered_board<Traits>::data_reference
 ordered_board<Traits>::top_dirty()
 {
+  assert(nullptr != m_heap_root);
+  assert(!m_tile_list.empty());
   return m_heap_root->get_data();
 }
 
@@ -127,12 +150,16 @@ template <class Traits>
 typename ordered_board<Traits>::const_handle_type
 ordered_board<Traits>::first() const
 {
+  assert(nullptr != m_heap_root);
+  assert(!m_tile_list.empty());
   return const_handle_type(m_heap_root);
 }
 template <class Traits>
 typename ordered_board<Traits>::dirty_handle_type
 ordered_board<Traits>::first_dirty()
 {
+  assert(nullptr != m_heap_root);
+  assert(!m_tile_list.empty());
   return dirty_handle_type(m_heap_root);
 }
 
@@ -150,7 +177,6 @@ template <class Traits>
 typename ordered_board<Traits>::dirty_handle_type
 ordered_board<Traits>::find_dirty(const key_type &key)
 {
-  // using return_type = boost::optional<data_reference>;
   set_iterator it =
       m_tile_set.find(key, m_key_hash_pred, node_equal_pred(m_key_equal_pred));
 
@@ -261,6 +287,11 @@ typename ordered_board<Traits>::dirty_handle_type
 ordered_board<Traits>::get_dirty_handle(const_handle_type ch)
 {
   return dirty_handle_type(const_cast<node_pointer>(ch.get_object_ptr()));
+}
+
+template <class Traits> bool ordered_board<Traits>::check_order()
+{
+  return pairing_heap_algo::check_heap_property(m_heap_root, m_order_pred);
 }
 
 END_NAMESPACE_CORE

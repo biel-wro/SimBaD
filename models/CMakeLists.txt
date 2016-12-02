@@ -9,7 +9,7 @@ set( MODELS
   discrete_wave_1d_1s
   discrete_wave_1d_2s
   front_wave_1d
-
+  parameter_evolution_3d
   simple_exp_2d
 )
 
@@ -26,7 +26,6 @@ endif()
 
 subdirs(common)
 
-subdirs(parameter_evolution_3d)
 foreach( MODEL ${MODELS} )
   subdirs( ${MODEL} )
 endforeach()

@@ -122,6 +122,16 @@ public:
     pop_dirty();
     find_top(std::move(cmp));
   }
+  template <class Compare> value_type pop_value(Compare cmp = Compare())
+  {
+    if(m_top_it != std::prev(m_subcontainer.end()))
+      std::swap(*m_top_it, m_subcontainer.back());
+    value_type val = std::move(m_subcontainer.back());
+    m_subcontainer.pop_back();
+    repair_order(cmp);
+    return val;
+  }
+
   void pop_dirty() { remove_dirty(m_top_it); }
   void clear()
   {
@@ -228,10 +238,10 @@ template <class Compare = std::less<>> struct queued_set_compare
   template <class OrderedSet>
   bool operator()(OrderedSet const &lhs, OrderedSet const &rhs) const
   {
-    if(lhs.empty())
-      return true;
     if(rhs.empty())
       return false;
+    if(lhs.empty())
+      return true;
     return m_compare(lhs.top(), rhs.top());
   }
 

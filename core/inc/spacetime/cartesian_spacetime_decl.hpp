@@ -20,6 +20,7 @@ template <class ParticleTraits> struct make_spacetime_traits_cartesian
 
     using dimension_type = typename ParticleTraits::dimension_type;
     constexpr static dimension_type dimension = ParticleTraits::dimension;
+    constexpr static bool allow_empty_tiles = ParticleTraits::allow_empty_tiles;
 
     using tile_key = coordinates<tile_coord_scalar, ParticleTraits::dimension>;
     using tile_key_equal = std::equal_to<tile_key>;
@@ -46,6 +47,7 @@ public:
   using coord_getter = typename particle_traits::coord_getter;
   using dimension_type = typename particle_traits::dimension_type;
   constexpr static dimension_type dimension = particle_traits::dimension;
+  constexpr static bool allow_empty_tiles = particle_traits::allow_empty_tiles;
 
   using generic_coords = coordinates<coord_scalar, dimension>;
 
@@ -69,16 +71,29 @@ public:
   template <class P> const_handle_type insert(P &&p);
   template <class P> dirty_handle_type insert_dirty(P &&p);
 
+  template <class Visitor> void visit_top_guarded(Visitor v = Visitor());
+
   template <class Visitor>
   void visit_ball(coord_vector center, coord_scalar radius,
                   Visitor v = Visitor()) const;
   template <class Visitor>
   void visit_ball_dirty(coord_vector center, coord_scalar radius,
-                  Visitor v = Visitor());
+                        Visitor v = Visitor());
   template <class Visitor>
   void visit_ball_guarded_order(coord_vector center, coord_scalar radius,
-                  Visitor v = Visitor());
+                                Visitor v = Visitor());
 
+  template <class Visitor>
+  void visit_double_ball(coord_vector c1, coord_vector c2, coord_scalar radius,
+                         Visitor v = Visitor()) const;
+  template <class Visitor>
+  void visit_double_ball_dirty(coord_vector c1, coord_vector c2,
+                               coord_scalar radius, Visitor v = Visitor());
+
+  template <class Visitor>
+  void visit_double_ball_guarded_order(coord_vector c1, coord_vector c2,
+                                       coord_scalar radius,
+                                       Visitor v = Visitor());
   tiler m_tiler;
   coord_getter m_coord_getter;
 };

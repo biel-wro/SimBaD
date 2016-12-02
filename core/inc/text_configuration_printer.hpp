@@ -7,8 +7,6 @@
 
 #include <iosfwd>
 
-
-
 BEGIN_NAMESPACE_CORE
 class text_configuration_printer : public configuration_reader
 {
@@ -18,12 +16,13 @@ public:
   text_configuration_printer(property_tree const &pt);
 
   void set_ostream(std::ostream &ostream);
-  void read_configuration(const configuration_view &conf) override;
+  void read_configuration(const configuration_view &conf,
+                          property_tree const &) override;
+
 
 private:
-  std::ostream * m_ostream_ptr;
+  std::ostream *m_ostream_ptr;
 };
-
 
 END_NAMESPACE_CORE
 #endif // TEXT_CONFIGURATION_PRINTER_HPP

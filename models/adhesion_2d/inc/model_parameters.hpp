@@ -25,7 +25,9 @@ struct model_parameters
   double max_jump() const;
   double diffusion() const;
   double brownian_displacement(std::mt19937_64 &rng, double t) const;
+  double viscosity() const;
   double viscosus_speed(double dt, double old_speed) const;
+  double acceleration_with_friction(double f)const;
   double min_time_step() const;
   double max_time_step() const;
 
@@ -35,6 +37,7 @@ private:
   double m_max_time_step;
   double m_viscosity;
   double m_diffusion;
+  double m_max_friction;
 
   int m_potential_order;
   double m_potential_depth;

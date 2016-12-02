@@ -1,9 +1,13 @@
 #ifndef SIMPLE_EVENT_HPP
 #define SIMPLE_EVENT_HPP
-#include <ostream>
+
+
 
 #include "event_kind.hpp"
-#include "particle_coords.hpp"
+
+#include "coordinates/coordinates.hpp"
+#include <ostream>
+
 namespace simbad
 {
 namespace core
@@ -42,7 +46,7 @@ public:
   }
 
 private:
-  particle_coords<coord_type, DIM> coords;
+  coordinates<coord_type, DIM> coords;
   time_type t;
   EVENT_KIND ek;
 };

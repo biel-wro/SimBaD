@@ -1,30 +1,46 @@
 #include "particle.hpp"
 #include "model_parameters.hpp"
 
+#include "event_kind.hpp"
+#include "property_tree.hpp"
 #include <random>
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
-cell::cell() {}
+cell::cell(position_type pos, simbad::core::property_tree const &pt)
+    : m_position(pos),
+      m_time(0),
+      m_params(pt),
+      m_interaction_acc(0),
+      m_event_kind(simbad::core::EVENT_KIND::NONE)
+{
+}
 cell::~cell() {}
-const cell::coords &cell::get_coords() const { return m_coords; }
-float cell::get_time() const { return m_time; }
-cell::EVENT_KIND cell::get_event_kind() const { return m_event_kind; }
+cell::position_type const &cell::position() const { return m_position; }
+void cell::set_position(const position_type &pos) { m_position = pos; }
+void cell::set_event_time(float t) { m_time = t; }
+float cell::event_time() const { return m_time; }
+cell::EVENT_KIND cell::event_kind() const { return m_event_kind; }
+void cell::set_event_kind(cell::EVENT_KIND ek) { m_event_kind = ek; }
 void cell::include_interaction(const cell &p, const model_params &mp)
 {
-  throw "not implemented yet";
+  position_type displacement = p.position() - position();
+  position_scalar distance = displacement.hypot();
+  m_interaction_acc += mp.interaction()(distance);
 }
 
 void cell::exclude_interaction(const cell &p, const model_params &mp)
 {
-  throw "not implemented yet";
+  position_type displacement = p.position() - position();
+  position_scalar distance = displacement.hypot();
+  m_interaction_acc -= mp.interaction()(distance);
 }
 
-cell_params &cell::get_params() { return m_intrinsic_params; }
-const cell_params &cell::get_params() const { return m_intrinsic_params; }
-
+cell_params &cell::params() { return m_params; }
+const cell_params &cell::params() const { return m_params; }
+double cell::density() const { return m_interaction_acc; }
 void cell::mutate(const model_params &mp, std::mt19937_64 &rng)
 {
-  mp.mutate(m_intrinsic_params,rng);
+  mp.mutate(m_params, rng);
 }
 
 END_NAMESPACE_PARAMETER_EVOLUTION_3D
