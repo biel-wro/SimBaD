@@ -349,34 +349,34 @@ END_NAMESPACE_CORE
 
 namespace std
 {
-template <class scalar_type_, size_t dimension_>
-struct hash<simbad::core::coordinates<scalar_type_, dimension_>>
+template <class Scalar, size_t dimension>
+struct hash<simbad::core::coordinates<Scalar, dimension>>
 {
   using result_type = std::size_t;
-  using arg_type = simbad::core::coordinates<scalar_type_, dimension_>;
+  using arg_type = simbad::core::coordinates<Scalar, dimension>;
   std::size_t operator()(arg_type const &c)
   {
     return boost::hash_range(c.begin(), c.end());
   }
 };
 
-template <class Scalar, size_t dim>
-simbad::core::coordinates<Scalar, dim>
-min(simbad::core::coordinates<Scalar, dim> const &c1,
-    simbad::core::coordinates<Scalar, dim> const &c2)
+template <class Scalar, size_t dimension>
+simbad::core::coordinates<Scalar, dimension>
+min(simbad::core::coordinates<Scalar, dimension> const &c1,
+    simbad::core::coordinates<Scalar, dimension> const &c2)
 {
-  simbad::core::coordinates<Scalar, dim> ret;
-  for(size_t d = 0; d < dim; ++d)
+  simbad::core::coordinates<Scalar, dimension> ret;
+  for(size_t d = 0; d < dimension; ++d)
     ret[d] = std::min(c1[d], c2[d]);
   return ret;
 }
-template <class Scalar, std::size_t dim>
-simbad::core::coordinates<Scalar, dim>
-max(simbad::core::coordinates<Scalar, dim> const &c1,
-    simbad::core::coordinates<Scalar, dim> const &c2)
+template <class Scalar, size_t dimension>
+simbad::core::coordinates<Scalar, dimension>
+max(simbad::core::coordinates<Scalar, dimension> const &c1,
+    simbad::core::coordinates<Scalar, dimension> const &c2)
 {
-  simbad::core::coordinates<Scalar, dim> ret;
-  for(std::size_t d = 0; d < dim; ++d)
+  simbad::core::coordinates<Scalar, dimension> ret;
+  for(size_t d = 0; d < dimension; ++d)
     ret[d] = std::max(c1[d], c2[d]);
   return ret;
 }
