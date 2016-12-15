@@ -1,4 +1,6 @@
 #include "configurations/cubic_crystal_configuration.hpp"
+#include "interface/particle.hpp"
+
 #include <boost/test/auto_unit_test.hpp>
 #include <iostream>
 

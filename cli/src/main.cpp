@@ -6,14 +6,13 @@
 #include "configurations/poisson_configuration.hpp"
 #include "interface/event.hpp"
 #include "interface/model.hpp"
-#include "launch_utils.hpp"
-#include "model_factory.hpp"
-#include "model_register.hpp"
-
-#include "properties.hpp"
-#include "property_tree.hpp"
-#include "snapshotter.hpp"
-#include "text_configuration_printer.hpp"
+#include "interface/model_factory.hpp"
+#include "interface/model_register.hpp"
+#include "interface/property_tree.hpp"
+#include "processors/launch_utils.hpp"
+#include "processors/snapshotter.hpp"
+#include "processors/text_configuration_printer.hpp"
+#include "utils/properties.hpp"
 
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -58,9 +57,15 @@ void snapshots(property_tree const &pt)
 {
   std::unique_ptr<model> p_model = get_model(pt.get_child("model"));
 
+  auto opt_defattr = pt.get_child_optional("model.default_attributes");
+  property_tree empty_properties;
+
+  property_tree const &default_attr =
+      opt_defattr ? opt_defattr.get() : empty_properties;
+
   std::unique_ptr<configuration_view> p_init_config =
       get_initial_config(pt.get_child("model.initial_configuration"));
-  p_model->set_configuration(*p_init_config);
+  p_model->set_configuration(*p_init_config, default_attr);
 
   snapshotter processor(p_model.get(), pt.get<double>("time_step"));
   std::size_t nsteps = pt.get<std::size_t>("max_steps");
@@ -78,13 +83,39 @@ static void simulation(property_tree const &pt)
 {
   std::unique_ptr<model> p_model = get_model(pt.get_child("model"));
 
+  auto opt_defattr = pt.get_child_optional("model.default_attributes");
+  property_tree empty_properties;
+
+  property_tree const &default_attr =
+      opt_defattr ? opt_defattr.get() : empty_properties;
+
+  std::unique_ptr<configuration_view> p_init_config =
+      get_initial_config(pt.get_child("model.initial_configuration"));
+  p_model->set_configuration(*p_init_config, default_attr);
+
   size_t nevents = pt.get<size_t>("nevents");
-
-  auto event_visitor = [](event const &e) {
-    std::cout << e.time() << " " << e.coord(0, 0) << std::endl;
-  };
-
+  auto event_visitor = [](event const &e) { std::cout << e << std::endl; };
   p_model->generate_events(event_visitor, nevents);
+}
+static void final_snapshot(property_tree const &pt)
+{
+  std::unique_ptr<model> p_model = get_model(pt.get_child("model"));
+
+  auto opt_defattr = pt.get_child_optional("model.default_attributes");
+  property_tree empty_properties;
+
+  property_tree const &default_attr =
+      opt_defattr ? opt_defattr.get() : empty_properties;
+
+  std::unique_ptr<configuration_view> p_init_config =
+      get_initial_config(pt.get_child("model.initial_configuration"));
+  p_model->set_configuration(*p_init_config, default_attr);
+
+  text_configuration_printer configuration_printer(std::cout);
+
+  size_t nevents = pt.get<size_t>("nevents");
+  p_model->generate_events([](event const &) {}, nevents);
+  configuration_printer.set_configuration(*p_model);
 }
 
 int main(int argc, const char **argv)
@@ -92,7 +123,8 @@ int main(int argc, const char **argv)
   using namespace boost::property_tree;
 
   properties prop;
-  prop.add_properties_cmd(argc, argv);
+  argument_parser parser(argc,argv);
+  prop.add_properties(parser.get_property_tree());
 
   ptree const &tree = prop.get_property_tree();
   boost::optional<std::string> param_fname =
@@ -107,4 +139,8 @@ int main(int argc, const char **argv)
     simulation(tree.get_child("simulation"));
   else if(tree.count("snapshots"))
     snapshots(tree.get_child("snapshots"));
+  else if(tree.count("final_snapshot"))
+    final_snapshot(tree.get_child("final_snapshot"));
+  else
+    throw std::runtime_error("unrecognized mode");
 }

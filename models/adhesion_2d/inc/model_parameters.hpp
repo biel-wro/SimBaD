@@ -2,7 +2,7 @@
 #define PARAMETERS_HPP
 #include "adhesion_2d_def.hpp"
 
-#include "extractors/generalized_exponential_extractor.hpp"
+#include "computational/extractors/generalized_exponential_extractor.hpp"
 
 #include <random>
 

@@ -3,7 +3,7 @@
 
 #include "discrete_wave_1d_1s_fwd.hpp"
 #include "discrete_wave_1d_templ.hpp"
-#include "power_law_distribution.hpp"
+#include "computational/distributions/power_law_distribution.hpp"
 
 #include <random>
 #include <vector>

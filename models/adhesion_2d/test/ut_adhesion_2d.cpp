@@ -3,8 +3,8 @@
 #include "configurations/cubic_crystal_configuration.hpp"
 #include "interface/model.hpp"
 #include "particle.hpp"
-#include "property_tree.hpp"
-#include "snapshotter.hpp"
+#include "interface/property_tree.hpp"
+#include "processors/snapshotter.hpp"
 
 #include "core_fwd.hpp"
 

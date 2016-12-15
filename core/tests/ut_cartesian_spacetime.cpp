@@ -6,7 +6,7 @@
 
 #include "coordinates/coordinates.hpp"
 #include "coordinates/scale_coord_tiler.hpp"
-#include "spacetime/cartesian_spacetime.hpp"
+#include "containers/spacetime/cartesian_spacetime.hpp"
 
 using namespace simbad::core;
 namespace

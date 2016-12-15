@@ -1,6 +1,6 @@
 #include <boost/test/auto_unit_test.hpp>
 
-#include "power_law_distribution.hpp"
+#include "computational/distributions/power_law_distribution.hpp"
 
 #include <random>
 

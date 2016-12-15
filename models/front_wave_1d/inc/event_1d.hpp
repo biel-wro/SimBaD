@@ -3,7 +3,7 @@
 
 #include "front_wave_1d_fwd.hpp"
 
-#include "simple_event.hpp"
+#include "legacy/simple/simple_event.hpp"
 BEGIN_NAMESPACE_FRONT_WAVE_1D
 class event_1d : public core::simple_event<float, float, 1>
 {

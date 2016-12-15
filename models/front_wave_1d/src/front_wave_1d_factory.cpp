@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "property_tree.hpp"
+#include "interface/property_tree.hpp"
 
 #include "front_wave_1d.hpp"
 

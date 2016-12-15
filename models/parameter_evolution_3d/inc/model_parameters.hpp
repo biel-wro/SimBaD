@@ -2,11 +2,11 @@
 #define PARAMETERS_HPP
 #include "parameter_evolution_3d_fwd.hpp"
 
-#include "dispersions/gaussian_dispersion.hpp"
-#include "extractors/generalized_exponential_extractor.hpp"
-#include "interactions/generalized_exponential_interaction.hpp"
-#include "property_tree.hpp"
-#include "skewed_beta_mutation.hpp"
+#include "computational/dispersions/gaussian_dispersion.hpp"
+#include "computational/extractors/generalized_exponential_extractor.hpp"
+#include "computational/interactions/generalized_exponential_interaction.hpp"
+#include "interface/property_tree.hpp"
+#include "computational/mutations/skewed_beta_mutation.hpp"
 
 #include <random>
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D

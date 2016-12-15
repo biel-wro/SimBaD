@@ -1,0 +1,154 @@
+simulation
+{
+  nevents 1000000
+  time_step 0.1
+  max_steps 1000
+  
+  model
+  {
+    class parameter_evolution_3d
+    parameters
+    {
+      space
+      {
+        tile_size 1
+      }
+      seed 0
+      mutation
+      {
+        probability 0.01
+      }
+      interaction
+      {
+        sigma 1
+        gamma 2
+        tolerance 0.1
+      }
+      
+      birth
+      {
+        dispersion
+        {
+          sigma 1
+        }
+        saturation
+        {
+          sigma 10
+          gamma 2
+          scale 10
+        }
+        efficiency
+        {
+          mutator
+          {
+            alpha 2
+            improvement_probability 0.1
+            scale 1
+          }
+        }
+        resistance
+        {
+          mutator
+          {
+            alpha 2
+            improvement_probability 0.1
+            scale 1
+          }
+        }        
+      }
+      lifespan
+      {
+        saturation
+        {
+          sigma 10
+          gamma 2
+          scale 1000
+        }
+        efficiency
+        {
+          mutator
+          {
+            alpha 2
+            improvement_probability 0.1
+            scale 1
+          }
+        }
+        resistance
+        {
+          mutator
+          {
+            alpha 2
+            improvement_probability 0.1
+            scale 1
+          }
+        }
+      }
+      success
+      {
+        saturation
+        {
+          sigma 10
+          gamma 2
+          scale 1
+        }
+        efficiency
+        {
+          mutator
+          {
+            alpha 2
+            improvement_probability 0.1
+            scale 1
+          }
+        }
+        resistance
+        {
+          mutator
+          {
+            alpha 2
+            improvement_probability 0.1
+            scale 1
+          }
+        }
+      }
+
+    }
+    initial_configuration
+    {
+      class cubic_crystal_configuration
+      parameters
+      {
+        dimension 3
+        radius 2
+        spacing 1
+      }
+    }
+    default_attributes
+    {
+      birth
+      {
+        efficiency 0.1
+        resistance 0.5
+      }
+      lifespan
+      {
+        efficiency 0.1
+        resistance 0.5
+      }
+      success
+      {
+        efficiency 0.9
+        resistance 0.5
+      }
+    }
+  }
+
+  reader
+  {
+    class text_configuration_printer
+    parameters
+    {
+      output stdout
+    }
+    stream stdout
+  }
+}

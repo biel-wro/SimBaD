@@ -1,8 +1,8 @@
 #include "front_wave_1d.hpp"
 
 #include "front_wave_1d_impl.hpp"
-#include "simple_event_view.hpp"
-#include "simple_particle_view.hpp"
+#include "legacy/simple/simple_event_view.hpp"
+#include "legacy/simple/simple_particle_view.hpp"
 
 BEGIN_NAMESPACE_FRONT_WAVE_1D
 front_wave_1d::front_wave_1d(double alpha, double x0 = 1.0)
@@ -31,8 +31,7 @@ void front_wave_1d::visit_configuration(particle_visitor visitor) const
     visitor(view(p));
 }
 
-void front_wave_1d::read_configuration(const simbad::core::configuration_view &,
-                                       const simbad::core::property_tree &)
+void front_wave_1d::read_configuration(const simbad::core::configuration_view &)
 {
   assert(false);
 }

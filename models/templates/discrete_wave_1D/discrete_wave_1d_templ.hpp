@@ -6,9 +6,9 @@
 #include <random>
 #include <vector>
 
-#include "event_kind.hpp"
-#include "power_law_distribution.hpp"
-#include "simple_event.hpp"
+#include "interface/event_kind.hpp"
+#include "computational/distributions/power_law_distribution.hpp"
+#include "legacy/simple/simple_event.hpp"
 
 namespace simbad
 {

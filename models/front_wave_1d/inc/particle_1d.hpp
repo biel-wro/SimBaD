@@ -7,7 +7,7 @@
 #include <random>
 
 #include "event_rate_accumulator.hpp"
-#include "simple_tracked_particle.hpp"
+#include "legacy/simple/simple_tracked_particle.hpp"
 
 
 

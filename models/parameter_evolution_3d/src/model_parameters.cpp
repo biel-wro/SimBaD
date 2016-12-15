@@ -38,7 +38,7 @@ double model_params::success_prob(double density, double eff, double res) const
 
 void model_params::mutate(cell_params &cp, std::mt19937_64 &rng) const
 {
-  if(m_mutation_prob >= std::uniform_real_distribution<>()(rng))
+  if(m_mutation_prob < std::uniform_real_distribution<>()(rng))
     return;
 
   mutate_birth(cp, rng);

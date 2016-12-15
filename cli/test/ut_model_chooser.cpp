@@ -3,9 +3,9 @@
 #include <iostream>
 
 //#include "core_fwd.hpp"
-#include "model_register.hpp"
-
 #include "builtin_models.hpp"
+
+#include "interface/model_register.hpp"
 
 using namespace simbad::core;
 using namespace simbad::models::common;

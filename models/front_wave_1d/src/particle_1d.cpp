@@ -4,8 +4,8 @@
 #include "death_rate_accumulator.hpp"
 #include "event_1d.hpp"
 #include "event_rate_accumulator.hpp"
-#include "simple_event_queue.hpp"
-#include "simple_tracked_particle.hpp"
+#include "legacy/simple/simple_event_queue.hpp"
+#include "legacy/simple/simple_tracked_particle.hpp"
 
 BEGIN_NAMESPACE_FRONT_WAVE_1D
 

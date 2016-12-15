@@ -2,7 +2,7 @@
 #define PARTICLE_HPP
 #include "adhesion_2d_fwd.hpp"
 
-#include "accumulator.hpp"
+#include "computational/templates/accumulator.hpp"
 #include "coordinates/coordinates.hpp"
 #include "interface/particle.hpp"
 #include <limits>
@@ -56,10 +56,10 @@ public:
   using orig = simbad::models::adhesion_2d::cell;
   explicit particle_view(orig const *ptr = nullptr);
   void set_orig(const orig *ptr);
-  std::size_t dimension() const override;
+  //std::size_t dimension() const override;
   double coord(std::size_t d) const override;
-  simbad::core::attribute
-  extra_attribute(std::string const &attribute_name) const override;
+  //simbad::core::attribute
+  //extra_attribute(std::size_t) const override;
 
 private:
   orig const *m_ptr;

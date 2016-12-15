@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <random>
 
-#include "heap/binary_tree_algorithms.hpp"
+#include "containers/heap/binary_tree_algorithms.hpp"
 struct MyProperNode
 {
   MyProperNode *left;

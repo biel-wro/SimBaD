@@ -1,9 +1,9 @@
 #include "object_tracking/handle_trackee.hpp"
 #include "object_tracking/trackee.hpp"
 
-#include "simple_event_queue.hpp"
-#include "simple_event_schedule.hpp"
-#include "simple_tracked_particle.hpp"
+#include "legacy/simple/simple_event_queue.hpp"
+#include "legacy/simple/simple_event_schedule.hpp"
+#include "legacy/simple/simple_tracked_particle.hpp"
 
 #include <boost/heap/d_ary_heap.hpp>
 #include <boost/heap/fibonacci_heap.hpp>

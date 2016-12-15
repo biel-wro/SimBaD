@@ -3,7 +3,7 @@
 
 #include "simple_exp_2d_fwd.hpp"
 
-#include "model_factory.hpp"
+#include "interface/model_factory.hpp"
 
 BEGIN_NAMESPACE_SIMPLE_EXP_2D
 

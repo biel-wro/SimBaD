@@ -3,7 +3,7 @@
 
 #include "front_wave_1d_fwd.hpp"
 
-#include "model_factory.hpp"
+#include "interface/model_factory.hpp"
 
 BEGIN_NAMESPACE_FRONT_WAVE_1D
 

@@ -1,9 +1,9 @@
 #include "adhesion_2d.hpp"
 #include "core_fwd.hpp"
 
-#include "event_kind.hpp"
+#include "interface/event_kind.hpp"
 #include "interface/event.hpp"
-#include "model_factory.hpp"
+#include "interface/model_factory.hpp"
 
 #include <cassert>
 #include <iostream>
@@ -156,15 +156,14 @@ void adhesion_2d::visit_configuration(particle_visitor v) const
   });
 }
 
-void adhesion_2d::read_configuration(const configuration_view &configuration,
-                                     const simbad::core::property_tree &)
+void adhesion_2d::read_configuration(const configuration_view &configuration)
 {
   assert(configuration.dimension() == dimension());
 
   m_spacetime.clear();
 
   configuration.visit_configuration([this](simbad::core::particle const &p) {
-    assert(dimension() == p.dimension());
+    //assert(dimension() == p.dimension());
 
     position_type position{p.coord(0), p.coord(1)};
     velocity_type velocity(0);

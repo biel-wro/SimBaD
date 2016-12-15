@@ -6,7 +6,7 @@
 
 #include "death_rate_accumulator.hpp"
 #include "density_accumulator.hpp"
-#include "event_kind.hpp"
+#include "interface/event_kind.hpp"
 
 BEGIN_NAMESPACE_FRONT_WAVE_1D
 

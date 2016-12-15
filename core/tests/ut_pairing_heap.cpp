@@ -4,7 +4,7 @@
 #include <numeric>
 #include <random>
 
-#include "heap/pairing_heap_algorithms.hpp"
+#include "containers/heap/pairing_heap_algorithms.hpp"
 
 struct MyNode
 {

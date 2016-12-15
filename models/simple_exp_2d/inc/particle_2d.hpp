@@ -5,7 +5,7 @@
 #include "coordinates/coordinates.hpp"
 #include "density_accumulator.hpp"
 #include "object_tracking/handle_trackee.hpp"
-#include "simple_event_queue.hpp"
+#include "legacy/simple/simple_event_queue.hpp"
 #include "simple_exp_2d_fwd.hpp"
 
 BEGIN_NAMESPACE_SIMPLE_EXP_2D

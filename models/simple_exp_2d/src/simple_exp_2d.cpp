@@ -4,8 +4,8 @@
 #include <boost/property_tree/ptree.hpp>
 
 #include "interface/particle.hpp"
-#include "simple_event_queue.hpp"
-#include "simple_event_schedule.hpp"
+#include "legacy/simple/simple_event_queue.hpp"
+#include "legacy/simple/simple_event_schedule.hpp"
 
 #include "density_accumulator.hpp"
 #include "kernel.hpp"
@@ -122,7 +122,7 @@ struct my_particle_view : public simbad::core::particle
 {
   config::space_coords sc;
   my_particle_view(config::space_coords sc) : sc(sc) {}
-  std::size_t dimension() const override { return 2; }
+  // std::size_t dimension() const override { return 2; }
   double coord(std::size_t d) const override { return sc[d]; }
 };
 }
@@ -138,9 +138,7 @@ void simple_exp_2d::visit_configuration(
   });
 }
 
-void simple_exp_2d::read_configuration(
-    const core::configuration_view &,
-    const simbad::core::property_tree &)
+void simple_exp_2d::read_configuration(const core::configuration_view &)
 {
   assert(false);
 }

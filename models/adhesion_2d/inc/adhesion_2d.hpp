@@ -25,8 +25,7 @@ public:
   size_type configuration_size() const override;
   void visit_configuration(particle_visitor) const override;
 
-  void read_configuration(configuration_view const &configuration,
-                          simbad::core::property_tree const &) override;
+  void read_configuration(configuration_view const &configuration) override;
 
   double time() const;
   void print_nicely(std::string header);

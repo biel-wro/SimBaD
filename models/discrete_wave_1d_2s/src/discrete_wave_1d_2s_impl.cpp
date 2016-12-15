@@ -1,6 +1,6 @@
 #include "discrete_wave_1d_2s_impl.hpp"
 
-#include "event_kind.hpp"
+#include "interface/event_kind.hpp"
 
 BEGIN_NAMESPACE_DISCRETE_WAVE_1D_2S
 

@@ -2,7 +2,7 @@
 
 #include "config.hpp"
 #include "particle_2d.hpp"
-#include "simple_event_queue.hpp"
+#include "legacy/simple/simple_event_queue.hpp"
 
 using namespace simbad::models::simple_exp_2d;
 

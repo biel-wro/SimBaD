@@ -6,8 +6,8 @@
 #include "simple_exp_2d_def.hpp"
 
 #include "interface/model.hpp"
-#include "simple_event_queue.hpp"
-#include "space/space.hpp"
+#include "legacy/simple/simple_event_queue.hpp"
+#include "containers/space/space.hpp"
 
 #include "config.hpp"
 #include "dispersion.hpp"
@@ -33,8 +33,7 @@ public:
   std::size_t configuration_size() const override;
   std::size_t dimension() const override;
   void visit_configuration(particle_visitor) const override;
-  void read_configuration(const simbad::core::configuration_view &,
-                          simbad::core::property_tree const &) override;
+  void read_configuration(const simbad::core::configuration_view &) override;
   void starting_configuration();
   double get_time() const;
 

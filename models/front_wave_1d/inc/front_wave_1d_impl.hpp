@@ -7,7 +7,7 @@
 #include <random>
 
 #include "offspring_placer.hpp"
-#include "simple_event_queue.hpp"
+#include "legacy/simple/simple_event_queue.hpp"
 #include "space_1d.hpp"
 #include "spatial_neighbourhood.hpp"
 

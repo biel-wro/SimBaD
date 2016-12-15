@@ -2,7 +2,7 @@
 #define DISCRETE_WAVE_1D_1S_FACTORY_H
 #include "discrete_wave_1d_1s_fwd.hpp"
 
-#include "model_factory.hpp"
+#include "interface/model_factory.hpp"
 
 BEGIN_NAMESPACE_DISCRETE_WAVE_1D_1S
 

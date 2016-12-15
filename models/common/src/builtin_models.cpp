@@ -2,8 +2,8 @@
 #include <boost/preprocessor.hpp>
 #include <memory>
 
-#include "model_factory.hpp"
-#include "model_register.hpp"
+#include "interface/model_factory.hpp"
+#include "interface/model_register.hpp"
 
 
 

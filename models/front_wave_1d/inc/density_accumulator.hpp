@@ -7,7 +7,7 @@
 #include <cmath>
 
 #include "event_1d.hpp"
-#include "event_kind.hpp"
+#include "interface/event_kind.hpp"
 
 BEGIN_NAMESPACE_FRONT_WAVE_1D
 

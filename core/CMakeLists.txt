@@ -1,25 +1,36 @@
 set( TARGET_NAME ${CORE_NAME} )
 
-include_directories( inc )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 set( SOURCES
-  src/argument_parser.cpp
   src/core.cpp
-  src/event.cpp
-  src/event_kind.cpp
-  src/event_partial.cpp
-  src/launch_utils.cpp
-  src/properties.cpp
-  src/property_tree.cpp
-  src/model.cpp
-  src/model_factory.cpp
-  src/model_register.cpp
-  src/particle.cpp
-  src/simple_event_view.cpp
-  src/snapshotter.cpp
-  src/text_configuration_printer.cpp
-  src/configurations/poisson_configuration.cpp
-  src/configurations/cubic_crystal_configuration.cpp
+  configurations/enriched_configuration.cpp
+  configurations/cubic_crystal_configuration.cpp
+  configurations/poisson_configuration.cpp
+  interface/attribute.cpp
+  interface/attribute_descriptor.cpp
+  interface/attribute_mapping.cpp
+  interface/configuration_reader.cpp
+  interface/configuration_view.cpp
+  interface/event.cpp
+  interface/event_kind.cpp
+  interface/event_sink.cpp
+  interface/event_source.cpp
+  interface/property_tree.cpp
+  interface/model.cpp
+  interface/model_factory.cpp
+  interface/model_register.cpp
+  interface/particle.cpp
+  processors/configuration_builder.cpp
+  processors/launch_utils.cpp
+  processors/snapshotter.cpp
+  processors/text_configuration_printer.cpp
+  legacy/simple/simple_event_view.cpp
+  legacy/event_partial.cpp
+  utils/attribute_exceptions.cpp
+  utils/counting_id_generator.cpp
+  utils/generic_particle.cpp
+  utils/properties.cpp
 )
 
 set( LIBS

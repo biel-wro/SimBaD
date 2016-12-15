@@ -3,9 +3,9 @@
 #include <boost/test/auto_unit_test.hpp>
 
 #include "interface/event.hpp"
-#include "event_kind.hpp"
+#include "interface/event_kind.hpp"
 #include "interface/model.hpp"
-#include "property_tree.hpp"
+#include "interface/property_tree.hpp"
 #include "simple_exp_2d_factory.hpp"
 
 BOOST_AUTO_TEST_CASE(config_run)

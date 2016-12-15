@@ -1,5 +1,5 @@
 #include "particle.hpp"
-#include "interface/property.hpp"
+#include "interface/attribute.hpp"
 #include "model_parameters.hpp"
 #include <random>
 
@@ -34,17 +34,18 @@ cell::pressure_type &cell::pressure() { return m_pressure; }
  */
 particle_view::particle_view(const particle_view::orig *ptr) : m_ptr(ptr) {}
 void particle_view::set_orig(const particle_view::orig *ptr) { m_ptr = ptr; }
-std::size_t particle_view::dimension() const { return orig::dimension; }
+//std::size_t particle_view::dimension() const { return orig::dimension; }
 double particle_view::coord(std::size_t d) const
 {
   return m_ptr->position()[d];
 }
 
+/*
 simbad::core::attribute
-particle_view::extra_attribute(const std::string &attribute_name) const
+particle_view::extra_attribute(std::size_t attribute_name) const
 {
   std::string msg = "attribute '" + attribute_name + "' not found";
   throw std::runtime_error(std::move(msg));
-}
+}*/
 
 END_NAMESPACE_ADHESION_2D

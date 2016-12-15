@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/core/inc )
+include_directories( ${CMAKE_SOURCE_DIR}/core/ )
 
 set( MODEL_ROOT_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR} )
 

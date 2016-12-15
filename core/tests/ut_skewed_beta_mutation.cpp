@@ -1,6 +1,6 @@
 #include <boost/test/auto_unit_test.hpp>
 
-#include "skewed_beta_mutation.hpp"
+#include "computational/mutations/skewed_beta_mutation.hpp"
 #include <boost/math/distributions/beta.hpp>
 #include <iostream>
 using namespace simbad::core;

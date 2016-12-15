@@ -4,7 +4,7 @@
 #include "discrete_wave_1d_2s_def.hpp"
 #include "discrete_wave_1d_2s_fwd.hpp"
 
-#include "model_factory.hpp"
+#include "interface/model_factory.hpp"
 
 BEGIN_NAMESPACE_DISCRETE_WAVE_1D_2S
 class discrete_wave_1d_2s_factory : public simbad::core::model_factory {

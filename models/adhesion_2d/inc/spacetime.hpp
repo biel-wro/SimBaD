@@ -4,7 +4,7 @@
 
 
 #include "adhesion_2d_def.hpp"
-#include "spacetime/cartesian_spacetime.hpp"
+#include "containers/spacetime/cartesian_spacetime.hpp"
 #include "particle.hpp"
 
 BEGIN_NAMESPACE_ADHESION_2D

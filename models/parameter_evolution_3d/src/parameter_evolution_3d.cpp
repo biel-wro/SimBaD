@@ -1,20 +1,17 @@
 #include "parameter_evolution_3d.hpp"
+#include "interface/attribute.hpp"
 #include "interface/event.hpp"
+#include "interface/model_factory.hpp"
 #include "interface/particle.hpp"
-#include "model_factory.hpp"
-#include "particle.hpp"
+#include "interface/particle.hpp"
+#include "utils/attribute_exceptions.hpp"
+#include <iostream>
 #include <stdexcept>
 
 using simbad::core::EVENT_KIND;
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
-/*
-std::string parameter_evolution_3d::model_name()
-{
-  return "parameter_evolution_3d";
-}
-std::size_t parameter_evolution_3d::s_dimension() { return 3; }
-*/
+
 parameter_evolution_3d::parameter_evolution_3d(
     const simbad::core::property_tree &pt)
     : m_time(0),
@@ -42,7 +39,7 @@ void parameter_evolution_3d::generate_events(event_visitor v, size_type nevents)
 
     if(EVENT_KIND::BIRTH == event_kind)
     {
-      if(compute_success_rate(c) < std::uniform_real_distribution<>()(m_rng))
+      if(compute_success_rate(c) >= std::uniform_real_distribution<>()(m_rng))
         execute_birth(v);
       else
         execute_death(v);
@@ -62,33 +59,39 @@ parameter_evolution_3d::configuration_size() const
 
 void parameter_evolution_3d::visit_configuration(particle_visitor v) const
 {
-  m_spacetime.visit([v](cell const &p) {
+  m_spacetime.visit([this, v](cell const &p) {
     struct : public simbad::core::particle
     {
-      std::size_t dimension() const override { return 3; }
+      // std::size_t dimension() const override { return 3; }
       double coord(std::size_t d) const override
       {
-        return parent_ptr->position()[d];
+        return cell_ptr->position()[d];
       }
-      cell const *parent_ptr;
+      simbad::core::attribute extra_attribute(std::size_t idx) const override
+      {
+        return self->attribute(*cell_ptr, idx);
+      }
+      cell const *cell_ptr;
+      parameter_evolution_3d const *self;
     } view;
-    view.parent_ptr = &p;
+    view.self = this;
+    view.cell_ptr = &p;
     v(view);
   });
 }
 
-void parameter_evolution_3d::read_configuration(
-    const configuration_view &conf,
-    simbad::core::property_tree const &default_properties)
+void parameter_evolution_3d::read_configuration(const configuration_view &conf)
 {
-  conf.visit_configuration(
-      [this, &default_properties](simbad::core::particle const &p) {
-        cell::position_type pos;
-        pos[0] = p.coord(0);
-        pos[1] = p.coord(1);
-        pos[2] = p.coord(2);
-        insert(cell(pos, default_properties));
-      });
+  std::vector<std::size_t> attribute_indices =
+      cell_params::get_attribute_indices(conf.attr_map());
+
+  conf.visit_configuration([&](simbad::core::particle const &p) {
+    cell::position_type pos;
+    pos[0] = p.coord(0);
+    pos[1] = p.coord(1);
+    pos[2] = p.coord(2);
+    insert(cell(pos, cell_params(p, attribute_indices)));
+  });
 }
 
 double parameter_evolution_3d::time() const { return m_time; }
@@ -114,6 +117,52 @@ void parameter_evolution_3d::pop()
   };
   double range = m_model_params.interaction().range();
   m_spacetime.visit_ball_guarded_order(c.position(), range, visitor);
+}
+
+void parameter_evolution_3d::check_accumulators()
+{
+  double range = m_model_params.interaction().range();
+  m_spacetime.visit([this, range](cell const &c) {
+    double density = 0.0;
+    m_spacetime.visit_ball(
+        c.position(), range, [this, &c, &density](cell const &neighbor) {
+          if(std::addressof(c) == std::addressof(neighbor))
+            return;
+          double distance = (c.position() - neighbor.position()).hypot();
+          density += m_model_params.interaction()(distance);
+        });
+
+    std::cout << "stored:" << c.density();
+    std::cout << " measured:" << density << std::endl;
+  });
+}
+/*
+std::vector<std::string> parameter_evolution_3d::extra_attribute_names() const
+{
+  return {"density",     "event_time",   "event_kind",   "birth_eff",
+          "birth_res",   "lifetime_eff", "lifetime_res", "success_eff",
+          "success_res", "birth_rate",   "death_rate",   "success_rate"};
+}*/
+
+simbad::core::attribute
+parameter_evolution_3d::attribute(const cell &c, std::size_t attr_idx) const
+{
+  switch(attr_idx)
+  {
+  case 0: return c.density();
+  case 1: return c.event_time();
+  case 2: return std::int64_t(c.event_kind());
+  case 3: return c.params().birth_eff();
+  case 4: return c.params().birth_res();
+  case 5: return c.params().lifespan_eff();
+  case 6: return c.params().lifespan_res();
+  case 7: return c.params().success_eff();
+  case 8: return c.params().success_res();
+  case 9: return compute_birth_rate(c);
+  case 10: return compute_death_rate(c);
+  case 11: return compute_success_rate(c);
+  }
+  throw simbad::core::unrecognized_attribute_number(attr_idx);
 }
 void parameter_evolution_3d::resample_event(cell &c)
 {
@@ -167,8 +216,8 @@ void parameter_evolution_3d::execute_death(event_visitor v)
 {
   struct : public simbad::core::event
   {
-    cell const *parent_ptr;
-    double time() const override { return parent_ptr->event_time(); }
+    cell const *cell_ptr;
+    double time() const override { return cell_ptr->event_time(); }
     std::size_t dimension() const override { return 3; }
     std::size_t npartials() const override { return 1; }
     EVENT_KIND partial_type(std::size_t p) const override
@@ -179,11 +228,11 @@ void parameter_evolution_3d::execute_death(event_visitor v)
     double coord(std::size_t partialno, std::size_t dimno) const override
     {
       assert(partialno == 0);
-      return parent_ptr->position()[dimno];
+      return cell_ptr->position()[dimno];
     }
   } death_view;
 
-  death_view.parent_ptr = &m_spacetime.top();
+  death_view.cell_ptr = &m_spacetime.top();
   v(death_view);
   pop();
 }
@@ -191,10 +240,10 @@ void parameter_evolution_3d::execute_birth(event_visitor v)
 {
   struct : public simbad::core::event
   {
-    cell const *parent_ptr;
+    cell const *cell_ptr;
     cell::position_type const *newpos_ptr;
 
-    double time() const override { return parent_ptr->event_time(); }
+    double time() const override { return cell_ptr->event_time(); }
     std::size_t dimension() const override { return 3; }
     std::size_t npartials() const override { return 2; }
     EVENT_KIND partial_type(std::size_t p) const override
@@ -210,7 +259,7 @@ void parameter_evolution_3d::execute_birth(event_visitor v)
       assert(dimno < 3);
       if(0 == partialno)
         return (*newpos_ptr)[dimno];
-      return parent_ptr->position()[dimno];
+      return cell_ptr->position()[dimno];
     }
   } birth_view;
 
@@ -219,12 +268,14 @@ void parameter_evolution_3d::execute_birth(event_visitor v)
   new_position[0] += m_model_params.dispersion()(m_rng);
   new_position[1] += m_model_params.dispersion()(m_rng);
   new_position[2] += m_model_params.dispersion()(m_rng);
-  birth_view.parent_ptr = &parent;
+  birth_view.cell_ptr = &parent;
   birth_view.newpos_ptr = &new_position;
 
   v(birth_view);
 
   cell child(m_spacetime.top());
+  child.set_position(new_position);
+  child.reset_interaction();
 
   mutate(child);
   insert(child);

@@ -1,6 +1,6 @@
 #include "discrete_wave_1d_2s.hpp"
 
-#include "simple_event_view.hpp"
+#include "legacy/simple/simple_event_view.hpp"
 
 #include "discrete_wave_1d_2s_impl.hpp"
 #include "interface/particle.hpp"
@@ -43,7 +43,6 @@ namespace
 struct particle_view : public CORE_NAMESPACE::particle
 {
   double pos;
-  std::size_t dimension() const override { return 1; }
   double coord(std::size_t) const override { return pos; }
 };
 }
@@ -65,8 +64,7 @@ void discrete_wave_1d_2s::visit_configuration(particle_visitor v) const
 }
 
 void discrete_wave_1d_2s::read_configuration(
-    const simbad::core::configuration_view &,
-    const simbad::core::property_tree &)
+    const simbad::core::configuration_view &)
 {
   assert(false);
 }

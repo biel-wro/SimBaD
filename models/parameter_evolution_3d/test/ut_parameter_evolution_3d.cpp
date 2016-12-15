@@ -2,7 +2,8 @@
 
 #include "configurations/cubic_crystal_configuration.hpp"
 #include "particle.hpp"
-#include "property_tree.hpp"
+#include "interface/property_tree.hpp"
+#include "processors/text_configuration_printer.hpp"
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/test/auto_unit_test.hpp>
@@ -16,8 +17,6 @@ static property_tree make_paramaters()
 {
   property_tree pt;
   pt.put("mutation.probability", 0.01);
-
-  //pt.put("tile.size", 1);
 
   pt.put("interaction.sigma", 1);
   pt.put("interaction.gamma", 2);
@@ -100,20 +99,25 @@ BOOST_AUTO_TEST_CASE(reading_configuration)
   m.visit_configuration([&counter](particle const &p) { ++counter; });
 
   BOOST_REQUIRE_EQUAL(counter, original_size);
+
 }
-BOOST_AUTO_TEST_CASE(particle_size_check)
+
+BOOST_AUTO_TEST_CASE(short_run)
 {
   parameter_evolution_3d m(make_paramaters());
 
   cubic_crystal_configuration initial_configuraiton(
-      make_initial_configuraiton(3));
+      make_initial_configuraiton(1));
 
   m.set_configuration(initial_configuraiton, make_initial_vals());
 
-  m.generate_events([](event const &e){
-    std::cout<<e<<std::endl;
-  },10);
+  text_configuration_printer configuration_printer(std::cout);
 
+  //configuration_printer.set_configuration(m);
+
+  m.generate_events([](event const &e) { std::cout << e << std::endl; }, 100);
+  m.check_accumulators();
+  configuration_printer.set_configuration(m);
 
 }
 

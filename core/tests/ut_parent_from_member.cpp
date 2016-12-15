@@ -1,4 +1,4 @@
-#include "parent_from_member.hpp"
+#include "utils/parent_from_member.hpp"
 #include <boost/test/auto_unit_test.hpp>
 #include <iostream>
 namespace

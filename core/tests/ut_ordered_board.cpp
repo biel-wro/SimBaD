@@ -4,8 +4,9 @@
 #include <boost/test/auto_unit_test.hpp>
 
 #include "coordinates/coordinates.hpp"
-#include "spacetime/ordered_board.hpp"
-#include "spacetime/queued_set.hpp"
+#include "containers/spacetime/ordered_board.hpp"
+#include "containers/spacetime/queued_set.hpp"
+#include "utils/auto_rehash.hpp"
 
 using namespace simbad::core;
 

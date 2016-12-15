@@ -1,13 +1,14 @@
 project( ${CLI_NAME})
 
 include_directories( inc )
-include_directories( ${CMAKE_SOURCE_DIR}/core/inc )
+include_directories( ${CMAKE_SOURCE_DIR}/core/ )
 include_directories( ${CMAKE_SOURCE_DIR}/models/common/inc )
 include_directories( ${Boost_INCLUDE_DIR} )
 
 set( MAIN_SOURCE src/main.cpp)
 
 set(SOURCES
+  src/argument_parser.cpp
   src/launcher.cpp
 )
 
@@ -25,6 +26,7 @@ target_link_libraries( ${PROJECT_NAME} ${LIBS} )
 set( TEST_MAIN_SOURCE  test/test_main.cpp)
 
 set( TEST_SOURCES
+    test/ut_argument_parser.cpp
     test/ut_model_chooser.cpp
     test/ut_snapshotting.cpp
     )

@@ -2,7 +2,7 @@
 #define DENSITY_ACCUMULATOR_HPP
 #include "simple_exp_2d_def.hpp"
 
-#include "accumulator.hpp"
+#include "computational/templates/accumulator.hpp"
 #include "kernel.hpp"
 
 BEGIN_NAMESPACE_SIMPLE_EXP_2D

@@ -1,0 +1,4 @@
+#ifndef LAUNCH_UTILS_HPP
+#define LAUNCH_UTILS_HPP
+
+#endif // LAUNCH_UTILS_HPP

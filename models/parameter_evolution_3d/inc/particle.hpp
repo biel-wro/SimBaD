@@ -2,10 +2,14 @@
 #define PARTICLE_HPP
 #include "parameter_evolution_3d_fwd.hpp"
 
-#include "accumulator.hpp"
+#include "core_fwd.hpp"
+
+#include "computational/templates/accumulator.hpp"
 #include "coordinates/coordinates.hpp"
-#include "event_kind.hpp"
+#include "interface/event_kind.hpp"
+
 #include "intrinsic_params.hpp"
+
 #include <random>
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
@@ -16,7 +20,7 @@ public:
   using position_type = simbad::core::coordinates<float, 3>;
   using interaction_accumulator = simbad::core::additive_accumulator<float>;
   using EVENT_KIND = simbad::core::EVENT_KIND;
-  cell(position_type pos, const simbad::core::property_tree &pt);
+  cell(position_type pos, cell_params params);
   ~cell();
 
   position_type const &position() const;
@@ -26,6 +30,7 @@ public:
   EVENT_KIND event_kind() const;
   void set_event_kind(EVENT_KIND ek);
 
+  void reset_interaction();
   void include_interaction(cell const &p, model_params const &mp);
   void exclude_interaction(cell const &p, model_params const &mp);
 

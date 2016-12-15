@@ -4,9 +4,9 @@
 #include <utility>
 
 #include "front_wave_1d_fwd.hpp"
+#include "legacy/simple/simple_event.hpp"
 #include "offspring_placer.hpp"
 #include "particle_1d.hpp"
-#include "simple_event.hpp"
 #include "space_1d.hpp"
 #include "spatial_neighbourhood.hpp"
 
@@ -18,7 +18,8 @@
 
 BEGIN_NAMESPACE_FRONT_WAVE_1D
 
-front_wave_1d_impl::front_wave_1d_impl(double alpha, double x0, std::size_t seed)
+front_wave_1d_impl::front_wave_1d_impl(double alpha, double x0,
+                                       std::size_t seed)
     : t(0.0), placer(alpha, x0)
 {
   this->seed(seed);
@@ -26,14 +27,10 @@ front_wave_1d_impl::front_wave_1d_impl(double alpha, double x0, std::size_t seed
 }
 
 front_wave_1d_impl::~front_wave_1d_impl() { space.clear(); }
-
 void front_wave_1d_impl::seed(uint64_t s) { rnd.seed(s); }
-
 void front_wave_1d_impl::clear() {}
-
 void front_wave_1d_impl::reinitialize()
 {
-
   init_configuration();
   init_event_queue();
 }
@@ -55,7 +52,6 @@ front_wave_1d_impl::end_queue() const
 }
 
 std::size_t front_wave_1d_impl::size() const { return space.size(); }
-
 double front_wave_1d_impl::simulation_time() const { return t; }
 front_wave_1d_impl::Space::const_iterator front_wave_1d_impl::begin() const
 {
@@ -72,7 +68,7 @@ void front_wave_1d_impl::resample_event(particle_1D &p)
   EventHandle h = p.get_handle();
   std::pair<float, EVENT_KIND> e = p.sample_event(rnd);
 
-  (*h).set_time( float( e.first + simulation_time()) );
+  (*h).set_time(float(e.first + simulation_time()));
   (*h).set_event_kind(e.second);
   (*h).set_particle_ptr(&p);
 
@@ -83,7 +79,7 @@ void front_wave_1d_impl::full_update(particle_1D &p)
 {
   double center = p.coordinate(0);
 
-  for (particle_1D const &neighbour : get_neighbourhood(float(center)))
+  for(particle_1D const &neighbour : get_neighbourhood(float(center)))
     p.update_accumulators(neighbour);
 
   resample_event(p);
@@ -103,8 +99,7 @@ void front_wave_1d_impl::init_configuration()
 
 void front_wave_1d_impl::init_event_queue()
 {
-
-  for (particle_1D &p : space)
+  for(particle_1D &p : space)
   {
     EventHandle h = queue.emplace(&p);
     p.set_handle(h);
@@ -116,7 +111,7 @@ void front_wave_1d_impl::update_neighbourhood(const Event &e)
 {
   double center = e.coordinate(0);
   spatial_neighbourhood neighbourhood = get_neighbourhood(float(center));
-  for (particle_1D &particle : neighbourhood)
+  for(particle_1D &particle : neighbourhood)
   {
     particle.update_accumulators(e);
     resample_event(particle);
@@ -131,9 +126,9 @@ front_wave_1d_impl::Event front_wave_1d_impl::execute_event()
   EVENT_KIND const event_kind = queue.top().get_event_kind();
 
   Event retval;
-  if (event_kind == EVENT_KIND::DEATH)
+  if(event_kind == EVENT_KIND::DEATH)
     retval = execute_death();
-  else if (event_kind == EVENT_KIND::BIRTH)
+  else if(event_kind == EVENT_KIND::BIRTH)
     retval = execute_birth();
 
   return retval;

@@ -4,7 +4,7 @@
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/test/auto_unit_test.hpp>
 
-#include "event_kind.hpp"
+#include "interface/event_kind.hpp"
 #include "front_wave_1d_impl.hpp"
 using namespace simbad::models::front_wave_1d;
 using namespace simbad::core;

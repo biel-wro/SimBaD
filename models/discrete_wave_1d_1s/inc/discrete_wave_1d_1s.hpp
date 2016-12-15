@@ -18,8 +18,7 @@ public:
   std::size_t configuration_size() const override;
   std::size_t dimension() const override;
   void visit_configuration(particle_visitor v) const override;
-  void read_configuration(const simbad::core::configuration_view &,
-                          simbad::core::property_tree const &) override;
+  void read_configuration(const simbad::core::configuration_view &) override;
 
 protected:
   std::unique_ptr<discrete_wave_1d_1s_impl> impl;

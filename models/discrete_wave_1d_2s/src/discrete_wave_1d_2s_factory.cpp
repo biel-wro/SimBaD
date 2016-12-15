@@ -1,7 +1,7 @@
 #include "discrete_wave_1d_2s_factory.hpp"
 #include "discrete_wave_1d_2s.hpp"
 
-#include "property_tree.hpp"
+#include "interface/property_tree.hpp"
 
 BEGIN_NAMESPACE_DISCRETE_WAVE_1D_2S
 discrete_wave_1d_2s_factory::discrete_wave_1d_2s_factory() {}

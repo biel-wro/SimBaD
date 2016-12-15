@@ -1,15 +1,17 @@
 #include "particle.hpp"
 #include "model_parameters.hpp"
 
-#include "event_kind.hpp"
-#include "property_tree.hpp"
+#include "interface/attribute.hpp"
+#include "interface/event_kind.hpp"
+#include "interface/configuration_view.hpp"
+#include <cstddef>
 #include <random>
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
-cell::cell(position_type pos, simbad::core::property_tree const &pt)
+cell::cell(position_type pos, cell_params params)
     : m_position(pos),
       m_time(0),
-      m_params(pt),
+      m_params(std::move(params)),
       m_interaction_acc(0),
       m_event_kind(simbad::core::EVENT_KIND::NONE)
 {
@@ -21,6 +23,11 @@ void cell::set_event_time(float t) { m_time = t; }
 float cell::event_time() const { return m_time; }
 cell::EVENT_KIND cell::event_kind() const { return m_event_kind; }
 void cell::set_event_kind(cell::EVENT_KIND ek) { m_event_kind = ek; }
+
+void cell::reset_interaction()
+{
+  m_interaction_acc = 0;
+}
 void cell::include_interaction(const cell &p, const model_params &mp)
 {
   position_type displacement = p.position() - position();
@@ -42,5 +49,7 @@ void cell::mutate(const model_params &mp, std::mt19937_64 &rng)
 {
   mp.mutate(m_params, rng);
 }
+
+
 
 END_NAMESPACE_PARAMETER_EVOLUTION_3D
