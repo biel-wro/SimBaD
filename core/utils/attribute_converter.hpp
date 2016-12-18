@@ -145,13 +145,11 @@ public:
     using element_type = typename attribute_array_element<Target>::element_type;
     boost::optional<element_type> opt_elem =
         scalar_attribute_converter<element_type>()(val);
-    boost::optional<Target> ret;
-    if(opt_elem)
-    {
-      element_type elem = std::move(opt_elem.get());
-      ret.emplace(1, std::move(elem));
-    }
-    return ret;
+
+    if(!opt_elem)
+      return boost::none;
+
+    return Target{opt_elem.get()};
   }
 
   // coords to scalar => allowed only for 1d coords
@@ -264,9 +262,8 @@ public:
       output_element_type elem = std::move(opt_elem.get());
       tgt[d] = (std::move(elem));
     }
-    ret.emplace(std::move(tgt));
 
-    return ret;
+    return tgt;
   }
 
   // array to array
@@ -282,8 +279,6 @@ public:
     using output_element_type =
         typename attribute_array_element<Target>::element_type;
 
-    optional<Target> ret;
-
     Target tgt;
     tgt.reserve(arr.size());
     scalar_attribute_converter<output_element_type> converter;
@@ -291,23 +286,31 @@ public:
     {
       optional<output_element_type> opt_out_elem = converter(inp_elem);
       if(!opt_out_elem)
-        return ret;
+        return boost::none;
       output_element_type out_elem = std::move(opt_out_elem.get());
       tgt.emplace_back(std::move(out_elem));
     }
-    ret.emplace(std::move(tgt));
-
-    return ret;
+    return tgt;
   }
 };
 
+namespace
+{
+template <class Target> struct convert_visitor
+{
+  using result_type = boost::optional<Target>;
+  template <class Source>
+  boost::optional<Target> operator()(Source const &val) const
+  {
+    return attribute_converter::convert_to<Target>(val);
+  }
+};
+}
+
 template <class Target> Target attribute_cast(attribute const &attr)
 {
-  boost::optional<Target> opt = boost::apply_visitor(
-      [](auto const &val) {
-        return attribute_converter::convert_to<Target>(val);
-      },
-      attr);
+  boost::optional<Target> opt =
+      boost::apply_visitor(convert_visitor<Target>(), attr);
   if(opt)
     return opt.get();
 

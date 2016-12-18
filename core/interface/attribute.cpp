@@ -71,6 +71,7 @@ namespace
 {
 struct empty_checker
 {
+  using result_type =bool;
   template <class T> bool operator()(T const &) const { return false; }
   bool operator()(std::string const &str) const { return str.empty(); }
 };
@@ -84,6 +85,7 @@ namespace
 {
 template <class Ref, class Bind> struct getter
 {
+  using result_type = Ref;
   std::size_t const m_idx;
   getter(std::size_t idx) : m_idx(idx) {}
   Ref operator()(Ref v) const
@@ -151,6 +153,7 @@ namespace
 {
 struct equal_visitor
 {
+  using result_type=bool;
   template <class T1, class T2>
   typename std::enable_if<!std::is_same<T1, T2>::value, bool>::type
   operator()(T1 const &, T2 const &) const

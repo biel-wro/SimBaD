@@ -16,12 +16,12 @@ BOOST_AUTO_TEST_CASE(layout_preview)
 {
   attribute attr0("text val");
   attribute attr1("quite long std::string exceedig 24 characters");
-  attribute attr2(10ll);
+  attribute attr2(std::int64_t(10));
   attribute attr3(20.0);
-  attribute attr4(std::vector<long long int>{1, 2, 3});
-  attribute attr5(std::vector<double>{10.0, 20.0, 30.0});
-  attribute attr6(std::vector<long long int>{1, 2, 3, 4, 5, 6});
-  attribute attr7(std::vector<double>{10.0, 20.0, 30.0, 40.0, 50.0, 60.0});
+  attribute attr4(attribute_array<std::int64_t>{1, 2, 3});
+  attribute attr5(attribute_array<double>{10.0, 20.0, 30.0});
+  attribute attr6(attribute_array<std::int64_t>{1, 2, 3, 4, 5, 6});
+  attribute attr7(attribute_array<double>{10.0, 20.0, 30.0, 40.0, 50.0, 60.0});
 }
 
 BOOST_AUTO_TEST_CASE(size_check)

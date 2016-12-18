@@ -366,6 +366,20 @@ private:
 
 END_NAMESPACE_CORE
 
+namespace boost
+{
+template <class Scalar, size_t dimension>
+struct hash<simbad::core::coordinates<Scalar, dimension>>
+{
+  using result_type = std::size_t;
+  using arg_type = simbad::core::coordinates<Scalar, dimension>;
+  std::size_t operator()(arg_type const &c) const
+  {
+    return boost::hash_range(c.begin(), c.end());
+  }
+};
+}
+
 namespace std
 {
 template <class Scalar, size_t dimension>
@@ -373,7 +387,7 @@ struct hash<simbad::core::coordinates<Scalar, dimension>>
 {
   using result_type = std::size_t;
   using arg_type = simbad::core::coordinates<Scalar, dimension>;
-  std::size_t operator()(arg_type const &c)
+  std::size_t operator()(arg_type const &c) const
   {
     return boost::hash_range(c.begin(), c.end());
   }

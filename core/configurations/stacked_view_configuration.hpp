@@ -5,6 +5,8 @@
 #include "core_def.hpp"
 
 #include <list>
+#include <memory>
+
 
 BEGIN_NAMESPACE_CORE
 class stacked_view_configuration final: public enriched_configuration
