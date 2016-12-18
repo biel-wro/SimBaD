@@ -75,16 +75,22 @@ std::size_t attribute_mapping::next_unused_idx(std::size_t start) const
   return val;
 }
 
+void attribute_mapping::add_attribute(std::size_t idx, std::string name,
+                                      ATTRIBUTE_KIND kind)
+{
+#if BOOST_VERSION >= 105500
+  emplace(idx, std::move(name), kind);
+#else
+  insert(attribute_descriptor(idx, std::move(name), kind));
+#endif
+}
+
 std::size_t attribute_mapping::add_attribute(std::string name,
                                              ATTRIBUTE_KIND kind,
                                              std::size_t start_index)
 {
   std::size_t idx = next_unused_idx(start_index);
-#if BOOST_VERSION >= 105500
-  emplace(idx, std::move(name), kind);
-#else
-  insert(attribute_descriptor(idx,std::move(name),kind));
-#endif
+  add_attribute(idx, std::move(name), kind);
   return idx;
 }
 
@@ -94,7 +100,7 @@ attribute_mapping::unpack_all() const
   std::pair<std::vector<std::size_t>, std::vector<std::string>> ret;
   ret.first.reserve(size());
   ret.second.reserve(size());
-  for( attribute_descriptor const &desc : *this)
+  for(attribute_descriptor const &desc : *this)
   {
     ret.first.push_back(desc.attribute_idx());
     ret.second.push_back(desc.attribute_name());

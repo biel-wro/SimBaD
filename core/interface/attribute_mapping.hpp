@@ -62,6 +62,8 @@ public:
   attribute_descriptor const &operator[](std::string const &name) const;
 
   std::size_t next_unused_idx(std::size_t start = 0) const;
+  void add_attribute(std::size_t idx, std::string name, ATTRIBUTE_KIND kind=
+      ATTRIBUTE_KIND::INFO);
   std::size_t add_attribute(std::string name,
                             ATTRIBUTE_KIND kind = ATTRIBUTE_KIND::INFO,
                             std::size_t start_index = 0);

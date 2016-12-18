@@ -139,25 +139,25 @@ void parameter_evolution_3d::check_accumulators()
 
 const simbad::core::attribute_mapping &parameter_evolution_3d::attr_map() const
 {
-  static std::unique_ptr<simbad::core::attribute_mapping> p_mapping;
-  if(nullptr == p_mapping)
+  static std::unique_ptr<simbad::core::attribute_mapping> p_map;
+  if(nullptr == p_map)
   {
-    p_mapping.reset(new simbad::core::attribute_mapping);
+    p_map.reset(new simbad::core::attribute_mapping);
     using simbad::core::ATTRIBUTE_KIND;
-    p_mapping->emplace(0, "density", ATTRIBUTE_KIND::ACCUMULATED);
-    p_mapping->emplace(1, "event.time", ATTRIBUTE_KIND::INFO);
-    p_mapping->emplace(2, "event.kind", ATTRIBUTE_KIND::INFO);
-    p_mapping->emplace(3, "birth.efficiency", ATTRIBUTE_KIND::INTRINSIC);
-    p_mapping->emplace(4, "birth.resistance", ATTRIBUTE_KIND::INTRINSIC);
-    p_mapping->emplace(5, "lifespan.efficiency", ATTRIBUTE_KIND::INTRINSIC);
-    p_mapping->emplace(6, "lifespan.resistance", ATTRIBUTE_KIND::INTRINSIC);
-    p_mapping->emplace(7, "success.efficiency", ATTRIBUTE_KIND::INTRINSIC);
-    p_mapping->emplace(8, "success.resistance", ATTRIBUTE_KIND::INTRINSIC);
-    p_mapping->emplace(9, "birth.rate", ATTRIBUTE_KIND::OBSERVABLE);
-    p_mapping->emplace(10, "death.rate", ATTRIBUTE_KIND::OBSERVABLE);
-    p_mapping->emplace(11, "success.rate", ATTRIBUTE_KIND::OBSERVABLE);
+    p_map->add_attribute(0, "density", ATTRIBUTE_KIND::ACCUMULATED);
+    p_map->add_attribute(1, "event.time", ATTRIBUTE_KIND::INFO);
+    p_map->add_attribute(2, "event.kind", ATTRIBUTE_KIND::INFO);
+    p_map->add_attribute(3, "birth.efficiency", ATTRIBUTE_KIND::INTRINSIC);
+    p_map->add_attribute(4, "birth.resistance", ATTRIBUTE_KIND::INTRINSIC);
+    p_map->add_attribute(5, "lifespan.efficiency", ATTRIBUTE_KIND::INTRINSIC);
+    p_map->add_attribute(6, "lifespan.resistance", ATTRIBUTE_KIND::INTRINSIC);
+    p_map->add_attribute(7, "success.efficiency", ATTRIBUTE_KIND::INTRINSIC);
+    p_map->add_attribute(8, "success.resistance", ATTRIBUTE_KIND::INTRINSIC);
+    p_map->add_attribute(9, "birth.rate", ATTRIBUTE_KIND::OBSERVABLE);
+    p_map->add_attribute(10, "death.rate", ATTRIBUTE_KIND::OBSERVABLE);
+    p_map->add_attribute(11, "success.rate", ATTRIBUTE_KIND::OBSERVABLE);
   }
-  return *p_mapping;
+  return *p_map;
 }
 simbad::core::attribute
 parameter_evolution_3d::attribute(const cell &c, std::size_t attr_idx) const
