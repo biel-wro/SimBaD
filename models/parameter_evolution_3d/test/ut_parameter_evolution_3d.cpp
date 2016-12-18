@@ -113,8 +113,6 @@ BOOST_AUTO_TEST_CASE(short_run)
 
   text_configuration_printer configuration_printer(std::cout);
 
-  //configuration_printer.set_configuration(m);
-
   m.generate_events([](event const &e) { std::cout << e << std::endl; }, 100);
   m.check_accumulators();
   configuration_printer.set_configuration(m);

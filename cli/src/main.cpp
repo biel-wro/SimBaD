@@ -4,6 +4,7 @@
 
 #include "configurations/cubic_crystal_configuration.hpp"
 #include "configurations/poisson_configuration.hpp"
+#include "configurations/stacked_view_configuration.hpp"
 #include "interface/event.hpp"
 #include "interface/model.hpp"
 #include "interface/model_factory.hpp"
@@ -112,10 +113,12 @@ static void final_snapshot(property_tree const &pt)
   p_model->set_configuration(*p_init_config, default_attr);
 
   text_configuration_printer configuration_printer(std::cout);
+  stacked_view_configuration stacked_view(*p_model,
+                                          pt.get_child("stacked_view"));
 
   size_t nevents = pt.get<size_t>("nevents");
   p_model->generate_events([](event const &) {}, nevents);
-  configuration_printer.set_configuration(*p_model);
+  configuration_printer.set_configuration(stacked_view);
 }
 
 int main(int argc, const char **argv)
@@ -123,7 +126,7 @@ int main(int argc, const char **argv)
   using namespace boost::property_tree;
 
   properties prop;
-  argument_parser parser(argc,argv);
+  argument_parser parser(argc, argv);
   prop.add_properties(parser.get_property_tree());
 
   ptree const &tree = prop.get_property_tree();

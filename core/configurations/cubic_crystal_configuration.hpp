@@ -3,10 +3,6 @@
 
 #include "interface/configuration_view.hpp"
 
-#include "core_fwd.hpp"
-
-#include <vector>
-
 BEGIN_NAMESPACE_CORE
 
 class cubic_crystal_configuration : public configuration_view

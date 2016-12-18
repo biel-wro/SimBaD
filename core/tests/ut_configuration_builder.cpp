@@ -1,5 +1,8 @@
 #include "configurations/cubic_crystal_configuration.hpp"
-#include "configurations/enriched_configuration.hpp"
+#include "configurations/default_attributed_configuration.hpp"
+#include "configurations/selected_attributes_configuration.hpp"
+#include "configurations/stacked_view_configuration.hpp"
+
 #include "interface/attribute_descriptor.hpp"
 #include "interface/particle.hpp"
 #include "processors/configuration_builder.hpp"
@@ -12,7 +15,7 @@ using namespace simbad::core;
 BOOST_AUTO_TEST_SUITE(test_configuration_builder)
 BOOST_AUTO_TEST_CASE(load_static_configuration)
 {
-  cubic_crystal_configuration initial_configuration(2, 2, 1);
+  cubic_crystal_configuration crystal(2, 2, 1);
   property_tree pt;
   pt.put("prop1", "abc");
   pt.put("prop2", "2");
@@ -20,17 +23,22 @@ BOOST_AUTO_TEST_CASE(load_static_configuration)
   pt.put("prop4", 4.0);
   pt.put("prop5", 5);
 
-  enriched_configuration enriched_initial_configuration(initial_configuration,
+  default_attributed_configuration initial_configuration(crystal,
                                                         pt);
-
   configuration_builder builder(true,
                                 configuration_builder::ID_POLICY::REASSIGN);
 
-  builder.set_configuration(enriched_initial_configuration);
+  builder.set_configuration(initial_configuration);
+
+  property_tree cpt;
+  cpt.put("layers.l1.class", "selected_attributes");
+  cpt.put("layers.l1.parameters.white_list.el1", "prop4");
+
+  stacked_view_configuration stacked_view(builder, cpt);
 
   text_configuration_printer printer(std::cout);
 
-  printer.set_configuration(builder);
+  printer.set_configuration(stacked_view);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

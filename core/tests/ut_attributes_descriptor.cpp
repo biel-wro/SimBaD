@@ -16,11 +16,11 @@ BOOST_AUTO_TEST_SUITE(test_attribute_descriptor)
 BOOST_AUTO_TEST_CASE(instantiation)
 {
   attribute_mapping c;
-  c.insert(attribute_descriptor("prop1", 1));
-  c.insert(attribute_descriptor("prop2", 2));
-  c.insert(attribute_descriptor("prop3", 3));
-  c.insert(attribute_descriptor("prop4", 4));
-  c.insert(attribute_descriptor("prop5", 5));
+  c.insert(attribute_descriptor(1,"prop1"));
+  c.insert(attribute_descriptor(2,"prop2"));
+  c.insert(attribute_descriptor(3,"prop3"));
+  c.insert(attribute_descriptor(4,"prop4"));
+  c.insert(attribute_descriptor(5,"prop5"));
 
   std::size_t cnt = 0;
   for(attribute_mapping::index_iterator it = c.begin_indices(),
@@ -38,10 +38,10 @@ BOOST_AUTO_TEST_CASE(instantiation)
 BOOST_AUTO_TEST_CASE(next_unused_idx)
 {
   attribute_mapping c;
-  c.insert(attribute_descriptor("prop1", 1));
-  c.insert(attribute_descriptor("prop2", 2));
-  c.insert(attribute_descriptor("prop4", 4));
-  c.insert(attribute_descriptor("prop5", 5));
+  c.insert(attribute_descriptor(1,"prop1"));
+  c.insert(attribute_descriptor(2,"prop2"));
+  c.insert(attribute_descriptor(4,"prop4"));
+  c.insert(attribute_descriptor(5,"prop5"));
 
   BOOST_REQUIRE_EQUAL(c.next_unused_idx(0), 0);
   BOOST_REQUIRE_EQUAL(c.next_unused_idx(1), 3);

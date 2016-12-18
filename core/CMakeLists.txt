@@ -4,9 +4,13 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 set( SOURCES
   src/core.cpp
+  configurations/default_attributed_configuration.cpp
   configurations/enriched_configuration.cpp
+  configurations/slice_configuration.cpp
   configurations/cubic_crystal_configuration.cpp
   configurations/poisson_configuration.cpp
+  configurations/selected_attributes_configuration.cpp
+  configurations/stacked_view_configuration.cpp
   interface/attribute.cpp
   interface/attribute_descriptor.cpp
   interface/attribute_mapping.cpp

@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE(model_params_load)
   std::unique_ptr<model> ptr(reinterpret_cast<model *>(
       simbad::core::create_from_property_tree<adhesion_2d>(model_pt)));
 }
-
+/*
 BOOST_AUTO_TEST_CASE(particle_size_check)
 {
   BOOST_REQUIRE_EQUAL(sizeof(cell), 6 * sizeof(double));
@@ -113,5 +113,5 @@ BOOST_AUTO_TEST_CASE(nine_particles)
       10);
   model.print_nicely("after");
 }
-
+*/
 BOOST_AUTO_TEST_SUITE_END()

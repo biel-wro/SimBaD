@@ -53,10 +53,10 @@ attribute_mapping::get_descriptor(std::size_t index) const
 const attribute_descriptor &attribute_mapping::
 operator[](const std::string &name) const
 {
-  boost::optional<attribute_descriptor const &> opt;
-  if(!opt)
+  name_iterator it = get<1>().find(name);
+  if(end_names() == it)
     throw unrecognized_attribute_name(name);
-  return opt.get();
+  return *it;
 }
 
 std::size_t attribute_mapping::next_unused_idx(std::size_t start) const
@@ -78,8 +78,22 @@ std::size_t attribute_mapping::add_attribute(std::string name,
                                              std::size_t start_index)
 {
   std::size_t idx = next_unused_idx(start_index);
-  emplace(std::move(name), idx, kind);
+  emplace(idx, std::move(name), kind);
   return idx;
+}
+
+std::pair<std::vector<std::size_t>, std::vector<std::string>>
+attribute_mapping::unpack_all() const
+{
+  std::pair<std::vector<std::size_t>, std::vector<std::string>> ret;
+  ret.first.reserve(size());
+  ret.second.reserve(size());
+  for( attribute_descriptor const &desc : *this)
+  {
+    ret.first.push_back(desc.attribute_idx());
+    ret.second.push_back(desc.attribute_name());
+  }
+  return ret;
 }
 
 std::unordered_map<std::size_t, std::string>
@@ -117,7 +131,7 @@ attribute_mapping::add_attributes(const attribute_mapping &other,
     std::size_t src_index = it->attribute_idx();
     new2old.emplace(tgt_index, src_index);
     ATTRIBUTE_KIND kind = it->attribute_kind();
-    insert(attribute_descriptor(name, tgt_index, kind));
+    insert(attribute_descriptor(tgt_index, name, kind));
 
     tgt_index = next_unused_idx(tgt_index + 1);
   }

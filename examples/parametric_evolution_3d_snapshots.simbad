@@ -1,4 +1,4 @@
-simulation
+final_snapshot
 {
   nevents 1000000
   time_step 0.1
@@ -141,7 +141,36 @@ simulation
       }
     }
   }
-
+  stacked_view
+  {
+    layers
+    {
+      layer1
+      {
+        class slice
+        parameters
+        {
+          slicing
+          {
+            dimension 2
+            min -1.0
+            max +1.0
+          }
+        }
+      }
+      layer2
+      {
+        class selected_attributes
+        parameters
+        {
+          white_list
+          {
+            entry birth.rate
+          }
+        }
+      }
+    }
+  }
   reader
   {
     class text_configuration_printer

@@ -13,15 +13,13 @@ BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 class parameter_evolution_3d : public simbad::core::model
 {
 public:
-  // static std::string model_name();
-  // static std::size_t s_dimension();
-
   parameter_evolution_3d(simbad::core::property_tree const &pt);
 
   std::size_t dimension() const override;
   void generate_events(event_visitor, size_type nevents) override;
   size_type configuration_size() const override;
   void visit_configuration(particle_visitor) const override;
+  simbad::core::attribute_mapping const &attr_map() const override;
   void read_configuration(
       configuration_view const &conf) override;
 
@@ -34,7 +32,6 @@ public:
   void check_accumulators();
 
 protected:
-  //std::vector<std::string> extra_attribute_names() const override;
   simbad::core::attribute attribute(cell const &c,
                                     std::size_t attrname) const;
 

@@ -1,10 +1,10 @@
 #include "attribute_descriptor.hpp"
 BEGIN_NAMESPACE_CORE
-attribute_descriptor::attribute_descriptor(std::string name,
-                                           std::size_t attr_id,
+attribute_descriptor::attribute_descriptor(std::size_t attr_id,
+                                           std::string name,
                                            ATTRIBUTE_KIND kind)
-    : m_attribute_name(std::move(name)),
-      m_attribute_id(attr_id),
+    : m_attribute_id(attr_id),
+      m_attribute_name(std::move(name)),
       m_attribute_kind(kind)
 {
 }
@@ -37,9 +37,5 @@ void attribute_descriptor::set_attribute_kind(ATTRIBUTE_KIND attribute_kind)
 {
   m_attribute_kind = attribute_kind;
 }
-
-
-
-
 
 END_NAMESPACE_CORE

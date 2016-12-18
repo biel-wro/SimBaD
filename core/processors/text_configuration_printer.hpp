@@ -17,6 +17,8 @@ public:
 
   void set_ostream(std::ostream &ostream);
   void read_configuration(const configuration_view &conf) override;
+
+
 private:
   std::ostream *m_ostream_ptr;
 };

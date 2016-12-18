@@ -1,8 +1,8 @@
 #include "text_configuration_printer.hpp"
 
 #include "interface/attribute.hpp"
-#include "interface/attribute_mapping.hpp"
 #include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_mapping.hpp"
 #include "interface/configuration_view.hpp"
 #include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
@@ -33,29 +33,48 @@ void text_configuration_printer::set_ostream(std::ostream &ostream)
 {
   m_ostream_ptr = &ostream;
 }
+
+static void print_id(std::ostream &os, particle const &p, bool has_id)
+{
+  if(has_id)
+    os << p.id() << ": ";
+}
+
+static void print_coords(std::ostream &os, particle const &p, std::size_t dim)
+{
+  for(size_t d = 0; d < dim; ++d)
+    os << p.coord(d) << " ";
+}
+
+static void print_atributes(std::ostream &os, particle const &p,
+                            std::size_t nattrs,
+                            std::vector<std::string> const &names,
+                            std::vector<std::size_t> const &indices)
+{
+  os << "{";
+  if(nattrs > 0)
+    os << names[0] << "=" << p.get_attribute(indices[0]);
+  for(std::size_t i = 1; i < nattrs; ++i)
+    os << ", " << names[i] << "=" << p.get_attribute(indices[i]);
+  os << "}" << std::endl;
+}
+
 void text_configuration_printer::read_configuration(
     const configuration_view &conf)
 {
   size_t dimension = conf.dimension();
   bool has_id = conf.has_unique_id();
 
-  conf.visit_configuration([this, dimension, has_id, &conf](particle const &p) {
+  std::size_t n_attributes = conf.attr_map().size();
 
-    if(has_id)
-      *m_ostream_ptr << p.id() << ": ";
+  std::vector<std::size_t> attr_indices;
+  std::vector<std::string> attr_names;
+  std::tie(attr_indices,attr_names) = conf.attr_map().unpack_all();
 
-    for(size_t d = 0; d < dimension; ++d)
-    {
-      double coord = p.coord(d);
-      *m_ostream_ptr << coord << " ";
-    }
-    *m_ostream_ptr << "{";
-    for(attribute_descriptor const &attrdesc : conf.attr_map())
-    {
-      *m_ostream_ptr << attrdesc.attribute_name() << "=";
-      *m_ostream_ptr << p.get_attribute(attrdesc.attribute_idx()) << ", ";
-    }
-    *m_ostream_ptr << "}" << std::endl;
+  conf.visit_configuration([&](particle const &p) {
+    print_id(*m_ostream_ptr, p, has_id);
+    print_coords(*m_ostream_ptr, p, dimension);
+    print_atributes(*m_ostream_ptr, p, n_attributes, attr_names, attr_indices);
   });
 }
 

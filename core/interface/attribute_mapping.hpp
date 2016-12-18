@@ -66,9 +66,12 @@ public:
                             ATTRIBUTE_KIND kind = ATTRIBUTE_KIND::INFO,
                             std::size_t start_index = 0);
 
+  std::pair<std::vector<std::size_t>, std::vector<std::string>>
+  unpack_all() const;
+
   // returned indices might be usefull sometimes
-  std::unordered_map<std::size_t,std::string>
-  add_attributes(property_tree const &pt, bool ignore_empty=true);
+  std::unordered_map<std::size_t, std::string>
+  add_attributes(property_tree const &pt, bool ignore_empty = true);
 
   // optional map new_idx=>old_idx might be usefull sometimes
   std::unordered_map<std::size_t, std::size_t>

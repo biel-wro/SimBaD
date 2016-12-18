@@ -9,5 +9,7 @@ std::size_t property_tree::total_size(bool ignore_empty) const
         ignore_empty);
   return cnt;
 }
+
+
 property_tree::~property_tree() {}
 END_NAMESPACE_CORE
