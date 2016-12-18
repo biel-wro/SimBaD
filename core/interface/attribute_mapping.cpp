@@ -1,5 +1,7 @@
 #include "attribute_mapping.hpp"
 #include "utils/attribute_exceptions.hpp"
+#include <boost/version.hpp>
+
 BEGIN_NAMESPACE_CORE
 attribute_mapping::attribute_mapping() {}
 attribute_mapping::index_iterator attribute_mapping::begin_indices() const
@@ -78,7 +80,11 @@ std::size_t attribute_mapping::add_attribute(std::string name,
                                              std::size_t start_index)
 {
   std::size_t idx = next_unused_idx(start_index);
+#if BOOST_VERSION >= 105400
   emplace(idx, std::move(name), kind);
+#else
+  insert(attribute_descriptor(idx,std::move(name),kind));
+#endif
   return idx;
 }
 
