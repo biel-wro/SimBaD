@@ -5,6 +5,7 @@
 
 #include <boost/property_tree/ptree.hpp>
 #include <string>
+#include <vector>
 BEGIN_NAMESPACE_CORE
 class property_tree : public boost::property_tree::ptree
 {
