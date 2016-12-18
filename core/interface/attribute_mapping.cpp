@@ -80,7 +80,7 @@ std::size_t attribute_mapping::add_attribute(std::string name,
                                              std::size_t start_index)
 {
   std::size_t idx = next_unused_idx(start_index);
-#if BOOST_VERSION >= 105400
+#if BOOST_VERSION >= 105500
   emplace(idx, std::move(name), kind);
 #else
   insert(attribute_descriptor(idx,std::move(name),kind));
