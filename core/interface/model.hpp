@@ -12,9 +12,10 @@ class model : public event_source,
               public configuration_reader
 {
 public:
-  void generate_events(event_visitor, size_t) override = 0;
   size_type configuration_size() const override = 0;
   void visit_configuration(particle_visitor) const override = 0;
+protected:
+  void generate_events(event_visitor, size_t) override = 0;
 };
 
 END_NAMESPACE_CORE

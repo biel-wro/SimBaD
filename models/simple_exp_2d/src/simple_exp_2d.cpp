@@ -42,7 +42,7 @@ struct my_death_view : public simbad::core::event
   std::size_t npartials() const override { return 1; }
   simbad::core::EVENT_KIND partial_type(std::size_t) const override
   {
-    return simbad::core::EVENT_KIND::DEATH;
+    return simbad::core::EVENT_KIND::REMOVED;
   }
   double coord(std::size_t, std::size_t nc) const override
   {
@@ -62,7 +62,7 @@ struct my_birth_view : public simbad::core::event
   std::size_t npartials() const override { return 2; }
   simbad::core::EVENT_KIND partial_type(std::size_t pn) const override
   {
-    return pn == 0 ? simbad::core::EVENT_KIND::BIRTH
+    return pn == 0 ? simbad::core::EVENT_KIND::CREATED
                    : simbad::core::EVENT_KIND::NONE;
   }
   double coord(std::size_t pn, std::size_t nc) const override
@@ -99,12 +99,12 @@ void simple_exp_2d::generate_events(core::model::event_visitor visitor,
 
     particle *p = ev.get_particle_ptr_as_nonconst<particle>();
 
-    if(EVENT_KIND::DEATH == event_kind)
+    if(EVENT_KIND::REMOVED == event_kind)
     {
       visitor(my_death_view(ev.get_time(), p->coords()[0], p->coords()[1]));
       remove_particle(*p);
     }
-    else if(EVENT_KIND::BIRTH == event_kind)
+    else if(EVENT_KIND::CREATED == event_kind)
     {
       float birth_x = p->coords()[0] + m_dispersion(m_random_engine);
       float birth_y = p->coords()[1] + m_dispersion(m_random_engine);
@@ -244,12 +244,12 @@ void simple_exp_2d::resample_event(simple_exp_2d::particle_type &p)
 
   if(birth_time <= death_time)
   {
-    event_kind = simbad::core::EVENT_KIND::BIRTH;
+    event_kind = simbad::core::EVENT_KIND::CREATED;
     time = get_time() + birth_time;
   }
   else
   {
-    event_kind = simbad::core::EVENT_KIND::DEATH;
+    event_kind = simbad::core::EVENT_KIND::REMOVED;
     time = get_time() + death_time;
   }
 

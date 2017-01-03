@@ -43,7 +43,7 @@ const configuration_view &snapshotter::operator()()
 
 void snapshotter::next_event()
 {
-  m_model_ptr->generate_events(
+  m_model_ptr->run(
       [this](event const &e) {
         time_type new_time = e.time();
         assert(new_time >= m_current_time);

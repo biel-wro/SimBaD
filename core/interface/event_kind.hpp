@@ -11,9 +11,9 @@ BEGIN_NAMESPACE_CORE
 enum class EVENT_KIND : std::uint32_t
 {
     NONE,
-    BIRTH,
-    DEATH,
-//    JUMP
+    CREATED,
+    REMOVED,
+    MODIFIED
 };
 
 END_NAMESPACE_CORE

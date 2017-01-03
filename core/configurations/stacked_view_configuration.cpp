@@ -17,7 +17,7 @@ stacked_view_configuration::stacked_view_configuration(
     : enriched_configuration(base)
 {
   for(std::pair<std::string, property_tree> const &child :
-      pt.get_child("layers"))
+      pt.get_child("layers",property_tree::get_empty()))
   {
     property_tree const &subtree = child.second;
     push_layer(subtree.get<std::string>("class"),

@@ -45,9 +45,9 @@ BOOST_AUTO_TEST_CASE(front_wave_1d_size_check)
     {
         auto event = model_pt.next_event();
         EVENT_KIND event_kind = event.event_kind();
-        if (event_kind == EVENT_KIND::BIRTH)
+        if (event_kind == EVENT_KIND::CREATED)
             nparticles++;
-        if (event_kind == EVENT_KIND::DEATH)
+        if (event_kind == EVENT_KIND::REMOVED)
             nparticles--;
         BOOST_CHECK_GT(nparticles, 0);
         BOOST_REQUIRE_EQUAL(nparticles, model_pt.size());

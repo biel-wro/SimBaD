@@ -26,8 +26,11 @@ set( SOURCES
   interface/model_register.cpp
   interface/particle.cpp
   processors/configuration_builder.cpp
+  processors/csv_printer.cpp
+  processors/json_configuration_printer.cpp
   processors/launch_utils.cpp
   processors/snapshotter.cpp
+  processors/stream_printer.cpp
   processors/text_configuration_printer.cpp
   legacy/simple/simple_event_view.cpp
   legacy/event_partial.cpp

@@ -47,5 +47,5 @@ BOOST_TEST_CHECKPOINT("property tree created");
     std::cout<<std::endl;
   };
 
-  up_model->generate_events(visitor, 100);
+  up_model->run(visitor, 100);
 }

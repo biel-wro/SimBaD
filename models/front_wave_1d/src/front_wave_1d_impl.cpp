@@ -126,9 +126,9 @@ front_wave_1d_impl::Event front_wave_1d_impl::execute_event()
   EVENT_KIND const event_kind = queue.top().get_event_kind();
 
   Event retval;
-  if(event_kind == EVENT_KIND::DEATH)
+  if(event_kind == EVENT_KIND::REMOVED)
     retval = execute_death();
-  else if(event_kind == EVENT_KIND::BIRTH)
+  else if(event_kind == EVENT_KIND::CREATED)
     retval = execute_birth();
 
   return retval;
@@ -137,7 +137,7 @@ front_wave_1d_impl::Event front_wave_1d_impl::execute_event()
 front_wave_1d_impl::Event front_wave_1d_impl::execute_birth()
 {
   EventSchedule const &es = queue.top();
-  Event event(es.get_time(), simbad::core::EVENT_KIND::BIRTH);
+  Event event(es.get_time(), simbad::core::EVENT_KIND::CREATED);
 
   particle_1D &parent = *es.get_particle_ptr_as_nonconst<particle_1D>();
 
@@ -167,7 +167,7 @@ front_wave_1d_impl::Event front_wave_1d_impl::execute_death()
 {
   EventSchedule const &es = queue.top();
 
-  Event event(es.get_time(), simbad::core::EVENT_KIND::DEATH);
+  Event event(es.get_time(), simbad::core::EVENT_KIND::REMOVED);
 
   particle_1D const &p = *es.get_particle_ptr_as<particle_1D>();
   float position = p.coordinate(0);

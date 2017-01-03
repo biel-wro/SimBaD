@@ -12,7 +12,9 @@ class event_sink
 {
 public:
   virtual ~event_sink();
-  virtual void process_event(event const &e) = 0;
+  virtual void read_event(event const &e) final;
+protected:
+  virtual void process_event(event const &e) =0;
 };
 END_NAMESPACE_CORE
 #endif // EVENT_SINK_HPP

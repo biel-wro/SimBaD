@@ -1,5 +1,5 @@
-#ifndef DEATH_RATE_ACCUMULATOR_HPP
-#define DEATH_RATE_ACCUMULATOR_HPP
+#ifndef death_RATE_ACCUMULATOR_HPP
+#define death_RATE_ACCUMULATOR_HPP
 
 #include "front_wave_1d_fwd.hpp"
 
@@ -36,4 +36,4 @@ class death_rate_accumulator
 };
 END_NAMESPACE_FRONT_WAVE_1D
 
-#endif // DEATH_RATE_ACCUMULATOR_HPP
+#endif // death_RATE_ACCUMULATOR_HPP

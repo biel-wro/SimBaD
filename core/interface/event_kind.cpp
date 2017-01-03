@@ -14,15 +14,15 @@ std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek)
     case EVENT_KIND::NONE:
         str = "NONE";
         break;
-    case EVENT_KIND::BIRTH:
-        str = "BIRTH";
+    case EVENT_KIND::CREATED:
+        str = "CREATED";
         break;
-    case EVENT_KIND::DEATH:
-        str = "DEATH";
+    case EVENT_KIND::REMOVED:
+        str = "REMOVED";
         break;
-//    case EVENT_KIND::JUMP:
-//        str = "JUMP";
-//        break;
+    case EVENT_KIND::MODIFIED:
+        str = "MODIFIED";
+        break;
     default:
         using num_type =
             typename std::underlying_type<simbad::core::EVENT_KIND>::type;

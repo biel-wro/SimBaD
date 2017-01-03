@@ -32,7 +32,7 @@ class density_accumulator
         case EVENT_KIND::BIRTH:
             update_on_creation(distance);
             break;
-        case EVENT_KIND::DEATH:
+        case EVENT_KIND::REMOVED:
             update_on_anihillation(distance);
             break;
         default:

@@ -12,6 +12,7 @@ class property_tree : public boost::property_tree::ptree
 public:
   using super = boost::property_tree::ptree;
   using super::super;
+  static property_tree const &get_empty();
   property_tree();
   property_tree(super const &s);
   template <class Visitor>
@@ -38,6 +39,7 @@ public:
     return r;
   }
   ~property_tree();
+
 };
 END_NAMESPACE_CORE
 

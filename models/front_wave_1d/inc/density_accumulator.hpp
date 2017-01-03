@@ -29,10 +29,10 @@ public:
     double distance = std::fabs(point_pos - event_pos);
     switch (ek)
     {
-    case EVENT_KIND::BIRTH:
+    case EVENT_KIND::CREATED:
       update_on_creation(distance);
       break;
-    case EVENT_KIND::DEATH:
+    case EVENT_KIND::REMOVED:
       update_on_anihillation(distance);
       break;
     default:

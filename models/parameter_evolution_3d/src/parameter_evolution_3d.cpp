@@ -38,14 +38,14 @@ void parameter_evolution_3d::generate_events(event_visitor v, size_type nevents)
 
     EVENT_KIND event_kind = c.event_kind();
 
-    if(EVENT_KIND::BIRTH == event_kind)
+    if(EVENT_KIND::CREATED == event_kind)
     {
       if(compute_success_rate(c) >= std::uniform_real_distribution<>()(m_rng))
         execute_birth(v);
       else
         execute_death(v);
     }
-    else if(EVENT_KIND::DEATH == event_kind)
+    else if(EVENT_KIND::REMOVED == event_kind)
       execute_death(v);
     else
       assert(false);
@@ -155,7 +155,8 @@ const simbad::core::attribute_mapping &parameter_evolution_3d::attr_map() const
     p_map->add_attribute(8, "success.resistance", ATTRIBUTE_KIND::INTRINSIC);
     p_map->add_attribute(9, "birth.rate", ATTRIBUTE_KIND::OBSERVABLE);
     p_map->add_attribute(10, "death.rate", ATTRIBUTE_KIND::OBSERVABLE);
-    p_map->add_attribute(11, "success.rate", ATTRIBUTE_KIND::OBSERVABLE);
+    p_map->add_attribute(11, "success.probability", ATTRIBUTE_KIND::OBSERVABLE);
+    p_map->add_attribute(12, "lifespan", ATTRIBUTE_KIND::OBSERVABLE);
   }
   return *p_map;
 }
@@ -176,6 +177,7 @@ parameter_evolution_3d::attribute(const cell &c, std::size_t attr_idx) const
   case 9: return compute_birth_rate(c);
   case 10: return compute_death_rate(c);
   case 11: return compute_success_rate(c);
+  case 12: return 1.0/compute_death_rate(c);
   }
   throw simbad::core::unrecognized_attribute_number(attr_idx);
 }
@@ -189,12 +191,12 @@ void parameter_evolution_3d::resample_event(cell &c)
 
   if(birth_time < death_time)
   {
-    c.set_event_kind(EVENT_KIND::BIRTH);
+    c.set_event_kind(EVENT_KIND::CREATED);
     c.set_event_time(birth_time + time());
   }
   else
   {
-    c.set_event_kind(EVENT_KIND::DEATH);
+    c.set_event_kind(EVENT_KIND::REMOVED);
     c.set_event_time(death_time + time());
   }
 }
@@ -238,7 +240,7 @@ void parameter_evolution_3d::execute_death(event_visitor v)
     EVENT_KIND partial_type(std::size_t p) const override
     {
       assert(p == 0);
-      return EVENT_KIND::DEATH;
+      return EVENT_KIND::REMOVED;
     }
     double coord(std::size_t partialno, std::size_t dimno) const override
     {
@@ -265,7 +267,7 @@ void parameter_evolution_3d::execute_birth(event_visitor v)
     {
       assert(p < 2);
       if(0 == p)
-        return EVENT_KIND::BIRTH;
+        return EVENT_KIND::CREATED;
       return EVENT_KIND::NONE;
     }
     double coord(std::size_t partialno, std::size_t dimno) const override

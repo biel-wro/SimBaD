@@ -42,8 +42,6 @@ public:
       std::size_t nbuckets = 1024);
   ~configuration_builder() override;
 
-  void process_event(event const &e) override;
-
   void add_particle(std::unique_ptr<node_type> p);
 
   size_type configuration_size() const override;
@@ -56,6 +54,7 @@ public:
   // attribute_range attribute_descriptors() const override;
 
 protected:
+  void process_event(event const &e) override;
   void read_configuration(const configuration_view &conf) override;
 
   std::size_t particle_id_attr_idx() const;

@@ -40,9 +40,9 @@ public:
   {
     assert(partialno < 2);
     if(0 == partialno)
-      return simbad::core::EVENT_KIND::DEATH;
+      return simbad::core::EVENT_KIND::REMOVED;
     else // if(1 == partialno)
-      return simbad::core::EVENT_KIND::BIRTH;
+      return simbad::core::EVENT_KIND::CREATED;
   }
   double coord(std::size_t partialno, std::size_t dimno) const override
   {

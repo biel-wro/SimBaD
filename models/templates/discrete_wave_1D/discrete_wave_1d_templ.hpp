@@ -43,7 +43,7 @@ public:
   Event initial_event()
   {
     grid_count[0] += 1;
-    Event e(0, simbad::core::EVENT_KIND::BIRTH);
+    Event e(0, simbad::core::EVENT_KIND::CREATED);
     e.set_coordinate(0, 0);
 
     static_cast<Derived *>(this)->update_birth_uncapped_density(e);
@@ -63,7 +63,7 @@ public:
 
     ++grid_count[birth_position];
 
-    Event e(time, simbad::core::EVENT_KIND::BIRTH);
+    Event e(time, simbad::core::EVENT_KIND::CREATED);
 
     e.set_coordinate(0, long(static_cast<Derived *>(this)->distance_from_origin(
                             birth_position)));
@@ -79,7 +79,7 @@ public:
 protected:
   void update_birth_uncapped_density(const Event &e)
   {
-    if(e.event_kind() != simbad::core::EVENT_KIND::BIRTH)
+    if(e.event_kind() != simbad::core::EVENT_KIND::CREATED)
       throw std::runtime_error("unsupported event type");
 
     const double birth_pos = e.coordinate(0);
