@@ -175,10 +175,10 @@ int main(int argc, const char **argv)
   if(param_fname)
     prop.add_properties_auto(param_fname.get());
 
-  if(tree.count("print_properties"))
+/*  if(tree.count("print_properties"))
     xml_parser::write_xml(std::cout, static_cast<property_tree::super>(tree),
                           xml_writer_make_settings<ptree::key_type>(' ', 2));
-  else if(tree.count("simulation"))
+  else*/ if(tree.count("simulation"))
     simulation(tree.get_child("simulation"));
   else if(tree.count("snapshots"))
     snapshots(tree.get_child("snapshots"));
