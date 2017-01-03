@@ -87,18 +87,26 @@ public:
   // relational operators
   bool operator==(attribute const &rhs) const;
   bool operator!=(attribute const &rhs) const;
+
+  // hash
+  std::size_t hash() const;
 };
 
 #undef SIMBAD_CORE_ATTRIBUTE_SUBTYPES
 
 END_NAMESPACE_CORE
 
+
+
 namespace std
 {
 template <>
 struct hash<::simbad::core::attribute>
-    : public boost::hash<::simbad::core::attribute::super>
+//    : public boost::hash<::simbad::core::attribute::super>
 {
+  std::size_t operator()(::simbad::core::attribute const &attr) const{
+    return attr.hash();
+  }
 };
 }
 

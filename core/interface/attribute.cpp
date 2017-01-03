@@ -176,5 +176,20 @@ bool attribute::operator!=(const attribute &rhs) const
 {
   return !this->operator==(rhs);
 }
+namespace {
+struct hashing_visitor{
+  template<class T>
+  std::size_t operator()(T const &t) const{
+    return boost::hash<T>()(t);
+  }
+};
+}
+
+std::size_t attribute::hash() const
+{
+  return boost::apply_visitor(hashing_visitor(),*this);
+}
 
 END_NAMESPACE_CORE
+
+
