@@ -71,7 +71,7 @@ namespace
 {
 struct empty_checker
 {
-  using result_type =bool;
+  using result_type = bool;
   template <class T> bool operator()(T const &) const { return false; }
   bool operator()(std::string const &str) const { return str.empty(); }
 };
@@ -153,7 +153,7 @@ namespace
 {
 struct equal_visitor
 {
-  using result_type=bool;
+  using result_type = bool;
   template <class T1, class T2>
   typename std::enable_if<!std::is_same<T1, T2>::value, bool>::type
   operator()(T1 const &, T2 const &) const
@@ -176,10 +176,13 @@ bool attribute::operator!=(const attribute &rhs) const
 {
   return !this->operator==(rhs);
 }
-namespace {
-struct hashing_visitor{
-  template<class T>
-  std::size_t operator()(T const &t) const{
+namespace
+{
+struct hashing_visitor
+{
+  using result_type = std::size_t;
+  template <class T> std::size_t operator()(T const &t) const
+  {
     return boost::hash<T>()(t);
   }
 };
@@ -187,9 +190,7 @@ struct hashing_visitor{
 
 std::size_t attribute::hash() const
 {
-  return boost::apply_visitor(hashing_visitor(),*this);
+  return boost::apply_visitor(hashing_visitor(), *this);
 }
 
 END_NAMESPACE_CORE
-
-
