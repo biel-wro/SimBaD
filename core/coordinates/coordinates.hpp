@@ -392,7 +392,7 @@ struct hash<simbad::core::coordinates<Scalar, dimension>>
     return boost::hash_range(c.begin(), c.end());
   }
 };
-
+/*
 template <class Scalar, size_t dimension>
 ::simbad::core::coordinates<Scalar, dimension>
 min(::simbad::core::coordinates<Scalar, dimension> const &c1,
@@ -412,7 +412,7 @@ max(::simbad::core::coordinates<Scalar, dimension> const &c1,
   for(size_t d = 0; d < dimension; ++d)
     ret[d] = std::max(c1[d], c2[d]);
   return ret;
-}
+}*/
 }
 
 #endif
