@@ -2,6 +2,7 @@
 
 #include "configurations/cubic_crystal_configuration.hpp"
 #include "particle.hpp"
+#include "interface/event.hpp"
 #include "interface/property_tree.hpp"
 #include "processors/text_configuration_printer.hpp"
 

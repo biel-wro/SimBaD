@@ -1,7 +1,7 @@
 #include "snapshotter.hpp"
 
 #include "interface/model.hpp"
-
+#include "interface/event.hpp"
 #include <assert.h>
 BEGIN_NAMESPACE_CORE
 snapshotter::snapshotter(model *model_ptr, time_type time_step)

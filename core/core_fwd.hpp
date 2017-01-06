@@ -52,6 +52,7 @@ template <size_t, class> class simple_particle;
 // processors
 class configuration_builder;
 class snapshotter;
+class stream_printer;
 
 // utils
 class argument_parser;

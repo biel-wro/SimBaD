@@ -10,7 +10,7 @@
 #include <random>
 
 BEGIN_NAMESPACE_CORE
-class poisson_configuration : public simbad::core::configuration_view
+class poisson_configuration final : public simbad::core::configuration_view
 {
 public:
   using dimension_type = std::size_t;

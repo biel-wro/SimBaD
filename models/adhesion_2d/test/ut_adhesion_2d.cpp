@@ -39,7 +39,7 @@ static property_tree make_test_model_parameters()
   pt.put("seed", 0);
   return pt;
 }
-
+/*
 static cubic_crystal_configuration make_initial_configuration(double radius)
 {
   property_tree pt;
@@ -48,7 +48,7 @@ static cubic_crystal_configuration make_initial_configuration(double radius)
   pt.put("spacing", 1);
 
   return cubic_crystal_configuration(pt);
-}
+}*/
 
 BOOST_AUTO_TEST_SUITE(test_adhesion_2d)
 

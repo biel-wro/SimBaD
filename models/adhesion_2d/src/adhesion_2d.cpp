@@ -1,8 +1,8 @@
 #include "adhesion_2d.hpp"
 #include "core_fwd.hpp"
 
-#include "interface/event_kind.hpp"
 #include "interface/event.hpp"
+#include "interface/event_kind.hpp"
 #include "interface/model_factory.hpp"
 
 #include <cassert>
@@ -10,6 +10,7 @@
 #include <stdexcept>
 using namespace simbad::models::adhesion_2d;
 using simbad::core::property_tree;
+using simbad::core::EVENT_KIND;
 
 BEGIN_NAMESPACE_CORE
 template <>
@@ -25,38 +26,22 @@ BEGIN_NAMESPACE_ADHESION_2D
 
 namespace
 {
+template <EVENT_KIND EK, std::size_t PL>
 class event_view : public simbad::core::event
 {
 public:
-  explicit event_view(cell const *ptr = nullptr,
-                      cell::position_type const *newpos_ptr = nullptr)
-      : m_particle_ptr(ptr), m_newpos_ptr(newpos_ptr)
+  explicit event_view(cell const &c, double t) : m_paricle_view(c), m_time(t) {}
+  double time() const override { return m_time; }
+  std::size_t partials_left() const override { return PL; }
+  EVENT_KIND event_kind() const override { return EK; }
+  simbad::core::particle const &subject() const override
   {
-  }
-  double time() const override { return m_particle_ptr->next_jump_time(); }
-  std::size_t dimension() const override { return cell::dimension; }
-  std::size_t npartials() const override { return 2; }
-  core::EVENT_KIND partial_type(std::size_t partialno) const override
-  {
-    assert(partialno < 2);
-    if(0 == partialno)
-      return simbad::core::EVENT_KIND::REMOVED;
-    else // if(1 == partialno)
-      return simbad::core::EVENT_KIND::CREATED;
-  }
-  double coord(std::size_t partialno, std::size_t dimno) const override
-  {
-    assert(partialno < 2);
-    assert(dimno < dimension());
-    if(0 == partialno)
-      return m_particle_ptr->position()[dimno];
-    else // if(1 == partialno)
-      return (*m_newpos_ptr)[dimno];
+    return m_paricle_view;
   }
 
 private:
-  cell const *m_particle_ptr;
-  cell::position_type const *m_newpos_ptr;
+  particle_view m_paricle_view;
+  double m_time;
 };
 }
 
@@ -99,11 +84,8 @@ void adhesion_2d::generate_events(event_visitor v, size_type nevents)
     position_type new_pos = old_pos + brownian_displacement +
                             position_type(delta_time * old_particle.velocity());
 
-    // create and call visitor
-    {
-      event_view view(&old_particle, &new_pos);
-      v(view);
-    }
+    // create jump_out event and call visitor
+    v(event_view<EVENT_KIND::JUMPED_OUT, 1>(old_particle, time()));
 
     // compute forces and update neighbor
     force_type total_force(0);
@@ -128,7 +110,12 @@ void adhesion_2d::generate_events(event_visitor v, size_type nevents)
           neighbor.pressure() += new_pressure - old_pressure;
 
           update_time(neighbor, false);
+
         });
+
+    // TODO: move past update
+    // create jump_in event
+    v(event_view<EVENT_KIND::JUMPED_IN, 0>(m_spacetime.top(), time()));
 
     // move particle
     m_spacetime.visit_top_guarded([&](cell &c) {
@@ -149,11 +136,7 @@ adhesion_2d::size_type adhesion_2d::configuration_size() const
 
 void adhesion_2d::visit_configuration(particle_visitor v) const
 {
-  particle_view view;
-  m_spacetime.visit([this, v, &view](const cell &p) {
-    view.set_orig(&p);
-    v(view);
-  });
+  m_spacetime.visit([v](const cell &p) { v(particle_view(p)); });
 }
 
 void adhesion_2d::read_configuration(const configuration_view &configuration)
@@ -163,7 +146,7 @@ void adhesion_2d::read_configuration(const configuration_view &configuration)
   m_spacetime.clear();
 
   configuration.visit_configuration([this](simbad::core::particle const &p) {
-    //assert(dimension() == p.dimension());
+    // assert(dimension() == p.dimension());
 
     position_type position{p.coord(0), p.coord(1)};
     velocity_type velocity(0);

@@ -12,6 +12,8 @@
 
 #include "interface/event.hpp"
 
+using simbad::core::EVENT_KIND;
+
 BEGIN_NAMESPACE_SIMPLE_EXP_2D
 
 simple_exp_2d::simple_exp_2d(dispersion disp, kernel interaction_kernel,
@@ -33,46 +35,30 @@ simple_exp_2d::simple_exp_2d(dispersion disp, kernel interaction_kernel,
 
 namespace
 {
-struct my_death_view : public simbad::core::event
+struct my_particle_view : public simbad::core::particle
 {
-  double t, x, y;
-  my_death_view(double t, double x, double y) : t(t), x(x), y(y) {}
+  config::space_coords sc;
+  my_particle_view(config::space_coords sc) : sc(sc) {}
+  // std::size_t dimension() const override { return 2; }
+  double coord(std::size_t d) const override { return sc[d]; }
+};
+
+template <EVENT_KIND EK, std::size_t PL>
+struct my_event_view : public simbad::core::event
+{
+  double t;
+  my_particle_view m_particle_view;
+
+  my_event_view(double t, float x, float y) : t(t), m_particle_view({x, y}) {}
   double time() const override { return t; }
-  std::size_t dimension() const override { return 2; }
-  std::size_t npartials() const override { return 1; }
-  simbad::core::EVENT_KIND partial_type(std::size_t) const override
+  std::size_t partials_left() const override { return PL; }
+  EVENT_KIND event_kind() const override { return EK; }
+  simbad::core::particle const &subject() const override
   {
-    return simbad::core::EVENT_KIND::REMOVED;
-  }
-  double coord(std::size_t, std::size_t nc) const override
-  {
-    return 0 == nc ? x : y;
+    return m_particle_view;
   }
 };
 
-struct my_birth_view : public simbad::core::event
-{
-  double t, x, y, x2, y2;
-  my_birth_view(double t, double x, double y, double x2, double y2)
-      : t(t), x(x), y(y), x2(x2), y2(y2)
-  {
-  }
-  double time() const override { return t; }
-  std::size_t dimension() const override { return 2; }
-  std::size_t npartials() const override { return 2; }
-  simbad::core::EVENT_KIND partial_type(std::size_t pn) const override
-  {
-    return pn == 0 ? simbad::core::EVENT_KIND::CREATED
-                   : simbad::core::EVENT_KIND::NONE;
-  }
-  double coord(std::size_t pn, std::size_t nc) const override
-  {
-    if(0 == pn)
-      return 0 == nc ? x : y;
-    else
-      return 0 == nc ? x2 : y2;
-  }
-};
 }
 
 simple_exp_2d::simple_exp_2d::~simple_exp_2d() {}
@@ -101,15 +87,18 @@ void simple_exp_2d::generate_events(core::model::event_visitor visitor,
 
     if(EVENT_KIND::REMOVED == event_kind)
     {
-      visitor(my_death_view(ev.get_time(), p->coords()[0], p->coords()[1]));
+      visitor(my_event_view<EVENT_KIND::REMOVED, 0>(
+          ev.get_time(), p->coords()[0], p->coords()[1]));
       remove_particle(*p);
     }
     else if(EVENT_KIND::CREATED == event_kind)
     {
       float birth_x = p->coords()[0] + m_dispersion(m_random_engine);
       float birth_y = p->coords()[1] + m_dispersion(m_random_engine);
-      visitor(my_birth_view(ev.get_time(), birth_x, birth_y, p->coords()[0],
-                            p->coords()[1]));
+      visitor(my_event_view<EVENT_KIND::NONE, 1>(ev.get_time(), p->coords()[0],
+                                                 p->coords()[1]));
+      visitor(my_event_view<EVENT_KIND::CREATED, 0>(ev.get_time(), birth_x,
+                                                    birth_y));
       config::space_coords birth_coords{birth_x, birth_y};
       add_particle(birth_coords);
       resample_event(*p);
@@ -118,13 +107,6 @@ void simple_exp_2d::generate_events(core::model::event_visitor visitor,
 }
 namespace
 {
-struct my_particle_view : public simbad::core::particle
-{
-  config::space_coords sc;
-  my_particle_view(config::space_coords sc) : sc(sc) {}
-  // std::size_t dimension() const override { return 2; }
-  double coord(std::size_t d) const override { return sc[d]; }
-};
 }
 
 std::size_t simple_exp_2d::configuration_size() const { return m_space.size(); }
