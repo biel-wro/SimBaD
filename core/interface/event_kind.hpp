@@ -7,18 +7,17 @@
 
 BEGIN_NAMESPACE_CORE
 
-
 enum class EVENT_KIND : std::uint32_t
-{
-    NONE,
-    CREATED,
-    REMOVED,
-    MODIFIED
+{              // position   | ID         | attributes
+  NONE,        // preserved  | preserved  | preserved
+  CREATED,     // assigned   | assigned   | assigned
+  REMOVED,     // freed      | freed      | undefined
+  MODIFIED,    // preserved  | preserved  | changed
+  TRANSFORMED, // preserved  | reassigned | changed
+  JUMPED_OUT,  // freed      | saved      | saved
+  JUMPED_IN,   // assigned   | restored   | restored
 };
-
 END_NAMESPACE_CORE
-
-
 
 std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek);
 

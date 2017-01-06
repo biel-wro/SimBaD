@@ -13,6 +13,43 @@ using simbad::core::EVENT_KIND;
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 
+namespace
+{
+struct particle_view : public simbad::core::particle
+{
+  cell const &m_cell;
+  parameter_evolution_3d const &m_model;
+  particle_view(cell const &c, parameter_evolution_3d const &model)
+      : m_cell(c), m_model(model)
+  {
+  }
+  double coord(std::size_t d) const override { return m_cell.position()[d]; }
+  simbad::core::attribute extra_attribute(std::size_t idx) const override
+  {
+    return m_model.attribute(m_cell, idx);
+  }
+};
+
+template <EVENT_KIND EK, std::size_t PARTIALS_LEFT>
+struct event_view : public simbad::core::event
+{
+  particle_view m_particle_view;
+
+  event_view(cell const &c, parameter_evolution_3d const &m)
+      : m_particle_view(c, m)
+  {
+  }
+
+  double time() const override { return m_particle_view.m_model.time(); }
+  std::size_t partials_left() const override { return PARTIALS_LEFT; }
+  EVENT_KIND event_kind() const override { return EK; }
+  simbad::core::particle const &subject() const override
+  {
+    return m_particle_view;
+  }
+};
+}
+
 parameter_evolution_3d::parameter_evolution_3d(
     const simbad::core::property_tree &pt)
     : m_time(0),
@@ -61,21 +98,7 @@ parameter_evolution_3d::configuration_size() const
 void parameter_evolution_3d::visit_configuration(particle_visitor v) const
 {
   m_spacetime.visit([this, v](cell const &p) {
-    struct : public simbad::core::particle
-    {
-      double coord(std::size_t d) const override
-      {
-        return cell_ptr->position()[d];
-      }
-      simbad::core::attribute extra_attribute(std::size_t idx) const override
-      {
-        return self->attribute(*cell_ptr, idx);
-      }
-      cell const *cell_ptr;
-      parameter_evolution_3d const *self;
-    } view;
-    view.self = this;
-    view.cell_ptr = &p;
+    particle_view view(p, *this);
     v(view);
   });
 }
@@ -177,7 +200,7 @@ parameter_evolution_3d::attribute(const cell &c, std::size_t attr_idx) const
   case 9: return compute_birth_rate(c);
   case 10: return compute_death_rate(c);
   case 11: return compute_success_rate(c);
-  case 12: return 1.0/compute_death_rate(c);
+  case 12: return 1.0 / compute_death_rate(c);
   }
   throw simbad::core::unrecognized_attribute_number(attr_idx);
 }
@@ -231,6 +254,7 @@ void parameter_evolution_3d::mutate(cell &c)
 
 void parameter_evolution_3d::execute_death(event_visitor v)
 {
+  /*
   struct : public simbad::core::event
   {
     cell const *cell_ptr;
@@ -249,12 +273,14 @@ void parameter_evolution_3d::execute_death(event_visitor v)
     }
   } death_view;
 
-  death_view.cell_ptr = &m_spacetime.top();
+  death_view.cell_ptr = &m_spacetime.top();*/
+  event_view<EVENT_KIND::REMOVED, 0> death_view(m_spacetime.top(), *this);
   v(death_view);
   pop();
 }
 void parameter_evolution_3d::execute_birth(event_visitor v)
 {
+  /*
   struct : public simbad::core::event
   {
     cell const *cell_ptr;
@@ -279,16 +305,13 @@ void parameter_evolution_3d::execute_birth(event_visitor v)
       return cell_ptr->position()[dimno];
     }
   } birth_view;
+*/
 
   cell const &parent = m_spacetime.top();
   cell::position_type new_position(parent.position());
   new_position[0] += m_model_params.dispersion()(m_rng);
   new_position[1] += m_model_params.dispersion()(m_rng);
   new_position[2] += m_model_params.dispersion()(m_rng);
-  birth_view.cell_ptr = &parent;
-  birth_view.newpos_ptr = &new_position;
-
-  v(birth_view);
 
   cell child(m_spacetime.top());
   child.set_position(new_position);
@@ -301,6 +324,12 @@ void parameter_evolution_3d::execute_birth(event_visitor v)
   mutate(*parent_handle);
   resample_event(*parent_handle);
   m_spacetime.repair_order(parent_handle);
+
+  event_view<EVENT_KIND::TRANSFORMED, 1> parent_birth_view(parent, *this);
+  v(parent_birth_view);
+
+  event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
+  v(child_birth_view);
 }
 END_NAMESPACE_PARAMETER_EVOLUTION_3D
 

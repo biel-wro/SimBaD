@@ -32,12 +32,10 @@ cell::pressure_type &cell::pressure() { return m_pressure; }
 /*
  * particle_view
  */
-particle_view::particle_view(const particle_view::orig *ptr) : m_ptr(ptr) {}
-void particle_view::set_orig(const particle_view::orig *ptr) { m_ptr = ptr; }
-//std::size_t particle_view::dimension() const { return orig::dimension; }
+particle_view::particle_view(const orig &c) : m_cell(c) {}
 double particle_view::coord(std::size_t d) const
 {
-  return m_ptr->position()[d];
+  return m_cell.position()[d];
 }
 
 /*

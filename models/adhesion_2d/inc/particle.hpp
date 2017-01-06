@@ -54,15 +54,10 @@ class particle_view : public simbad::core::particle
 {
 public:
   using orig = simbad::models::adhesion_2d::cell;
-  explicit particle_view(orig const *ptr = nullptr);
-  void set_orig(const orig *ptr);
-  //std::size_t dimension() const override;
+  explicit particle_view(orig const &c);
   double coord(std::size_t d) const override;
-  //simbad::core::attribute
-  //extra_attribute(std::size_t) const override;
-
 private:
-  orig const *m_ptr;
+  orig const &m_cell;
 };
 
 END_NAMESPACE_ADHESION_2D

@@ -6,7 +6,7 @@
 
 
 BEGIN_NAMESPACE_CORE
-
+/*
 template <class base_event>
 class simple_event_view : public event
 {
@@ -22,8 +22,8 @@ public:
   bool has_assigned_base() { return nullptr != pbase; }
 
   double time() const override { return pbase->time(); }
-  std::size_t dimension() const override { return base_event::s_dimension(); }
-  std::size_t npartials() const override { return 1; }
+  //std::size_t dimension() const override { return base_event::s_dimension(); }
+  //std::size_t npartials() const override { return 1; }
   EVENT_KIND partial_type(std::size_t partialno) const override
   {
     (void)partialno; // remove warning, there is only one partial event
@@ -38,7 +38,7 @@ public:
 protected:
   base_ptr pbase;
 };
-
+*/
 END_NAMESPACE_CORE
 
 #endif // SIMPLE_EVENT_VIEW_HPP

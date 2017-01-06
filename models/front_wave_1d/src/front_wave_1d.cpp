@@ -10,14 +10,45 @@ front_wave_1d::front_wave_1d(double alpha, double x0 = 1.0)
 {
 }
 
+namespace
+{
+struct particle_view : public simbad::core::particle
+{
+  double pos;
+  particle_view(double c) : pos(c) {}
+  double coord(std::size_t d) const override
+  {
+    assert(0 == d);
+    return pos;
+  }
+};
+
+struct event_view : public simbad::core::event
+{
+  using base_type = front_wave_1d_impl::Event;
+  base_type const &base;
+  particle_view p;
+
+  event_view(base_type const &base) : base(base), p(base.coordinate(0)) {}
+  double time() const override { return base.time(); }
+  std::size_t partials_left() const override { return 0; }
+  simbad::core::EVENT_KIND event_kind() const override
+  {
+    return simbad::core::EVENT_KIND::CREATED;
+  }
+  simbad::core::particle const &subject() const override { return p; }
+};
+}
+
 void front_wave_1d::generate_events(event_visitor visitor, size_t nevents)
 {
-  CORE_NAMESPACE::simple_event_view<front_wave_1d_impl::Event> event_view;
+  //CORE_NAMESPACE::simple_event_view<front_wave_1d_impl::Event> event_view;
+
   for(size_t i = 0; i < nevents; ++i)
   {
     front_wave_1d_impl::Event event = impl->next_event();
-    event_view = event;
-    visitor(event_view);
+    event_view view(event);
+    visitor(view);
   }
 }
 

@@ -30,10 +30,10 @@ public:
   void pop();
 
   void check_accumulators();
-
-protected:
   simbad::core::attribute attribute(cell const &c,
                                     std::size_t attrname) const;
+protected:
+
 
   double compute_birth_rate(cell const &c) const;
   double compute_death_rate(cell const &c) const;

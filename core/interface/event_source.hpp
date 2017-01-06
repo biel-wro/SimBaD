@@ -1,8 +1,6 @@
 #ifndef CORE_EVENT_SOURCE_HPP
 #define CORE_EVENT_SOURCE_HPP
-#include "core_def.hpp"
-
-#include "event.hpp"
+#include "core_fwd.hpp"
 
 #include <functional>
 

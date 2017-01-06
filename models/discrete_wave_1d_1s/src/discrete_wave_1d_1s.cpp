@@ -18,11 +18,10 @@ discrete_wave_1d_1s::discrete_wave_1d_1s(double alpha, double intensity_cap,
 discrete_wave_1d_1s::~discrete_wave_1d_1s() {}
 void discrete_wave_1d_1s::generate_events(event_visitor visitor, size_t nevents)
 {
-  CORE_NAMESPACE::simple_event_view<discrete_wave_1d_1s_impl::Event> event_view;
   for(size_t i = 0; i < nevents; ++i)
   {
     discrete_wave_1d_1s_impl::Event event = impl->next_event();
-    event_view = event;
+    discrete_wave_1d_1s_impl::EventView event_view(event);
     visitor(event_view);
   }
 }
@@ -37,25 +36,15 @@ std::size_t discrete_wave_1d_1s::configuration_size() const
 }
 
 std::size_t discrete_wave_1d_1s::dimension() const { return 1; }
-namespace
-{
-struct particle_view : public CORE_NAMESPACE::particle
-{
-  double pos;
-  // std::size_t dimension() const override { return 1; }
-  double coord(std::size_t) const override { return pos; }
-};
-}
+
 
 void discrete_wave_1d_1s::visit_configuration(particle_visitor v) const
 {
   double spacing = impl->get_spacing();
-  particle_view view;
   std::size_t siteno = 0;
   for(std::size_t site_count : impl->get_counts())
   {
-    view.pos = spacing * siteno;
-
+    discrete_wave_1d_1s_impl::particle_view view(spacing * siteno);
     for(std::size_t count = 0; count < site_count; ++count)
       v(view);
 

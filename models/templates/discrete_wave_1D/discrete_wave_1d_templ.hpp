@@ -6,8 +6,10 @@
 #include <random>
 #include <vector>
 
-#include "interface/event_kind.hpp"
 #include "computational/distributions/power_law_distribution.hpp"
+#include "interface/event.hpp"
+#include "interface/event_kind.hpp"
+#include "interface/particle.hpp"
 #include "legacy/simple/simple_event.hpp"
 
 namespace simbad
@@ -19,9 +21,36 @@ namespace discrete_wave_1d
 template <class Derived> class discrete_wave_1d_impl
 {
 public:
-  class Event : public core::simple_event<double, long, 1>
+  struct Event : public core::simple_event<double, long, 1>
   {
     using simple_event<double, long, 1>::simple_event;
+  };
+
+  struct particle_view : public simbad::core::particle
+  {
+    particle_view(double pos) : pos(pos) {}
+    double pos;
+    double coord(std::size_t) const override { return pos; }
+  };
+
+  struct EventView : public simbad::core::event
+  {
+    EventView(Event const &base) : m_base(base), m_particle(base.coordinate(0))
+    {
+    }
+    double time() const override { return m_base.time(); }
+    std::size_t partials_left() const override { return 0; }
+    simbad::core::EVENT_KIND event_kind() const override
+    {
+      return simbad::core::EVENT_KIND::CREATED;
+    }
+    simbad::core::particle const &subject() const override
+    {
+      return m_particle;
+    }
+
+    Event const &m_base;
+    particle_view m_particle;
   };
 
   discrete_wave_1d_impl(double alpha, double intensity_cap, std::size_t length,

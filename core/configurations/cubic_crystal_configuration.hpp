@@ -5,7 +5,7 @@
 
 BEGIN_NAMESPACE_CORE
 
-class cubic_crystal_configuration : public configuration_view
+class cubic_crystal_configuration final : public configuration_view
 {
 public:
   explicit cubic_crystal_configuration(property_tree const &pt);
