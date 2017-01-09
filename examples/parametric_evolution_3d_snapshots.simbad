@@ -62,18 +62,18 @@ model
       {
         mutator
         {
-          alpha 2
           improvement_probability 0.1
-          scale 1
+          improvement_exponent 100
+          deterioration_exponent 1
         }
       }
       resistance
       {
         mutator
         {
-          alpha 2
           improvement_probability 0.1
-          scale 1
+          improvement_exponent 100
+          deterioration_exponent 1
         }
       }        
     }
@@ -89,18 +89,18 @@ model
       {
         mutator
         {
-          alpha 2
           improvement_probability 0.1
-          scale 1
+          improvement_exponent 100
+          deterioration_exponent 1
         }
       }
       resistance
       {
         mutator
         {
-          alpha 2
           improvement_probability 0.1
-          scale 1
+          improvement_exponent 100
+          deterioration_exponent 1
         }
       }
     }
@@ -116,18 +116,18 @@ model
       {
         mutator
         {
-          alpha 2
           improvement_probability 0.1
-          scale 1
+          improvement_exponent 100
+          deterioration_exponent 1
         }
       }
       resistance
       {
         mutator
         {
-          alpha 2
           improvement_probability 0.1
-          scale 1
+          improvement_exponent 100
+          deterioration_exponent 1
         }
       }
     }

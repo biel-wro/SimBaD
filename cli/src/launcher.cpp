@@ -56,12 +56,14 @@ void launcher::launch_snapshots(const property_tree &pt)
                                           pt.get_child("stacked_view"));
   for(std::size_t i = 0; i < nsteps; ++i)
   {
+    std::cerr << "processing..." << std::endl;
     configuration_view const &raw_configuration = processor();
     stacked_view.set_base(raw_configuration);
     std::cerr << "[" << double(100 * i) / double(nsteps) << "%] processed " << i
               << " snapshots out of " << nsteps << std::endl;
     std::cout << "time = " << processor.get_current_time() << std::endl;
     printer->set_configuration(stacked_view);
+
   }
 }
 

@@ -29,7 +29,7 @@ public:
     return boost::math::ibetac_invb(m_alpha, parent_val, m_impr_prob);
   }
 
-  template <class RNG> double operator()(real_type parent_val, RNG &rng) const
+  template <class RNG> real_type operator()(real_type parent_val, RNG &rng) const
   {
     real_type beta = find_beta(parent_val);
     real_type u = std::uniform_real_distribution<real_type>()(rng);

@@ -16,6 +16,7 @@ set( TEST_SOURCES
   ut_generic_particle.cpp
   ut_lazy_set.cpp
   ut_lazy_set_chunk.cpp
+  ut_skewed_poly_mutation.cpp
   ut_ordered_board.cpp
   ut_pairing_heap.cpp
   ut_parent_from_member.cpp

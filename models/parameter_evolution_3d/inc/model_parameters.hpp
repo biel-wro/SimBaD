@@ -7,6 +7,7 @@
 #include "computational/interactions/generalized_exponential_interaction.hpp"
 #include "interface/property_tree.hpp"
 #include "computational/mutations/skewed_beta_mutation.hpp"
+#include "computational/mutations/skewed_polynomial_mutator.hpp"
 
 #include <random>
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
@@ -47,7 +48,8 @@ private:
   extractor_type m_lifespan_extractor;
   extractor_type m_success_extractor;
 
-  using mutator_type = simbad::core::skewed_beta_mutator<double>;
+  //using mutator_type = simbad::core::skewed_beta_mutator<double>;
+  using mutator_type = simbad::core::skewed_polynomial_mutator<double>;
   mutator_type m_birth_eff_mutator;
   mutator_type m_birth_res_mutator;
   mutator_type m_lifespan_eff_mutator;

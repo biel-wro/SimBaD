@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(load_static_configuration)
 
   text_configuration_printer printer(std::cout);
 
-  printer.set_configuration(stacked_view);
+  //printer.set_configuration(stacked_view);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
