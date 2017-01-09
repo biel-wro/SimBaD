@@ -4,7 +4,7 @@
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 model_params::model_params(const simbad::core::property_tree &pt)
     : m_mutation_prob(pt.get<double>("mutation.probability")),
-      m_interaction(pt.get_child("interaction")),
+     m_interaction(pt.get_child("interaction")),
       m_dispersion(pt.get_child("birth.dispersion")),
       m_birth_extractor(pt.get_child("birth.saturation")),
       m_lifespan_extractor(pt.get_child("lifespan.saturation")),

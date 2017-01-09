@@ -1,9 +1,9 @@
 #include "parameter_evolution_3d.hpp"
 
 #include "configurations/cubic_crystal_configuration.hpp"
-#include "particle.hpp"
 #include "interface/event.hpp"
 #include "interface/property_tree.hpp"
+#include "particle.hpp"
 #include "processors/text_configuration_printer.hpp"
 
 #include <boost/property_tree/ptree.hpp>
@@ -28,32 +28,33 @@ static property_tree make_paramaters()
   pt.put("birth.saturation.sigma", 10);
   pt.put("birth.saturation.gamma", 2);
   pt.put("birth.saturation.scale", 10);
-  pt.put("birth.efficiency.mutator.alpha", 2);
   pt.put("birth.efficiency.mutator.improvement_probability", 0.1);
-  pt.put("birth.efficiency.mutator.scale", 1);
-  pt.put("birth.resistance.mutator.alpha", 2);
+  pt.put("birth.efficiency.mutator.improvement_exponent", 100);
+  pt.put("birth.efficiency.mutator.deterioration_exponent", 1);
   pt.put("birth.resistance.mutator.improvement_probability", 0.1);
-  pt.put("birth.resistance.mutator.scale", 1);
+  pt.put("birth.resistance.mutator.improvement_exponent", 100);
+  pt.put("birth.resistance.mutator.deterioration_exponent", 1);
 
   pt.put("lifespan.saturation.sigma", 10);
   pt.put("lifespan.saturation.gamma", 2);
   pt.put("lifespan.saturation.scale", 1000);
-  pt.put("lifespan.efficiency.mutator.alpha", 2);
   pt.put("lifespan.efficiency.mutator.improvement_probability", 0.1);
-  pt.put("lifespan.efficiency.mutator.scale", 1);
-  pt.put("lifespan.resistance.mutator.alpha", 2);
+  pt.put("lifespan.efficiency.mutator.improvement_exponent", 100);
+  pt.put("lifespan.efficiency.mutator.deterioration_exponent", 1);
   pt.put("lifespan.resistance.mutator.improvement_probability", 0.1);
-  pt.put("lifespan.resistance.mutator.scale", 1);
+  pt.put("lifespan.resistance.mutator.improvement_exponent", 100);
+  pt.put("lifespan.resistance.mutator.deterioration_exponent", 1);
 
   pt.put("success.saturation.sigma", 1);
   pt.put("success.saturation.gamma", 2);
   pt.put("success.saturation.scale", 1);
-  pt.put("success.efficiency.mutator.alpha", 2);
+
   pt.put("success.efficiency.mutator.improvement_probability", 0.1);
-  pt.put("success.efficiency.mutator.scale", 1);
-  pt.put("success.resistance.mutator.alpha", 2);
+  pt.put("success.efficiency.mutator.improvement_exponent", 100);
+  pt.put("success.efficiency.mutator.deterioration_exponent", 1);
   pt.put("success.resistance.mutator.improvement_probability", 0.1);
-  pt.put("success.resistance.mutator.scale", 1);
+  pt.put("success.resistance.mutator.improvement_exponent", 100);
+  pt.put("success.resistance.mutator.deterioration_exponent", 1);
 
   pt.put("seed", 0);
   pt.put("space.tile_size", 1);
@@ -100,7 +101,6 @@ BOOST_AUTO_TEST_CASE(reading_configuration)
   m.visit_configuration([&counter](particle const &p) { ++counter; });
 
   BOOST_REQUIRE_EQUAL(counter, original_size);
-
 }
 
 BOOST_AUTO_TEST_CASE(short_run)
@@ -117,7 +117,6 @@ BOOST_AUTO_TEST_CASE(short_run)
   m.generate_events([](event const &e) { std::cout << e << std::endl; }, 100);
   m.check_accumulators();
   configuration_printer.set_configuration(m);
-
 }
 
 BOOST_AUTO_TEST_SUITE_END()
