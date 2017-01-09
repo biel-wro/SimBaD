@@ -6,7 +6,7 @@
 using namespace simbad::core;
 BOOST_AUTO_TEST_SUITE(test_skewed_poly_mutation)
 
-BOOST_AUTO_TEST_CASE(sampling)
+BOOST_AUTO_TEST_CASE(sampling_skewed_poly)
 {
   constexpr double improvement_prob = 0.001;
   constexpr double increase_power = 2.0;
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(sampling2)
 /*
   for(std::size_t i = 0; i < histogram.size(); ++i)
     std::cout << double(i) / histogram.size() << "\t" << histogram[i]
-  */            << std::endl;
+              << std::endl;*/
 }
 
 BOOST_AUTO_TEST_SUITE_END()
