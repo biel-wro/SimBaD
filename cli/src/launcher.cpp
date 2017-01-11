@@ -63,7 +63,6 @@ void launcher::launch_snapshots(const property_tree &pt)
               << " snapshots out of " << nsteps << std::endl;
     std::cout << "time = " << processor.get_current_time() << std::endl;
     printer->set_configuration(stacked_view);
-
   }
 }
 
@@ -105,7 +104,8 @@ std::unique_ptr<model> launcher::make_model(const property_tree &pt) const
   std::string model_name = pt.get<std::string>("class");
 
   model_register const &reg = simbad::models::common::get_builtin_models();
-  model_factory const &factory = reg.get_model_factory(model_name);
+  model_factory const &factory =
+      dynamic_cast<model_factory const &>(reg.get_factory(model_name));
 
   property_tree parameters_props = pt.get_child("parameters");
 

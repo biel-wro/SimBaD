@@ -62,18 +62,24 @@ model
       {
         mutator
         {
-          improvement_probability 0.1
-          improvement_exponent 100
-          deterioration_exponent 1
+          class "uniform_step_mutator"
+          parameters
+          {
+            increase_length 0.01
+            decrease_length 0.09
+          }
         }
       }
       resistance
       {
         mutator
         {
-          improvement_probability 0.1
-          improvement_exponent 100
-          deterioration_exponent 1
+          class "uniform_step_mutator"
+          parameters
+          {
+            increase_length 0.01
+            decrease_length 0.09
+          }
         }
       }        
     }
@@ -89,18 +95,24 @@ model
       {
         mutator
         {
-          improvement_probability 0.1
-          improvement_exponent 100
-          deterioration_exponent 1
+          class "uniform_step_mutator"
+          parameters
+          {
+            increase_length 0.01
+            decrease_length 0.09
+          }
         }
       }
       resistance
       {
         mutator
         {
-          improvement_probability 0.1
-          improvement_exponent 100
-          deterioration_exponent 1
+          class "uniform_step_mutator"
+          parameters
+          {
+            increase_length 0.01
+            decrease_length 0.09
+          }
         }
       }
     }
@@ -116,18 +128,24 @@ model
       {
         mutator
         {
-          improvement_probability 0.1
-          improvement_exponent 100
-          deterioration_exponent 1
+          class "uniform_step_mutator"
+          parameters
+          {
+            increase_length 0.01
+            decrease_length 0.09
+          }
         }
       }
       resistance
       {
         mutator
         {
-          improvement_probability 0.1
-          improvement_exponent 100
-          deterioration_exponent 1
+          class "uniform_step_mutator"
+          parameters
+          {
+            increase_length 0.01
+            decrease_length 0.09
+          }
         }
       }
     }

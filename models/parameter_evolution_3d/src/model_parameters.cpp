@@ -1,20 +1,30 @@
 #include "model_parameters.hpp"
+#include "computational/mutations/builtin_mutators.hpp"
 #include "intrinsic_params.hpp"
+#include "utils/class_register.hpp"
+using simbad::core::get_builtin_mutators;
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
+
 model_params::model_params(const simbad::core::property_tree &pt)
     : m_mutation_prob(pt.get<double>("mutation.probability")),
-     m_interaction(pt.get_child("interaction")),
+      m_interaction(pt.get_child("interaction")),
       m_dispersion(pt.get_child("birth.dispersion")),
       m_birth_extractor(pt.get_child("birth.saturation")),
       m_lifespan_extractor(pt.get_child("lifespan.saturation")),
       m_success_extractor(pt.get_child("success.saturation")),
-      m_birth_eff_mutator(pt.get_child("birth.efficiency.mutator")),
-      m_birth_res_mutator(pt.get_child("birth.resistance.mutator")),
-      m_lifespan_eff_mutator(pt.get_child("lifespan.efficiency.mutator")),
-      m_lifespan_res_mutator(pt.get_child("lifespan.resistance.mutator")),
-      m_success_eff_mutator(pt.get_child("success.efficiency.mutator")),
-      m_success_res_mutator(pt.get_child("success.resistance.mutator"))
+      m_birth_eff_mutator_ptr(get_builtin_mutators().create_instance(
+          pt.get_child("birth.efficiency.mutator"))),
+      m_birth_res_mutator_ptr(get_builtin_mutators().create_instance(
+          pt.get_child("birth.resistance.mutator"))),
+      m_lifespan_eff_mutator_ptr(get_builtin_mutators().create_instance(
+          pt.get_child("lifespan.efficiency.mutator"))),
+      m_lifespan_res_mutator_ptr(get_builtin_mutators().create_instance(
+          pt.get_child("lifespan.resistance.mutator"))),
+      m_success_eff_mutator_ptr(get_builtin_mutators().create_instance(
+          pt.get_child("success.efficiency.mutator"))),
+      m_success_res_mutator_ptr(get_builtin_mutators().create_instance(
+          pt.get_child("success.resistance.mutator")))
 {
 }
 model_params::~model_params() {}
@@ -74,19 +84,19 @@ double model_params::success_saturation(double x) const
 
 void model_params::mutate_birth(cell_params &cp, std::mt19937_64 &rnd) const
 {
-  apply_mutator(cp.birth_eff(), m_birth_eff_mutator, rnd);
-  apply_mutator(cp.birth_res(), m_birth_res_mutator, rnd);
+  apply_mutator(cp.birth_eff(), *m_birth_eff_mutator_ptr, rnd);
+  apply_mutator(cp.birth_res(), *m_birth_res_mutator_ptr, rnd);
 }
 void model_params::mutate_lifespan(cell_params &cp, std::mt19937_64 &rnd) const
 {
-  apply_mutator(cp.lifespan_eff(), m_lifespan_eff_mutator, rnd);
-  apply_mutator(cp.lifespan_res(), m_lifespan_eff_mutator, rnd);
+  apply_mutator(cp.lifespan_eff(), *m_lifespan_eff_mutator_ptr, rnd);
+  apply_mutator(cp.lifespan_res(), *m_lifespan_eff_mutator_ptr, rnd);
 }
 
 void model_params::mutate_success(cell_params &cp, std::mt19937_64 &rnd) const
 {
-  apply_mutator(cp.success_eff(), m_success_eff_mutator, rnd);
-  apply_mutator(cp.success_res(), m_success_res_mutator, rnd);
+  apply_mutator(cp.success_eff(), *m_success_eff_mutator_ptr, rnd);
+  apply_mutator(cp.success_res(), *m_success_res_mutator_ptr, rnd);
 }
 
 const simbad::models::parameter_evolution_3d::model_params::dispersion_type &

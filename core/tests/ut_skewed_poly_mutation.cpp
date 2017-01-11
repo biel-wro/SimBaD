@@ -1,6 +1,6 @@
 #include <boost/test/auto_unit_test.hpp>
 
-#include "computational/mutations/skewed_polynomial_mutator.hpp"
+#include "computational/mutations/templ/skewed_polynomial_mutator.hpp"
 #include <boost/math/distributions/beta.hpp>
 #include <iostream>
 using namespace simbad::core;

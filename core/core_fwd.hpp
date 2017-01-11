@@ -9,6 +9,7 @@
 
 BEGIN_NAMESPACE_CORE
 // computational
+class mutator;
 
 // configurations
 
@@ -60,6 +61,8 @@ class counting_id_generator;
 class generic_particle;
 
 // other
+template <class T> class object_factory;
+template <class T> class class_register;
 template <class Object>
 Object *create_from_property_tree(property_tree const &);
 END_NAMESPACE_CORE

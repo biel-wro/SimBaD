@@ -4,6 +4,9 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 set( SOURCES
   src/core.cpp
+  computational/mutations/builtin_mutators.cpp
+  computational/mutations/mutator.cpp
+  computational/mutations/mutator_register.cpp
   configurations/default_attributed_configuration.cpp
   configurations/enriched_configuration.cpp
   configurations/slice_configuration.cpp

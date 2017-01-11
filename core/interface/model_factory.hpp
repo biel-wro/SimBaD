@@ -2,12 +2,12 @@
 #define MODEL_FACTORY_HPP
 
 #include "core_fwd.hpp"
-
+#include "utils/object_factory.hpp"
 #include <memory>
 #include <string>
 
 BEGIN_NAMESPACE_CORE
-
+/*
 class model_factory
 {
 public:
@@ -19,6 +19,18 @@ public:
   virtual std::string model_name() const = 0;
   virtual std::size_t dimension() const = 0;
 };
+*/
+class model_factory : public object_factory<model>
+{
+public:
+    using params = property_tree;
+    virtual std::size_t dimension() const =0;
+    virtual std::string model_name() const = 0;
+    std::string class_name() const override;
+    model_factory();
+    virtual ~model_factory();
+};
+
 END_NAMESPACE_CORE
 
 #define SIMBAD_MAKE_MODEL_FACTORY(modelname, DIMENSION)                        \
