@@ -14,8 +14,8 @@ public:
   {
   }
   uniform_step_mutator(property_tree const &pt)
-      : uniform_step_mutator(pt.get<real_type>("decrease_length"),
-                             pt.get<real_type>("increase_length"))
+      : uniform_step_mutator(pt.get<real_type>("increase_length"),
+                             pt.get<real_type>("decrease_length"))
   {
   }
 
