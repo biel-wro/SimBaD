@@ -45,7 +45,7 @@ bool attribute_descriptor::is_uniquely_defined(ATTRIBUTE_KIND kind,
     return is_optional;
 
   attribute_descriptor::kind_iterator next = std::next(it);
-  return next == end_kinds() || next->kind() == kind;
+  return next == end_kinds() || next->kind() != kind;
 }
 
 boost::optional<const attribute_descriptor_record &>
