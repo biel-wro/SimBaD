@@ -7,6 +7,10 @@
 #include <vector>
 
 #include "computational/distributions/power_law_distribution.hpp"
+#include "interface/attribute.hpp"
+#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_list.hpp"
+#include "interface/attribute_descriptor.hpp"
 #include "interface/event.hpp"
 #include "interface/event_kind.hpp"
 #include "interface/particle.hpp"
@@ -26,11 +30,17 @@ public:
     using simple_event<double, long, 1>::simple_event;
   };
 
-  struct particle_view : public simbad::core::particle
+  struct particle_view : public simbad::core::attribute_list,
+                         public simbad::core::particle
   {
     particle_view(double pos) : pos(pos) {}
     double pos;
     double coord(std::size_t) const override { return pos; }
+    simbad::core::attribute get_attribute(std::size_t idx) const override
+    {
+      assert(0 == idx);
+      return pos;
+    }
   };
 
   struct EventView : public simbad::core::event
@@ -105,6 +115,11 @@ public:
 
   double get_spacing() const { return grid_spacing; }
   std::vector<std::size_t> const &get_counts() const { return grid_count; }
+  simbad::core::attribute_descriptor const &attr_map() const
+  {
+    return simbad::core::attribute_descriptor::make_position_only();
+  }
+
 protected:
   void update_birth_uncapped_density(const Event &e)
   {

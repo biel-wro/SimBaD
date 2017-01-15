@@ -4,6 +4,7 @@
 
 #include "computational/templates/accumulator.hpp"
 #include "coordinates/coordinates.hpp"
+#include "interface/attribute_list.hpp"
 #include "interface/particle.hpp"
 #include <limits>
 
@@ -40,6 +41,7 @@ public:
   force_type &force();
   pressure_type pressure() const;
   pressure_type &pressure();
+
 private:
   position_type m_position;
   velocity_type m_velocity;
@@ -50,12 +52,24 @@ private:
   pressure_type m_pressure;
 };
 
+class new_particle_view : public simbad::core::attribute_list
+{
+public:
+  using base = cell;
+  new_particle_view(base const &base_ref);
+  simbad::core::attribute get_attribute(std::size_t idx) const;
+
+private:
+  base const &m_base_p;
+};
+
 class particle_view : public simbad::core::particle
 {
 public:
   using orig = simbad::models::adhesion_2d::cell;
   explicit particle_view(orig const &c);
   double coord(std::size_t d) const override;
+
 private:
   orig const &m_cell;
 };

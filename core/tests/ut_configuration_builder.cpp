@@ -3,7 +3,6 @@
 #include "configurations/selected_attributes_configuration.hpp"
 #include "configurations/stacked_view_configuration.hpp"
 
-#include "interface/attribute_descriptor.hpp"
 #include "interface/particle.hpp"
 #include "processors/configuration_builder.hpp"
 #include "processors/text_configuration_printer.hpp"
@@ -13,8 +12,26 @@
 
 using namespace simbad::core;
 BOOST_AUTO_TEST_SUITE(test_configuration_builder)
+BOOST_AUTO_TEST_CASE(set_default_attributes)
+{
+  property_tree pt;
+  pt.put("dimension", 3);
+  pt.put("radius", 2);
+  pt.put("spacing", 1);
+
+  cubic_crystal_configuration initial_configuration(pt);
+  text_configuration_printer printer(&std::cout);
+
+  property_tree attrs;
+  attrs.put("abc", 123);
+
+  default_attributed_configuration conf(initial_configuration, attrs);
+  //printer.set_configuration(conf);
+}
+
 BOOST_AUTO_TEST_CASE(load_static_configuration)
 {
+  /*
   cubic_crystal_configuration crystal(2, 2, 1);
   property_tree pt;
   pt.put("prop1", "abc");
@@ -36,9 +53,10 @@ BOOST_AUTO_TEST_CASE(load_static_configuration)
 
   stacked_view_configuration stacked_view(builder, cpt);
 
-  text_configuration_printer printer(std::cout);
+  text_configuration_printer printer(&std::cout);
 
   //printer.set_configuration(stacked_view);
+  */
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -1,8 +1,8 @@
 #include "text_configuration_printer.hpp"
 
 #include "interface/attribute.hpp"
+#include "interface/attribute_list.hpp"
 #include "interface/attribute_descriptor.hpp"
-#include "interface/attribute_mapping.hpp"
 #include "interface/configuration_view.hpp"
 #include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
@@ -11,71 +11,58 @@
 
 BEGIN_NAMESPACE_CORE
 text_configuration_printer::text_configuration_printer()
-    : m_ostream_ptr(nullptr)
+    : stream_printer(nullptr)
 {
 }
-text_configuration_printer::text_configuration_printer(std::ostream &ostream)
-    : m_ostream_ptr(&ostream)
+text_configuration_printer::text_configuration_printer(std::ostream *ostream,
+                                                       std::string delim)
+    : stream_printer(*ostream), m_delimiter(std::move(delim))
 {
 }
 
-text_configuration_printer::text_configuration_printer(const property_tree &pt)
-    : text_configuration_printer()
+text_configuration_printer::text_configuration_printer(std::ostream *ostream,
+                                                       const property_tree &pt)
+    : text_configuration_printer(ostream,
+                                 pt.get<std::string>("delimiter", ", "))
 {
-  std::string stream_name = pt.get("output", "stdout");
-  if("stdout" == stream_name)
-    set_ostream(std::cout);
-  else
-    throw std::runtime_error("unrecognized output: " + stream_name);
 }
 
-void text_configuration_printer::set_ostream(std::ostream &ostream)
+void text_configuration_printer::write_header(const configuration_view &conf)
 {
-  m_ostream_ptr = &ostream;
+  attribute_descriptor::const_iterator it = conf.new_attr_map().begin(),
+                                    end = conf.new_attr_map().end();
+
+  if(end != it)
+    ostream() << "\"" << it->attribute_name() << "\"";
+
+  for(++it; end != it; ++it)
+    ostream() << m_delimiter << "\"" << it->attribute_name() << "\"";
+  ostream() << std::endl;
 }
 
-static void print_id(std::ostream &os, particle const &p, bool has_id)
+void text_configuration_printer::write_data(const configuration_view &conf)
 {
-  if(has_id)
-    os << p.id() << ": ";
-}
+  std::vector<std::size_t> indices;
+  std::vector<std::string> names;
+  std::tie(indices, names) = conf.new_attr_map().unpack_all();
 
-static void print_coords(std::ostream &os, particle const &p, std::size_t dim)
-{
-  for(size_t d = 0; d < dim; ++d)
-    os << p.coord(d) << " ";
-}
+  std::vector<std::size_t>::const_iterator beg_idx = indices.begin(),
+                                           end_idx = indices.end();
+  std::vector<std::string>::const_iterator beg_names = names.begin();
 
-static void print_atributes(std::ostream &os, particle const &p,
-                            std::size_t nattrs,
-                            std::vector<std::string> const &names,
-                            std::vector<std::size_t> const &indices)
-{
-  os << "{";
-  if(nattrs > 0)
-    os << names[0] << "=" << p.get_attribute(indices[0]);
-  for(std::size_t i = 1; i < nattrs; ++i)
-    os << ", " << names[i] << "=" << p.get_attribute(indices[i]);
-  os << "}" << std::endl;
-}
+  std::ostream &os = ostream();
+  conf.visit_configuration([=, &os](attribute_list const &a) {
 
-void text_configuration_printer::read_configuration(
-    const configuration_view &conf)
-{
-  size_t dimension = conf.dimension();
-  bool has_id = conf.has_unique_id();
+    if(end_idx != beg_idx)
+      os << *beg_names << "=" << a[*beg_idx];
 
-  std::size_t n_attributes = conf.attr_map().size();
 
-  std::vector<std::size_t> attr_indices;
-  std::vector<std::string> attr_names;
-  std::tie(attr_indices,attr_names) = conf.attr_map().unpack_all();
-
-  conf.visit_configuration([&](particle const &p) {
-    print_id(*m_ostream_ptr, p, has_id);
-    print_coords(*m_ostream_ptr, p, dimension);
-    print_atributes(*m_ostream_ptr, p, n_attributes, attr_names, attr_indices);
+    std::vector<std::size_t>::const_iterator it_idx = std::next(beg_idx, 1);
+    std::vector<std::string>::const_iterator it_names = std::next(beg_names, 1);
+    for(; end_idx != it_idx; ++it_idx, ++it_names)
+      os << m_delimiter << *it_names << "=" << a[*it_idx];
+    os << std::endl;
   });
 }
-
+void text_configuration_printer::write_footer(const configuration_view &conf) {}
 END_NAMESPACE_CORE

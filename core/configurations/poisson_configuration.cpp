@@ -1,4 +1,7 @@
 #include "configurations/poisson_configuration.hpp"
+#include "interface/attribute.hpp"
+#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_list.hpp"
 #include "interface/particle.hpp"
 
 #include <cmath>
@@ -7,14 +10,13 @@ BEGIN_NAMESPACE_CORE
 
 namespace
 {
-struct particle_view : public particle
+struct particle_view : public attribute_list
 {
   explicit particle_view(std::size_t dimension) : m_coords(dimension) {}
-  //std::size_t dimension() const override { return m_coords.size(); }
-  double coord(std::size_t d) const override
+  attribute get_attribute(std::size_t attributeno) const
   {
-   // assert(d < dimension());
-    return m_coords[d];
+    assert(0 == attributeno);
+    return m_coords;
   }
   void sample_ball(double radius, std::mt19937_64 &rng)
   {
@@ -32,14 +34,13 @@ struct particle_view : public particle
   }
 
 private:
-  std::vector<double> m_coords;
+  attribute_array<double> m_coords;
 };
 }
 poisson_configuration::poisson_configuration(const property_tree &pt)
-    : m_radius(pt.get<double>("radius")),
-      m_dimension(pt.get<dimension_type>("dimension")),
-      m_rng(pt.get<std::uint64_t>("seed")),
-      m_is_ball(pt.get<bool>("ball", false))
+    : poisson_configuration(
+          pt.get<dimension_type>("dimension"), pt.get<double>("radius"),
+          pt.get<bool>("ball", false), pt.get<std::uint64_t>("seed"))
 {
   boost::optional<double> lambda = pt.get_optional<double>("lambda");
   if(lambda)
@@ -52,29 +53,27 @@ poisson_configuration::poisson_configuration(dimension_type dimension,
                                              bool ball, std::uint64_t seed)
     : m_radius(radius),
       m_dimension(dimension),
-      m_size(n),
       m_rng(seed),
-      m_is_ball(ball)
+      m_size(n),
+      m_is_ball(ball),
+      m_attr_desc(new attribute_descriptor)
 {
+  m_attr_desc->add_attribute(0, "position", ATTRIBUTE_KIND::POSITION,
+                             dimension);
 }
 
 poisson_configuration::poisson_configuration(
     poisson_configuration::dimension_type dimension, double lambda,
     double radius, bool ball, std::uint64_t seed)
-    : m_radius(radius), m_dimension(dimension), m_rng(seed), m_is_ball(ball)
+    : poisson_configuration(dimension, sample_poisson(lambda), radius, ball,
+                            seed)
 {
-  set_sample_size(lambda);
 }
 
 poisson_configuration::size_type
 poisson_configuration::configuration_size() const
 {
   return m_size;
-}
-
-configuration_view::size_type poisson_configuration::dimension() const
-{
-  return m_dimension;
 }
 
 void poisson_configuration::visit_configuration(
@@ -97,12 +96,12 @@ void poisson_configuration::visit_configuration(
   }
 }
 
-void poisson_configuration::set_dimension(
-    poisson_configuration::dimension_type d)
+const attribute_descriptor &poisson_configuration::new_attr_map() const
 {
-  m_dimension = d;
+  return attribute_descriptor::make_position_only();
 }
 
+poisson_configuration::~poisson_configuration() {}
 void poisson_configuration::set_size(poisson_configuration::size_type n)
 {
   m_size = n;

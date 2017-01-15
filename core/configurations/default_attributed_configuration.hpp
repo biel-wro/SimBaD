@@ -1,9 +1,10 @@
 #ifndef ATTRIBUTE_DEFAULTED_CONFIGURATION_HPP
 #define ATTRIBUTE_DEFAULTED_CONFIGURATION_HPP
 
-#include "core_fwd.hpp"
 #include "configurations/enriched_configuration.hpp"
-#include "interface/attribute_mapping.hpp"
+#include "core_fwd.hpp"
+#include "interface/attribute_descriptor.hpp"
+#include "interface/property_tree.hpp"
 
 #include <unordered_map>
 #include <vector>
@@ -14,20 +15,16 @@ class default_attributed_configuration final : public enriched_configuration
 {
 public:
   using attribute_map = std::unordered_map<std::size_t, std::string>;
-  explicit default_attributed_configuration(
-      configuration_view const &m_base,
-      property_tree const &attributes);
-
-  void visit_configuration(particle_visitor) const override;
-  attribute_mapping const &attr_map() const override;
-protected:
-  void static store_extra_attributes(std::vector<attribute> &attributes,
-                                     property_tree const &pt,
-                                     std::string prefix = "");
+  explicit default_attributed_configuration(configuration_view const &m_base,
+                                            property_tree const &attributes);
+  virtual void on_base_reset() override;
+  void visit_configuration(particle_visitor visitor) const override;
+  attribute_descriptor const &new_attr_map() const override;
 
 private:
-  attribute_mapping m_attribute_mapping;
-  attribute_map m_new_attributes;
+  property_tree m_properties;
+  attribute_map m_owned_attributes;
+  attribute_descriptor m_merged_attr_desc;
 };
 END_NAMESPACE_CORE
 

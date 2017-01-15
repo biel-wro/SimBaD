@@ -15,13 +15,11 @@ class parameter_evolution_3d : public simbad::core::model
 public:
   parameter_evolution_3d(simbad::core::property_tree const &pt);
 
-  std::size_t dimension() const override;
   void generate_events(event_visitor, size_type nevents) override;
   size_type configuration_size() const override;
   void visit_configuration(particle_visitor) const override;
-  simbad::core::attribute_mapping const &attr_map() const override;
-  void read_configuration(
-      configuration_view const &conf) override;
+  simbad::core::attribute_descriptor const &new_attr_map() const override;
+  void read_configuration(configuration_view const &conf) override;
 
   double time() const;
 
@@ -30,11 +28,10 @@ public:
   void pop();
 
   void check_accumulators();
-  simbad::core::attribute attribute(cell const &c,
-                                    std::size_t attrname) const;
+  simbad::core::attribute new_attribute(cell const &c, std::size_t idx) const;
+  simbad::core::attribute attribute(cell const &c, std::size_t attrname) const;
+
 protected:
-
-
   double compute_birth_rate(cell const &c) const;
   double compute_death_rate(cell const &c) const;
   double compute_success_rate(cell const &c) const;

@@ -1,6 +1,7 @@
 #include "intrinsic_params.hpp"
 #include "interface/attribute.hpp"
-#include "interface/attribute_mapping.hpp"
+#include "interface/attribute_list.hpp"
+#include "interface/attribute_descriptor.hpp"
 #include "interface/configuration_view.hpp"
 #include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
@@ -18,20 +19,15 @@ cell_params::cell_params(const simbad::core::property_tree &pt)
       m_success_res(pt.get<float>("success.resistance"))
 {
 }
-static double get_attribute(std::size_t d, const simbad::core::particle &p)
-{
-  simbad::core::attribute const &attr = p.get_attribute(d);
-  return simbad::core::attribute_cast<double>(attr);
-}
 
-cell_params::cell_params(const simbad::core::particle &p,
-                         std::vector<std::size_t> const &attribute_indexes)
-    : m_birth_eff(get_attribute(attribute_indexes[0], p)),
-      m_birth_res(get_attribute(attribute_indexes[1], p)),
-      m_lifespan_eff(get_attribute(attribute_indexes[2], p)),
-      m_lifespan_res(get_attribute(attribute_indexes[3], p)),
-      m_success_eff(get_attribute(attribute_indexes[4], p)),
-      m_success_res(get_attribute(attribute_indexes[5], p))
+cell_params::cell_params(const core::attribute_list &p,
+                         std::vector<std::size_t> const &attribute_indices)
+    : m_birth_eff(p[attribute_indices[0]].get_real_val()),
+      m_birth_res(p[attribute_indices[1]].get_real_val()),
+      m_lifespan_eff(p[attribute_indices[2]].get_real_val()),
+      m_lifespan_res(p[attribute_indices[3]].get_real_val()),
+      m_success_eff(p[attribute_indices[4]].get_real_val()),
+      m_success_res(p[attribute_indices[5]].get_real_val())
 {
 }
 cell_params::cell_params(float birth_eff, float birth_res, float lifespan_eff,
@@ -47,7 +43,7 @@ cell_params::cell_params(float birth_eff, float birth_res, float lifespan_eff,
 }
 
 std::vector<std::size_t> cell_params::get_attribute_indices(
-    const simbad::core::attribute_mapping &mapping)
+    const simbad::core::attribute_descriptor &mapping)
 {
   std::vector<std::size_t> indices(6);
   indices[0] = mapping["birth.efficiency"].attribute_idx();

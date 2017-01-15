@@ -6,6 +6,7 @@ set( TEST_SOURCES
   #test_fixed.cpp
   ut_attribute.cpp
   ut_attributes_descriptor.cpp
+  ut_attribute_serialization.cpp
   ut_binary_tree.cpp
   #ut_board.cpp
   ut_board_coords.cpp

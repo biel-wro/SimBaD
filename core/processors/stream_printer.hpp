@@ -12,6 +12,13 @@ public:
   stream_printer(std::ostream &ostream);
   void set_ostream(std::ostream &ostream);
   std::ostream &ostream();
+
+  virtual void write_header(configuration_view const &conf) = 0;
+  virtual void write_data(configuration_view const &conf) = 0;
+  virtual void write_footer(configuration_view const &conf) = 0;
+protected:
+   void read_configuration(configuration_view const &conf) final;
+
 private:
   std::ostream *m_ostream_ptr;
 };

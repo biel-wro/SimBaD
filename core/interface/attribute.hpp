@@ -72,10 +72,12 @@ public:
   attribute(attribute_array<real_type> const &val);
   // query
   bool empty() const;
-
+  std::size_t dimension() const;
   // access
-  string_type &get_string_ref(std::size_t i=0);
-  string_type const &get_string_ref(std::size_t i=0) const;
+  attribute get_scalar(std::size_t) const;
+  real_type get_real_val(std::size_t idx = 0) const;
+  string_type &get_string_ref(std::size_t i = 0);
+  string_type const &get_string_ref(std::size_t i = 0) const;
   real_type &get_real_ref(std::size_t i = 0);
   real_type const &get_real_ref(std::size_t i = 0) const;
   int_type &get_integer_ref(std::size_t i = 0);
@@ -96,15 +98,13 @@ public:
 
 END_NAMESPACE_CORE
 
-
-
 namespace std
 {
-template <>
-struct hash<::simbad::core::attribute>
+template <> struct hash<::simbad::core::attribute>
 //    : public boost::hash<::simbad::core::attribute::super>
 {
-  std::size_t operator()(::simbad::core::attribute const &attr) const{
+  std::size_t operator()(::simbad::core::attribute const &attr) const
+  {
     return attr.hash();
   }
 };

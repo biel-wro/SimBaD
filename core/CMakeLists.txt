@@ -15,8 +15,9 @@ set( SOURCES
   configurations/selected_attributes_configuration.cpp
   configurations/stacked_view_configuration.cpp
   interface/attribute.cpp
+  interface/attribute_descriptor_record.cpp
+  interface/attribute_list.cpp
   interface/attribute_descriptor.cpp
-  interface/attribute_mapping.cpp
   interface/configuration_reader.cpp
   interface/configuration_view.cpp
   interface/event.cpp

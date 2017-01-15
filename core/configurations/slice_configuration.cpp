@@ -1,4 +1,7 @@
 #include "slice_configuration.hpp"
+#include "interface/attribute.hpp"
+#include "interface/attribute_list.hpp"
+#include "interface/attribute_descriptor.hpp"
 #include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
 
@@ -23,13 +26,19 @@ slice_configuration::slice_configuration(configuration_view const &base,
 {
 }
 
-void slice_configuration::visit_configuration(particle_visitor v) const
+void slice_configuration::visit_configuration(
+    configuration_view::particle_visitor v) const
 {
-  get_base().visit_configuration([this, v](particle const &p) {
-    double slicing_coord = p.coord(m_slicing_dimension);
+  attribute_descriptor const &map = get_base().new_attr_map();
+  assert(map.get_descriptor(ATTRIBUTE_KIND::POSITION));
+  attribute_descriptor_record d = map.get_descriptor(ATTRIBUTE_KIND::POSITION).get();
+  std::size_t attr_idx = d.attribute_idx();
+
+  get_base().visit_configuration([=](attribute_list const &al) {
+    double slicing_coord = al[attr_idx].get_real_ref(m_slicing_dimension);
     if(slicing_coord < m_slice_min || m_slice_max < slicing_coord)
       return;
-    v(p);
+    v(al);
   });
 }
 

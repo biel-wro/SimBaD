@@ -16,7 +16,7 @@ public:
   virtual double coord(std::size_t d) const = 0;
   virtual std::size_t id() const;
 
-  virtual attribute get_attribute(std::size_t attributeno) const final;
+  virtual attribute get_attribute(std::size_t attributeno) const;
 protected:
   virtual attribute extra_attribute(std::size_t attrno) const;
 };

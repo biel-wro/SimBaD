@@ -25,22 +25,26 @@ public:
                                  std::uint64_t seed = 0);
 
   size_type configuration_size() const override;
-  size_type dimension() const override;
   void visit_configuration(particle_visitor v) const override;
+  attribute_descriptor const &new_attr_map() const override;
 
-  void set_dimension(dimension_type d);
+
+  ~poisson_configuration();
+
   void set_size(size_type n);
   void set_sample_size(double lambda);
 
 protected:
+   void init_descriptor();
   size_type sample_poisson(double lambda);
 
 private:
   coord_scalar m_radius;
   dimension_type m_dimension;
-  std::size_t m_size;
   std::mt19937_64 m_rng;
+  std::size_t m_size;
   bool m_is_ball;
+  std::unique_ptr<attribute_descriptor> m_attr_desc;
 };
 
 END_NAMESPACE_CORE

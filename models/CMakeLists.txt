@@ -6,11 +6,11 @@ set( MODELS
 #  empty_model
 #  bio2D
   adhesion_2d
-  discrete_wave_1d_1s
-  discrete_wave_1d_2s
-  front_wave_1d
+#  discrete_wave_1d_1s
+#  discrete_wave_1d_2s
+#  front_wave_1d
   parameter_evolution_3d
-  simple_exp_2d
+#  simple_exp_2d
 )
 
 set( LIBS

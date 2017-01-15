@@ -302,9 +302,10 @@ template <class Target> struct convert_visitor
   template <class Source>
   boost::optional<Target> operator()(Source const &val) const
   {
-    return attribute_converter::convert_to<Target>(val);
+    return attribute_converter::convert_to<Target, Source>(val);
   }
 };
+
 }
 
 template <class Target> Target attribute_cast(attribute const &attr)

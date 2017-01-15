@@ -7,9 +7,8 @@
 #include <list>
 #include <memory>
 
-
 BEGIN_NAMESPACE_CORE
-class stacked_view_configuration final: public enriched_configuration
+class stacked_view_configuration final : public enriched_configuration
 {
 public:
   stacked_view_configuration(configuration_view const &base);
@@ -20,9 +19,7 @@ public:
   size_type configuration_size() const override;
   void visit_configuration(particle_visitor visitor) const override;
 
-  size_type dimension() const override;
-  bool has_unique_id() const override;
-  attribute_mapping const &attr_map() const override;
+  attribute_descriptor const &new_attr_map() const override;
 
   void push_layer(std::unique_ptr<enriched_configuration> layer);
   void push_layer(std::string const &layer_name, property_tree const &pt);

@@ -4,6 +4,7 @@
 #include "interface/event.hpp"
 #include "interface/property_tree.hpp"
 #include "particle.hpp"
+#include "processors/csv_printer.hpp"
 #include "processors/text_configuration_printer.hpp"
 
 #include <boost/property_tree/ptree.hpp>
@@ -100,11 +101,14 @@ BOOST_AUTO_TEST_CASE(reading_configuration)
 
   m.set_configuration(initial_configuraiton, make_initial_vals());
 
+  csv_printer printer(&std::cout);
+
+
   std::size_t const original_size = initial_configuraiton.configuration_size();
   BOOST_REQUIRE_EQUAL(m.configuration_size(), original_size);
 
   std::size_t counter(0);
-  m.visit_configuration([&counter](particle const &p) { ++counter; });
+  m.visit_configuration([&counter](attribute_list const &p) { ++counter; });
 
   BOOST_REQUIRE_EQUAL(counter, original_size);
 }
@@ -118,11 +122,15 @@ BOOST_AUTO_TEST_CASE(short_run)
 
   m.set_configuration(initial_configuraiton, make_initial_vals());
 
-  text_configuration_printer configuration_printer(std::cout);
+  //  text_configuration_printer configuration_printer(&std::cout);
+  csv_printer configuration_printer(&std::cout);
 
   m.generate_events([](event const &e) { std::cout << e << std::endl; }, 100);
   m.check_accumulators();
-  configuration_printer.set_configuration(m);
+  // configuration_printer.set_configuration(m);
+  configuration_printer.write_header(m);
+  configuration_printer.write_data(m);
+  // configuration_printer.write_footer(m);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

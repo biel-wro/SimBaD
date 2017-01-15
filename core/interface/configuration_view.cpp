@@ -1,13 +1,31 @@
 #include "configuration_view.hpp"
 #include "interface/attribute_descriptor.hpp"
-#include "interface/attribute_mapping.hpp"
 #include "interface/particle.hpp"
+#include <boost/optional.hpp>
 BEGIN_NAMESPACE_CORE
-bool configuration_view::has_unique_id() const { return false; }
-const attribute_mapping &configuration_view::attr_map() const
+
+std::size_t configuration_view::position_attr_idx() const
 {
-  static attribute_mapping mapping;
-  return mapping;
+  boost::optional<attribute_descriptor_record const &> desc_opt =
+      new_attr_map().get_descriptor(ATTRIBUTE_KIND::POSITION);
+  assert(desc_opt);
+  return desc_opt.get().attribute_idx();
 }
+
+configuration_view::size_type configuration_view::dimension() const
+{
+  boost::optional<attribute_descriptor_record const &> desc_opt =
+      new_attr_map().get_descriptor(ATTRIBUTE_KIND::POSITION);
+  assert(desc_opt);
+  return desc_opt.get().attribute_dimension();
+}
+
+bool configuration_view::has_unique_id() const
+{
+  boost::optional<attribute_descriptor_record const &> desc_opt =
+      new_attr_map().get_descriptor(ATTRIBUTE_KIND::POSITION);
+  return desc_opt.is_initialized();
+}
+
 configuration_view::~configuration_view() {}
 END_NAMESPACE_CORE

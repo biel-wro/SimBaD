@@ -22,9 +22,10 @@ public:
   // Constructors
   generic_particle();
 
-  void visit_view(configuration_view::particle_visitor v,
-                  std::size_t id_attr_idx = NOT_STORED,
-                  std::size_t coord_attr_idx = NOT_STORED) const;
+  void visit_view(configuration_view::particle_visitor v
+                  //,std::size_t id_attr_idx = NOT_STORED,
+                  //std::size_t coord_attr_idx = NOT_STORED
+                  ) const;
 
   void clear_attributes();
   void set_attribute(std::size_t extra_idx, attribute attr);

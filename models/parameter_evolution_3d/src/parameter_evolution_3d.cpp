@@ -1,10 +1,12 @@
 #include "parameter_evolution_3d.hpp"
 #include "interface/attribute.hpp"
-#include "interface/attribute_mapping.hpp"
+#include "interface/attribute_list.hpp"
+#include "interface/attribute_descriptor.hpp"
 #include "interface/event.hpp"
 #include "interface/model_factory.hpp"
 #include "interface/particle.hpp"
 #include "interface/particle.hpp"
+#include "utils/attribute_converter.hpp"
 #include "utils/attribute_exceptions.hpp"
 #include <iostream>
 #include <stdexcept>
@@ -27,6 +29,20 @@ struct particle_view : public simbad::core::particle
   simbad::core::attribute extra_attribute(std::size_t idx) const override
   {
     return m_model.attribute(m_cell, idx);
+  }
+};
+
+struct particle_attr : public simbad::core::attribute_list
+{
+  cell const &m_cell;
+  parameter_evolution_3d const &m_model;
+  particle_attr(cell const &c, parameter_evolution_3d const &model)
+      : m_cell(c), m_model(model)
+  {
+  }
+  simbad::core::attribute get_attribute(std::size_t idx) const override
+  {
+    return m_model.new_attribute(m_cell, idx);
   }
 };
 
@@ -59,7 +75,6 @@ parameter_evolution_3d::parameter_evolution_3d(
 {
 }
 
-std::size_t parameter_evolution_3d::dimension() const { return 3; }
 void parameter_evolution_3d::generate_events(event_visitor v, size_type nevents)
 {
   using simbad::core::EVENT_KIND;
@@ -95,10 +110,11 @@ parameter_evolution_3d::configuration_size() const
   return m_spacetime.size();
 }
 
-void parameter_evolution_3d::visit_configuration(particle_visitor v) const
+void parameter_evolution_3d::visit_configuration(
+    core::configuration_view::particle_visitor v) const
 {
   m_spacetime.visit([this, v](cell const &p) {
-    particle_view view(p, *this);
+    particle_attr view(p, *this);
     v(view);
   });
 }
@@ -106,13 +122,14 @@ void parameter_evolution_3d::visit_configuration(particle_visitor v) const
 void parameter_evolution_3d::read_configuration(const configuration_view &conf)
 {
   std::vector<std::size_t> attribute_indices =
-      cell_params::get_attribute_indices(conf.attr_map());
+      cell_params::get_attribute_indices(conf.new_attr_map());
 
-  conf.visit_configuration([&](simbad::core::particle const &p) {
+  std::size_t idx = conf.position_attr_idx();
+  conf.visit_configuration([=](particle_attributes const &p) {
     cell::position_type pos;
-    pos[0] = p.coord(0);
-    pos[1] = p.coord(1);
-    pos[2] = p.coord(2);
+    pos[0] = p[idx].get_real_ref(0);
+    pos[1] = p[idx].get_real_ref(1);
+    pos[2] = p[idx].get_real_ref(2);
     insert(cell(pos, cell_params(p, attribute_indices)));
   });
 }
@@ -142,6 +159,33 @@ void parameter_evolution_3d::pop()
   m_spacetime.visit_ball_guarded_order(c.position(), range, visitor);
 }
 
+const core::attribute_descriptor &parameter_evolution_3d::new_attr_map() const
+{
+  static std::unique_ptr<simbad::core::attribute_descriptor> map_p;
+  if(nullptr == map_p)
+  {
+    map_p.reset(new simbad::core::attribute_descriptor);
+    using simbad::core::ATTRIBUTE_KIND;
+    map_p->add_attribute(0, "position", ATTRIBUTE_KIND::POSITION, 3);
+    map_p->add_attribute(1, "density", ATTRIBUTE_KIND::ACCUMULATED, 1);
+    map_p->add_attribute(2, "event.time", ATTRIBUTE_KIND::INFO, 1);
+    map_p->add_attribute(3, "event.kind", ATTRIBUTE_KIND::INFO, 1);
+    map_p->add_attribute(4, "birth.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1);
+    map_p->add_attribute(5, "birth.resistance", ATTRIBUTE_KIND::INTRINSIC, 1);
+    map_p->add_attribute(6, "lifespan.efficiency", ATTRIBUTE_KIND::INTRINSIC,
+                         1);
+    map_p->add_attribute(7, "lifespan.resistance", ATTRIBUTE_KIND::INTRINSIC,
+                         1);
+    map_p->add_attribute(8, "success.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1);
+    map_p->add_attribute(9, "success.resistance", ATTRIBUTE_KIND::INTRINSIC, 1);
+    map_p->add_attribute(10, "birth.rate", ATTRIBUTE_KIND::OBSERVABLE, 1);
+    map_p->add_attribute(11, "death.rate", ATTRIBUTE_KIND::OBSERVABLE, 1);
+    map_p->add_attribute(12, "success.probability", ATTRIBUTE_KIND::OBSERVABLE,
+                         1);
+    map_p->add_attribute(13, "lifespan", ATTRIBUTE_KIND::OBSERVABLE, 1);
+  }
+  return *map_p;
+}
 void parameter_evolution_3d::check_accumulators()
 {
   double range = m_model_params.interaction().range();
@@ -158,30 +202,6 @@ void parameter_evolution_3d::check_accumulators()
     std::cout << "stored:" << c.density();
     std::cout << " measured:" << density << std::endl;
   });
-}
-
-const simbad::core::attribute_mapping &parameter_evolution_3d::attr_map() const
-{
-  static std::unique_ptr<simbad::core::attribute_mapping> p_map;
-  if(nullptr == p_map)
-  {
-    p_map.reset(new simbad::core::attribute_mapping);
-    using simbad::core::ATTRIBUTE_KIND;
-    p_map->add_attribute(0, "density", ATTRIBUTE_KIND::ACCUMULATED);
-    p_map->add_attribute(1, "event.time", ATTRIBUTE_KIND::INFO);
-    p_map->add_attribute(2, "event.kind", ATTRIBUTE_KIND::INFO);
-    p_map->add_attribute(3, "birth.efficiency", ATTRIBUTE_KIND::INTRINSIC);
-    p_map->add_attribute(4, "birth.resistance", ATTRIBUTE_KIND::INTRINSIC);
-    p_map->add_attribute(5, "lifespan.efficiency", ATTRIBUTE_KIND::INTRINSIC);
-    p_map->add_attribute(6, "lifespan.resistance", ATTRIBUTE_KIND::INTRINSIC);
-    p_map->add_attribute(7, "success.efficiency", ATTRIBUTE_KIND::INTRINSIC);
-    p_map->add_attribute(8, "success.resistance", ATTRIBUTE_KIND::INTRINSIC);
-    p_map->add_attribute(9, "birth.rate", ATTRIBUTE_KIND::OBSERVABLE);
-    p_map->add_attribute(10, "death.rate", ATTRIBUTE_KIND::OBSERVABLE);
-    p_map->add_attribute(11, "success.probability", ATTRIBUTE_KIND::OBSERVABLE);
-    p_map->add_attribute(12, "lifespan", ATTRIBUTE_KIND::OBSERVABLE);
-  }
-  return *p_map;
 }
 simbad::core::attribute
 parameter_evolution_3d::attribute(const cell &c, std::size_t attr_idx) const
@@ -204,6 +224,16 @@ parameter_evolution_3d::attribute(const cell &c, std::size_t attr_idx) const
   }
   throw simbad::core::unrecognized_attribute_number(attr_idx);
 }
+core::attribute parameter_evolution_3d::new_attribute(const cell &c,
+                                                      std::size_t idx) const
+{
+  if(0 == idx)
+    return simbad::core::attribute_converter::convert_to<
+               simbad::core::coordinates<double, 3>>(c.position())
+        .get();
+  return attribute(c, idx - 1);
+}
+
 void parameter_evolution_3d::resample_event(cell &c)
 {
   double birth_rate = compute_birth_rate(c);

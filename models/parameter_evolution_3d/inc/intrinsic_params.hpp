@@ -11,12 +11,12 @@ struct cell_params
 {
 public:
   cell_params(simbad::core::property_tree const &pt);
-  cell_params(simbad::core::particle const &p,
-              std::vector<std::size_t> const &attribute_indexes);
+  cell_params(simbad::core::attribute_list const &p,
+              std::vector<std::size_t> const &attribute_indices);
   cell_params(float birth_eff, float birth_res, float lifespan_eff,
               float lifespan_res, float success_eff, float success_res);
   static std::vector<std::size_t> get_attribute_indices(
-      simbad::core::attribute_mapping const &mapping);
+      simbad::core::attribute_descriptor const &mapping);
 
   float lifespan_eff() const;
   float &lifespan_eff();

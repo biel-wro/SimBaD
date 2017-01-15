@@ -1,6 +1,8 @@
 #include "adhesion_2d.hpp"
 #include "core_fwd.hpp"
 
+#include "interface/attribute.hpp"
+#include "interface/attribute_descriptor.hpp"
 #include "interface/event.hpp"
 #include "interface/event_kind.hpp"
 #include "interface/model_factory.hpp"
@@ -128,7 +130,6 @@ void adhesion_2d::generate_events(event_visitor v, size_type nevents)
   }
 }
 
-adhesion_2d::size_type adhesion_2d::dimension() const { return 2; }
 adhesion_2d::size_type adhesion_2d::configuration_size() const
 {
   return m_spacetime.size();
@@ -136,19 +137,24 @@ adhesion_2d::size_type adhesion_2d::configuration_size() const
 
 void adhesion_2d::visit_configuration(particle_visitor v) const
 {
-  m_spacetime.visit([v](const cell &p) { v(particle_view(p)); });
+  m_spacetime.visit([v](const cell &p) { v(new_particle_view(p)); });
 }
 
+const core::attribute_descriptor &adhesion_2d::new_attr_map() const
+{
+  return simbad::core::attribute_descriptor::make_position_only();
+}
 void adhesion_2d::read_configuration(const configuration_view &configuration)
 {
   assert(configuration.dimension() == dimension());
 
   m_spacetime.clear();
 
-  configuration.visit_configuration([this](simbad::core::particle const &p) {
+  std::size_t idx = configuration.position_attr_idx();
+  configuration.visit_configuration([=](particle_attributes const &p) {
     // assert(dimension() == p.dimension());
 
-    position_type position{p.coord(0), p.coord(1)};
+    position_type position{p[idx].get_real_ref(0), p[idx].get_real_ref(1)};
     velocity_type velocity(0);
     // push_particle(cell(position, velocity, time_type(0), time_type(0)));
   });

@@ -18,6 +18,7 @@ enriched_configuration::enriched_configuration(const configuration_view &base)
 void enriched_configuration::set_base(const configuration_view &base)
 {
   m_base = &base;
+  on_base_reset();
 }
 
 const configuration_view &enriched_configuration::get_base() const
@@ -25,22 +26,18 @@ const configuration_view &enriched_configuration::get_base() const
   return *m_base;
 }
 
+void enriched_configuration::on_base_reset() {}
 configuration_view::size_type enriched_configuration::configuration_size() const
 {
   return get_base().configuration_size();
-}
-
-configuration_view::size_type enriched_configuration::dimension() const
-{
-  return get_base().dimension();
 }
 
 void enriched_configuration::visit_configuration(particle_visitor v) const
 {
   get_base().visit_configuration(v);
 }
-const attribute_mapping &enriched_configuration::attr_map() const
+const attribute_descriptor &enriched_configuration::new_attr_map() const
 {
-  return get_base().attr_map();
+  return get_base().new_attr_map();
 }
 END_NAMESPACE_CORE

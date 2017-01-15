@@ -24,10 +24,11 @@ template <class scalar_type_, std::size_t dimension_> struct coordinates;
 // interface
 class attribute;
 template <class T> class attribute_array;
-class attribute_descriptor;
+class attribute_descriptor_record;
+class attribute_list;
 class attribute_range;
 enum class ATTRIBUTE_KIND : std::uint32_t;
-class attribute_mapping;
+class attribute_descriptor;
 class configuration_reader;
 class configuration_view;
 class event;

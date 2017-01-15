@@ -1,5 +1,8 @@
 #include "configurations/cubic_crystal_configuration.hpp"
 
+#include "interface/attribute.hpp"
+#include "interface/attribute_list.hpp"
+#include "interface/attribute_descriptor.hpp"
 #include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
 
@@ -15,31 +18,32 @@ cubic_crystal_configuration::cubic_crystal_configuration(
 cubic_crystal_configuration::cubic_crystal_configuration(size_type dimension,
                                                          double radius,
                                                          double spacing)
-    : m_dimension(dimension), m_radius(radius), m_spacing(spacing)
+    : m_dimension(dimension),
+      m_radius(radius),
+      m_spacing(spacing),
+      m_attr_mapping_ptr(new mapping)
 {
+  m_attr_mapping_ptr->add_attribute(0, "position", ATTRIBUTE_KIND::POSITION,
+                                    m_dimension);
 }
 configuration_view::size_type
 cubic_crystal_configuration::configuration_size() const
 {
   return std::pow(2 * spacings_per_radius() + 1, m_dimension);
 }
-configuration_view::size_type cubic_crystal_configuration::dimension() const
-{
-  return m_dimension;
-}
 
 namespace
 {
-struct particle_view : public simbad::core::particle
+struct particle_view : public simbad::core::attribute_list
 {
   particle_view(std::size_t dim) : m_position(dim) {}
-  //std::size_t dimension() const override { return m_position.size(); }
-  double coord(std::size_t d) const override
+  attribute_array<double> m_position;
+  attribute get_attribute(std::size_t idx) const override
   {
-    //assert(dimension() > d);
-    return m_position[d];
+    assert(0 == idx);
+    attribute attr = m_position;
+    return attr;
   }
-  std::vector<double> m_position;
 };
 }
 
@@ -88,6 +92,12 @@ void cubic_crystal_configuration::visit_configuration(
   } while(!last);
 }
 
+const attribute_descriptor &cubic_crystal_configuration::new_attr_map() const
+{
+  return *m_attr_mapping_ptr;
+}
+
+cubic_crystal_configuration::~cubic_crystal_configuration() {}
 cubic_crystal_configuration::size_type
 cubic_crystal_configuration::spacings_per_radius() const
 {

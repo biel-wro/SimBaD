@@ -59,11 +59,13 @@ attribute::attribute(attribute_array<real_type> &&val) : super(std::move(val))
 attribute::attribute(attribute_array<real_type> const &val)
 {
   if(3 == val.size())
-    super::operator=(attribute_cast<coordinates<real_type, 3>>(val));
+    super::operator=(
+        attribute_converter::convert_to<coordinates<real_type, 3>>(val).get());
   else if(2 == val.size())
-    super::operator=(attribute_cast<coordinates<real_type, 2>>(val));
+    super::operator=(
+        attribute_converter::convert_to<coordinates<real_type, 2>>(val).get());
   else if(1 == val.size())
-    super::operator=(attribute_cast<real_type>(val));
+    super::operator=(attribute_converter::convert_to<real_type>(val).get());
   else
     super::operator=(val);
 }
@@ -81,6 +83,65 @@ bool attribute::empty() const
   return boost::apply_visitor(empty_checker(), *this);
 }
 
+namespace
+{
+struct dimension_checker
+{
+  using result_type = std::size_t;
+  template <class T, std::size_t N>
+  std::size_t operator()(coordinates<T, N> const &) const
+  {
+    return N;
+  }
+  template <class T> std::size_t operator()(attribute_array<T> const &v) const
+  {
+    return v.size();
+  }
+  template <class T> std::size_t operator()(T const &v) const { return 1; }
+};
+}
+
+std::size_t attribute::dimension() const
+{
+  return boost::apply_visitor(dimension_checker(), *this);
+}
+
+namespace
+{
+struct scalar_getter
+{
+  using result_type = attribute;
+  std::size_t m_idx;
+  scalar_getter(std::size_t idx) : m_idx(idx) {}
+  template <class T, std::size_t N>
+  attribute operator()(coordinates<T, N> const &v) const
+  {
+    assert(N > m_idx);
+    return v[m_idx];
+  }
+  template <class T> attribute operator()(attribute_array<T> const &v) const
+  {
+    assert(v.size() > m_idx);
+    return v[m_idx];
+  }
+  template <class T> attribute operator()(T const &v) const
+  {
+    assert(0 == m_idx);
+    return v;
+  }
+};
+}
+
+attribute attribute::get_scalar(std::size_t idx) const
+{
+  return boost::apply_visitor(scalar_getter(idx), *this);
+}
+
+attribute::real_type attribute::get_real_val(std::size_t idx) const
+{
+  attribute scalar = get_scalar(idx);
+  return attribute_cast<real_type>(scalar);
+}
 namespace
 {
 template <class Ref, class Bind> struct getter
@@ -123,7 +184,6 @@ attribute::string_type &attribute::get_string_ref(std::size_t i)
 {
   return boost::apply_visitor(getter<string_type &, string_type>(i), *this);
 }
-
 attribute::string_type const &attribute::get_string_ref(std::size_t i) const
 {
   using boost::apply_visitor;
@@ -133,12 +193,10 @@ attribute::real_type &attribute::get_real_ref(std::size_t i)
 {
   return boost::apply_visitor(getter<real_type &, real_type>(i), *this);
 }
-
 attribute::real_type const &attribute::get_real_ref(std::size_t i) const
 {
   return boost::apply_visitor(getter<real_type const &, real_type>(i), *this);
 }
-
 attribute::int_type &attribute::get_integer_ref(std::size_t i)
 {
   return boost::apply_visitor(getter<int_type &, int_type>(i), *this);
@@ -171,7 +229,6 @@ bool attribute::operator==(const attribute &rhs) const
 {
   return boost::apply_visitor(equal_visitor(), *this, rhs);
 }
-
 bool attribute::operator!=(const attribute &rhs) const
 {
   return !this->operator==(rhs);

@@ -3,7 +3,7 @@
 #include "configurations/cubic_crystal_configuration.hpp"
 
 #include "interface/attribute.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_list.hpp"
 #include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
 
@@ -13,47 +13,46 @@ BEGIN_NAMESPACE_CORE
 default_attributed_configuration::default_attributed_configuration(
     const configuration_view &base, const property_tree &pt)
     : enriched_configuration(base),
-      m_attribute_mapping(),
-      m_new_attributes(m_attribute_mapping.add_attributes(pt))
+      m_properties(pt),
+      m_owned_attributes(),
+      m_merged_attr_desc()
 {
+  on_base_reset();
 }
 
-
-void default_attributed_configuration::visit_configuration(
-    particle_visitor v) const
+void default_attributed_configuration::on_base_reset()
 {
-  get_base().visit_configuration([this, v](particle const &p) {
-    struct : public particle
+  m_merged_attr_desc.clear();
+  m_merged_attr_desc = get_base().new_attr_map();
+  m_owned_attributes = m_merged_attr_desc.add_attributes(m_properties);
+}
+void default_attributed_configuration::visit_configuration(
+    configuration_view::particle_visitor v) const
+{
+  get_base().visit_configuration([this, v](attribute_list const &al) {
+    struct : public attribute_list
     {
-      particle const *m_base;
+      attribute_list const *m_base;
       default_attributed_configuration const *m_config;
-      double coord(std::size_t d) const override { return m_base->coord(d); }
-      std::size_t id() const override { return m_base->id(); }
-    protected:
-      attribute extra_attribute(std::size_t attrno) const override
+      attribute get_attribute(std::size_t attr_idx) const override
       {
         default_attributed_configuration::attribute_map::const_iterator it;
-        it = m_config->m_new_attributes.find(attrno);
-        if(m_config->m_new_attributes.end() == it)
-          return m_base->get_attribute(attrno);
+        it = m_config->m_owned_attributes.find(attr_idx);
+        if(m_config->m_owned_attributes.end() == it)
+          return (*m_base)[attr_idx];
         return it->second;
       }
-    } new_view;
-    new_view.m_base = &p;
-    new_view.m_config = this;
-    v(new_view);
+    } new_attributes;
+    new_attributes.m_base = &al;
+    new_attributes.m_config = this;
+    v(new_attributes);
   });
 }
 
-const attribute_mapping &default_attributed_configuration::attr_map() const
+const attribute_descriptor &
+default_attributed_configuration::new_attr_map() const
 {
-  return m_attribute_mapping;
-}
-void default_attributed_configuration::store_extra_attributes(
-    std::vector<attribute> &attributes, property_tree const &pt,
-    std::string prefix)
-{
-  throw "!!!";
+  return m_merged_attr_desc;
 }
 
 END_NAMESPACE_CORE

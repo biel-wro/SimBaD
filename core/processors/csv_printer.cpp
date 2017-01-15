@@ -1,9 +1,12 @@
 #include "csv_printer.hpp"
 
 #include "interface/attribute.hpp"
-#include "interface/attribute_mapping.hpp"
+#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_list.hpp"
 #include "interface/configuration_view.hpp"
 #include "interface/particle.hpp"
+#include "interface/property_tree.hpp"
+
 BEGIN_NAMESPACE_CORE
 
 csv_printer::csv_printer(std::ostream *ostream, const property_tree &pt)
@@ -14,51 +17,77 @@ csv_printer::csv_printer(std::ostream *ostream, std::string delimiter)
     : stream_printer(ostream), m_delimiter(std::move(delimiter))
 {
 }
-static void print_header(std::ostream &os, configuration_view const &conf,
-                         std::vector<std::string> const &names,
-                         std::string const &delimiter)
+
+static std::ostream &write_header_part(std::ostream &os,
+                                       attribute_descriptor_record const &desc,
+                                       std::vector<std::size_t> &dims,
+                                       std::string const &delim)
 {
-  if(conf.has_unique_id())
-    os << "id" << delimiter;
+  std::size_t dim = desc.attribute_dimension();
+  std::string const &name = desc.attribute_name();
 
-  std::size_t dimension = conf.dimension();
-  for(std::size_t d = 0; d < dimension; ++d)
-    os << "coord_" << d << delimiter;
+  dims.push_back(dim);
+  if(0 == dim || 1 == dim)
+    return os << "\"" << name << "\"";
 
-  for(std::string const &name : names)
-    os << "\"" << name << "\""<< delimiter;
-  os << std::endl;
+  os << "\"" << name << "_0\"";
+
+  for(std::size_t d = 1; d < dim; ++d)
+    os << delim << "\"" << name << "_" << d << "\"";
+
+  return os;
 }
 
-static void print_values(std::ostream &os, configuration_view const &conf,
-                         std::vector<std::size_t> const &indices,
-                         std::string const &delimiter)
+void csv_printer::write_header(const configuration_view &conf)
 {
-  bool has_unique_id = conf.has_unique_id();
-  std::size_t dimension = conf.dimension();
+  m_dimensions.clear();
+  m_dimensions.reserve(conf.new_attr_map().size());
 
-  conf.visit_configuration([&](particle const &p) {
-    if(has_unique_id)
-      os << p.id() << delimiter;
+  attribute_descriptor::const_iterator it = conf.new_attr_map().begin(),
+                                       end = conf.new_attr_map().end();
 
-    for(std::size_t d = 0; d < dimension; ++d)
-      os << p.coord(d) << delimiter;
+  if(end != it)
+    write_header_part(ostream(), *it, m_dimensions, m_delimiter);
+  for(++it; end != it; ++it)
+    write_header_part(ostream() << m_delimiter, *it, m_dimensions, m_delimiter);
 
-    for(std::size_t idx : indices)
-      os << p.get_attribute(idx) << delimiter;
+  ostream() << std::endl;
+}
+
+static std::ostream &s_write_data_part(std::ostream &os, attribute const &attr,
+                                       std::size_t const &dim,
+                                       std::string const &delim)
+{
+  if(0 == dim)
+    return os << "\"" << attr << "\"";
+  if(1 == dim)
+    return os << attr;
+
+  os << attr.get_scalar(0);
+  for(std::size_t d = 1; d < dim; ++d)
+    os << delim << attr.get_scalar(d);
+  return os;
+}
+
+void csv_printer::write_data(const configuration_view &conf)
+{
+  std::vector<std::size_t> indices = conf.new_attr_map().unpack_indices();
+  std::vector<std::size_t>::const_iterator beg = indices.begin(),
+                                           end = indices.end();
+  std::ostream &os = ostream();
+  conf.visit_configuration([=, &os](attribute_list const &a) {
+    if(end != beg)
+      s_write_data_part(os, a[*beg], m_dimensions[*beg], m_delimiter);
+    std::vector<std::size_t>::const_iterator it = std::next(beg, 1);
+    for(; end != it; ++it)
+      s_write_data_part(os << m_delimiter, a[*it], m_dimensions[*it],
+                        m_delimiter);
+
     os << std::endl;
   });
 }
-
-void csv_printer::read_configuration(const configuration_view &conf)
+void csv_printer::write_footer(const configuration_view &)
 {
-  std::vector<std::size_t> indices;
-  std::vector<std::string> names;
-  std::tie(indices, names) = conf.attr_map().unpack_all();
-
-  print_header(ostream(), conf, names, m_delimiter);
-  print_values(ostream(), conf, indices, m_delimiter);
+  ostream() << std::endl;
 }
 END_NAMESPACE_CORE
-
-

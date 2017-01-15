@@ -21,10 +21,10 @@ public:
   explicit adhesion_2d(model_parameters mp, double tile_size = 1.0,
                        std::uint64_t seed = 0);
   void generate_events(event_visitor, size_type nevents) override;
-  size_type dimension() const override;
+
   size_type configuration_size() const override;
   void visit_configuration(particle_visitor) const override;
-
+  simbad::core::attribute_descriptor const &new_attr_map() const override;
   void read_configuration(configuration_view const &configuration) override;
 
   double time() const;

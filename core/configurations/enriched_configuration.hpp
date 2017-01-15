@@ -11,10 +11,10 @@ public:
 
   virtual void set_base(configuration_view const &base) final;
   virtual configuration_view const &get_base() const final;
+  virtual void on_base_reset();
   size_type configuration_size() const override;
-  size_type dimension() const override;
   void visit_configuration(particle_visitor) const override;
-  attribute_mapping const &attr_map() const override;
+  attribute_descriptor const &new_attr_map() const override;
 
 private:
   configuration_view const *m_base;

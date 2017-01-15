@@ -17,7 +17,7 @@ stacked_view_configuration::stacked_view_configuration(
     : enriched_configuration(base)
 {
   for(std::pair<std::string, property_tree> const &child :
-      pt.get_child("layers",property_tree::get_empty()))
+      pt.get_child("layers", property_tree::get_empty()))
   {
     property_tree const &subtree = child.second;
     push_layer(subtree.get<std::string>("class"),
@@ -37,24 +37,14 @@ stacked_view_configuration::configuration_size() const
 }
 
 void stacked_view_configuration::visit_configuration(
-    particle_visitor visitor) const
+    configuration_view::particle_visitor visitor) const
 {
   return last_layer().visit_configuration(visitor);
 }
 
-configuration_view::size_type stacked_view_configuration::dimension() const
+const attribute_descriptor &stacked_view_configuration::new_attr_map() const
 {
-  return last_layer().dimension();
-}
-
-bool stacked_view_configuration::has_unique_id() const
-{
-  return last_layer().has_unique_id();
-}
-
-const attribute_mapping &stacked_view_configuration::attr_map() const
-{
-  return last_layer().attr_map();
+  return last_layer().new_attr_map();
 }
 
 void stacked_view_configuration::push_layer(

@@ -1,26 +1,27 @@
 #ifndef TEXT_CONFIGURATION_PRINTER_HPP
 #define TEXT_CONFIGURATION_PRINTER_HPP
 
-#include "interface/configuration_reader.hpp"
+#include "processors/stream_printer.hpp"
 
 #include "core_fwd.hpp"
 
-#include <iosfwd>
+#include <string>
 
 BEGIN_NAMESPACE_CORE
-class text_configuration_printer : public configuration_reader
+class text_configuration_printer : public stream_printer
 {
 public:
   text_configuration_printer();
-  text_configuration_printer(std::ostream &ostream);
-  text_configuration_printer(property_tree const &pt);
+  text_configuration_printer(std::ostream *ostream, std::string delimiter = ", ");
+  text_configuration_printer(std::ostream *ostream, property_tree const &pt);
 
-  void set_ostream(std::ostream &ostream);
-  void read_configuration(const configuration_view &conf) override;
 
+  void write_header(const configuration_view &conf) override;
+  void write_data(const configuration_view &conf) override;
+  void write_footer(const configuration_view &conf) override;
 
 private:
-  std::ostream *m_ostream_ptr;
+  std::string m_delimiter;
 };
 
 END_NAMESPACE_CORE

@@ -1,5 +1,4 @@
 #include "utils/generic_particle.hpp"
-#include "interface/attribute_descriptor.hpp"
 #include <boost/test/auto_unit_test.hpp>
 using namespace simbad::core;
 BOOST_AUTO_TEST_SUITE(test_generic_particle)

@@ -1,6 +1,7 @@
 #include "particle.hpp"
 #include "interface/attribute.hpp"
 #include "model_parameters.hpp"
+#include "utils/attribute_converter.hpp"
 #include <random>
 
 BEGIN_NAMESPACE_ADHESION_2D
@@ -36,6 +37,18 @@ particle_view::particle_view(const orig &c) : m_cell(c) {}
 double particle_view::coord(std::size_t d) const
 {
   return m_cell.position()[d];
+}
+
+new_particle_view::new_particle_view(const new_particle_view::base &base_ref)
+    : m_base_p(base_ref)
+{
+}
+
+core::attribute new_particle_view::get_attribute(std::size_t idx) const
+{
+  assert(0 == idx);
+  return simbad::core::attribute_converter::convert_to<
+      simbad::core::coordinates<double, 2>>(m_base_p.position()).get();
 }
 
 /*

@@ -1,44 +1,25 @@
 #include "generic_particle.hpp"
 
 #include "interface/attribute.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_list.hpp"
 
 #include <tuple>
 
 BEGIN_NAMESPACE_CORE
 
 generic_particle::generic_particle() {}
-void generic_particle::visit_view(configuration_view::particle_visitor v,
-                                  std::size_t id_attr_idx,
-                                  std::size_t coord_attr_idx) const
+void generic_particle::visit_view(
+    configuration_view::particle_visitor v) const
 {
-  struct : particle
+  struct : attribute_list
   {
-    std::size_t id_attr_idx = generic_particle::NOT_STORED;
-    std::size_t coord_attr_idx = generic_particle::NOT_STORED;
     generic_particle const *self;
-    double coord(std::size_t d) const override
+    attribute get_attribute(std::size_t idx) const override
     {
-      if(generic_particle::NOT_STORED == coord_attr_idx)
-        return 0;
-      attribute const &attr = self->find_attribute(coord_attr_idx);
-      return attr.get_real_ref(d);
-    }
-    std::size_t id() const override
-    {
-      if(generic_particle::NOT_STORED == id_attr_idx)
-        return 0;
-      return self->find_attribute(id_attr_idx).get_integer_ref();
-    }
-    attribute extra_attribute(std::size_t attrno) const override
-    {
-      return self->find_attribute(attrno);
+      return self->attributes()[idx];
     }
   } particle_view;
   particle_view.self = this;
-  particle_view.id_attr_idx = id_attr_idx;
-  particle_view.coord_attr_idx = coord_attr_idx;
-
   v(particle_view);
 }
 void generic_particle::clear_attributes() { m_attributes.clear(); }
