@@ -31,7 +31,7 @@ struct coordinates:
   static constexpr dimension_type dimension = dimension_;
   using scalar_type = scalar_type_;
   using base_array = std::array<scalar_type_, dimension_>;
-  static constexpr bool is_discrete = std::is_integral<scalar_type>();
+  static constexpr bool is_discrete = std::is_integral<scalar_type>::value;
   /*
    * Constructors
    */
