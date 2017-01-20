@@ -2,7 +2,7 @@ mode "snapshots"
 run
 {
   time_step 1
-  max_steps 150  
+  max_steps 15 
 }
 
 stacked_view
