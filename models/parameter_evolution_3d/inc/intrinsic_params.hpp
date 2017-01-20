@@ -14,9 +14,9 @@ public:
   cell_params(simbad::core::attribute_list const &p,
               std::vector<std::size_t> const &attribute_indices);
   cell_params(float birth_eff, float birth_res, float lifespan_eff,
-              float lifespan_res, float success_eff, float success_res);
-  static std::vector<std::size_t> get_attribute_indices(
-      simbad::core::attribute_descriptor const &mapping);
+              float lifespan_res, float success_eff, float success_res, float dummy);
+  static std::vector<std::size_t>
+  get_attribute_indices(simbad::core::attribute_descriptor const &mapping);
 
   float lifespan_eff() const;
   float &lifespan_eff();
@@ -30,7 +30,8 @@ public:
   float &success_eff();
   float success_res() const;
   float &success_res();
-
+  float dummy() const { return m_dummy; }
+  float &dummy() { return m_dummy; }
 private:
   float m_birth_eff;
   float m_birth_res;
@@ -38,6 +39,7 @@ private:
   float m_lifespan_res;
   float m_success_eff;
   float m_success_res;
+  float m_dummy;
 };
 
 END_NAMESPACE_PARAMETER_EVOLUTION_3D

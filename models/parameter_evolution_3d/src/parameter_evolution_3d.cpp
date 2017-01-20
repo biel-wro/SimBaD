@@ -183,6 +183,7 @@ const core::attribute_descriptor &parameter_evolution_3d::new_attr_map() const
     map_p->add_attribute(12, "success.probability", ATTRIBUTE_KIND::OBSERVABLE,
                          1);
     map_p->add_attribute(13, "lifespan", ATTRIBUTE_KIND::OBSERVABLE, 1);
+    map_p->add_attribute(14,"dummy", ATTRIBUTE_KIND::INTRINSIC,1);
   }
   return *map_p;
 }
@@ -221,6 +222,7 @@ parameter_evolution_3d::attribute(const cell &c, std::size_t attr_idx) const
   case 10: return compute_death_rate(c);
   case 11: return compute_success_rate(c);
   case 12: return 1.0 / compute_death_rate(c);
+  case 13: return c.params().dummy();
   }
   throw simbad::core::unrecognized_attribute_number(attr_idx);
 }

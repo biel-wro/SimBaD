@@ -2,7 +2,7 @@ mode "snapshots"
 run
 {
   time_step 1
-  max_steps 50  
+  max_steps 150  
 }
 
 stacked_view
@@ -37,7 +37,7 @@ model
     seed 0
     mutation
     {
-      probability 0.05
+      probability 0.1
     }
     interaction
     {
@@ -65,8 +65,8 @@ model
           class "uniform_step_mutator"
           parameters
           {
-            increase_length 0.01
-            decrease_length 0.09
+            increase_length 0.1
+            decrease_length 1.0
           }
         }
       }
@@ -77,8 +77,8 @@ model
           class "uniform_step_mutator"
           parameters
           {
-            increase_length 0.01
-            decrease_length 0.09
+            increase_length 0.1
+            decrease_length 1.0
           }
         }
       }        
@@ -98,8 +98,8 @@ model
           class "uniform_step_mutator"
           parameters
           {
-            increase_length 0.01
-            decrease_length 0.09
+            increase_length 0.1
+            decrease_length 1.0
           }
         }
       }
@@ -110,8 +110,8 @@ model
           class "uniform_step_mutator"
           parameters
           {
-            increase_length 0.01
-            decrease_length 0.09
+            increase_length 0.1
+            decrease_length 1.0
           }
         }
       }
@@ -131,8 +131,8 @@ model
           class "uniform_step_mutator"
           parameters
           {
-            increase_length 0.01
-            decrease_length 0.09
+            increase_length 0.1
+            decrease_length 1.0
           }
         }
       }
@@ -143,13 +143,24 @@ model
           class "uniform_step_mutator"
           parameters
           {
-            increase_length 0.01
-            decrease_length 0.09
+            increase_length 0.1
+            decrease_length 1.0
           }
         }
       }
     }
-
+    dummy
+    {
+      mutator
+      {
+        class "uniform_step_mutator"
+        parameters
+        {
+          increase_length 0.1
+          decrease_length 1.0
+        }
+      }
+    }
   }
 }
 initial_configuration
@@ -178,6 +189,7 @@ initial_configuration
       efficiency 0.9
       resistance 0.5
     }
+    dummy 0.1
   }
 }
 

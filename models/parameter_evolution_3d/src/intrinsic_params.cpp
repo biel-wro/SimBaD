@@ -1,7 +1,7 @@
 #include "intrinsic_params.hpp"
 #include "interface/attribute.hpp"
-#include "interface/attribute_list.hpp"
 #include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_list.hpp"
 #include "interface/configuration_view.hpp"
 #include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
@@ -16,7 +16,8 @@ cell_params::cell_params(const simbad::core::property_tree &pt)
       m_lifespan_eff(pt.get<float>("lifespan.efficiency")),
       m_lifespan_res(pt.get<float>("lifespan.resistance")),
       m_success_eff(pt.get<float>("success.efficiency")),
-      m_success_res(pt.get<float>("success.resistance"))
+      m_success_res(pt.get<float>("success.resistance")),
+      m_dummy(pt.get<float>("dummy"))
 {
 }
 
@@ -27,18 +28,20 @@ cell_params::cell_params(const core::attribute_list &p,
       m_lifespan_eff(p[attribute_indices[2]].get_real_val()),
       m_lifespan_res(p[attribute_indices[3]].get_real_val()),
       m_success_eff(p[attribute_indices[4]].get_real_val()),
-      m_success_res(p[attribute_indices[5]].get_real_val())
+      m_success_res(p[attribute_indices[5]].get_real_val()),
+      m_dummy(p[attribute_indices[6]].get_real_val())
 {
 }
 cell_params::cell_params(float birth_eff, float birth_res, float lifespan_eff,
                          float lifespan_res, float success_eff,
-                         float success_res)
+                         float success_res, float dummy)
     : m_birth_eff(birth_eff),
       m_birth_res(birth_res),
       m_lifespan_eff(lifespan_eff),
       m_lifespan_res(lifespan_res),
       m_success_eff(success_eff),
-      m_success_res(success_res)
+      m_success_res(success_res),
+      m_dummy(dummy)
 {
 }
 

@@ -24,7 +24,9 @@ model_params::model_params(const simbad::core::property_tree &pt)
       m_success_eff_mutator_ptr(get_builtin_mutators().create_instance(
           pt.get_child("success.efficiency.mutator"))),
       m_success_res_mutator_ptr(get_builtin_mutators().create_instance(
-          pt.get_child("success.resistance.mutator")))
+          pt.get_child("success.resistance.mutator"))),
+      m_dummy_mutator_ptr(
+          get_builtin_mutators().create_instance(pt.get_child("dummy.mutator")))
 {
 }
 model_params::~model_params() {}
@@ -54,6 +56,7 @@ void model_params::mutate(cell_params &cp, std::mt19937_64 &rng) const
   mutate_birth(cp, rng);
   mutate_lifespan(cp, rng);
   mutate_success(cp, rng);
+  mutate_dummy(cp,rng);
 }
 
 const model_params::interaction_type &model_params::interaction() const
@@ -97,6 +100,11 @@ void model_params::mutate_success(cell_params &cp, std::mt19937_64 &rnd) const
 {
   apply_mutator(cp.success_eff(), *m_success_eff_mutator_ptr, rnd);
   apply_mutator(cp.success_res(), *m_success_res_mutator_ptr, rnd);
+}
+
+void model_params::mutate_dummy(cell_params &cp, std::mt19937_64 &rnd) const
+{
+  apply_mutator(cp.dummy(), *m_dummy_mutator_ptr, rnd);
 }
 
 const simbad::models::parameter_evolution_3d::model_params::dispersion_type &
