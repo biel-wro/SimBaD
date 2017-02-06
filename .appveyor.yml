@@ -45,8 +45,8 @@ matrix:
 
 after_build:
   - cmd: dir %APPVEYOR_BUILD_FOLDER%
-  - cmd: dir %INSTALL_DIR%
   - cmd: make install
+  - cmd: dir %INSTALL_DIR%
   - cmd: 7z a SimBaD.zip %INSTALL_DIR%
 
 artifacts:
