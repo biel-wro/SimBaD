@@ -70,7 +70,8 @@ public:
   std::unique_ptr<T> create_instance(property_tree const &pt) const
   {
     std::string const &class_name = pt.get<std::string>("class");
-    property_tree const &parameters = pt.get_child("parameters");
+    property_tree const &parameters =
+        pt.get_child("parameters", property_tree::get_empty());
     return create_instance(class_name, parameters);
   }
   std::unique_ptr<T> create_instance(std::string const &class_name,

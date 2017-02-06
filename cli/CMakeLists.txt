@@ -1,5 +1,3 @@
-project( ${CLI_NAME})
-
 include_directories( inc )
 include_directories( ${CMAKE_SOURCE_DIR}/core/ )
 include_directories( ${CMAKE_SOURCE_DIR}/models/common/inc )
@@ -18,10 +16,10 @@ set( LIBS
   ${CORE_NAME}
 )
 
-add_library(${PROJECT_NAME}_obj OBJECT ${SOURCES} )
+add_library(${CLI_NAME}_obj OBJECT ${SOURCES} )
 
-add_executable(${PROJECT_NAME} ${MAIN_SOURCE} $<TARGET_OBJECTS:${PROJECT_NAME}_obj> )
-target_link_libraries( ${PROJECT_NAME} ${LIBS} )
+add_executable(${CLI_NAME} ${MAIN_SOURCE} $<TARGET_OBJECTS:${CLI_NAME}_obj> )
+target_link_libraries( ${CLI_NAME} ${LIBS} )
 
 set( TEST_MAIN_SOURCE  test/test_main.cpp)
 
@@ -31,6 +29,12 @@ set( TEST_SOURCES
     test/ut_snapshotting.cpp
     )
 
-add_executable( ${PROJECT_NAME}_test ${TEST_MAIN_SOURCE} $<TARGET_OBJECTS:${PROJECT_NAME}_obj> ${TEST_SOURCES} )
-target_link_libraries( ${PROJECT_NAME}_test ${LIBS} )
-add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME}_test )
+set_target_properties(${CLI_NAME} PROPERTIES OUTPUT_NAME SimBaD-cli)
+install(TARGETS ${CLI_NAME} RENAME SimBaD-cli DESTINATION bin)
+
+
+add_executable( ${CLI_NAME}_test ${TEST_MAIN_SOURCE} $<TARGET_OBJECTS:${CLI_NAME}_obj> ${TEST_SOURCES} )
+target_link_libraries( ${CLI_NAME}_test ${LIBS} )
+add_test(NAME ${CLI_NAME} COMMAND ${CLI_NAME}_test )
+
+
