@@ -45,7 +45,7 @@ matrix:
 
 after_build:
   - cmd: dir %APPVEYOR_BUILD_FOLDER%
-  - cmd: make install
+  - cmd: cmake --build . --config %configuration% --target install
   - cmd: dir %INSTALL_DIR%
   - cmd: 7z a SimBaD.zip %INSTALL_DIR%
 
