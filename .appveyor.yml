@@ -5,6 +5,7 @@ environment:
   BOOST_ROOT: C:\Libraries\boost_1_62_0
   BOOST_LIBRARYDIR_WIN32: C:\Libraries\boost_1_62_0\lib32-msvc-14.0
   BOOST_LIBRARYDIR_WIN64: C:\Libraries\boost_1_62_0\lib64-msvc-14.0
+  INSTALL_DIR: c:\SimBaD\install
 
 platform: x64
   
@@ -27,7 +28,7 @@ before_build:
   - cmd: if "%platform%"=="Win32" set BOOST_LIBRARYDIR=%BOOST_LIBRARYDIR_WIN32%
   - cmd: if "%platform%"=="x64"   set BOOST_LIBRARYDIR=%BOOST_LIBRARYDIR_WIN64%
 #  - cmd: dir %BOOST_LIBRARYDIR%
-  - cmd: cmake -G "%CMAKE_GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%configuration% -DBOOST_ROOT="%BOOST_ROOT%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%" ..
+  - cmd: cmake -G "%CMAKE_GENERATOR_NAME%" -DCMAKE_BUILD_TYPE=%configuration% -DBOOST_ROOT="%BOOST_ROOT%" -DBOOST_LIBRARYDIR="%BOOST_LIBRARYDIR%" -DCMAKE_INSTALL_PREFIX="%INSTALL_DIR%" ..
 
   
 
@@ -44,7 +45,9 @@ matrix:
 
 after_build:
   - cmd: dir %APPVEYOR_BUILD_FOLDER%
-  - cmd: 7z a SimBaD.zip %APPVEYOR_BUILD_FOLDER%\build\cli\%configuration%\cli.exe %APPVEYOR_BUILD_FOLDER%\examples\ 
+  - cmd: dir %INSTALL_DIR%
+  - cmd: make install
+  - cmd: 7z a SimBaD.zip %INSTALL_DIR%
 
 artifacts:
   path: build\SimBaD.zip
