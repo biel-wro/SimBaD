@@ -46,9 +46,9 @@ endif()
 
 # linking
 if( WIN32 )
-  set( IF_SHARED_LIBS " ")
+  set( IF_SHARED_LIBS STATIC )
 else()
-  set( IF_SHARED_LIBS SHARED )
+  set( IF_SHARED_LIBS "" )
 endif()
 
 # Boost	
@@ -79,3 +79,5 @@ add_subdirectory(core)
 add_subdirectory(cli)
 #add_subdirectory(gui)
 add_subdirectory(models)
+
+install(DIRECTORY examples DESTINATION examples)

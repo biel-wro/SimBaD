@@ -7,6 +7,7 @@
 #include "templ/skewed_polynomial_mutator.hpp"
 #include "templ/stateless_beta_mutator.hpp"
 #include "templ/uniform_step_mutator.hpp"
+#include "templ/void_mutator.hpp"
 
 #include <memory>
 #include <random>
@@ -57,7 +58,7 @@ SIMBAD_MAKE_MUTATOR_FACTORY_MAKER(uniform_step_mutator,
                                   uniform_step_mutator<double>)
 SIMBAD_MAKE_MUTATOR_FACTORY_MAKER(stateless_beta_mutator,
                                   stateless_beta_mutator<double>)
-
+SIMBAD_MAKE_MUTATOR_FACTORY_MAKER(void_mutator, void_mutator<double>)
 std::unique_ptr<class_register<mutator>> make_register()
 {
   std::unique_ptr<class_register<mutator>> reg_ptr(new class_register<mutator>);
@@ -66,6 +67,7 @@ std::unique_ptr<class_register<mutator>> make_register()
   reg_ptr->register_factory(make_skewed_polynomial_mutator_factory());
   reg_ptr->register_factory(make_uniform_step_mutator_factory());
   reg_ptr->register_factory(make_stateless_beta_mutator_factory());
+  reg_ptr->register_factory(make_void_mutator_factory());
   return reg_ptr;
 }
 }
