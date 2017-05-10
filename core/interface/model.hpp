@@ -7,15 +7,13 @@
 
 BEGIN_NAMESPACE_CORE
 
-class model : public event_source,
-              public configuration_view,
-              public configuration_reader
+class model : public event_source, public configuration_reader
 {
 public:
-  size_type configuration_size() const override = 0;
-  void visit_configuration(particle_visitor) const override = 0;
+  virtual configuration_view const &current_configuration() const = 0;
+
 protected:
-  void generate_events(event_visitor, size_t) override = 0;
+  void generate_events(event_visitor, std::size_t) override = 0;
 };
 
 END_NAMESPACE_CORE

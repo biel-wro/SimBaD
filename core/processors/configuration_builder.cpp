@@ -3,6 +3,7 @@
 #include <limits>
 
 BEGIN_NAMESPACE_CORE
+/*
 configuration_builder::configuration_builder(bool store_coords,
                                              ID_POLICY id_policy,
                                              std::size_t nbuckets)
@@ -40,17 +41,7 @@ configuration_builder::configuration_size() const
 {
   return m_configuration_buffer.size();
 }
-/*
-configuration_builder::size_type configuration_builder::dimension() const
-{
-  return m_dimension;
-}
 
-bool configuration_builder::has_unique_id() const
-{
-  return m_id_policy != ID_POLICY::DO_NOT_STORE;
-}
-*/
 const attribute_descriptor &configuration_builder::new_attr_map() const
 {
   return m_attribute_descriptor;
@@ -89,4 +80,5 @@ void configuration_builder::store_attributes(
 
 std::size_t configuration_builder::generate_id() { return m_id_generator(); }
 void configuration_builder::generate_events(event_visitor, size_t) {}
+*/
 END_NAMESPACE_CORE

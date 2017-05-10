@@ -10,7 +10,7 @@ selected_attributes_configuration::selected_attributes_configuration(
     const configuration_view &base, std::vector<std::string> const &white_list)
     : enriched_configuration(base), m_mapping()
 {
-  attribute_descriptor const &other_mapping = base.new_attr_map();
+  attribute_descriptor const &other_mapping = base.descriptor();
   for(std::string const &attr_name : white_list)
     m_mapping.insert(other_mapping[attr_name]);
 }
@@ -23,7 +23,7 @@ selected_attributes_configuration::selected_attributes_configuration(
 }
 
 const attribute_descriptor &
-selected_attributes_configuration::new_attr_map() const
+selected_attributes_configuration::descriptor() const
 {
   return m_mapping;
 }

@@ -18,8 +18,8 @@ public:
   explicit default_attributed_configuration(configuration_view const &m_base,
                                             property_tree const &attributes);
   virtual void on_base_reset() override;
-  void visit_configuration(particle_visitor visitor) const override;
-  attribute_descriptor const &new_attr_map() const override;
+  void visit_records(particle_visitor visitor) const override;
+  attribute_descriptor const &descriptor() const override;
 
 private:
   property_tree m_properties;

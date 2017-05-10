@@ -62,9 +62,9 @@ adhesion_2d::adhesion_2d(model_parameters mp, double tile_size,
 {
 }
 
-void adhesion_2d::generate_events(event_visitor v, size_type nevents)
+void adhesion_2d::generate_events(event_visitor v, std::size_t nevents)
 {
-  for(size_type i = 0; i < nevents; ++i)
+  for(std::size_t i = 0; i < nevents; ++i)
   {
     if(m_spacetime.empty())
       return;
@@ -130,17 +130,22 @@ void adhesion_2d::generate_events(event_visitor v, size_type nevents)
   }
 }
 
-adhesion_2d::size_type adhesion_2d::configuration_size() const
+const core::configuration_view &adhesion_2d::current_configuration() const
+{
+  return *this;
+}
+
+std::size_t adhesion_2d::size() const
 {
   return m_spacetime.size();
 }
 
-void adhesion_2d::visit_configuration(particle_visitor v) const
+void adhesion_2d::visit_records(particle_visitor v) const
 {
   m_spacetime.visit([v](const cell &p) { v(new_particle_view(p)); });
 }
 
-const core::attribute_descriptor &adhesion_2d::new_attr_map() const
+const core::attribute_descriptor &adhesion_2d::descriptor() const
 {
   return simbad::core::attribute_descriptor::make_position_only();
 }
@@ -151,7 +156,7 @@ void adhesion_2d::read_configuration(const configuration_view &configuration)
   m_spacetime.clear();
 
   std::size_t idx = configuration.position_attr_idx();
-  configuration.visit_configuration([=](particle_attributes const &p) {
+  configuration.visit_records([=](particle_attributes const &p) {
     // assert(dimension() == p.dimension());
 
     position_type position{p[idx].get_real_ref(0), p[idx].get_real_ref(1)};

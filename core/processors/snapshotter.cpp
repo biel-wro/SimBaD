@@ -38,7 +38,7 @@ const configuration_view &snapshotter::operator()()
     next_event();
 
   ++m_current_step;
-  return get_model();
+  return get_model().current_configuration();
 }
 
 void snapshotter::next_event()

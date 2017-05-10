@@ -41,10 +41,10 @@ static std::ostream &write_header_part(std::ostream &os,
 void csv_printer::write_header(const configuration_view &conf)
 {
   m_dimensions.clear();
-  m_dimensions.reserve(conf.new_attr_map().size());
+  m_dimensions.reserve(conf.descriptor().size());
 
-  attribute_descriptor::const_iterator it = conf.new_attr_map().begin(),
-                                       end = conf.new_attr_map().end();
+  attribute_descriptor::const_iterator it = conf.descriptor().begin(),
+                                       end = conf.descriptor().end();
 
   if(end != it)
     write_header_part(ostream(), *it, m_dimensions, m_delimiter);
@@ -71,11 +71,11 @@ static std::ostream &s_write_data_part(std::ostream &os, attribute const &attr,
 
 void csv_printer::write_data(const configuration_view &conf)
 {
-  std::vector<std::size_t> indices = conf.new_attr_map().unpack_indices();
+  std::vector<std::size_t> indices = conf.descriptor().unpack_indices();
   std::vector<std::size_t>::const_iterator beg = indices.begin(),
                                            end = indices.end();
   std::ostream &os = ostream();
-  conf.visit_configuration([=, &os](attribute_list const &a) {
+  conf.visit_records([=, &os](attribute_list const &a) {
     if(end != beg)
       s_write_data_part(os, a[*beg], m_dimensions[*beg], m_delimiter);
     std::vector<std::size_t>::const_iterator it = std::next(beg, 1);

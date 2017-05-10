@@ -33,8 +33,8 @@ struct CoordGetter
 
 struct ParticleTraits
 {
-  using particle = Particle;
-  using ordering = Ordering;
+  using particle_type = Particle;
+  using particle_ordering = Ordering;
   using coord_scalar = float;
   using coord_vector = coords;
   using coord_getter = CoordGetter;

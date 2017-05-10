@@ -16,10 +16,10 @@ public:
                              property_tree const &pt);
   configuration_view const &last_layer() const;
 
-  size_type configuration_size() const override;
-  void visit_configuration(particle_visitor visitor) const override;
+  size_type size() const override;
+  void visit_records(particle_visitor visitor) const override;
 
-  attribute_descriptor const &new_attr_map() const override;
+  attribute_descriptor const &descriptor() const override;
 
   void push_layer(std::unique_ptr<enriched_configuration> layer);
   void push_layer(std::string const &layer_name, property_tree const &pt);

@@ -23,13 +23,13 @@ default_attributed_configuration::default_attributed_configuration(
 void default_attributed_configuration::on_base_reset()
 {
   m_merged_attr_desc.clear();
-  m_merged_attr_desc = get_base().new_attr_map();
+  m_merged_attr_desc = get_base().descriptor();
   m_owned_attributes = m_merged_attr_desc.add_attributes(m_properties);
 }
-void default_attributed_configuration::visit_configuration(
+void default_attributed_configuration::visit_records(
     configuration_view::particle_visitor v) const
 {
-  get_base().visit_configuration([this, v](attribute_list const &al) {
+  get_base().visit_records([this, v](attribute_list const &al) {
     struct : public attribute_list
     {
       attribute_list const *m_base;
@@ -50,7 +50,7 @@ void default_attributed_configuration::visit_configuration(
 }
 
 const attribute_descriptor &
-default_attributed_configuration::new_attr_map() const
+default_attributed_configuration::descriptor() const
 {
   return m_merged_attr_desc;
 }

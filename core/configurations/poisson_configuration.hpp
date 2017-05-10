@@ -24,9 +24,9 @@ public:
                                  double radius = 1, bool ball = false,
                                  std::uint64_t seed = 0);
 
-  size_type configuration_size() const override;
-  void visit_configuration(particle_visitor v) const override;
-  attribute_descriptor const &new_attr_map() const override;
+  size_type size() const override;
+  void visit_records(particle_visitor v) const override;
+  attribute_descriptor const &descriptor() const override;
 
 
   ~poisson_configuration();

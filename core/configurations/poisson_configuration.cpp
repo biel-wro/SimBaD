@@ -71,12 +71,12 @@ poisson_configuration::poisson_configuration(
 }
 
 poisson_configuration::size_type
-poisson_configuration::configuration_size() const
+poisson_configuration::size() const
 {
   return m_size;
 }
 
-void poisson_configuration::visit_configuration(
+void poisson_configuration::visit_records(
     configuration_view::particle_visitor v) const
 {
   using sampler_ptr = void (particle_view::*)(double, std::mt19937_64 &);
@@ -96,7 +96,7 @@ void poisson_configuration::visit_configuration(
   }
 }
 
-const attribute_descriptor &poisson_configuration::new_attr_map() const
+const attribute_descriptor &poisson_configuration::descriptor() const
 {
   return attribute_descriptor::make_position_only();
 }

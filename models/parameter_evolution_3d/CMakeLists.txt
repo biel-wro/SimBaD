@@ -1,17 +1,18 @@
 set( MODEL_NAME parameter_evolution_3d )
 set( TEST_NAME test_${MODEL_NAME} )
 
-include_directories( BEFORE inc )
+include_directories( BEFORE ${CMAKE_CURRENT_SOURCE_DIR} )
 
 set( MAIN_SOURCE
   src/main.cpp
 )
 
 set( SOURCES
-  src/intrinsic_params.cpp
-  src/model_parameters.cpp
-  src/parameter_evolution_3d.cpp
-  src/particle.cpp
+  configuration.cpp
+  intrinsic_params.cpp
+  model_parameters.cpp
+  parameter_evolution_3d.cpp
+  particle.cpp
 )
 
 add_library(${MODEL_NAME}_obj OBJECT ${SOURCES} )

@@ -11,7 +11,7 @@ public:
   slice_configuration(configuration_view const &base, property_tree const &pt);
   slice_configuration(configuration_view const &base, std::size_t slicing_dim,
                       double slice_min, double slice_max);
-  void visit_configuration(particle_visitor v) const override;
+  void visit_records(particle_visitor v) const override;
 private:
   std::size_t m_slicing_dimension;
   double m_slice_min;

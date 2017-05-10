@@ -26,15 +26,15 @@ slice_configuration::slice_configuration(configuration_view const &base,
 {
 }
 
-void slice_configuration::visit_configuration(
+void slice_configuration::visit_records(
     configuration_view::particle_visitor v) const
 {
-  attribute_descriptor const &map = get_base().new_attr_map();
+  attribute_descriptor const &map = get_base().descriptor();
   assert(map.get_descriptor(ATTRIBUTE_KIND::POSITION));
   attribute_descriptor_record d = map.get_descriptor(ATTRIBUTE_KIND::POSITION).get();
   std::size_t attr_idx = d.attribute_idx();
 
-  get_base().visit_configuration([=](attribute_list const &al) {
+  get_base().visit_records([=](attribute_list const &al) {
     double slicing_coord = al[attr_idx].get_real_ref(m_slicing_dimension);
     if(slicing_coord < m_slice_min || m_slice_max < slicing_coord)
       return;

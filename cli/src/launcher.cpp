@@ -52,7 +52,7 @@ void launcher::launch_snapshots(const property_tree &pt)
   snapshotter processor(m_model_ptr.get(), pt.get<double>("run.time_step"));
   std::size_t nsteps = pt.get<std::size_t>("run.max_steps");
 
-  stacked_view_configuration stacked_view(*m_model_ptr,
+  stacked_view_configuration stacked_view(m_model_ptr->current_configuration(),
                                           pt.get_child("stacked_view"));
   for(std::size_t i = 0; i < nsteps; ++i)
   {
@@ -70,7 +70,7 @@ void launcher::launch_final_snapshot(const property_tree &pt)
 {
   std::unique_ptr<stream_printer> printer = make_configuration_printer(
       &std::cout, pt.get_child("configuraiton_printer"));
-  stacked_view_configuration stacked_view(*m_model_ptr,
+  stacked_view_configuration stacked_view(m_model_ptr->current_configuration(),
                                           pt.get_child("stacked_view"));
 
   size_t nevents = pt.get<size_t>("nevents");

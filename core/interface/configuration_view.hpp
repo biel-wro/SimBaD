@@ -7,29 +7,22 @@
 #include <unordered_map>
 #include <vector>
 
+#include "finite_dataframe.hpp"
+
 BEGIN_NAMESPACE_CORE
-class configuration_view
+class configuration_view : public finite_dataframe
 {
 public:
   using particle_attributes = attribute_list;
   using particle_visitor = std::function<void(particle_attributes const &)>;
   using mapping = attribute_descriptor;
-
   using size_type = std::size_t;
 
-  virtual size_type configuration_size() const = 0;
-  virtual void visit_configuration(particle_visitor visitor) const = 0;
-
-  virtual std::size_t position_attr_idx() const final;
-
-  virtual size_type dimension() const final;
-  virtual bool has_unique_id() const final;
-
-  virtual attribute_descriptor const &new_attr_map() const = 0;
+  std::size_t position_attr_idx() const;
+  std::size_t dimension() const;
+  bool has_unique_id() const;
 
   virtual ~configuration_view();
-
-protected:
 };
 
 END_NAMESPACE_CORE

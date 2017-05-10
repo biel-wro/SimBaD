@@ -27,17 +27,17 @@ const configuration_view &enriched_configuration::get_base() const
 }
 
 void enriched_configuration::on_base_reset() {}
-configuration_view::size_type enriched_configuration::configuration_size() const
+configuration_view::size_type enriched_configuration::size() const
 {
-  return get_base().configuration_size();
+  return get_base().size();
 }
 
-void enriched_configuration::visit_configuration(particle_visitor v) const
+void enriched_configuration::visit_records(particle_visitor v) const
 {
-  get_base().visit_configuration(v);
+  get_base().visit_records(v);
 }
-const attribute_descriptor &enriched_configuration::new_attr_map() const
+const attribute_descriptor &enriched_configuration::descriptor() const
 {
-  return get_base().new_attr_map();
+  return get_base().descriptor();
 }
 END_NAMESPACE_CORE

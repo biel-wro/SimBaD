@@ -27,7 +27,7 @@ cubic_crystal_configuration::cubic_crystal_configuration(size_type dimension,
                                     m_dimension);
 }
 configuration_view::size_type
-cubic_crystal_configuration::configuration_size() const
+cubic_crystal_configuration::size() const
 {
   return std::pow(2 * spacings_per_radius() + 1, m_dimension);
 }
@@ -47,7 +47,7 @@ struct particle_view : public simbad::core::attribute_list
 };
 }
 
-void cubic_crystal_configuration::visit_configuration(
+void cubic_crystal_configuration::visit_records(
     particle_visitor visitor) const
 {
   std::size_t const dim = dimension();
@@ -92,7 +92,7 @@ void cubic_crystal_configuration::visit_configuration(
   } while(!last);
 }
 
-const attribute_descriptor &cubic_crystal_configuration::new_attr_map() const
+const attribute_descriptor &cubic_crystal_configuration::descriptor() const
 {
   return *m_attr_mapping_ptr;
 }

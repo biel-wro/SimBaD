@@ -15,7 +15,7 @@ public:
   selected_attributes_configuration(configuration_view const &base,
                                     property_tree const &pt);
 
-  attribute_descriptor const &new_attr_map() const;
+  attribute_descriptor const &descriptor() const;
 
 private:
   attribute_descriptor m_mapping;

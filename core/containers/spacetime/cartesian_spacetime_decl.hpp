@@ -12,10 +12,11 @@ template <class ParticleTraits> struct make_spacetime_traits_cartesian
 {
   struct type
   {
-    using particle_type = typename ParticleTraits::particle;
-    using particle_ordering = typename ParticleTraits::ordering;
+    using particle_type = typename ParticleTraits::particle_type;
+    using particle_ordering = typename ParticleTraits::particle_ordering;
     using coord_getter = typename ParticleTraits::coord_getter;
     using coord_scalar = typename ParticleTraits::coord_scalar;
+    using coord_vector = typename ParticleTraits::coord_vector;
     using tile_coord_scalar = int;
 
     using dimension_type = typename ParticleTraits::dimension_type;
@@ -40,8 +41,8 @@ public:
   using super = spacetime<spacetime_traits>;
 
   using particle_traits = ParticleTraits;
-  using particle = typename particle_traits::particle;
-  using ordering = typename particle_traits::ordering;
+  using particle = typename particle_traits::particle_type;
+  using ordering = typename particle_traits::particle_ordering;
   using coord_scalar = typename particle_traits::coord_scalar;
   using coord_vector = typename particle_traits::coord_vector;
   using coord_getter = typename particle_traits::coord_getter;

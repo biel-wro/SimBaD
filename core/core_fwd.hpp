@@ -31,6 +31,7 @@ enum class ATTRIBUTE_KIND : std::uint32_t;
 class attribute_descriptor;
 class configuration_reader;
 class configuration_view;
+class dataframe_view;
 class event;
 class event_sink;
 class event_source;

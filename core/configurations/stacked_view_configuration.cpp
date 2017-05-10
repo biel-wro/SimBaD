@@ -31,20 +31,20 @@ configuration_view const &stacked_view_configuration::last_layer() const
 }
 
 configuration_view::size_type
-stacked_view_configuration::configuration_size() const
+stacked_view_configuration::size() const
 {
-  return last_layer().configuration_size();
+  return last_layer().size();
 }
 
-void stacked_view_configuration::visit_configuration(
+void stacked_view_configuration::visit_records(
     configuration_view::particle_visitor visitor) const
 {
-  return last_layer().visit_configuration(visitor);
+  return last_layer().visit_records(visitor);
 }
 
-const attribute_descriptor &stacked_view_configuration::new_attr_map() const
+const attribute_descriptor &stacked_view_configuration::descriptor() const
 {
-  return last_layer().new_attr_map();
+  return last_layer().descriptor();
 }
 
 void stacked_view_configuration::push_layer(

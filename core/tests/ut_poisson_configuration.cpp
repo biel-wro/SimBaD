@@ -16,10 +16,10 @@ BOOST_AUTO_TEST_CASE(cube_fixed_size)
   const std::size_t size = 100;
   const double halflen = 2.34;
   simbad::core::poisson_configuration config(dimension, size, halflen);
-  BOOST_REQUIRE_EQUAL(config.configuration_size(), size);
+  BOOST_REQUIRE_EQUAL(config.size(), size);
   int cnt = 0;
   std::size_t idx = config.position_attr_idx();
-  config.visit_configuration([=, &cnt](attribute_list const &p) {
+  config.visit_records([=, &cnt](attribute_list const &p) {
     BOOST_REQUIRE_LE(p[idx].get_real_ref(0), +halflen);
     BOOST_REQUIRE_GE(p[idx].get_real_ref(0), -halflen);
     BOOST_REQUIRE_LE(p[idx].get_real_ref(1), +halflen);
@@ -36,10 +36,10 @@ BOOST_AUTO_TEST_CASE(ball_fixed_size)
   const std::size_t size = 100;
   const double radius = 17.3;
   simbad::core::poisson_configuration config(dimension, size, radius, true);
-  BOOST_REQUIRE_EQUAL(config.configuration_size(), size);
+  BOOST_REQUIRE_EQUAL(config.size(), size);
   int cnt = 0;
   std::size_t idx = config.position_attr_idx();
-  config.visit_configuration([=,&cnt](attribute_list const &p) {
+  config.visit_records([=,&cnt](attribute_list const &p) {
     double x = p[idx].get_real_ref(0);
     double y = p[idx].get_real_ref(1);
     double r = std::sqrt(x * x + y * y);
@@ -61,10 +61,10 @@ BOOST_AUTO_TEST_CASE(construct_from_property_tree)
 
   simbad::core::poisson_configuration config(pt);
 
-  std::size_t size = config.configuration_size();
+  std::size_t size = config.size();
 
   int cnt = 0;
-  config.visit_configuration([&cnt](attribute_list const &) { ++cnt; });
+  config.visit_records([&cnt](attribute_list const &) { ++cnt; });
 
   BOOST_REQUIRE_EQUAL(cnt, size);
 }

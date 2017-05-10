@@ -11,9 +11,9 @@ public:
   explicit cubic_crystal_configuration(property_tree const &pt);
   explicit cubic_crystal_configuration(size_type dimension, double radius,
                                        double spacing);
-  size_type configuration_size() const override;
-  void visit_configuration(particle_visitor) const override;
-  attribute_descriptor const &new_attr_map() const override;
+  size_type size() const override;
+  void visit_records(particle_visitor) const override;
+  attribute_descriptor const &descriptor() const override;
   ~cubic_crystal_configuration();
 
 protected:

@@ -20,10 +20,12 @@ set( SOURCES
   interface/attribute_descriptor.cpp
   interface/configuration_reader.cpp
   interface/configuration_view.cpp
+  interface/dataframe_view.cpp
   interface/event.cpp
   interface/event_kind.cpp
   interface/event_sink.cpp
   interface/event_source.cpp
+  interface/finite_dataframe.cpp
   interface/property_tree.cpp
   interface/model.cpp
   interface/model_factory.cpp
@@ -42,7 +44,7 @@ set( SOURCES
   utils/counting_id_generator.cpp
   utils/generic_particle.cpp
   utils/properties.cpp
-)
+ )
 
 set( LIBS
   ${Boost_LIBRARIES}

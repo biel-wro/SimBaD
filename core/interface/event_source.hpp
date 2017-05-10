@@ -9,13 +9,13 @@ class event_source
 {
 public:
   using event_visitor = std::function<void(event const &)>;
-  virtual void run(event_visitor, size_t) final;
-  virtual void run(size_t) final;
+  virtual void run(event_visitor, std::size_t) final;
+  virtual void run(std::size_t) final;
 
   virtual ~event_source();
 
 protected:
-  virtual void generate_events(event_visitor, size_t) = 0;
+  virtual void generate_events(event_visitor, std::size_t) = 0;
 };
 
 END_NAMESPACE_CORE

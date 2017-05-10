@@ -104,11 +104,11 @@ BOOST_AUTO_TEST_CASE(reading_configuration)
   csv_printer printer(&std::cout);
 
 
-  std::size_t const original_size = initial_configuraiton.configuration_size();
-  BOOST_REQUIRE_EQUAL(m.configuration_size(), original_size);
+  std::size_t const original_size = initial_configuraiton.size();
+  BOOST_REQUIRE_EQUAL(m.size(), original_size);
 
   std::size_t counter(0);
-  m.visit_configuration([&counter](attribute_list const &p) { ++counter; });
+  m.visit_records([&counter](attribute_list const &p) { ++counter; });
 
   BOOST_REQUIRE_EQUAL(counter, original_size);
 }

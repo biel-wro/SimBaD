@@ -15,6 +15,7 @@
 
 #include <unordered_map>
 BEGIN_NAMESPACE_CORE
+/*
 class configuration_builder final : public event_sink,
                               public event_source,
                               public configuration_view,
@@ -66,5 +67,6 @@ private:
   auto_rehash<float> m_rehash_watchdog;
   counting_id_generator m_id_generator;
 };
+*/
 END_NAMESPACE_CORE
 #endif // CONFIGURATION_BUILDER_HPP

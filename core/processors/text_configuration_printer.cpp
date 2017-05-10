@@ -29,8 +29,8 @@ text_configuration_printer::text_configuration_printer(std::ostream *ostream,
 
 void text_configuration_printer::write_header(const configuration_view &conf)
 {
-  attribute_descriptor::const_iterator it = conf.new_attr_map().begin(),
-                                    end = conf.new_attr_map().end();
+  attribute_descriptor::const_iterator it = conf.descriptor().begin(),
+                                    end = conf.descriptor().end();
 
   if(end != it)
     ostream() << "\"" << it->attribute_name() << "\"";
@@ -44,14 +44,14 @@ void text_configuration_printer::write_data(const configuration_view &conf)
 {
   std::vector<std::size_t> indices;
   std::vector<std::string> names;
-  std::tie(indices, names) = conf.new_attr_map().unpack_all();
+  std::tie(indices, names) = conf.descriptor().unpack_all();
 
   std::vector<std::size_t>::const_iterator beg_idx = indices.begin(),
                                            end_idx = indices.end();
   std::vector<std::string>::const_iterator beg_names = names.begin();
 
   std::ostream &os = ostream();
-  conf.visit_configuration([=, &os](attribute_list const &a) {
+  conf.visit_records([=, &os](attribute_list const &a) {
 
     if(end_idx != beg_idx)
       os << *beg_names << "=" << a[*beg_idx];
