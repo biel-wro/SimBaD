@@ -4,7 +4,7 @@
 #include <functional>
 #include "core_fwd.hpp"
 BEGIN_NAMESPACE_CORE
-class dataframe_view {
+class dataframe {
 public:
   using data_record = attribute_list;
   using record_visitor = std::function<void(data_record const&)>;
@@ -12,7 +12,7 @@ public:
   virtual void visit_records( record_visitor visitor ) const = 0;
 
   virtual attribute_descriptor const &descriptor() const = 0;
-  virtual ~dataframe_view();
+  virtual ~dataframe();
 };
 END_NAMESPACE_CORE
 

@@ -20,7 +20,7 @@ set( SOURCES
   interface/attribute_descriptor.cpp
   interface/configuration_reader.cpp
   interface/configuration_view.cpp
-  interface/dataframe_view.cpp
+  interface/dataframe.cpp
   interface/event.cpp
   interface/event_kind.cpp
   interface/event_sink.cpp
