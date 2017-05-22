@@ -2,6 +2,6 @@
 
 BEGIN_NAMESPACE_CORE
 
-//model::~model() {}
+model::~model() {}
 
 END_NAMESPACE_CORE

@@ -1,15 +1,20 @@
 #include "parameter_evolution_3d.hpp"
+
+#include <cstddef>
+#include <iostream>
+#include <stdexcept>
+
 #include "interface/attribute.hpp"
 #include "interface/attribute_descriptor.hpp"
 #include "interface/attribute_list.hpp"
+#include "interface/configuration_view.hpp"
 #include "interface/event.hpp"
 #include "interface/model_factory.hpp"
 #include "interface/particle.hpp"
-#include "interface/particle.hpp"
 #include "utils/attribute_converter.hpp"
 #include "utils/attribute_exceptions.hpp"
-#include <iostream>
-#include <stdexcept>
+
+#include "particle_view.hpp"
 
 using simbad::core::EVENT_KIND;
 
@@ -29,20 +34,6 @@ struct particle_view : public simbad::core::particle
   simbad::core::attribute extra_attribute(std::size_t idx) const override
   {
     return m_model.attribute(m_cell, idx);
-  }
-};
-
-struct particle_attr : public simbad::core::attribute_list
-{
-  cell const &m_cell;
-  parameter_evolution_3d const &m_model;
-  particle_attr(cell const &c, parameter_evolution_3d const &model)
-      : m_cell(c), m_model(model)
-  {
-  }
-  simbad::core::attribute get_attribute(std::size_t idx) const override
-  {
-    return m_model.new_attribute(m_cell, idx);
   }
 };
 
@@ -71,20 +62,22 @@ parameter_evolution_3d::parameter_evolution_3d(
     : m_time(0),
       m_rng(pt.get<uint64_t>("seed")),
       m_spacetime(pt.get<double>("space.tile_size")),
-      m_model_params(pt)
+      m_model_params(pt),
+      m_configuration_view(*this)
 {
 }
 
 const core::configuration_view &
 parameter_evolution_3d::current_configuration() const
 {
-  return *this;
+  return m_configuration_view;
 }
 
-void parameter_evolution_3d::generate_events(event_visitor v, size_type nevents)
+void parameter_evolution_3d::generate_events(event_visitor v,
+                                             std::size_t nevents)
 {
   using simbad::core::EVENT_KIND;
-  for(size_type iter = 0; iter < nevents; ++iter)
+  for(std::size_t iter = 0; iter < nevents; ++iter)
   {
     if(m_spacetime.empty())
       return;
@@ -110,34 +103,21 @@ void parameter_evolution_3d::generate_events(event_visitor v, size_type nevents)
   }
 }
 
-parameter_evolution_3d::size_type
-parameter_evolution_3d::size() const
-{
-  return m_spacetime.size();
-}
-
-void parameter_evolution_3d::visit_records(
-    core::configuration_view::particle_visitor v) const
-{
-  m_spacetime.visit([this, v](cell const &p) {
-    particle_attr view(p, *this);
-    v(view);
-  });
-}
-
-void parameter_evolution_3d::read_configuration(const configuration_view &conf)
+void parameter_evolution_3d::read_configuration(
+    const simbad::core::configuration_view &conf)
 {
   std::vector<std::size_t> attribute_indices =
       cell_params::get_attribute_indices(conf.descriptor());
 
   std::size_t idx = conf.position_attr_idx();
-  conf.visit_records([=](particle_attributes const &p) {
-    cell::position_type pos;
-    pos[0] = p[idx].get_real_ref(0);
-    pos[1] = p[idx].get_real_ref(1);
-    pos[2] = p[idx].get_real_ref(2);
-    insert(cell(pos, cell_params(p, attribute_indices)));
-  });
+  conf.visit_records(
+      [=](simbad::core::configuration_view::particle_attributes const &p) {
+        cell::position_type pos;
+        pos[0] = p[idx].get_real_ref(0);
+        pos[1] = p[idx].get_real_ref(1);
+        pos[2] = p[idx].get_real_ref(2);
+        insert(cell(pos, cell_params(p, attribute_indices)));
+      });
 }
 
 double parameter_evolution_3d::time() const { return m_time; }
@@ -164,7 +144,7 @@ void parameter_evolution_3d::pop()
   double range = m_model_params.interaction().range();
   m_spacetime.visit_ball_guarded_order(c.position(), range, visitor);
 }
-
+/*
 const core::attribute_descriptor &parameter_evolution_3d::descriptor() const
 {
   static std::unique_ptr<simbad::core::attribute_descriptor> map_p;
@@ -192,7 +172,7 @@ const core::attribute_descriptor &parameter_evolution_3d::descriptor() const
     map_p->add_attribute(14, "dummy", ATTRIBUTE_KIND::INTRINSIC, 1);
   }
   return *map_p;
-}
+}*/
 void parameter_evolution_3d::check_accumulators()
 {
   double range = m_model_params.interaction().range();
@@ -210,6 +190,7 @@ void parameter_evolution_3d::check_accumulators()
     std::cout << " measured:" << density << std::endl;
   });
 }
+
 simbad::core::attribute
 parameter_evolution_3d::attribute(const cell &c, std::size_t attr_idx) const
 {
@@ -236,11 +217,17 @@ parameter_evolution_3d::attribute(const cell &c, std::size_t attr_idx) const
   }
   throw simbad::core::unrecognized_attribute_number(attr_idx);
 }
+
+const spacetime &parameter_evolution_3d::current_spacetime() const
+{
+  return m_spacetime;
+}
+/*
 core::attribute parameter_evolution_3d::new_attribute(const cell &c,
                                                       std::size_t idx) const
 {
   return attribute(c, idx);
-}
+}*/
 
 void parameter_evolution_3d::resample_event(cell &c)
 {

@@ -31,6 +31,7 @@ struct spacetime_traits
     }
   };
 };
+/*
 using spacetime_super = simbad::core::cartesian_spacetime<spacetime_traits>;
 class spacetime : public simbad::core::cartesian_spacetime<spacetime_traits>,
                   public simbad::core::configuration_view
@@ -42,8 +43,8 @@ public:
   void visit_records(record_visitor visitor) const override;
   simbad::core::attribute_descriptor const &descriptor() const override;
 };
-
-// using spacetime = simbad::core::cartesian_spacetime<spacetime_traits>;
+*/
+using spacetime = simbad::core::cartesian_spacetime<spacetime_traits>;
 
 END_NAMESPACE_PARAMETER_EVOLUTION_3D
 

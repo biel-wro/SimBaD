@@ -105,10 +105,10 @@ BOOST_AUTO_TEST_CASE(reading_configuration)
 
 
   std::size_t const original_size = initial_configuraiton.size();
-  BOOST_REQUIRE_EQUAL(m.size(), original_size);
+  BOOST_REQUIRE_EQUAL(m.current_configuration().size(), original_size);
 
   std::size_t counter(0);
-  m.visit_records([&counter](attribute_list const &p) { ++counter; });
+  m.current_configuration().visit_records([&counter](attribute_list const &p) { ++counter; });
 
   BOOST_REQUIRE_EQUAL(counter, original_size);
 }
@@ -128,8 +128,8 @@ BOOST_AUTO_TEST_CASE(short_run)
   m.generate_events([](event const &e) { std::cout << e << std::endl; }, 100);
   m.check_accumulators();
   // configuration_printer.set_configuration(m);
-  configuration_printer.write_header(m);
-  configuration_printer.write_data(m);
+  configuration_printer.write_header(m.current_configuration());
+  configuration_printer.write_data(m.current_configuration());
   // configuration_printer.write_footer(m);
 }
 

@@ -1,28 +1,26 @@
-#include "configuration.hpp"
+#include "configuration_view.hpp"
+
+#include "interface/attribute.hpp"
+#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_list.hpp"
+#include "utils/attribute_converter.hpp"
+#include "utils/attribute_exceptions.hpp"
+
+#include "parameter_evolution_3d.hpp"
+#include "particle_view.hpp"
+
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 
-namespace{
-struct particle_attr : public simbad::core::attribute_list
+std::size_t configuration_view::size() const
 {
-  cell const &m_cell;
-  parameter_evolution_3d const &m_model;
-  particle_attr(cell const &c, parameter_evolution_3d const &model)
-      : m_cell(c), m_model(model)
-  {
-  }
-  simbad::core::attribute get_attribute(std::size_t idx) const override
-  {
-    return m_model.new_attribute(m_cell, idx);
-  }
-};
+  return m_model.current_spacetime().size();
 }
 
-std::size_t spacetime::size() const { return spacetime_super::size(); }
-const core::attribute_descriptor &spacetime::descriptor() const
+const simbad::core::attribute_descriptor &configuration_view::descriptor() const
 {
   static std::unique_ptr<simbad::core::attribute_descriptor> map_p;
   if(nullptr != map_p)
-    return map_p;
+    return *map_p;
 
   map_p.reset(new simbad::core::attribute_descriptor);
   using simbad::core::ATTRIBUTE_KIND;
@@ -45,12 +43,12 @@ const core::attribute_descriptor &spacetime::descriptor() const
   return *map_p;
 }
 
-void spacetime::visit_records(record_visitor visitor) const {
-
-    spacetime_super::visit([this, visitor](cell const &p) {
-      particle_attr view(p, *this);
-      visitor(view);
-    });
-
+void configuration_view::visit_records(
+    finite_dataframe::record_visitor visitor) const
+{
+  m_model.current_spacetime().visit([this, visitor](cell const &p) {
+    particle_view view(p, m_model);
+    visitor(view);
+  });
 }
 END_NAMESPACE_PARAMETER_EVOLUTION_3D
