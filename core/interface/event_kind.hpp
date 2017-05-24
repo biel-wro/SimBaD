@@ -17,6 +17,11 @@ enum class EVENT_KIND : std::uint32_t
   JUMPED_OUT,  // freed      | saved      | saved
   JUMPED_IN,   // assigned   | restored   | restored
 };
+
+EVENT_KIND to_event_kind(std::uint32_t num);
+std::uint32_t to_numeric(EVENT_KIND ek);
+
+
 END_NAMESPACE_CORE
 
 std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek);

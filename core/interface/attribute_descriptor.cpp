@@ -7,6 +7,13 @@
 
 BEGIN_NAMESPACE_CORE
 attribute_descriptor::attribute_descriptor() {}
+attribute_descriptor::attribute_descriptor(
+    std::initializer_list<attribute_descriptor_record> list)
+    : attribute_descriptor()
+{
+  for(attribute_descriptor_record const &record : list)
+    add_attribute(record);
+}
 attribute_descriptor::index_iterator attribute_descriptor::begin_indices() const
 {
   return get<0>().begin();
@@ -110,6 +117,11 @@ void attribute_descriptor::add_attribute(std::size_t idx, std::string name,
 #else
   insert(attribute_descriptor_record(idx, std::move(name), kind, dimension));
 #endif
+}
+
+void attribute_descriptor::add_attribute(const attribute_descriptor_record &record)
+{
+  insert(record);
 }
 
 std::size_t attribute_descriptor::add_attribute_auto_idx(

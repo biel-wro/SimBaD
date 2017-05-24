@@ -1,11 +1,17 @@
 #include "particle_view.hpp"
 
 #include "interface/attribute.hpp"
+#include "interface/attribute_list.hpp"
 #include "parameter_evolution_3d.hpp"
 #include "utils/attribute_converter.hpp"
 #include "utils/attribute_exceptions.hpp"
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
+
+particle_view::particle_view(const cell &c, const parameter_evolution_3d &model)
+    : m_cell(c), m_model(model)
+{
+}
 
 simbad::core::attribute particle_view::get_attribute(std::size_t attr_idx) const
 {

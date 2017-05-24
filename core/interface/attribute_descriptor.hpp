@@ -2,8 +2,12 @@
 #define ATTRIBUTE_DESCRIPTOR_HPP
 #include "core_fwd.hpp"
 
-//#include "interface/property_tree.hpp"
-#include "interface/attribute_descriptor_record.hpp"
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#include <initializer_list>
+
 
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/mem_fun.hpp>
@@ -11,11 +15,12 @@
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index_container.hpp>
 #include <boost/optional/optional_fwd.hpp>
+//#include "interface/property_tree.hpp"
+#include "interface/attribute_descriptor_record.hpp"
 
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
+
+
+
 
 BEGIN_NAMESPACE_CORE
 
@@ -47,6 +52,7 @@ public:
   using kind_iterator = super::nth_index<2>::type::iterator;
   // constructors
   attribute_descriptor();
+  attribute_descriptor(std::initializer_list<attribute_descriptor_record> list);
 
   // iterating
   index_iterator begin_indices() const;
@@ -72,6 +78,7 @@ public:
   void add_attribute(std::size_t idx, std::string name,
                      ATTRIBUTE_KIND kind = ATTRIBUTE_KIND::INFO,
                      std::size_t dimension = 0);
+  void add_attribute(attribute_descriptor_record const &record);
   std::size_t add_attribute_auto_idx(std::size_t start_index, std::string name,
                                      ATTRIBUTE_KIND kind = ATTRIBUTE_KIND::INFO,
                                      std::size_t dimension = 0);

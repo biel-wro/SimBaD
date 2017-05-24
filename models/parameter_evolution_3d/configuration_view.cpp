@@ -18,7 +18,29 @@ std::size_t configuration_view::size() const
 
 const simbad::core::attribute_descriptor &configuration_view::descriptor() const
 {
-  static std::unique_ptr<simbad::core::attribute_descriptor> map_p;
+  using simbad::core::ATTRIBUTE_KIND;
+  using rec = simbad::core::attribute_descriptor_record;
+
+  static std::unique_ptr<simbad::core::attribute_descriptor> map_p{
+      new simbad::core::attribute_descriptor{
+          rec{0, "position", ATTRIBUTE_KIND::POSITION, 3},
+          rec{1, "density", ATTRIBUTE_KIND::ACCUMULATED, 1},
+          rec{2, "event.time", ATTRIBUTE_KIND::INFO, 1},
+          rec{3, "event.kind", ATTRIBUTE_KIND::INFO, 1},
+          rec{4, "birth.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1},
+          rec{5, "birth.resistance", ATTRIBUTE_KIND::INTRINSIC, 1},
+          rec{6, "lifespan.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1},
+          rec{7, "lifespan.resistance", ATTRIBUTE_KIND::INTRINSIC, 1},
+          rec{8, "success.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1},
+          rec{9, "success.resistance", ATTRIBUTE_KIND::INTRINSIC, 1},
+          rec{10, "birth.rate", ATTRIBUTE_KIND::OBSERVABLE, 1},
+          rec{11, "death.rate", ATTRIBUTE_KIND::OBSERVABLE, 1},
+          rec{12, "success.probability", ATTRIBUTE_KIND::OBSERVABLE, 1},
+          rec{13, "lifespan", ATTRIBUTE_KIND::OBSERVABLE, 1},
+          rec{14, "dummy", ATTRIBUTE_KIND::INTRINSIC, 1},
+      }};
+  return *map_p;
+
   if(nullptr != map_p)
     return *map_p;
 

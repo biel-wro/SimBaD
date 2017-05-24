@@ -10,9 +10,9 @@ enum class ATTRIBUTE_KIND : std::uint32_t
 {
   UID,         // special case: optional, unique, integer, scalar
   POSITION,    // special case, optional, numeric values, fixed dimension
-  TIME,
-  DELTA_TIME,
-
+  TIME,        // special case, numeric scalar
+  DELTA_TIME,  // special case, integer scalar
+  EVENT_KIND,  // special case, same values as in event_kind enum
   INTRINSIC,   // attributes stored in particle, non-recomputable
   ACCUMULATED, // attributes stored in particle, recomputable
   OBSERVABLE,  // attributes not-stored in particle, with physical meaning

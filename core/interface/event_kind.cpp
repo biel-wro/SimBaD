@@ -5,6 +5,18 @@
 #include <string>
 #include <type_traits>
 
+BEGIN_NAMESPACE_CORE
+EVENT_KIND to_event_kind(std::uint32_t num)
+{
+  return static_cast<EVENT_KIND>(num);
+}
+
+std::uint32_t to_numeric(EVENT_KIND ek)
+{
+  return static_cast<std::uint32_t>(ek);
+}
+END_NAMESPACE_CORE
+
 std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek)
 {
   using simbad::core::EVENT_KIND;

@@ -37,12 +37,37 @@ struct particle_view : public simbad::core::particle
   }
 };
 
+template <EVENT_KIND EK, std::int64_t PARTIALS_LEFT>
+struct event_view : public simbad::core::attribute_list
+{
+  event_view(cell const &c, parameter_evolution_3d const &m)
+      : m_cell(c), m_model(m)
+  {
+  }
+  simbad::core::attribute get_attribute(std::size_t idx) const override
+  {
+    switch(idx)
+    {
+    case 0: return m_cell.event_time();
+    case 1: return PARTIALS_LEFT;
+    case 2: return std::int64_t(to_numeric(EK));
+    default:
+      throw std::invalid_argument("attribute index " + std::to_string(idx) +
+                                  "is not recognized");
+    }
+  }
+
+private:
+  cell const &m_cell;
+  parameter_evolution_3d const &m_model;
+};
+
 template <EVENT_KIND EK, std::size_t PARTIALS_LEFT>
-struct event_view : public simbad::core::event
+struct old_event_view : public simbad::core::event
 {
   particle_view m_particle_view;
 
-  event_view(cell const &c, parameter_evolution_3d const &m)
+  old_event_view(cell const &c, parameter_evolution_3d const &m)
       : m_particle_view(c, m)
   {
   }
@@ -67,10 +92,49 @@ parameter_evolution_3d::parameter_evolution_3d(
 {
 }
 
-const core::configuration_view &
-parameter_evolution_3d::current_configuration() const
+void parameter_evolution_3d::generate_events(
+    std::function<void(const simbad::core::attribute_list &)> v,
+    std::size_t nevents)
 {
-  return m_configuration_view;
+  using simbad::core::EVENT_KIND;
+  for(std::size_t iter = 0; iter < nevents; ++iter)
+  {
+    if(m_spacetime.empty())
+      return;
+
+    cell const &c = m_spacetime.top();
+
+    assert(m_time <= c.event_time());
+    m_time = c.event_time();
+
+    EVENT_KIND event_kind = c.event_kind();
+
+    if(EVENT_KIND::CREATED == event_kind)
+    {
+      if(compute_success_rate(c) >= std::uniform_real_distribution<>()(m_rng))
+        execute_birth(v);
+      else
+        execute_death(v);
+    }
+    else if(EVENT_KIND::REMOVED == event_kind)
+      execute_death(v);
+    else
+      assert(false);
+  }
+}
+
+const core::attribute_descriptor &
+parameter_evolution_3d::event_descriptor() const
+{
+  using AK = simbad::core::ATTRIBUTE_KIND;
+  using simbad::core::attribute_descriptor;
+  using rec = simbad::core::attribute_descriptor_record;
+
+  static std::unique_ptr<simbad::core::attribute_descriptor> ptr(
+      new simbad::core::attribute_descriptor{rec{0, "time", AK::TIME, 1},
+                                             rec{1, "delta_time", AK::TIME, 1},
+                                             rec{2, "id", AK::UID, 1}});
+  return *ptr;
 }
 
 void parameter_evolution_3d::generate_events(event_visitor v,
@@ -101,6 +165,12 @@ void parameter_evolution_3d::generate_events(event_visitor v,
     else
       assert(false);
   }
+}
+
+const core::configuration_view &
+parameter_evolution_3d::current_configuration() const
+{
+  return m_configuration_view;
 }
 
 void parameter_evolution_3d::read_configuration(
@@ -279,11 +349,19 @@ void parameter_evolution_3d::mutate(cell &c)
 
 void parameter_evolution_3d::execute_death(event_visitor v)
 {
+  old_event_view<EVENT_KIND::REMOVED, 0> death_view(m_spacetime.top(), *this);
+  v(death_view);
+  pop();
+}
+
+void parameter_evolution_3d::execute_death(new_event_visitor v)
+{
   event_view<EVENT_KIND::REMOVED, 0> death_view(m_spacetime.top(), *this);
   v(death_view);
   pop();
 }
-void parameter_evolution_3d::execute_birth(event_visitor v)
+void parameter_evolution_3d::execute_birth(
+    parameter_evolution_3d::new_event_visitor v)
 {
   cell const &parent = m_spacetime.top();
   cell::position_type new_position(parent.position());
@@ -307,6 +385,32 @@ void parameter_evolution_3d::execute_birth(event_visitor v)
   v(parent_birth_view);
 
   event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
+  v(child_birth_view);
+}
+void parameter_evolution_3d::execute_birth(event_visitor v)
+{
+  cell const &parent = m_spacetime.top();
+  cell::position_type new_position(parent.position());
+  new_position[0] += m_model_params.dispersion()(m_rng);
+  new_position[1] += m_model_params.dispersion()(m_rng);
+  new_position[2] += m_model_params.dispersion()(m_rng);
+
+  cell child(m_spacetime.top());
+  child.set_position(new_position);
+  child.reset_interaction();
+
+  mutate(child);
+  insert(child);
+
+  spacetime::dirty_handle_type parent_handle = m_spacetime.first_dirty();
+  mutate(*parent_handle);
+  resample_event(*parent_handle);
+  m_spacetime.repair_order(parent_handle);
+
+  old_event_view<EVENT_KIND::TRANSFORMED, 1> parent_birth_view(parent, *this);
+  v(parent_birth_view);
+
+  old_event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
   v(child_birth_view);
 }
 END_NAMESPACE_PARAMETER_EVOLUTION_3D
