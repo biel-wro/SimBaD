@@ -9,6 +9,7 @@
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 struct particle_view : public simbad::core::attribute_list
 {
+public:
   particle_view(cell const &c, parameter_evolution_3d const &model);
   cell const &get_cell() const { return m_cell; }
   parameter_evolution_3d const &get_model() const { return m_model; }

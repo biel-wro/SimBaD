@@ -14,27 +14,106 @@
 #include "utils/attribute_converter.hpp"
 #include "utils/attribute_exceptions.hpp"
 
-#include "particle_view.hpp"
-
 using simbad::core::EVENT_KIND;
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 
+static std::unique_ptr<simbad::core::attribute_descriptor>
+make_attribute_descriptor()
+{
+  using simbad::core::ATTRIBUTE_KIND;
+  using rec = simbad::core::attribute_descriptor_record;
+
+  return std::unique_ptr<simbad::core::attribute_descriptor>{
+      new simbad::core::attribute_descriptor{
+          rec{0, "position", ATTRIBUTE_KIND::POSITION, 3},
+          rec{1, "density", ATTRIBUTE_KIND::ACCUMULATED, 1},
+          rec{2, "event.time", ATTRIBUTE_KIND::INFO, 1},
+          rec{3, "event.kind", ATTRIBUTE_KIND::INFO, 1},
+          rec{4, "birth.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1},
+          rec{5, "birth.resistance", ATTRIBUTE_KIND::INTRINSIC, 1},
+          rec{6, "lifespan.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1},
+          rec{7, "lifespan.resistance", ATTRIBUTE_KIND::INTRINSIC, 1},
+          rec{8, "success.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1},
+          rec{9, "success.resistance", ATTRIBUTE_KIND::INTRINSIC, 1},
+          rec{10, "birth.rate", ATTRIBUTE_KIND::OBSERVABLE, 1},
+          rec{11, "death.rate", ATTRIBUTE_KIND::OBSERVABLE, 1},
+          rec{12, "success.probability", ATTRIBUTE_KIND::OBSERVABLE, 1},
+          rec{13, "lifespan", ATTRIBUTE_KIND::OBSERVABLE, 1},
+          rec{14, "dummy", ATTRIBUTE_KIND::INTRINSIC, 1},
+      }};
+}
+
+static std::unique_ptr<simbad::core::attribute_descriptor>
+make_event_descriptor()
+{
+  using simbad::core::ATTRIBUTE_KIND;
+  std::unique_ptr<simbad::core::attribute_descriptor> map_ptr =
+      make_attribute_descriptor();
+
+  map_ptr->add_attribute(15, "time", ATTRIBUTE_KIND::TIME, 1);
+  map_ptr->add_attribute(16, "delta time", ATTRIBUTE_KIND::TIME, 1);
+  map_ptr->add_attribute(17, "event", ATTRIBUTE_KIND::EVENT_KIND, 1);
+
+  return map_ptr;
+}
+
 namespace
+{ /*
+ struct old_particle_view : public simbad::core::particle
+ {
+   cell const &m_cell;
+   parameter_evolution_3d const &m_model;
+   old_particle_view(cell const &c, parameter_evolution_3d const &model)
+       : m_cell(c), m_model(model)
+   {
+   }
+   double coord(std::size_t d) const override { return m_cell.position()[d]; }
+   simbad::core::attribute extra_attribute(std::size_t idx) const override
+   {
+     return m_model.particle_attribute(m_cell, idx);
+   }
+ };
+ */
+struct particle_view : public simbad::core::attribute_list
 {
-struct particle_view : public simbad::core::particle
-{
+  particle_view(cell const &c, parameter_evolution_3d const &m)
+      : m_cell(c), m_model(m)
+  {
+  }
+  cell const &get_cell() const { return m_cell; }
+  parameter_evolution_3d const &model() const { return m_model; }
+  simbad::core::attribute get_attribute(std::size_t attr_idx) const override
+  {
+    return m_model.particle_attribute(m_cell, attr_idx);
+  }
+
+private:
   cell const &m_cell;
   parameter_evolution_3d const &m_model;
-  particle_view(cell const &c, parameter_evolution_3d const &model)
-      : m_cell(c), m_model(model)
+};
+
+class configuration_view : public simbad::core::configuration_view
+{
+public:
+  configuration_view(parameter_evolution_3d const &model) : m_model(model) {}
+  std::size_t size() const override { return m_model.particle_count(); }
+  void visit_records(record_visitor visitor) const override
   {
+    m_model.current_spacetime().visit([this, visitor](cell const &p) {
+      particle_view view(p, m_model);
+      visitor(view);
+    });
   }
-  double coord(std::size_t d) const override { return m_cell.position()[d]; }
-  simbad::core::attribute extra_attribute(std::size_t idx) const override
+  simbad::core::attribute_descriptor const &descriptor() const override
   {
-    return m_model.attribute(m_cell, idx);
+    static std::unique_ptr<simbad::core::attribute_descriptor> ptr =
+        make_attribute_descriptor();
+    return *ptr;
   }
+
+private:
+  parameter_evolution_3d const &m_model;
 };
 
 template <EVENT_KIND EK, std::int64_t PARTIALS_LEFT>
@@ -48,9 +127,9 @@ struct event_view : public simbad::core::attribute_list
   {
     switch(idx)
     {
-    case 0: return m_cell.event_time();
-    case 1: return PARTIALS_LEFT;
-    case 2: return std::int64_t(to_numeric(EK));
+    case 15: return m_cell.event_time();
+    case 16: return PARTIALS_LEFT;
+    case 17: return std::int64_t(to_numeric(EK));
     default:
       throw std::invalid_argument("attribute index " + std::to_string(idx) +
                                   "is not recognized");
@@ -61,7 +140,7 @@ private:
   cell const &m_cell;
   parameter_evolution_3d const &m_model;
 };
-
+/*
 template <EVENT_KIND EK, std::size_t PARTIALS_LEFT>
 struct old_event_view : public simbad::core::event
 {
@@ -72,14 +151,14 @@ struct old_event_view : public simbad::core::event
   {
   }
 
-  double time() const override { return m_particle_view.m_model.time(); }
+  double time() const override { return m_particle_view.model().time(); }
   std::size_t partials_left() const override { return PARTIALS_LEFT; }
   EVENT_KIND event_kind() const override { return EK; }
   simbad::core::particle const &subject() const override
   {
     return m_particle_view;
   }
-};
+};*/
 }
 
 parameter_evolution_3d::parameter_evolution_3d(
@@ -126,14 +205,8 @@ void parameter_evolution_3d::generate_events(
 const core::attribute_descriptor &
 parameter_evolution_3d::event_descriptor() const
 {
-  using AK = simbad::core::ATTRIBUTE_KIND;
-  using simbad::core::attribute_descriptor;
-  using rec = simbad::core::attribute_descriptor_record;
-
-  static std::unique_ptr<simbad::core::attribute_descriptor> ptr(
-      new simbad::core::attribute_descriptor{rec{0, "time", AK::TIME, 1},
-                                             rec{1, "delta_time", AK::TIME, 1},
-                                             rec{2, "id", AK::UID, 1}});
+  static std::unique_ptr<simbad::core::attribute_descriptor> ptr =
+      make_event_descriptor();
   return *ptr;
 }
 
@@ -191,6 +264,10 @@ void parameter_evolution_3d::read_configuration(
 }
 
 double parameter_evolution_3d::time() const { return m_time; }
+std::size_t parameter_evolution_3d::particle_count() const
+{
+  return m_spacetime.size();
+}
 void parameter_evolution_3d::insert(cell c)
 {
   auto visitor = [this, &c](cell &neighbor) {
@@ -214,35 +291,7 @@ void parameter_evolution_3d::pop()
   double range = m_model_params.interaction().range();
   m_spacetime.visit_ball_guarded_order(c.position(), range, visitor);
 }
-/*
-const core::attribute_descriptor &parameter_evolution_3d::descriptor() const
-{
-  static std::unique_ptr<simbad::core::attribute_descriptor> map_p;
-  if(nullptr == map_p)
-  {
-    map_p.reset(new simbad::core::attribute_descriptor);
-    using simbad::core::ATTRIBUTE_KIND;
-    map_p->add_attribute(0, "position", ATTRIBUTE_KIND::POSITION, 3);
-    map_p->add_attribute(1, "density", ATTRIBUTE_KIND::ACCUMULATED, 1);
-    map_p->add_attribute(2, "event.time", ATTRIBUTE_KIND::INFO, 1);
-    map_p->add_attribute(3, "event.kind", ATTRIBUTE_KIND::INFO, 1);
-    map_p->add_attribute(4, "birth.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1);
-    map_p->add_attribute(5, "birth.resistance", ATTRIBUTE_KIND::INTRINSIC, 1);
-    map_p->add_attribute(6, "lifespan.efficiency", ATTRIBUTE_KIND::INTRINSIC,
-                         1);
-    map_p->add_attribute(7, "lifespan.resistance", ATTRIBUTE_KIND::INTRINSIC,
-                         1);
-    map_p->add_attribute(8, "success.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1);
-    map_p->add_attribute(9, "success.resistance", ATTRIBUTE_KIND::INTRINSIC, 1);
-    map_p->add_attribute(10, "birth.rate", ATTRIBUTE_KIND::OBSERVABLE, 1);
-    map_p->add_attribute(11, "death.rate", ATTRIBUTE_KIND::OBSERVABLE, 1);
-    map_p->add_attribute(12, "success.probability", ATTRIBUTE_KIND::OBSERVABLE,
-                         1);
-    map_p->add_attribute(13, "lifespan", ATTRIBUTE_KIND::OBSERVABLE, 1);
-    map_p->add_attribute(14, "dummy", ATTRIBUTE_KIND::INTRINSIC, 1);
-  }
-  return *map_p;
-}*/
+
 void parameter_evolution_3d::check_accumulators()
 {
   double range = m_model_params.interaction().range();
@@ -262,7 +311,8 @@ void parameter_evolution_3d::check_accumulators()
 }
 
 simbad::core::attribute
-parameter_evolution_3d::attribute(const cell &c, std::size_t attr_idx) const
+parameter_evolution_3d::particle_attribute(const cell &c,
+                                           std::size_t attr_idx) const
 {
   switch(attr_idx)
   {
@@ -349,9 +399,10 @@ void parameter_evolution_3d::mutate(cell &c)
 
 void parameter_evolution_3d::execute_death(event_visitor v)
 {
+  /*
   old_event_view<EVENT_KIND::REMOVED, 0> death_view(m_spacetime.top(), *this);
   v(death_view);
-  pop();
+  pop();*/
 }
 
 void parameter_evolution_3d::execute_death(new_event_visitor v)
@@ -387,32 +438,32 @@ void parameter_evolution_3d::execute_birth(
   event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
   v(child_birth_view);
 }
-void parameter_evolution_3d::execute_birth(event_visitor v)
-{
-  cell const &parent = m_spacetime.top();
-  cell::position_type new_position(parent.position());
-  new_position[0] += m_model_params.dispersion()(m_rng);
-  new_position[1] += m_model_params.dispersion()(m_rng);
-  new_position[2] += m_model_params.dispersion()(m_rng);
+void parameter_evolution_3d::execute_birth(event_visitor v) { /*
+   cell const &parent = m_spacetime.top();
+   cell::position_type new_position(parent.position());
+   new_position[0] += m_model_params.dispersion()(m_rng);
+   new_position[1] += m_model_params.dispersion()(m_rng);
+   new_position[2] += m_model_params.dispersion()(m_rng);
 
-  cell child(m_spacetime.top());
-  child.set_position(new_position);
-  child.reset_interaction();
+   cell child(m_spacetime.top());
+   child.set_position(new_position);
+   child.reset_interaction();
 
-  mutate(child);
-  insert(child);
+   mutate(child);
+   insert(child);
 
-  spacetime::dirty_handle_type parent_handle = m_spacetime.first_dirty();
-  mutate(*parent_handle);
-  resample_event(*parent_handle);
-  m_spacetime.repair_order(parent_handle);
+   spacetime::dirty_handle_type parent_handle = m_spacetime.first_dirty();
+   mutate(*parent_handle);
+   resample_event(*parent_handle);
+   m_spacetime.repair_order(parent_handle);
 
-  old_event_view<EVENT_KIND::TRANSFORMED, 1> parent_birth_view(parent, *this);
-  v(parent_birth_view);
+   old_event_view<EVENT_KIND::TRANSFORMED, 1> parent_birth_view(parent, *this);
+   v(parent_birth_view);
 
-  old_event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
-  v(child_birth_view);
-}
+   old_event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
+   v(child_birth_view);
+   */}
+
 END_NAMESPACE_PARAMETER_EVOLUTION_3D
 
 SIMBAD_MAKE_MODEL_FACTORY(parameter_evolution_3d, 3)

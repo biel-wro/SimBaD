@@ -78,10 +78,15 @@ public:
   void add_attribute(std::size_t idx, std::string name,
                      ATTRIBUTE_KIND kind = ATTRIBUTE_KIND::INFO,
                      std::size_t dimension = 0);
+  void add_attribute(attribute_descriptor_record &&record);
   void add_attribute(attribute_descriptor_record const &record);
   std::size_t add_attribute_auto_idx(std::size_t start_index, std::string name,
                                      ATTRIBUTE_KIND kind = ATTRIBUTE_KIND::INFO,
                                      std::size_t dimension = 0);
+  std::size_t add_attribute_auto_idx( std::string name,
+                                     ATTRIBUTE_KIND kind = ATTRIBUTE_KIND::INFO,
+                                     std::size_t dimension = 0);
+
 
   // returned indices might be usefull sometimes
   std::unordered_map<std::size_t, std::string>

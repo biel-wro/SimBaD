@@ -31,6 +31,7 @@ public:
 
   double time() const;
 
+  std::size_t particle_count() const;
   void insert(cell c);
   void resample_event(cell &c);
   void pop();
@@ -38,7 +39,8 @@ public:
   void check_accumulators();
   // simbad::core::attribute new_attribute(cell const &c, std::size_t idx)
   // const;
-  simbad::core::attribute attribute(cell const &c, std::size_t attrname) const;
+  simbad::core::attribute particle_attribute(cell const &c,
+                                             std::size_t attrname) const;
 
   spacetime const &current_spacetime() const;
 

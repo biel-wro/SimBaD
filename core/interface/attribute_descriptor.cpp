@@ -86,7 +86,8 @@ boost::optional<const attribute_descriptor_record &>
 attribute_descriptor::get_descriptor(ATTRIBUTE_KIND kind) const
 {
   assert(ATTRIBUTE_KIND::POSITION != kind || is_uniquely_defined(kind));
-  assert(ATTRIBUTE_KIND::UID != kind || is_uniquely_defined(kind));
+  assert(ATTRIBUTE_KIND::PARTICLE_UID != kind || is_uniquely_defined(kind));
+  assert(ATTRIBUTE_KIND::EVENT_UID != kind || is_uniquely_defined(kind));
   kind_iterator it = get<2>().find(kind);
   if(end_kinds() == it)
     return boost::none;
@@ -112,6 +113,8 @@ void attribute_descriptor::add_attribute(std::size_t idx, std::string name,
                                          ATTRIBUTE_KIND kind,
                                          std::size_t dimension)
 {
+  assert(get<0>().find(idx) == end_indices());
+
 #if BOOST_VERSION >= 105500
   emplace(idx, std::move(name), kind, dimension);
 #else
@@ -119,7 +122,13 @@ void attribute_descriptor::add_attribute(std::size_t idx, std::string name,
 #endif
 }
 
-void attribute_descriptor::add_attribute(const attribute_descriptor_record &record)
+void attribute_descriptor::add_attribute(attribute_descriptor_record &&record)
+{
+  emplace(std::move(record));
+}
+
+void attribute_descriptor::add_attribute(
+    const attribute_descriptor_record &record)
 {
   insert(record);
 }
@@ -131,6 +140,14 @@ std::size_t attribute_descriptor::add_attribute_auto_idx(
   std::size_t idx = next_unused_idx(start_index);
   add_attribute(idx, std::move(name), kind);
   return idx;
+}
+
+std::size_t attribute_descriptor::add_attribute_auto_idx(std::string name,
+                                                         ATTRIBUTE_KIND kind,
+                                                         std::size_t dimension)
+{
+  return add_attribute_auto_idx(0, std::move(name), std::move(kind),
+                                std::move(dimension));
 }
 
 std::pair<std::vector<std::size_t>, std::vector<std::string>>
