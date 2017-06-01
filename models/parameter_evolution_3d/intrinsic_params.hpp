@@ -14,8 +14,7 @@ public:
   cell_params(simbad::core::attribute_list const &p,
               std::vector<std::size_t> const &attribute_indices);
   cell_params(float birth_eff, float birth_res, float lifespan_eff,
-              float lifespan_res, float success_eff, float success_res,
-              float dummy);
+              float lifespan_res, float success_eff, float success_res);
   static std::vector<std::size_t>
   get_attribute_indices(simbad::core::attribute_descriptor const &mapping);
 

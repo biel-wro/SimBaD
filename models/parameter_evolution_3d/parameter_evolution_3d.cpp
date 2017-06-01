@@ -40,7 +40,6 @@ make_attribute_descriptor()
           rec{11, "death.rate", ATTRIBUTE_KIND::OBSERVABLE, 1},
           rec{12, "success.probability", ATTRIBUTE_KIND::OBSERVABLE, 1},
           rec{13, "lifespan", ATTRIBUTE_KIND::OBSERVABLE, 1},
-          rec{14, "dummy", ATTRIBUTE_KIND::INTRINSIC, 1},
       }};
 }
 

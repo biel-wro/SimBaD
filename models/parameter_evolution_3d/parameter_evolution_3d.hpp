@@ -4,7 +4,6 @@
 #include "computational/interactions/generalized_exponential_interaction.hpp"
 #include "interface/model.hpp"
 
-#include "configuration_view.hpp"
 #include "model_parameters.hpp"
 #include "spacetime.hpp"
 

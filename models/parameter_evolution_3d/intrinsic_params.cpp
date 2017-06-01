@@ -16,7 +16,7 @@ cell_params::cell_params(const simbad::core::property_tree &pt)
                   pt.get<float>("lifespan.efficiency"),
                   pt.get<float>("lifespan.resistance"),
                   pt.get<float>("success.efficiency"),
-                  pt.get<float>("success.resistance"), pt.get<float>("dummy"))
+                  pt.get<float>("success.resistance"))
 {
 }
 
@@ -27,13 +27,12 @@ cell_params::cell_params(const core::attribute_list &p,
                   p[attribute_indices[2]].get_real_val(),
                   p[attribute_indices[3]].get_real_val(),
                   p[attribute_indices[4]].get_real_val(),
-                  p[attribute_indices[5]].get_real_val(),
-                  p[attribute_indices[6]].get_real_val())
+                  p[attribute_indices[5]].get_real_val())
 {
 }
 cell_params::cell_params(float birth_eff, float birth_res, float lifespan_eff,
                          float lifespan_res, float success_eff,
-                         float success_res, float dummy)
+                         float success_res)
     : m_birth_eff(birth_eff),
       m_birth_res(birth_res),
       m_lifespan_eff(lifespan_eff),
@@ -46,14 +45,13 @@ cell_params::cell_params(float birth_eff, float birth_res, float lifespan_eff,
 std::vector<std::size_t> cell_params::get_attribute_indices(
     const simbad::core::attribute_descriptor &mapping)
 {
-  std::vector<std::size_t> indices(7);
-  indices[0] = mapping["birth.efficiency"].attribute_idx();
-  indices[1] = mapping["birth.resistance"].attribute_idx();
-  indices[2] = mapping["lifespan.efficiency"].attribute_idx();
-  indices[3] = mapping["lifespan.resistance"].attribute_idx();
-  indices[4] = mapping["success.efficiency"].attribute_idx();
-  indices[5] = mapping["success.resistance"].attribute_idx();
-  indices[6] = mapping["dummy"].attribute_idx();
+  std::vector<std::size_t> indices{
+      mapping["birth.efficiency"].attribute_idx(),
+      mapping["birth.resistance"].attribute_idx(),
+      mapping["lifespan.efficiency"].attribute_idx(),
+      mapping["lifespan.resistance"].attribute_idx(),
+      mapping["success.efficiency"].attribute_idx(),
+      mapping["success.resistance"].attribute_idx()};
   return indices;
 }
 

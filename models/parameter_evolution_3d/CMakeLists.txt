@@ -8,7 +8,6 @@ set( MAIN_SOURCE
 )
 
 set( SOURCES
-  configuration_view.cpp
   intrinsic_params.cpp
   model_parameters.cpp
   parameter_evolution_3d.cpp
