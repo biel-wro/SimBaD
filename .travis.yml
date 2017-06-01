@@ -1,11 +1,10 @@
 language: generic
 
-sudo: required
-dist: trusty
-
 matrix:
   include:
-    - compiler: gcc
+    - dist: trusty
+      compiler: gcc
+      sudo: required
       addons:
         apt:
           sources:
@@ -15,6 +14,9 @@ matrix:
             - libboost-all-dev
       env: COMPILER=g++-4.9
     - compiler: gcc
+      dist: trusty
+      compiler: gcc
+      sudo: required
       addons:
         apt:
           sources:
@@ -23,7 +25,9 @@ matrix:
             - g++-5
             - libboost-all-dev
       env: COMPILER=g++-5
-    - compiler: clang
+    - dist: trusty
+      compiler: gcc
+      sudo: required
       addons:
         apt:
           sources:
@@ -33,7 +37,10 @@ matrix:
             - clang-3.6
             - libboost-all-dev
       env: COMPILER=clang++-3.6
-    - compiler: clang
+    - dist: trusty
+      compiler: gcc
+      sudo: required
+      compiler: clang
       addons:
         apt:
           sources:
