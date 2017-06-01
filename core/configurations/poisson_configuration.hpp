@@ -28,20 +28,19 @@ public:
   void visit_records(particle_visitor v) const override;
   attribute_descriptor const &descriptor() const override;
 
-
   ~poisson_configuration();
 
   void set_size(size_type n);
   void set_sample_size(double lambda);
 
 protected:
-   void init_descriptor();
-  size_type sample_poisson(double lambda);
+  void init_descriptor();
+  static size_type sample_poisson(double lambda, std::mt19937_64 &rng);
 
 private:
+  std::mt19937_64 m_rng;
   coord_scalar m_radius;
   dimension_type m_dimension;
-  std::mt19937_64 m_rng;
   std::size_t m_size;
   bool m_is_ball;
 };

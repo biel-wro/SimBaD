@@ -13,8 +13,7 @@ BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 class parameter_evolution_3d : public simbad::core::model
 {
 public:
-  using event_visitor =
-      std::function<void(const simbad::core::attribute_list &)>;
+
   parameter_evolution_3d(simbad::core::property_tree const &pt);
 
   simbad::core::attribute_descriptor const &event_descriptor() const override;
@@ -34,8 +33,6 @@ public:
   void pop();
 
   void check_accumulators();
-  // simbad::core::attribute new_attribute(cell const &c, std::size_t idx)
-  // const;
   simbad::core::attribute particle_attribute(cell const &c,
                                              std::size_t attrname) const;
 
@@ -47,9 +44,7 @@ public:
 
 protected:
   void mutate(cell &c);
-  // void execute_death(new_event_visitor v);
   void execute_death(event_visitor v);
-  // void execute_birth(new_event_visitor v);
   void execute_birth(event_visitor v);
 
 private:
@@ -57,7 +52,7 @@ private:
   std::mt19937_64 m_rng;
   spacetime m_spacetime;
   model_params m_model_params;
-  configuration_view m_configuration_view;
+  std::unique_ptr<simbad::core::configuration_view> m_configurtation_view;
 };
 
 END_NAMESPACE_PARAMETER_EVOLUTION_3D

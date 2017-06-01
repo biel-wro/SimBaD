@@ -39,8 +39,7 @@ cell_params::cell_params(float birth_eff, float birth_res, float lifespan_eff,
       m_lifespan_eff(lifespan_eff),
       m_lifespan_res(lifespan_res),
       m_success_eff(success_eff),
-      m_success_res(success_res),
-      m_dummy(dummy)
+      m_success_res(success_res)
 {
 }
 

@@ -5,7 +5,6 @@ BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 
 struct cell_params;
 struct model_params;
-class configuration_view;
 
 class cell;
 class parameter_evolution_3d;

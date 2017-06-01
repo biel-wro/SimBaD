@@ -51,9 +51,9 @@ poisson_configuration::poisson_configuration(const property_tree &pt)
 poisson_configuration::poisson_configuration(dimension_type dimension,
                                              size_type n, double radius,
                                              bool ball, std::uint64_t seed)
-    : m_radius(radius),
+    : m_rng(seed),
+      m_radius(radius),
       m_dimension(dimension),
-      m_rng(seed),
       m_size(n),
       m_is_ball(ball)
 {
@@ -62,13 +62,15 @@ poisson_configuration::poisson_configuration(dimension_type dimension,
 poisson_configuration::poisson_configuration(
     poisson_configuration::dimension_type dimension, double lambda,
     double radius, bool ball, std::uint64_t seed)
-    : poisson_configuration(dimension, sample_poisson(lambda), radius, ball,
-                            seed)
+    : m_rng(seed),
+      m_radius(radius),
+      m_dimension(dimension),
+      m_size(sample_poisson(lambda,m_rng)),
+      m_is_ball(ball)
 {
 }
 
-poisson_configuration::size_type
-poisson_configuration::size() const
+poisson_configuration::size_type poisson_configuration::size() const
 {
   return m_size;
 }
@@ -106,13 +108,13 @@ void poisson_configuration::set_size(poisson_configuration::size_type n)
 
 void poisson_configuration::set_sample_size(double lambda)
 {
-  m_size = sample_poisson(lambda);
+  m_size = sample_poisson(lambda, m_rng);
 }
 
 poisson_configuration::size_type
-poisson_configuration::sample_poisson(double lambda)
+poisson_configuration::sample_poisson(double lambda, std::mt19937_64 &rng)
 {
-  return std::poisson_distribution<size_type>(lambda)(m_rng);
+  return std::poisson_distribution<size_type>(lambda)(rng);
 }
 
 END_NAMESPACE_CORE

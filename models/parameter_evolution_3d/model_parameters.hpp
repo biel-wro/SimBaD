@@ -38,7 +38,6 @@ protected:
   void mutate_birth(cell_params &cp, std::mt19937_64 &rnd) const;
   void mutate_lifespan(cell_params &cp, std::mt19937_64 &rnd) const;
   void mutate_success(cell_params &cp, std::mt19937_64 &rnd) const;
-  void mutate_dummy(cell_params &cp, std::mt19937_64 &rnd) const;
 
 private:
   double m_mutation_prob;
@@ -51,15 +50,12 @@ private:
   extractor_type m_lifespan_extractor;
   extractor_type m_success_extractor;
 
-  // using mutator_type = simbad::core::skewed_beta_mutator<double>;
-
   mutator_ptr m_birth_eff_mutator_ptr;
   mutator_ptr m_birth_res_mutator_ptr;
   mutator_ptr m_lifespan_eff_mutator_ptr;
   mutator_ptr m_lifespan_res_mutator_ptr;
   mutator_ptr m_success_eff_mutator_ptr;
   mutator_ptr m_success_res_mutator_ptr;
-  mutator_ptr m_dummy_mutator_ptr;
 };
 END_NAMESPACE_PARAMETER_EVOLUTION_3D
 #endif // PARAMETERS_HPP

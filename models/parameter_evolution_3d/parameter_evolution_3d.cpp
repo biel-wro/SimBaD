@@ -134,7 +134,7 @@ parameter_evolution_3d::parameter_evolution_3d(
       m_rng(pt.get<uint64_t>("seed")),
       m_spacetime(pt.get<double>("space.tile_size")),
       m_model_params(pt),
-      m_configuration_view(*this)
+      m_configurtation_view(new configuration_view(*this))
 {
 }
 
@@ -179,7 +179,7 @@ void parameter_evolution_3d::generate_events(event_visitor v,
 const core::configuration_view &
 parameter_evolution_3d::current_configuration() const
 {
-  return m_configuration_view;
+  return *m_configurtation_view;
 }
 
 void parameter_evolution_3d::read_configuration(
@@ -269,7 +269,6 @@ parameter_evolution_3d::particle_attribute(const cell &c,
   case 11: return compute_death_rate(c);
   case 12: return compute_success_rate(c);
   case 13: return 1.0 / compute_death_rate(c);
-  case 14: return c.params().dummy();
   }
   throw simbad::core::unrecognized_attribute_number(attr_idx);
 }

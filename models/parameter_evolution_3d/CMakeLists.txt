@@ -13,7 +13,6 @@ set( SOURCES
   model_parameters.cpp
   parameter_evolution_3d.cpp
   particle.cpp
-  particle_view.cpp
 )
 
 add_library(${MODEL_NAME}_obj OBJECT ${SOURCES} )

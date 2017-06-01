@@ -94,7 +94,8 @@ BOOST_AUTO_TEST_SUITE(test_parameter_evolution_3d)
 
 BOOST_AUTO_TEST_CASE(reading_configuration)
 {
-  parameter_evolution_3d m(make_paramaters());
+  property_tree parameters = make_paramaters();
+  parameter_evolution_3d m(parameters);
 
   cubic_crystal_configuration initial_configuraiton(
       make_initial_configuraiton(3));
