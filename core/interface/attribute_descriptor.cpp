@@ -124,7 +124,11 @@ void attribute_descriptor::add_attribute(std::size_t idx, std::string name,
 
 void attribute_descriptor::add_attribute(attribute_descriptor_record &&record)
 {
+#if BOOST_VERSION >= 105500
   emplace(std::move(record));
+#else
+  insert(std::move(record));
+#endif
 }
 
 void attribute_descriptor::add_attribute(

@@ -43,16 +43,14 @@ cell_params::cell_params(float birth_eff, float birth_res, float lifespan_eff,
 }
 
 std::vector<std::size_t> cell_params::get_attribute_indices(
-    const simbad::core::attribute_descriptor &mapping)
+    simbad::core::attribute_descriptor const &mapping)
 {
-  std::vector<std::size_t> indices{
-      mapping["birth.efficiency"].attribute_idx(),
-      mapping["birth.resistance"].attribute_idx(),
-      mapping["lifespan.efficiency"].attribute_idx(),
-      mapping["lifespan.resistance"].attribute_idx(),
-      mapping["success.efficiency"].attribute_idx(),
-      mapping["success.resistance"].attribute_idx()};
-  return indices;
+  return {mapping["birth.efficiency"].attribute_idx(),
+          mapping["birth.resistance"].attribute_idx(),
+          mapping["lifespan.efficiency"].attribute_idx(),
+          mapping["lifespan.resistance"].attribute_idx(),
+          mapping["success.efficiency"].attribute_idx(),
+          mapping["success.resistance"].attribute_idx()};
 }
 
 float cell_params::lifespan_eff() const { return m_lifespan_eff; }
