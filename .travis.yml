@@ -49,7 +49,15 @@ matrix:
           packages:
             - clang-3.7
             - libboost-all-dev
-      env: COMPILER=clang++-3.7              
+      env: COMPILER=clang++-3.7
+    - os: osx
+      osx_image: xcode7.2
+      env: COMPILER=clang++
+      before_install:
+        - brew update
+        - brew install cmake
+        - brew install boost
+                    
 #    - compiler: clang
 #      addons:
 #        apt:
