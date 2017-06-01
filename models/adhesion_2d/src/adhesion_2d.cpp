@@ -40,7 +40,8 @@ public:
   {
     return m_paricle_view;
   }
-
+  // TODO
+  simbad::core::attribute get_attribute() const {}
 private:
   particle_view m_paricle_view;
   double m_time;
@@ -135,11 +136,7 @@ const core::configuration_view &adhesion_2d::current_configuration() const
   return *this;
 }
 
-std::size_t adhesion_2d::size() const
-{
-  return m_spacetime.size();
-}
-
+std::size_t adhesion_2d::size() const { return m_spacetime.size(); }
 void adhesion_2d::visit_records(particle_visitor v) const
 {
   m_spacetime.visit([v](const cell &p) { v(new_particle_view(p)); });

@@ -28,6 +28,7 @@ protected:
 
 private:
   model *m_model_ptr;
+  std::size_t m_time_attr_id;
   std::size_t m_current_step;
   time_type m_time_step;
   time_type m_current_time;

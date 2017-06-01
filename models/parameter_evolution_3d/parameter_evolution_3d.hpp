@@ -13,14 +13,11 @@ BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 class parameter_evolution_3d : public simbad::core::model
 {
 public:
-  using new_event_visitor =
+  using event_visitor =
       std::function<void(const simbad::core::attribute_list &)>;
   parameter_evolution_3d(simbad::core::property_tree const &pt);
 
-  void generate_events(std::function<void(simbad::core::attribute_list const &)>
-                           event_properties,
-                       std::size_t nevents);
-  simbad::core::attribute_descriptor const &event_descriptor() const;
+  simbad::core::attribute_descriptor const &event_descriptor() const override;
 
   void generate_events(event_visitor, std::size_t nevents) override;
   simbad::core::configuration_view const &
@@ -50,9 +47,9 @@ public:
 
 protected:
   void mutate(cell &c);
-  void execute_death(new_event_visitor v);
+  // void execute_death(new_event_visitor v);
   void execute_death(event_visitor v);
-  void execute_birth(new_event_visitor v);
+  // void execute_birth(new_event_visitor v);
   void execute_birth(event_visitor v);
 
 private:

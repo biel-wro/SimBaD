@@ -5,9 +5,10 @@
 #include <iosfwd>
 
 #include "core_fwd.hpp"
-
+#include "attribute_list.hpp"
 BEGIN_NAMESPACE_CORE
-class event
+/*
+class event : public attribute_list
 {
 public:
 
@@ -20,7 +21,8 @@ public:
 
   virtual void nice_print(std::ostream &) const;
 
-};
+};*/
+//using event = attribute_list;
 END_NAMESPACE_CORE
 
 std::ostream &operator<<(std::ostream &, CORE_NAMESPACE::event const &);

@@ -55,11 +55,8 @@ poisson_configuration::poisson_configuration(dimension_type dimension,
       m_dimension(dimension),
       m_rng(seed),
       m_size(n),
-      m_is_ball(ball),
-      m_attr_desc(new attribute_descriptor)
+      m_is_ball(ball)
 {
-  m_attr_desc->add_attribute(0, "position", ATTRIBUTE_KIND::POSITION,
-                             dimension);
 }
 
 poisson_configuration::poisson_configuration(

@@ -44,7 +44,6 @@ private:
   std::mt19937_64 m_rng;
   std::size_t m_size;
   bool m_is_ball;
-  std::unique_ptr<attribute_descriptor> m_attr_desc;
 };
 
 END_NAMESPACE_CORE

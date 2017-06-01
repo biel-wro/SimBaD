@@ -1,11 +1,21 @@
 #include "snapshotter.hpp"
-
-#include "interface/model.hpp"
-#include "interface/event.hpp"
 #include <assert.h>
+
+#include <boost/optional.hpp>
+
+#include "interface/attribute.hpp"
+#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_descriptor_record.hpp"
+#include "interface/event.hpp"
+#include "interface/model.hpp"
+
 BEGIN_NAMESPACE_CORE
 snapshotter::snapshotter(model *model_ptr, time_type time_step)
     : m_model_ptr(model_ptr),
+      m_time_attr_id(model_ptr->event_descriptor()
+                         .get_descriptor(ATTRIBUTE_KIND::TIME)
+                         .get()
+                         .attribute_idx()),
       m_current_step(0),
       m_time_step(time_step),
       m_current_time(0.0)
@@ -13,10 +23,7 @@ snapshotter::snapshotter(model *model_ptr, time_type time_step)
 }
 snapshotter::~snapshotter() {}
 const model &snapshotter::get_model() const { return *m_model_ptr; }
-void snapshotter::set_model(model *model_ptr)
-{
-  m_model_ptr = model_ptr;
-}
+void snapshotter::set_model(model *model_ptr) { m_model_ptr = model_ptr; }
 void snapshotter::set_time_step(snapshotter::time_type time_step)
 {
   m_time_step = time_step;
@@ -45,7 +52,7 @@ void snapshotter::next_event()
 {
   m_model_ptr->run(
       [this](event const &e) {
-        time_type new_time = e.time();
+        time_type new_time = e[m_time_attr_id].get_real_val();
         assert(new_time >= m_current_time);
         m_current_time = new_time;
       },

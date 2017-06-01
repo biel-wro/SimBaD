@@ -59,22 +59,7 @@ make_event_descriptor()
 }
 
 namespace
-{ /*
- struct old_particle_view : public simbad::core::particle
- {
-   cell const &m_cell;
-   parameter_evolution_3d const &m_model;
-   old_particle_view(cell const &c, parameter_evolution_3d const &model)
-       : m_cell(c), m_model(model)
-   {
-   }
-   double coord(std::size_t d) const override { return m_cell.position()[d]; }
-   simbad::core::attribute extra_attribute(std::size_t idx) const override
-   {
-     return m_model.particle_attribute(m_cell, idx);
-   }
- };
- */
+{
 struct particle_view : public simbad::core::attribute_list
 {
   particle_view(cell const &c, parameter_evolution_3d const &m)
@@ -140,26 +125,8 @@ private:
   cell const &m_cell;
   parameter_evolution_3d const &m_model;
 };
-/*
-template <EVENT_KIND EK, std::size_t PARTIALS_LEFT>
-struct old_event_view : public simbad::core::event
-{
-  particle_view m_particle_view;
 
-  old_event_view(cell const &c, parameter_evolution_3d const &m)
-      : m_particle_view(c, m)
-  {
-  }
-
-  double time() const override { return m_particle_view.model().time(); }
-  std::size_t partials_left() const override { return PARTIALS_LEFT; }
-  EVENT_KIND event_kind() const override { return EK; }
-  simbad::core::particle const &subject() const override
-  {
-    return m_particle_view;
-  }
-};*/
-}
+} // namespace
 
 parameter_evolution_3d::parameter_evolution_3d(
     const simbad::core::property_tree &pt)
@@ -169,37 +136,6 @@ parameter_evolution_3d::parameter_evolution_3d(
       m_model_params(pt),
       m_configuration_view(*this)
 {
-}
-
-void parameter_evolution_3d::generate_events(
-    std::function<void(const simbad::core::attribute_list &)> v,
-    std::size_t nevents)
-{
-  using simbad::core::EVENT_KIND;
-  for(std::size_t iter = 0; iter < nevents; ++iter)
-  {
-    if(m_spacetime.empty())
-      return;
-
-    cell const &c = m_spacetime.top();
-
-    assert(m_time <= c.event_time());
-    m_time = c.event_time();
-
-    EVENT_KIND event_kind = c.event_kind();
-
-    if(EVENT_KIND::CREATED == event_kind)
-    {
-      if(compute_success_rate(c) >= std::uniform_real_distribution<>()(m_rng))
-        execute_birth(v);
-      else
-        execute_death(v);
-    }
-    else if(EVENT_KIND::REMOVED == event_kind)
-      execute_death(v);
-    else
-      assert(false);
-  }
 }
 
 const core::attribute_descriptor &
@@ -342,12 +278,6 @@ const spacetime &parameter_evolution_3d::current_spacetime() const
 {
   return m_spacetime;
 }
-/*
-core::attribute parameter_evolution_3d::new_attribute(const cell &c,
-                                                      std::size_t idx) const
-{
-  return attribute(c, idx);
-}*/
 
 void parameter_evolution_3d::resample_event(cell &c)
 {
@@ -399,20 +329,12 @@ void parameter_evolution_3d::mutate(cell &c)
 
 void parameter_evolution_3d::execute_death(event_visitor v)
 {
-  /*
-  old_event_view<EVENT_KIND::REMOVED, 0> death_view(m_spacetime.top(), *this);
-  v(death_view);
-  pop();*/
-}
-
-void parameter_evolution_3d::execute_death(new_event_visitor v)
-{
   event_view<EVENT_KIND::REMOVED, 0> death_view(m_spacetime.top(), *this);
   v(death_view);
   pop();
 }
 void parameter_evolution_3d::execute_birth(
-    parameter_evolution_3d::new_event_visitor v)
+    parameter_evolution_3d::event_visitor v)
 {
   cell const &parent = m_spacetime.top();
   cell::position_type new_position(parent.position());
@@ -438,31 +360,6 @@ void parameter_evolution_3d::execute_birth(
   event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
   v(child_birth_view);
 }
-void parameter_evolution_3d::execute_birth(event_visitor v) { /*
-   cell const &parent = m_spacetime.top();
-   cell::position_type new_position(parent.position());
-   new_position[0] += m_model_params.dispersion()(m_rng);
-   new_position[1] += m_model_params.dispersion()(m_rng);
-   new_position[2] += m_model_params.dispersion()(m_rng);
-
-   cell child(m_spacetime.top());
-   child.set_position(new_position);
-   child.reset_interaction();
-
-   mutate(child);
-   insert(child);
-
-   spacetime::dirty_handle_type parent_handle = m_spacetime.first_dirty();
-   mutate(*parent_handle);
-   resample_event(*parent_handle);
-   m_spacetime.repair_order(parent_handle);
-
-   old_event_view<EVENT_KIND::TRANSFORMED, 1> parent_birth_view(parent, *this);
-   v(parent_birth_view);
-
-   old_event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
-   v(child_birth_view);
-   */}
 
 END_NAMESPACE_PARAMETER_EVOLUTION_3D
 

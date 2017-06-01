@@ -24,6 +24,7 @@ template <class scalar_type_, std::size_t dimension_> struct coordinates;
 // interface
 class attribute;
 template <class T> class attribute_array;
+class attribute_descriptor;
 class attribute_descriptor_record;
 class attribute_list;
 class attribute_range;
@@ -32,7 +33,8 @@ class attribute_descriptor;
 class configuration_reader;
 class configuration_view;
 class dataframe;
-class event;
+//class event;
+using event = attribute_list;
 class event_sink;
 class event_source;
 enum class EVENT_KIND : std::uint32_t;
