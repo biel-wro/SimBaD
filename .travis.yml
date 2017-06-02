@@ -80,7 +80,7 @@ before_script:
   - cd build
   
 script:
-  - cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make && ctest --VV --output-on-failure
+  - cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make -j && ctest --VV --output-on-failure
   
 notifications:
   email:
