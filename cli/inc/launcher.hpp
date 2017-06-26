@@ -17,7 +17,7 @@ public:
   launcher(property_tree const &pt);
   ~launcher();
 
-void launch(property_tree const &pt);
+  void launch(property_tree const &pt);
 
   simbad::core::model &model();
 
@@ -30,17 +30,16 @@ protected:
   make_model(property_tree const &pt) const;
 
   std::unique_ptr<simbad::core::stream_printer>
-  make_configuration_printer(std::ostream *os,
-                            property_tree const &pt) const;
+  make_configuration_printer(std::ostream *os, property_tree const &pt) const;
 
   std::unique_ptr<simbad::core::configuration_view>
   make_initial_configuration(property_tree const &pt) const;
-
 
   void set_initial_configuration(property_tree const &pt);
 
 private:
   std::unique_ptr<simbad::core::model> m_model_ptr;
+
 };
 
 END_NAMESPACE_CLI

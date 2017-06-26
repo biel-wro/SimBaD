@@ -1,11 +1,10 @@
 #ifndef STREAM_PRINTER_HPP
 #define STREAM_PRINTER_HPP
 #include "core_fwd.hpp"
-#include "interface/configuration_reader.hpp"
 #include <iosfwd>
 BEGIN_NAMESPACE_CORE
 
-class stream_printer : public configuration_reader
+class stream_printer
 {
 public:
   stream_printer(std::ostream *ostream);
@@ -13,11 +12,13 @@ public:
   void set_ostream(std::ostream &ostream);
   std::ostream &ostream();
 
-  virtual void write_header(configuration_view const &conf) = 0;
-  virtual void write_data(configuration_view const &conf) = 0;
-  virtual void write_footer(configuration_view const &conf) = 0;
-protected:
-   void read_configuration(configuration_view const &conf) final;
+  virtual void write_dataframe(dataframe const &conf) final;
+  virtual void write_header(dataframe const &conf) final;
+  virtual void write_data(dataframe const &conf);
+
+  virtual void write_header(attribute_descriptor const &desc) = 0;
+  virtual void write_entry(attribute_list const &entry) = 0;
+  virtual void write_footer() = 0;
 
 private:
   std::ostream *m_ostream_ptr;

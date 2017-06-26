@@ -1,8 +1,8 @@
 #include "text_configuration_printer.hpp"
 
 #include "interface/attribute.hpp"
-#include "interface/attribute_list.hpp"
 #include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_list.hpp"
 #include "interface/configuration_view.hpp"
 #include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
@@ -27,10 +27,11 @@ text_configuration_printer::text_configuration_printer(std::ostream *ostream,
 {
 }
 
-void text_configuration_printer::write_header(const configuration_view &conf)
+void text_configuration_printer::write_header(attribute_descriptor const &desc)
 {
-  attribute_descriptor::const_iterator it = conf.descriptor().begin(),
-                                    end = conf.descriptor().end();
+  std::tie(m_indices, m_names) = desc.unpack_all();
+
+  attribute_descriptor::const_iterator it = desc.begin(), end = desc.end();
 
   if(end != it)
     ostream() << "\"" << it->attribute_name() << "\"";
@@ -39,13 +40,9 @@ void text_configuration_printer::write_header(const configuration_view &conf)
     ostream() << m_delimiter << "\"" << it->attribute_name() << "\"";
   ostream() << std::endl;
 }
-
-void text_configuration_printer::write_data(const configuration_view &conf)
+/*
+void text_configuration_printer::write_data(dataframe const &conf)
 {
-  std::vector<std::size_t> indices;
-  std::vector<std::string> names;
-  std::tie(indices, names) = conf.descriptor().unpack_all();
-
   std::vector<std::size_t>::const_iterator beg_idx = indices.begin(),
                                            end_idx = indices.end();
   std::vector<std::string>::const_iterator beg_names = names.begin();
@@ -56,13 +53,30 @@ void text_configuration_printer::write_data(const configuration_view &conf)
     if(end_idx != beg_idx)
       os << *beg_names << "=" << a[*beg_idx];
 
-
     std::vector<std::size_t>::const_iterator it_idx = std::next(beg_idx, 1);
     std::vector<std::string>::const_iterator it_names = std::next(beg_names, 1);
     for(; end_idx != it_idx; ++it_idx, ++it_names)
       os << m_delimiter << *it_names << "=" << a[*it_idx];
     os << std::endl;
   });
+}*/
+
+void text_configuration_printer::write_entry(attribute_list const &entry)
+{
+  std::vector<std::size_t>::const_iterator beg_idx = m_indices.begin(),
+                                           end_idx = m_indices.end();
+  std::vector<std::string>::const_iterator beg_names = m_names.begin();
+
+  std::ostream &os = ostream();
+
+  if(end_idx != beg_idx)
+    os << *beg_names << "=" << entry[*beg_idx];
+
+  std::vector<std::size_t>::const_iterator it_idx = std::next(beg_idx, 1);
+  std::vector<std::string>::const_iterator it_names = std::next(beg_names, 1);
+  for(; end_idx != it_idx; ++it_idx, ++it_names)
+    os << m_delimiter << *it_names << "=" << entry[*it_idx];
+  os << std::endl;
 }
-void text_configuration_printer::write_footer(const configuration_view &conf) {}
+void text_configuration_printer::write_footer() {}
 END_NAMESPACE_CORE

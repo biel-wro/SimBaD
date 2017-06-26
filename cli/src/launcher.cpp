@@ -28,15 +28,10 @@ launcher::launcher(const property_tree &pt)
 cli::launcher::~launcher() {}
 void launcher::launch(const property_tree &pt)
 {
-  /*  if(tree.count("print_properties"))
-    xml_parser::write_xml(std::cout, static_cast<property_tree::super>(tree),
-                          xml_writer_make_settings<ptree::key_type>(' ', 2));
-  else*/
-
   std::string mode = pt.get<std::string>("mode");
 
   if("simulation" == mode)
-    launch_simulation(pt.get_child("simulation"));
+    launch_simulation(pt.get_child("run"));
   else if("snapshots" == mode)
     launch_snapshots(pt);
   else if("final_snapshot" == mode)
@@ -62,7 +57,7 @@ void launcher::launch_snapshots(const property_tree &pt)
     std::cerr << "[" << double(100 * i) / double(nsteps) << "%] processed " << i
               << " snapshots out of " << nsteps << std::endl;
     std::cout << "time = " << processor.get_current_time() << std::endl;
-    printer->set_configuration(stacked_view);
+    printer->write_dataframe(stacked_view);
   }
 }
 
@@ -87,15 +82,18 @@ void launcher::launch_final_snapshot(const property_tree &pt)
     std::size_t current_chunk = std::min(chunk, nevents - i);
     m_model_ptr->run(current_chunk);
   }
-
-  printer->set_configuration(stacked_view);
+  printer->write_dataframe(stacked_view);
 }
 
-void launcher::launch_simulation(const property_tree &pt)
+void launcher::launch_simulation(property_tree const &pt)
 {
   size_t nevents = pt.get<size_t>("nevents");
-  auto event_visitor = [](event const &e) { std::cout << e << std::endl; };
-  m_model_ptr->run(event_visitor, nevents);
+  std::unique_ptr<stream_printer> printer = make_configuration_printer(
+      &std::cout, pt.get_child("configuration_printer"));
+
+  printer->write_header(m_model_ptr->event_descriptor());
+  m_model_ptr->run([&](event const &e) { printer->write_entry(e); }, nevents);
+  printer->write_footer();
 }
 
 model &launcher::model() { return *m_model_ptr; }
