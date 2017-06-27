@@ -109,14 +109,17 @@ struct event_view : public simbad::core::attribute_list
   }
   simbad::core::attribute get_attribute(std::size_t idx) const override
   {
+    if(15>idx)
+      return m_model.particle_attribute(m_cell, idx);
+
     switch(idx)
     {
-    case 15: return m_cell.event_time();
+    case 15: return m_model.time();
     case 16: return PARTIALS_LEFT;
     case 17: return std::int64_t(to_numeric(EK));
     default:
       throw std::invalid_argument("attribute index " + std::to_string(idx) +
-                                  "is not recognized");
+                                  " is not recognized");
     }
   }
 

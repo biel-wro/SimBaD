@@ -31,7 +31,7 @@ void launcher::launch(const property_tree &pt)
   std::string mode = pt.get<std::string>("mode");
 
   if("simulation" == mode)
-    launch_simulation(pt.get_child("run"));
+    launch_simulation(pt);
   else if("snapshots" == mode)
     launch_snapshots(pt);
   else if("final_snapshot" == mode)
@@ -87,11 +87,12 @@ void launcher::launch_final_snapshot(const property_tree &pt)
 
 void launcher::launch_simulation(property_tree const &pt)
 {
-  size_t nevents = pt.get<size_t>("nevents");
+  size_t nevents = pt.get<size_t>("run.nevents");
   std::unique_ptr<stream_printer> printer = make_configuration_printer(
       &std::cout, pt.get_child("configuration_printer"));
 
-  printer->write_header(m_model_ptr->event_descriptor());
+  core::attribute_descriptor const & event_descriptor = m_model_ptr->event_descriptor();
+  printer->write_header(event_descriptor);
   m_model_ptr->run([&](event const &e) { printer->write_entry(e); }, nevents);
   printer->write_footer();
 }

@@ -73,19 +73,28 @@ void csv_printer::write_entry(const attribute_list &entry)
 {
   std::vector<std::size_t>::const_iterator beg = m_indices.begin(),
                                            end = m_indices.end();
+
   std::ostream &os = ostream();
 
-  if(end != beg)
-    s_write_data_part(os, entry[*beg], m_dimensions[*beg], m_delimiter);
+  if(end == beg)
+    return (void)(os << std::endl);
 
-  std::vector<std::size_t>::const_iterator it = std::next(beg, 1);
-  for(; end != it; ++it)
-    s_write_data_part(os << m_delimiter, entry[*it], m_dimensions[*it],
-                      m_delimiter);
+  s_write_data_part(os, entry[*beg], m_dimensions[*beg], m_delimiter);
 
+  std::vector<std::size_t>::const_iterator ind_it = std::next(beg, 1);
+  std::vector<std::size_t>::const_iterator dim_it =
+      std::next(m_dimensions.begin(), 1);
+
+  for(; end != ind_it; ++ind_it, ++dim_it)
+  {
+    std::size_t attr_idx = *ind_it;
+    attribute const &attr = entry[attr_idx];
+    std::size_t dim = *dim_it;
+    os << m_delimiter;
+    s_write_data_part(os, attr, dim, m_delimiter);
+  }
   os << std::endl;
 }
-
 
 void csv_printer::write_data(dataframe const &conf)
 {
@@ -94,8 +103,9 @@ void csv_printer::write_data(dataframe const &conf)
                                            end = indices.end();
   std::ostream &os = ostream();
   conf.visit_records([=, &os](attribute_list const &a) {
-    if(end != beg)
-      s_write_data_part(os, a[*beg], m_dimensions[*beg], m_delimiter);
+    if(end == beg)
+      return (void)(os << std::endl);
+    s_write_data_part(os, a[*beg], m_dimensions[*beg], m_delimiter);
     std::vector<std::size_t>::const_iterator it = std::next(beg, 1);
     for(; end != it; ++it)
       s_write_data_part(os << m_delimiter, a[*it], m_dimensions[*it],

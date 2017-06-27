@@ -8,7 +8,7 @@ set( MODELS_NAME models )
 set( MODEL_COMMON model_common )
 
 # C++11
-include(CheckCXXCompilerFlag)
+#include(CheckCXXCompilerFlag)
 
 #CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 #CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
@@ -25,12 +25,12 @@ set(CMAKE_CXX_FLAGS "-std=c++14")
 message("compiler=" ${CMAKE_CXX_COMPILER})
 
 #sanitizer
-#if ( UNIX)
-#  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-#    message("using addres sanitizer in debug")
-#      set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer")
-#  endif()
-#endif()
+if ( UNIX)
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    message("using addres sanitizer in debug")
+      set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer")
+  endif()
+endif()
 
 #warnings
 if( MSVC)
