@@ -87,11 +87,11 @@ public:
                          ATTRIBUTE_SCALAR scalar = ATTRIBUTE_SCALAR::UNKNOWN,
                          std::size_t dimension = 0);
 
-  // returned indices might be usefull sometimes
+  // returned indices might be useful sometimes
   std::unordered_map<std::size_t, std::string>
   add_attributes(property_tree const &pt, bool ignore_empty = true);
 
-  // optional map new_idx=>old_idx might be usefull sometimes
+  // optional map new_idx=>old_idx might be useful sometimes
   std::unordered_map<std::size_t, std::size_t>
   add_attributes(attribute_description const &other,
                  std::size_t start_target_idx = 0,
