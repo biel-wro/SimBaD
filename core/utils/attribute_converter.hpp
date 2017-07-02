@@ -14,13 +14,13 @@ BEGIN_NAMESPACE_CORE
 // clang-format off
 template<class> struct is_attribute_array : std::false_type {};
 template<class T>
-struct is_attribute_array<attribute_array<T>> : std::true_type {};
+struct is_attribute_array<array_attribute<T>> : std::true_type {};
 template<class T, class A>
 struct is_attribute_array<std::vector<T,A>> : std::true_type {};
 
 template<class> struct attribute_array_element { using element_type = void; };
 template<class T>
-struct attribute_array_element<attribute_array<T>> { using element_type = T; };
+struct attribute_array_element<array_attribute<T>> { using element_type = T; };
 template<class T, class A>
 struct attribute_array_element<std::vector<T,A>>{ using element_type = T; };
 

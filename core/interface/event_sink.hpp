@@ -3,8 +3,6 @@
 
 #include "core_fwd.hpp"
 
-#include "event.hpp"
-
 #include <functional>
 
 BEGIN_NAMESPACE_CORE

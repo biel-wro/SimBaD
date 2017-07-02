@@ -1,6 +1,6 @@
 #ifndef CORE_CONFIGURATION_VIEW_HPP
 #define CORE_CONFIGURATION_VIEW_HPP
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include <cstddef>
 #include <functional>
@@ -15,7 +15,7 @@ class configuration_view : public finite_dataframe
 public:
   using particle_attributes = attribute_list;
   using particle_visitor = std::function<void(particle_attributes const &)>;
-  using mapping = attribute_descriptor;
+  using mapping = attribute_description;
   using size_type = std::size_t;
 
   std::size_t position_attr_idx() const;

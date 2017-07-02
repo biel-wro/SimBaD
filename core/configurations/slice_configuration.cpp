@@ -1,8 +1,7 @@
 #include "slice_configuration.hpp"
 #include "interface/attribute.hpp"
 #include "interface/attribute_list.hpp"
-#include "interface/attribute_descriptor.hpp"
-#include "interface/particle.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/property_tree.hpp"
 
 BEGIN_NAMESPACE_CORE
@@ -29,9 +28,9 @@ slice_configuration::slice_configuration(configuration_view const &base,
 void slice_configuration::visit_records(
     configuration_view::particle_visitor v) const
 {
-  attribute_descriptor const &map = get_base().descriptor();
+  attribute_description const &map = get_base().descriptor();
   assert(map.get_descriptor(ATTRIBUTE_KIND::POSITION));
-  attribute_descriptor_record d = map.get_descriptor(ATTRIBUTE_KIND::POSITION).get();
+  attribute_descriptor d = map.get_descriptor(ATTRIBUTE_KIND::POSITION).get();
   std::size_t attr_idx = d.attribute_idx();
 
   get_base().visit_records([=](attribute_list const &al) {

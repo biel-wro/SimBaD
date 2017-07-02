@@ -14,7 +14,7 @@ public:
   csv_printer(std::ostream *ostream, property_tree const &pt);
   csv_printer(std::ostream *ostream, std::string delimiter = ",");
 
-  void write_header(attribute_descriptor const &desc) override;
+  void write_header(attribute_description const &desc) override;
   void write_entry(attribute_list const &entry) override;
   void write_data(dataframe const &conf) override;
   void write_footer() override;

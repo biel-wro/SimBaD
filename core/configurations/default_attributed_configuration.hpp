@@ -3,7 +3,7 @@
 
 #include "configurations/enriched_configuration.hpp"
 #include "core_fwd.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/property_tree.hpp"
 
 #include <unordered_map>
@@ -19,12 +19,12 @@ public:
                                             property_tree const &attributes);
   virtual void on_base_reset() override;
   void visit_records(particle_visitor visitor) const override;
-  attribute_descriptor const &descriptor() const override;
+  attribute_description const &descriptor() const override;
 
 private:
   property_tree m_properties;
   attribute_map m_owned_attributes;
-  attribute_descriptor m_merged_attr_desc;
+  attribute_description m_merged_attr_desc;
 };
 END_NAMESPACE_CORE
 

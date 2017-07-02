@@ -1,10 +1,9 @@
 #include "csv_printer.hpp"
 
 #include "interface/attribute.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/attribute_list.hpp"
 #include "interface/configuration_view.hpp"
-#include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
 
 BEGIN_NAMESPACE_CORE
@@ -19,7 +18,7 @@ csv_printer::csv_printer(std::ostream *ostream, std::string delimiter)
 }
 
 static std::ostream &write_header_part(std::ostream &os,
-                                       attribute_descriptor_record const &desc,
+                                       attribute_descriptor const &desc,
                                        std::vector<std::size_t> &dims,
                                        std::string const &delim)
 {
@@ -38,13 +37,13 @@ static std::ostream &write_header_part(std::ostream &os,
   return os;
 }
 
-void csv_printer::write_header(const attribute_descriptor &desc)
+void csv_printer::write_header(const attribute_description &desc)
 {
   m_dimensions.clear();
   m_dimensions.reserve(desc.size());
   m_indices = desc.unpack_indices();
 
-  attribute_descriptor::const_iterator it = desc.begin(), end = desc.end();
+  attribute_description::const_iterator it = desc.begin(), end = desc.end();
 
   if(end != it)
     write_header_part(ostream(), *it, m_dimensions, m_delimiter);

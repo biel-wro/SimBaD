@@ -2,7 +2,7 @@
 #include "core_fwd.hpp"
 
 #include "interface/attribute.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/event.hpp"
 #include "interface/event_kind.hpp"
 #include "interface/model_factory.hpp"
@@ -144,7 +144,7 @@ void adhesion_2d::visit_records(particle_visitor v) const
 
 const core::attribute_descriptor &adhesion_2d::descriptor() const
 {
-  return simbad::core::attribute_descriptor::make_position_only();
+  return simbad::core::attribute_description::make_position_only();
 }
 void adhesion_2d::read_configuration(const configuration_view &configuration)
 {

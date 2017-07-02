@@ -1,6 +1,8 @@
 #ifndef ATTRIBUTE_LIST_HPP
 #define ATTRIBUTE_LIST_HPP
-#include "core_fwd.hpp"
+
+#include "interface/interface_fwd.hpp"
+
 BEGIN_NAMESPACE_CORE
 class attribute_list
 {

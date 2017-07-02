@@ -8,9 +8,9 @@
 
 #include "computational/distributions/power_law_distribution.hpp"
 #include "interface/attribute.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/attribute_list.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/event.hpp"
 #include "interface/event_kind.hpp"
 #include "interface/particle.hpp"
@@ -115,9 +115,9 @@ public:
 
   double get_spacing() const { return grid_spacing; }
   std::vector<std::size_t> const &get_counts() const { return grid_count; }
-  simbad::core::attribute_descriptor const &attr_map() const
+  simbad::core::attribute_description const &attr_map() const
   {
-    return simbad::core::attribute_descriptor::make_position_only();
+    return simbad::core::attribute_description::make_position_only();
   }
 
 protected:

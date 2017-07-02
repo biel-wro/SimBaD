@@ -1,10 +1,6 @@
 #include "configurations/default_attributed_configuration.hpp"
-
-#include "configurations/cubic_crystal_configuration.hpp"
-
 #include "interface/attribute.hpp"
 #include "interface/attribute_list.hpp"
-#include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
 
 #include <algorithm>
@@ -49,7 +45,7 @@ void default_attributed_configuration::visit_records(
   });
 }
 
-const attribute_descriptor &
+const attribute_description &
 default_attributed_configuration::descriptor() const
 {
   return m_merged_attr_desc;

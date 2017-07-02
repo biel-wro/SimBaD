@@ -1,8 +1,11 @@
 #ifndef SIMBAD_DATAFRAME_VIEW_HPP
 #define SIMBAD_DATAFRAME_VIEW_HPP
 
+#include "interface/interface_fwd.hpp"
+
 #include <functional>
-#include "core_fwd.hpp"
+
+
 BEGIN_NAMESPACE_CORE
 class dataframe {
 public:
@@ -11,7 +14,7 @@ public:
 
   virtual void visit_records( record_visitor visitor ) const = 0;
 
-  virtual attribute_descriptor const &descriptor() const = 0;
+  virtual attribute_description const &descriptor() const = 0;
   virtual ~dataframe();
 };
 END_NAMESPACE_CORE

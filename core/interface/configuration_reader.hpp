@@ -1,6 +1,6 @@
 #ifndef CONFIGURATION_READER_HPP
 #define CONFIGURATION_READER_HPP
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 BEGIN_NAMESPACE_CORE
 class configuration_reader

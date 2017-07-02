@@ -23,7 +23,7 @@ class adhesion_2d : public simbad::core::model,
 {
 public:
   //TODO
-  simbad::core::attribute_descriptor const &event_descriptor() const override{}
+  simbad::core::attribute_description const &event_descriptor() const override{}
 
 
   explicit adhesion_2d(simbad::core::property_tree const &pt);
@@ -35,7 +35,7 @@ public:
 
   std::size_t size() const override;
   void visit_records(particle_visitor) const override;
-  simbad::core::attribute_descriptor const &descriptor() const override;
+  simbad::core::attribute_description const &descriptor() const override;
 
   void read_configuration(
       simbad::core::configuration_view const &configuration) override;

@@ -1,9 +1,8 @@
 #include "intrinsic_params.hpp"
 #include "interface/attribute.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/attribute_list.hpp"
 #include "interface/configuration_view.hpp"
-#include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
 #include "utils/attribute_converter.hpp"
 
@@ -43,7 +42,7 @@ cell_params::cell_params(float birth_eff, float birth_res, float lifespan_eff,
 }
 
 std::vector<std::size_t> cell_params::get_attribute_indices(
-    simbad::core::attribute_descriptor const &mapping)
+    simbad::core::attribute_description const &mapping)
 {
   return {mapping["birth.efficiency"].attribute_idx(),
           mapping["birth.resistance"].attribute_idx(),

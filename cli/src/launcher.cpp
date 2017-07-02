@@ -4,7 +4,6 @@
 #include "configurations/cubic_crystal_configuration.hpp"
 #include "configurations/poisson_configuration.hpp"
 #include "configurations/stacked_view_configuration.hpp"
-#include "interface/event.hpp"
 #include "interface/model.hpp"
 #include "interface/model_factory.hpp"
 #include "interface/model_register.hpp"
@@ -91,7 +90,7 @@ void launcher::launch_simulation(property_tree const &pt)
   std::unique_ptr<stream_printer> printer = make_configuration_printer(
       &std::cout, pt.get_child("configuration_printer"));
 
-  core::attribute_descriptor const & event_descriptor = m_model_ptr->event_descriptor();
+  core::attribute_description const & event_descriptor = m_model_ptr->event_descriptor();
   printer->write_header(event_descriptor);
   m_model_ptr->run([&](event const &e) { printer->write_entry(e); }, nevents);
   printer->write_footer();

@@ -2,7 +2,7 @@
 #define CONFIGURATION_BUILDER_HPP
 #include "core_fwd.hpp"
 
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/configuration_reader.hpp"
 #include "interface/configuration_view.hpp"
 #include "interface/event_sink.hpp"
@@ -46,7 +46,7 @@ public:
   void add_particle(std::unique_ptr<node_type> p);
 
   size_type configuration_size() const override;
-  attribute_descriptor const &new_attr_map() const override;
+  attribute_description const &new_attr_map() const override;
   void visit_configuration(particle_visitor visitor) const override;
   void generate_events(event_visitor, size_t) override;
 
@@ -61,7 +61,7 @@ protected:
 
 private:
   ID_POLICY m_id_policy;
-  attribute_descriptor m_attribute_descriptor;
+  attribute_description m_attribute_descriptor;
   std::unique_ptr<bucket_type[]> m_buckets;
   set_type m_configuration_buffer;
   auto_rehash<float> m_rehash_watchdog;

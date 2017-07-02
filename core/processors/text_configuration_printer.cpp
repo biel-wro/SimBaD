@@ -1,10 +1,9 @@
 #include "text_configuration_printer.hpp"
 
 #include "interface/attribute.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/attribute_list.hpp"
 #include "interface/configuration_view.hpp"
-#include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
 #include <cstddef>
 #include <iostream>
@@ -27,11 +26,11 @@ text_configuration_printer::text_configuration_printer(std::ostream *ostream,
 {
 }
 
-void text_configuration_printer::write_header(attribute_descriptor const &desc)
+void text_configuration_printer::write_header(attribute_description const &desc)
 {
   std::tie(m_indices, m_names) = desc.unpack_all();
 
-  attribute_descriptor::const_iterator it = desc.begin(), end = desc.end();
+  attribute_description::const_iterator it = desc.begin(), end = desc.end();
 
   if(end != it)
     ostream() << "\"" << it->attribute_name() << "\"";

@@ -15,7 +15,7 @@ public:
 
   parameter_evolution_3d(simbad::core::property_tree const &pt);
 
-  simbad::core::attribute_descriptor const &event_descriptor() const override;
+  simbad::core::attribute_description const &event_descriptor() const override;
 
   void generate_events(event_visitor, std::size_t nevents) override;
   simbad::core::configuration_view const &

@@ -42,7 +42,7 @@ void stacked_view_configuration::visit_records(
   return last_layer().visit_records(visitor);
 }
 
-const attribute_descriptor &stacked_view_configuration::descriptor() const
+const attribute_description &stacked_view_configuration::descriptor() const
 {
   return last_layer().descriptor();
 }

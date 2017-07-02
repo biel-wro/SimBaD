@@ -1,7 +1,6 @@
 #include "configurations/poisson_configuration.hpp"
 #include "interface/attribute.hpp"
 #include "interface/attribute_list.hpp"
-#include "interface/particle.hpp"
 
 #include <boost/test/auto_unit_test.hpp>
 #include <iostream>
@@ -39,7 +38,7 @@ BOOST_AUTO_TEST_CASE(ball_fixed_size)
   BOOST_REQUIRE_EQUAL(config.size(), size);
   int cnt = 0;
   std::size_t idx = config.position_attr_idx();
-  config.visit_records([=,&cnt](attribute_list const &p) {
+  config.visit_records([=, &cnt](attribute_list const &p) {
     double x = p[idx].get_real_ref(0);
     double y = p[idx].get_real_ref(1);
     double r = std::sqrt(x * x + y * y);

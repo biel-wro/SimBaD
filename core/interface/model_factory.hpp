@@ -1,8 +1,10 @@
 #ifndef MODEL_FACTORY_HPP
 #define MODEL_FACTORY_HPP
 
-#include "core_fwd.hpp"
+#include "interface_fwd.hpp"
+
 #include "utils/object_factory.hpp"
+
 #include <memory>
 #include <string>
 

@@ -41,7 +41,7 @@ public:
 
   std::size_t size() const override;
   void visit_records(record_visitor visitor) const override;
-  simbad::core::attribute_descriptor const &descriptor() const override;
+  simbad::core::attribute_description const &descriptor() const override;
 };
 */
 using spacetime = simbad::core::cartesian_spacetime<spacetime_traits>;

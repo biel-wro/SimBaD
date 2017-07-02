@@ -1,8 +1,7 @@
 #include "json_configuration_printer.hpp"
 #include "interface/attribute.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/configuration_view.hpp"
-#include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
 #include <cstddef>
 #include <iostream>

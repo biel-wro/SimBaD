@@ -5,12 +5,10 @@
 #include <stdexcept>
 
 #include "interface/attribute.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/attribute_list.hpp"
 #include "interface/configuration_view.hpp"
-#include "interface/event.hpp"
 #include "interface/model_factory.hpp"
-#include "interface/particle.hpp"
 #include "utils/attribute_converter.hpp"
 #include "utils/attribute_exceptions.hpp"
 
@@ -18,41 +16,45 @@ using simbad::core::EVENT_KIND;
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 
-static std::unique_ptr<simbad::core::attribute_descriptor>
+static std::unique_ptr<simbad::core::attribute_description>
 make_attribute_descriptor()
 {
-  using simbad::core::ATTRIBUTE_KIND;
-  using rec = simbad::core::attribute_descriptor_record;
+  using KIND = simbad::core::ATTRIBUTE_KIND;
+  using SCALAR = simbad::core::ATTRIBUTE_SCALAR;
+  using rec = simbad::core::attribute_descriptor;
 
-  return std::unique_ptr<simbad::core::attribute_descriptor>{
-      new simbad::core::attribute_descriptor{
-          rec{0, "position", ATTRIBUTE_KIND::POSITION, 3},
-          rec{1, "density", ATTRIBUTE_KIND::ACCUMULATED, 1},
-          rec{2, "event.time", ATTRIBUTE_KIND::INFO, 1},
-          rec{3, "event.kind", ATTRIBUTE_KIND::INFO, 1},
-          rec{4, "birth.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1},
-          rec{5, "birth.resistance", ATTRIBUTE_KIND::INTRINSIC, 1},
-          rec{6, "lifespan.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1},
-          rec{7, "lifespan.resistance", ATTRIBUTE_KIND::INTRINSIC, 1},
-          rec{8, "success.efficiency", ATTRIBUTE_KIND::INTRINSIC, 1},
-          rec{9, "success.resistance", ATTRIBUTE_KIND::INTRINSIC, 1},
-          rec{10, "birth.rate", ATTRIBUTE_KIND::OBSERVABLE, 1},
-          rec{11, "death.rate", ATTRIBUTE_KIND::OBSERVABLE, 1},
-          rec{12, "success.probability", ATTRIBUTE_KIND::OBSERVABLE, 1},
-          rec{13, "lifespan", ATTRIBUTE_KIND::OBSERVABLE, 1},
+  return std::unique_ptr<simbad::core::attribute_description>{
+
+      new simbad::core::attribute_description{
+          rec{0, "position", KIND::POSITION, SCALAR::REAL, 3},
+          rec{1, "density", KIND::ACCUMULATED, SCALAR::REAL, 1},
+          rec{2, "event.time", KIND::INFO, SCALAR::REAL, 1},
+          rec{3, "event.kind", KIND::INFO, SCALAR::INT, 1},
+          rec{4, "birth.efficiency", KIND::INTRINSIC, SCALAR::REAL, 1},
+          rec{5, "birth.resistance", KIND::INTRINSIC, SCALAR::REAL, 1},
+          rec{6, "lifespan.efficiency", KIND::INTRINSIC, SCALAR::REAL, 1},
+          rec{7, "lifespan.resistance", KIND::INTRINSIC, SCALAR::REAL, 1},
+          rec{8, "success.efficiency", KIND::INTRINSIC, SCALAR::REAL, 1},
+          rec{9, "success.resistance", KIND::INTRINSIC, SCALAR::REAL, 1},
+          rec{10, "birth.rate", KIND::OBSERVABLE, SCALAR::REAL, 1},
+          rec{11, "death.rate", KIND::OBSERVABLE, SCALAR::REAL, 1},
+          rec{12, "success.probability", KIND::OBSERVABLE, SCALAR::REAL, 1},
+          rec{13, "lifespan", KIND::OBSERVABLE, SCALAR::REAL, 1},
       }};
 }
 
-static std::unique_ptr<simbad::core::attribute_descriptor>
+static std::unique_ptr<simbad::core::attribute_description>
 make_event_descriptor()
 {
-  using simbad::core::ATTRIBUTE_KIND;
-  std::unique_ptr<simbad::core::attribute_descriptor> map_ptr =
+  using KIND = simbad::core::ATTRIBUTE_KIND;
+  using SCALAR = simbad::core::ATTRIBUTE_SCALAR;
+
+  std::unique_ptr<simbad::core::attribute_description> map_ptr =
       make_attribute_descriptor();
 
-  map_ptr->add_attribute(15, "time", ATTRIBUTE_KIND::TIME, 1);
-  map_ptr->add_attribute(16, "delta time", ATTRIBUTE_KIND::TIME, 1);
-  map_ptr->add_attribute(17, "event", ATTRIBUTE_KIND::EVENT_KIND, 1);
+  map_ptr->add_attribute(15, "time", KIND::TIME, SCALAR::REAL, 1);
+  map_ptr->add_attribute(16, "delta time", KIND::TIME, SCALAR::INT, 1);
+  map_ptr->add_attribute(17, "event", KIND::EVENT_KIND, SCALAR::INT, 1);
 
   return map_ptr;
 }
@@ -89,9 +91,9 @@ public:
       visitor(view);
     });
   }
-  simbad::core::attribute_descriptor const &descriptor() const override
+  simbad::core::attribute_description const &descriptor() const override
   {
-    static std::unique_ptr<simbad::core::attribute_descriptor> ptr =
+    static std::unique_ptr<simbad::core::attribute_description> ptr =
         make_attribute_descriptor();
     return *ptr;
   }
@@ -109,7 +111,7 @@ struct event_view : public simbad::core::attribute_list
   }
   simbad::core::attribute get_attribute(std::size_t idx) const override
   {
-    if(15>idx)
+    if(15 > idx)
       return m_model.particle_attribute(m_cell, idx);
 
     switch(idx)
@@ -140,10 +142,10 @@ parameter_evolution_3d::parameter_evolution_3d(
 {
 }
 
-const core::attribute_descriptor &
+const core::attribute_description &
 parameter_evolution_3d::event_descriptor() const
 {
-  static std::unique_ptr<simbad::core::attribute_descriptor> ptr =
+  static std::unique_ptr<simbad::core::attribute_description> ptr =
       make_event_descriptor();
   return *ptr;
 }

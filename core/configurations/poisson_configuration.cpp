@@ -1,8 +1,7 @@
 #include "configurations/poisson_configuration.hpp"
 #include "interface/attribute.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/attribute_list.hpp"
-#include "interface/particle.hpp"
 
 #include <cmath>
 #include <numeric>
@@ -34,7 +33,7 @@ struct particle_view : public attribute_list
   }
 
 private:
-  attribute_array<double> m_coords;
+  array_attribute<double> m_coords;
 };
 }
 poisson_configuration::poisson_configuration(const property_tree &pt)
@@ -95,9 +94,9 @@ void poisson_configuration::visit_records(
   }
 }
 
-const attribute_descriptor &poisson_configuration::descriptor() const
+const attribute_description &poisson_configuration::descriptor() const
 {
-  return attribute_descriptor::make_position_only();
+  return attribute_description::make_position_only();
 }
 
 poisson_configuration::~poisson_configuration() {}

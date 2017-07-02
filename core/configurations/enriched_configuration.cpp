@@ -3,8 +3,7 @@
 #include "configurations/cubic_crystal_configuration.hpp"
 
 #include "interface/attribute.hpp"
-#include "interface/attribute_descriptor.hpp"
-#include "interface/particle.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/property_tree.hpp"
 
 #include <algorithm>
@@ -36,7 +35,7 @@ void enriched_configuration::visit_records(particle_visitor v) const
 {
   get_base().visit_records(v);
 }
-const attribute_descriptor &enriched_configuration::descriptor() const
+const attribute_description &enriched_configuration::descriptor() const
 {
   return get_base().descriptor();
 }

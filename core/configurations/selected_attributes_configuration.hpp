@@ -2,7 +2,7 @@
 #define SELECTED_ATTRIBUTES_CONFIGURATION_HPP
 #include "configurations/enriched_configuration.hpp"
 #include "core_fwd.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/configuration_view.hpp"
 
 BEGIN_NAMESPACE_CORE
@@ -15,10 +15,10 @@ public:
   selected_attributes_configuration(configuration_view const &base,
                                     property_tree const &pt);
 
-  attribute_descriptor const &descriptor() const;
+  attribute_description const &descriptor() const;
 
 private:
-  attribute_descriptor m_mapping;
+  attribute_description m_mapping;
 };
 END_NAMESPACE_CORE
 

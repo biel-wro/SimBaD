@@ -1,12 +1,14 @@
 #include "parameter_evolution_3d.hpp"
 
 #include "configurations/cubic_crystal_configuration.hpp"
-#include "interface/event.hpp"
 #include "interface/property_tree.hpp"
+#include "interface/attribute_list.hpp"
 #include "particle.hpp"
 #include "processors/csv_printer.hpp"
 #include "processors/text_configuration_printer.hpp"
 
+#include <boost/container/small_vector.hpp>
+#include <boost/container/static_vector.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/test/auto_unit_test.hpp>
 
@@ -104,12 +106,12 @@ BOOST_AUTO_TEST_CASE(reading_configuration)
 
   csv_printer printer(&std::cout);
 
-
   std::size_t const original_size = initial_configuraiton.size();
   BOOST_REQUIRE_EQUAL(m.current_configuration().size(), original_size);
 
   std::size_t counter(0);
-  m.current_configuration().visit_records([&counter](attribute_list const &p) { ++counter; });
+  m.current_configuration().visit_records(
+      [&counter](attribute_list const &p) { ++counter; });
 
   BOOST_REQUIRE_EQUAL(counter, original_size);
 }
@@ -126,12 +128,23 @@ BOOST_AUTO_TEST_CASE(short_run)
   //  text_configuration_printer configuration_printer(&std::cout);
   csv_printer configuration_printer(&std::cout);
 
-  m.generate_events([](event const &e) { std::cout << e << std::endl; }, 100);
+  //m.generate_events([](event const &e) { std::cout << e << std::endl; }, 100);
   m.check_accumulators();
   // configuration_printer.set_configuration(m);
   configuration_printer.write_header(m.current_configuration().descriptor());
   configuration_printer.write_data(m.current_configuration());
   // configuration_printer.write_footer(m);
+}
+
+BOOST_AUTO_TEST_CASE(my_test)
+{
+  using vec = std::vector<std::size_t>;
+  using s3vec = boost::container::small_vector<std::size_t, 1>;
+  using stvec = boost::container::static_vector<std::size_t, 2>;
+
+  std::cout << sizeof(vec) << std::endl;
+  std::cout << sizeof(s3vec) << std::endl;
+  std::cout << sizeof(stvec) << std::endl;
 }
 
 BOOST_AUTO_TEST_SUITE_END()

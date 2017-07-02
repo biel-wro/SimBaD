@@ -1,6 +1,6 @@
 #include "configurations/cubic_crystal_configuration.hpp"
 #include "interface/attribute.hpp"
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/attribute_list.hpp"
 #include <boost/optional.hpp>
 #include <boost/test/auto_unit_test.hpp>

@@ -13,7 +13,7 @@ public:
   virtual void run(event_visitor, std::size_t) final;
   virtual void run(std::size_t) final;
 
-  virtual attribute_descriptor const &event_descriptor() const = 0;
+  virtual attribute_description const &event_descriptor() const = 0;
 
   virtual ~event_source();
 

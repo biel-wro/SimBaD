@@ -13,7 +13,7 @@ public:
                                        double spacing);
   size_type size() const override;
   void visit_records(particle_visitor) const override;
-  attribute_descriptor const &descriptor() const override;
+  attribute_description const &descriptor() const override;
   ~cubic_crystal_configuration();
 
 protected:

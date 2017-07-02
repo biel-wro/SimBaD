@@ -1,9 +1,8 @@
 #include "configurations/cubic_crystal_configuration.hpp"
 
 #include "interface/attribute.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/attribute_list.hpp"
-#include "interface/attribute_descriptor.hpp"
-#include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
 
 #include <cmath>
@@ -24,10 +23,9 @@ cubic_crystal_configuration::cubic_crystal_configuration(size_type dimension,
       m_attr_mapping_ptr(new mapping)
 {
   m_attr_mapping_ptr->add_attribute(0, "position", ATTRIBUTE_KIND::POSITION,
-                                    m_dimension);
+                                    ATTRIBUTE_SCALAR ::REAL, m_dimension);
 }
-configuration_view::size_type
-cubic_crystal_configuration::size() const
+configuration_view::size_type cubic_crystal_configuration::size() const
 {
   return std::pow(2 * spacings_per_radius() + 1, m_dimension);
 }
@@ -37,7 +35,7 @@ namespace
 struct particle_view : public simbad::core::attribute_list
 {
   particle_view(std::size_t dim) : m_position(dim) {}
-  attribute_array<double> m_position;
+  array_attribute<double> m_position;
   attribute get_attribute(std::size_t idx) const override
   {
     assert(0 == idx);
@@ -47,8 +45,7 @@ struct particle_view : public simbad::core::attribute_list
 };
 }
 
-void cubic_crystal_configuration::visit_records(
-    particle_visitor visitor) const
+void cubic_crystal_configuration::visit_records(particle_visitor visitor) const
 {
   std::size_t const dim = dimension();
 
@@ -92,7 +89,7 @@ void cubic_crystal_configuration::visit_records(
   } while(!last);
 }
 
-const attribute_descriptor &cubic_crystal_configuration::descriptor() const
+const attribute_description &cubic_crystal_configuration::descriptor() const
 {
   return *m_attr_mapping_ptr;
 }

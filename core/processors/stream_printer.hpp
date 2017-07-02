@@ -16,7 +16,7 @@ public:
   virtual void write_header(dataframe const &conf) final;
   virtual void write_data(dataframe const &conf);
 
-  virtual void write_header(attribute_descriptor const &desc) = 0;
+  virtual void write_header(attribute_description const &desc) = 0;
   virtual void write_entry(attribute_list const &entry) = 0;
   virtual void write_footer() = 0;
 

@@ -26,7 +26,7 @@ public:
 
   size_type size() const override;
   void visit_records(particle_visitor v) const override;
-  attribute_descriptor const &descriptor() const override;
+  attribute_description const &descriptor() const override;
 
   ~poisson_configuration();
 

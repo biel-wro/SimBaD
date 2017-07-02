@@ -1,6 +1,6 @@
 #include <boost/test/auto_unit_test.hpp>
 
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 
 #include <boost/multi_index/mem_fun.hpp>
 #include <boost/multi_index/ordered_index.hpp>
@@ -15,19 +15,19 @@ BOOST_AUTO_TEST_SUITE(test_attribute_descriptor)
 
 BOOST_AUTO_TEST_CASE(instantiation)
 {
-  attribute_descriptor c;
-  c.insert(attribute_descriptor_record(1,"prop1"));
-  c.insert(attribute_descriptor_record(2,"prop2"));
-  c.insert(attribute_descriptor_record(3,"prop3"));
-  c.insert(attribute_descriptor_record(4,"prop4"));
-  c.insert(attribute_descriptor_record(5,"prop5"));
+  attribute_description c;
+  c.insert(attribute_descriptor(1,"prop1"));
+  c.insert(attribute_descriptor(2,"prop2"));
+  c.insert(attribute_descriptor(3,"prop3"));
+  c.insert(attribute_descriptor(4,"prop4"));
+  c.insert(attribute_descriptor(5,"prop5"));
 
   std::size_t cnt = 0;
-  for(attribute_descriptor::index_iterator it = c.begin_indices(),
+  for(attribute_description::index_iterator it = c.begin_indices(),
                                         end = c.end_indices();
       it != end; ++it)
   {
-    attribute_descriptor_record const &desc = *it;
+    attribute_descriptor const &desc = *it;
     (void)desc;
     ++cnt;
   }
@@ -37,11 +37,11 @@ BOOST_AUTO_TEST_CASE(instantiation)
 
 BOOST_AUTO_TEST_CASE(next_unused_idx)
 {
-  attribute_descriptor c;
-  c.insert(attribute_descriptor_record(1,"prop1"));
-  c.insert(attribute_descriptor_record(2,"prop2"));
-  c.insert(attribute_descriptor_record(4,"prop4"));
-  c.insert(attribute_descriptor_record(5,"prop5"));
+  attribute_description c;
+  c.insert(attribute_descriptor(1,"prop1"));
+  c.insert(attribute_descriptor(2,"prop2"));
+  c.insert(attribute_descriptor(4,"prop4"));
+  c.insert(attribute_descriptor(5,"prop5"));
 
   BOOST_REQUIRE_EQUAL(c.next_unused_idx(0), 0);
   BOOST_REQUIRE_EQUAL(c.next_unused_idx(1), 3);

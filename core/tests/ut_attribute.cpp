@@ -18,10 +18,10 @@ BOOST_AUTO_TEST_CASE(layout_preview)
   attribute attr1("quite long std::string exceedig 24 characters");
   attribute attr2(std::int64_t(10));
   attribute attr3(20.0);
-  attribute attr4(attribute_array<std::int64_t>{1, 2, 3});
-  attribute attr5(attribute_array<double>{10.0, 20.0, 30.0});
-  attribute attr6(attribute_array<std::int64_t>{1, 2, 3, 4, 5, 6});
-  attribute attr7(attribute_array<double>{10.0, 20.0, 30.0, 40.0, 50.0, 60.0});
+  attribute attr4(array_attribute<std::int64_t>{1, 2, 3});
+  attribute attr5(array_attribute<double>{10.0, 20.0, 30.0});
+  attribute attr6(array_attribute<std::int64_t>{1, 2, 3, 4, 5, 6});
+  attribute attr7(array_attribute<double>{10.0, 20.0, 30.0, 40.0, 50.0, 60.0});
 }
 
 BOOST_AUTO_TEST_CASE(size_check)
@@ -36,9 +36,9 @@ BOOST_AUTO_TEST_CASE(conversion_to_scalar)
   std::string val_str = "1";
   double val_dbl = 2.0;
   std::int64_t val_int = 3;
-  attribute_array<double> val_dbla{4};
-  attribute_array<std::int64_t> val_inta{5};
-  attribute_array<std::string> val_stra{"6"};
+  array_attribute<double> val_dbla{4};
+  array_attribute<std::int64_t> val_inta{5};
+  array_attribute<std::string> val_stra{"6"};
 
   optional<double> str2dbl = conv::convert_to<double>(val_str);
   optional<double> dbl2dbl = conv::convert_to<double>(val_dbl);
@@ -90,11 +90,11 @@ BOOST_AUTO_TEST_CASE(conversion_to_double_array)
   std::string val_str = "1";
   double val_dbl = 2.0;
   std::int64_t val_int = 3;
-  attribute_array<double> val_dbla(10, 4);
-  attribute_array<std::int64_t> val_inta(10, 5);
-  attribute_array<std::string> val_stra(10, "6.0");
+  array_attribute<double> val_dbla(10, 4);
+  array_attribute<std::int64_t> val_inta(10, 5);
+  array_attribute<std::string> val_stra(10, "6.0");
 
-  using dbla = attribute_array<double>;
+  using dbla = array_attribute<double>;
 
   dbla str2dbla = conv::convert_to<dbla>(val_str).get();
   dbla dbl2dbla = conv::convert_to<dbla>(val_dbl).get();
@@ -128,11 +128,11 @@ BOOST_AUTO_TEST_CASE(conversion_to_int_array)
   std::string val_str = "1";
   double val_dbl = 2.0;
   std::int64_t val_int = 3;
-  attribute_array<double> val_dbla(10, 4);
-  attribute_array<std::int64_t> val_inta(10, 5);
-  attribute_array<std::string> val_stra(10, "6");
+  array_attribute<double> val_dbla(10, 4);
+  array_attribute<std::int64_t> val_inta(10, 5);
+  array_attribute<std::string> val_stra(10, "6");
 
-  using inta = attribute_array<std::int64_t>;
+  using inta = array_attribute<std::int64_t>;
 
   inta str2stra = conv::convert_to<inta>(val_str).get();
   inta dbl2stra = conv::convert_to<inta>(val_dbl).get();
@@ -166,11 +166,11 @@ BOOST_AUTO_TEST_CASE(conversion_to_str_array)
   std::string val_str = "1";
   double val_dbl = 2.0;
   std::int64_t val_int = 3;
-  attribute_array<double> val_dbla(10, 4);
-  attribute_array<std::int64_t> val_inta(10, 5);
-  attribute_array<std::string> val_stra(10, "6");
+  array_attribute<double> val_dbla(10, 4);
+  array_attribute<std::int64_t> val_inta(10, 5);
+  array_attribute<std::string> val_stra(10, "6");
 
-  using stra = attribute_array<std::string>;
+  using stra = array_attribute<std::string>;
 
   stra str2stra = conv::convert_to<stra>(val_str).get();
   stra dbl2stra = conv::convert_to<stra>(val_dbl).get();
@@ -200,9 +200,9 @@ BOOST_AUTO_TEST_CASE(conversion_to_coord_double3)
 {
   using conv = attribute_converter;
 
-  attribute_array<double> val_dbla(3, 4);
-  attribute_array<std::int64_t> val_inta(3, 5);
-  attribute_array<std::string> val_stra(3, "6");
+  array_attribute<double> val_dbla(3, 4);
+  array_attribute<std::int64_t> val_inta(3, 5);
+  array_attribute<std::string> val_stra(3, "6");
 
   using coords3d = coordinates<double, 3>;
 

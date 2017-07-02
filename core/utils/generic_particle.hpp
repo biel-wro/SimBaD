@@ -4,7 +4,6 @@
 
 #include "interface/attribute.hpp"
 #include "interface/configuration_view.hpp"
-#include "interface/particle.hpp"
 #include "interface/property_tree.hpp"
 
 #include <limits>

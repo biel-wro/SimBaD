@@ -1,7 +1,7 @@
 #ifndef CORE_PROPERTY_TREE_HPP
 #define CORE_PROPERTY_TREE_HPP
 
-#include "core_def.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include <boost/property_tree/ptree.hpp>
 #include <string>

@@ -2,8 +2,6 @@
 #include "configurations/default_attributed_configuration.hpp"
 #include "configurations/selected_attributes_configuration.hpp"
 #include "configurations/stacked_view_configuration.hpp"
-
-#include "interface/particle.hpp"
 #include "processors/configuration_builder.hpp"
 #include "processors/text_configuration_printer.hpp"
 

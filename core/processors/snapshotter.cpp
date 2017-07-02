@@ -4,9 +4,9 @@
 #include <boost/optional.hpp>
 
 #include "interface/attribute.hpp"
+#include "interface/attribute_list.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/attribute_descriptor.hpp"
-#include "interface/attribute_descriptor_record.hpp"
-#include "interface/event.hpp"
 #include "interface/model.hpp"
 
 BEGIN_NAMESPACE_CORE

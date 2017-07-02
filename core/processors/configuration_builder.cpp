@@ -42,7 +42,7 @@ configuration_builder::configuration_size() const
   return m_configuration_buffer.size();
 }
 
-const attribute_descriptor &configuration_builder::new_attr_map() const
+const attribute_description &configuration_builder::new_attr_map() const
 {
   return m_attribute_descriptor;
 }

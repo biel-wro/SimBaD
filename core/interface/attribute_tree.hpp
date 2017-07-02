@@ -1,7 +1,7 @@
 #ifndef ATTRIBUTE_TREE_HPP
 #define ATTRIBUTE_TREE_HPP
 
-#include "core_def.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include "interface/attribute.hpp"
 

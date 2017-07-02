@@ -3,7 +3,7 @@
 
 #include "model_register.hpp"
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include "utils/class_register.hpp"
 

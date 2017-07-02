@@ -1,7 +1,7 @@
 #include "selected_attributes_configuration.hpp"
 #include "core_fwd.hpp"
 
-#include "interface/attribute_descriptor.hpp"
+#include "interface/attribute_description.hpp"
 #include "interface/property_tree.hpp"
 
 #include <string>
@@ -10,7 +10,7 @@ selected_attributes_configuration::selected_attributes_configuration(
     const configuration_view &base, std::vector<std::string> const &white_list)
     : enriched_configuration(base), m_mapping()
 {
-  attribute_descriptor const &other_mapping = base.descriptor();
+  attribute_description const &other_mapping = base.descriptor();
   for(std::string const &attr_name : white_list)
     m_mapping.insert(other_mapping[attr_name]);
 }
@@ -22,7 +22,7 @@ selected_attributes_configuration::selected_attributes_configuration(
 {
 }
 
-const attribute_descriptor &
+const attribute_description &
 selected_attributes_configuration::descriptor() const
 {
   return m_mapping;
