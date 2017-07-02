@@ -120,7 +120,7 @@ void attribute_description::add_attribute(std::size_t idx, std::string name,
 #if BOOST_VERSION >= 105500
   emplace(idx, std::move(name), kind, scalar, dimension);
 #else
-  insert(attribute_descriptor_record(idx, std::move(name), kind, scalar,
+  insert(attribute_descriptor(idx, std::move(name), kind, scalar,
                                      dimension));
 #endif
 }
