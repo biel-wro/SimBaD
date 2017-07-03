@@ -7,8 +7,6 @@
 #include "processors/csv_printer.hpp"
 #include "processors/text_configuration_printer.hpp"
 
-#include <boost/container/small_vector.hpp>
-#include <boost/container/static_vector.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/test/auto_unit_test.hpp>
 
@@ -134,17 +132,6 @@ BOOST_AUTO_TEST_CASE(short_run)
   configuration_printer.write_header(m.current_configuration().descriptor());
   configuration_printer.write_data(m.current_configuration());
   // configuration_printer.write_footer(m);
-}
-
-BOOST_AUTO_TEST_CASE(my_test)
-{
-  using vec = std::vector<std::size_t>;
-  using s3vec = boost::container::small_vector<std::size_t, 1>;
-  using stvec = boost::container::static_vector<std::size_t, 2>;
-
-  std::cout << sizeof(vec) << std::endl;
-  std::cout << sizeof(s3vec) << std::endl;
-  std::cout << sizeof(stvec) << std::endl;
 }
 
 BOOST_AUTO_TEST_SUITE_END()

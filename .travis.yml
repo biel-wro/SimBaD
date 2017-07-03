@@ -38,9 +38,8 @@ matrix:
             - libboost-all-dev
       env: COMPILER=clang++-3.6
     - dist: trusty
-      compiler: gcc
+      compiler: clang-3.7
       sudo: required
-      compiler: clang
       addons:
         apt:
           sources:
