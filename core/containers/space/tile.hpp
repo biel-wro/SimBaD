@@ -1,7 +1,6 @@
 #ifndef TILE_H
 #define TILE_H
 
-
 #include "board_impl.h"
 
 /*
@@ -10,6 +9,5 @@ class Tile{
 
 };
 */
-
 
 #endif

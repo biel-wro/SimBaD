@@ -3,10 +3,13 @@
 
 #include "core_fwd.hpp"
 
-namespace simbad {
-namespace models {
-namespace common {
-    simbad::core::model_register const &get_builtin_models();
+namespace simbad
+{
+namespace models
+{
+namespace common
+{
+simbad::core::model_register const &get_builtin_models();
 }
 }
 }

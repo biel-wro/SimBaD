@@ -12,7 +12,6 @@ BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 class parameter_evolution_3d : public simbad::core::model
 {
 public:
-
   parameter_evolution_3d(simbad::core::property_tree const &pt);
 
   simbad::core::attribute_description const &event_descriptor() const override;

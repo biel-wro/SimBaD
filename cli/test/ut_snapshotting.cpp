@@ -4,5 +4,4 @@
 
 BOOST_AUTO_TEST_SUITE(snapshotting)
 
-
 BOOST_AUTO_TEST_SUITE_END()

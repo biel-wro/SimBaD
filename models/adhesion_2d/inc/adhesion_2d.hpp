@@ -8,10 +8,9 @@
 #include "model_parameters.hpp"
 #include "spacetime.hpp"
 
+#include "core_fwd.hpp"
 #include <random>
 #include <string>
-#include "core_fwd.hpp"
-
 
 BEGIN_NAMESPACE_ADHESION_2D
 
@@ -22,9 +21,10 @@ class adhesion_2d : public simbad::core::model,
                     public simbad::core::configuration_view
 {
 public:
-  //TODO
-  simbad::core::attribute_description const &event_descriptor() const override{}
-
+  // TODO
+  simbad::core::attribute_description const &event_descriptor() const override
+  {
+  }
 
   explicit adhesion_2d(simbad::core::property_tree const &pt);
   explicit adhesion_2d(model_parameters mp, double tile_size = 1.0,

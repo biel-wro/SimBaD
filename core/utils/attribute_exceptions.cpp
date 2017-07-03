@@ -9,7 +9,8 @@ unrecognized_attribute_name::unrecognized_attribute_name(std::string name)
 {
 }
 
-const std::string &unrecognized_attribute_name::get_name() const {
+const std::string &unrecognized_attribute_name::get_name() const
+{
   return m_attribute_name;
 }
 unrecognized_attribute_number::unrecognized_attribute_number(std::size_t attrno)

@@ -13,12 +13,12 @@ class text_configuration_printer : public stream_printer
 {
 public:
   text_configuration_printer();
-  text_configuration_printer(std::ostream *ostream, std::string delimiter = ", ");
+  text_configuration_printer(std::ostream *ostream,
+                             std::string delimiter = ", ");
   text_configuration_printer(std::ostream *ostream, property_tree const &pt);
 
-
   void write_header(attribute_description const &desc) override;
-  //void write_data(dataframe const &conf) override;
+  // void write_data(dataframe const &conf) override;
   void write_entry(attribute_list const &entry) override;
   void write_footer() override;
 

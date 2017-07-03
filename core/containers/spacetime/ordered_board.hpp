@@ -13,8 +13,8 @@ ordered_board<Traits>::ordered_board(size_type nbuckets, key_equal_pred equal,
     : m_tile_list(),
       m_buckets(new bucket_type[nbuckets]),
       m_heap_root(nullptr),
-      m_tile_set(bucket_traits(m_buckets.get(), nbuckets),
-                 node_hash_pred(hash), node_equal_pred(equal)),
+      m_tile_set(bucket_traits(m_buckets.get(), nbuckets), node_hash_pred(hash),
+                 node_equal_pred(equal)),
       m_key_equal_pred(equal),
       m_key_hash_pred(hash),
       m_data_order_pred(order),
@@ -28,7 +28,7 @@ template <class Traits> ordered_board<Traits>::~ordered_board() { clear(); }
 template <class Traits>
 void ordered_board<Traits>::ordered_board::rehash(size_type new_size)
 {
-  std::unique_ptr<bucket_type[]> new_buckets( new bucket_type[new_size]);
+  std::unique_ptr<bucket_type[]> new_buckets(new bucket_type[new_size]);
   m_tile_set.rehash(bucket_traits(new_buckets.get(), new_size));
   m_buckets.swap(new_buckets);
 }
@@ -74,7 +74,7 @@ ordered_board<Traits>::emplace_dirty(Args &&... args)
 
   pairing_heap_algo::init(rptr);
   m_heap_root = pairing_heap_algo::merge(m_heap_root, rptr, m_order_pred);
-  m_auto_rehash(this->m_tile_set,m_buckets);
+  m_auto_rehash(this->m_tile_set, m_buckets);
   m_tile_list.push_back(*rptr);
   return dirty_handle_type(rptr);
 }

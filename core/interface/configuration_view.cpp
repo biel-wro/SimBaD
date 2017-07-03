@@ -3,7 +3,6 @@
 #include <boost/optional.hpp>
 BEGIN_NAMESPACE_CORE
 
-
 std::size_t configuration_view::position_attr_idx() const
 {
   boost::optional<attribute_descriptor const &> desc_opt =

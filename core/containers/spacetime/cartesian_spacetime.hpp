@@ -1,8 +1,8 @@
 #ifndef CARTESIAN_SPACETIME_HPP
 #define CARTESIAN_SPACETIME_HPP
 #include "cartesian_spacetime_decl.hpp"
-#include "coordinates/coord_generators.hpp"
 #include "containers/spacetime/spacetime.hpp"
+#include "coordinates/coord_generators.hpp"
 BEGIN_NAMESPACE_CORE
 
 template <class Traits>

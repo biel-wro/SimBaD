@@ -2,9 +2,9 @@
 #define CARTESIAN_SPACETIME_DECL_HPP
 #include "core_def.hpp"
 
+#include "containers/spacetime/spacetime_decl.hpp"
 #include "coordinates/coordinates.hpp"
 #include "coordinates/scale_coord_tiler.hpp"
-#include "containers/spacetime/spacetime_decl.hpp"
 
 BEGIN_NAMESPACE_CORE
 

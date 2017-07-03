@@ -9,41 +9,34 @@ namespace core
 {
 namespace fixed
 {
-
-template <int bits, bool signed_ = true>
-struct int_base
+template <int bits, bool signed_ = true> struct int_base
 {
-    static_assert(true, "base of gived size is not available");
+  static_assert(true, "base of gived size is not available");
 };
 
-template <>
-struct int_base<32, true>
+template <> struct int_base<32, true>
 {
-    typedef std::int32_t type;
+  typedef std::int32_t type;
 };
 
-template <>
-struct int_base<32, false>
+template <> struct int_base<32, false>
 {
-    typedef std::uint32_t type;
+  typedef std::uint32_t type;
 };
 
-template <>
-struct int_base<64, true>
+template <> struct int_base<64, true>
 {
-    typedef std::int64_t type;
+  typedef std::int64_t type;
 };
 
-template <>
-struct int_base<64, false>
+template <> struct int_base<64, false>
 {
-    typedef std::uint64_t type;
+  typedef std::uint64_t type;
 };
 
-template <>
-struct int_base<128, true>
+template <> struct int_base<128, true>
 {
-    typedef __int128_t type;
+  typedef __int128_t type;
 };
 }
 }

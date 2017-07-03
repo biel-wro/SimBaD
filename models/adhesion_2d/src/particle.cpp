@@ -48,7 +48,8 @@ core::attribute new_particle_view::get_attribute(std::size_t idx) const
 {
   assert(0 == idx);
   return simbad::core::attribute_converter::convert_to<
-      simbad::core::coordinates<double, 2>>(m_base_p.position()).get();
+             simbad::core::coordinates<double, 2>>(m_base_p.position())
+      .get();
 }
 
 /*

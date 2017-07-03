@@ -11,10 +11,7 @@
 using namespace boost;
 using namespace simbad::core;
 
-void serialize(attribute const &attr){
-
-}
-
+void serialize(attribute const &attr) {}
 
 BOOST_AUTO_TEST_SUITE(test_attribute_serialization)
 

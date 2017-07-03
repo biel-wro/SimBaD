@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(single_emplacement)
   BOOST_REQUIRE(!st.empty());
 
   st.pop();
-  BOOST_REQUIRE_EQUAL(st.size(), 0 );
+  BOOST_REQUIRE_EQUAL(st.size(), 0);
   BOOST_REQUIRE(st.empty());
 }
 BOOST_AUTO_TEST_SUITE_END()

@@ -11,12 +11,9 @@ BOOST_AUTO_TEST_CASE(load_from_property_tree)
   pt.put("c.2", 4);
   pt.put("d", "5");
 
-(void) pt;
-  //generic_particle gp(pt, descriptors);
-  //attribute const &attr = gp.find_attribute(0);
-
-
-
+  (void)pt;
+  // generic_particle gp(pt, descriptors);
+  // attribute const &attr = gp.find_attribute(0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

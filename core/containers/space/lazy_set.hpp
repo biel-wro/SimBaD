@@ -9,9 +9,7 @@ namespace simbad
 {
 namespace core
 {
-
-template <class T, size_t chunk_size = DEFAULT_CHUNK_SIZE>
-class LazySet
+template <class T, size_t chunk_size = DEFAULT_CHUNK_SIZE> class LazySet
 {
 public:
   /*
@@ -58,8 +56,7 @@ public:
   /*
    * Modifiers
    */
-  template <class... Args>
-  iterator emplace_back(Args &&... args)
+  template <class... Args> iterator emplace_back(Args &&... args)
   {
     return m_impl.emplace_back(std::forward<Args>(args)...);
   }
@@ -72,10 +69,7 @@ public:
     pop_back();
   }
 
-  void clear()
-  {
-    m_impl.clear();
-  }
+  void clear() { m_impl.clear(); }
 
   /*
    * Status
@@ -87,8 +81,7 @@ public:
    * Visitors
    */
 
-  template <class Visitor>
-  void visit(Visitor v = Visitor())
+  template <class Visitor> void visit(Visitor v = Visitor())
   {
     m_impl.visit(v);
   }

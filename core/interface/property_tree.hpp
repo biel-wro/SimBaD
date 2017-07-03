@@ -30,16 +30,14 @@ public:
   }
   std::size_t total_size(bool ignore_empty = true) const;
 
-  template <typename T>
-  std::vector<T> get_vector(std::string const &key) const
+  template <typename T> std::vector<T> get_vector(std::string const &key) const
   {
     std::vector<T> r;
-    for(std::pair<std::string,super> const &item : get_child(key))
+    for(std::pair<std::string, super> const &item : get_child(key))
       r.push_back(item.second.get_value<T>());
     return r;
   }
   ~property_tree();
-
 };
 END_NAMESPACE_CORE
 

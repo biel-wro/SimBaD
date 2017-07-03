@@ -65,6 +65,7 @@ public:
   }
   operator bool() const { return !is_end(); }
   bool is_end() const { return m_end; }
+
 private:
   friend class boost::iterator_core_access;
 

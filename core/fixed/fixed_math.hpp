@@ -3,23 +3,20 @@
 
 #include "fixed.h"
 
-namespace core{
-namespace fixed{
+namespace core
+{
+namespace fixed
+{
+template <int Bits, int Offset> Fixed<Bits, Offset> exp(Fixed<Bits, Offset> x)
+{
+  typedef Fixed<Bits, Offset> fixed;
 
-template<int Bits, int Offset>
-Fixed<Bits,Offset> exp(Fixed<Bits,Offset> x ){
-    typedef Fixed<Bits,Offset> fixed;
+  for(size_t b = Offset; b < Offset + Bits; b++)
+  {
+  }
 
-    for( size_t b=Offset; b<Offset+Bits; b++ )
-    {
-
-    }
-
-    throw "not implemented yet";
-
+  throw "not implemented yet";
 }
-
-
 }
 }
 

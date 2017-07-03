@@ -1,18 +1,6 @@
 #include "attribute_descriptor.hpp"
-#include <tic.h>
+
 BEGIN_NAMESPACE_CORE
-/*
-attribute_descriptor::attribute_descriptor(std::size_t attr_id,
-                                           std::string name,
-                                           ATTRIBUTE_KIND kind,
-                                           std::size_t attribute_dimension)
-    : m_attribute_id(attr_id),
-      m_attribute_name(std::move(name)),
-      m_kind(kind),
-      m_scalar(ATTRIBUTE_SCALAR::UNDEFINED),
-      m_attribue_dimension(attribute_dimension)
-{
-}*/
 
 attribute_descriptor::attribute_descriptor(std::size_t attr_id,
                                            std::string name,

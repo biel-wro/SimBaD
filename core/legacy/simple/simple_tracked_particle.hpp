@@ -14,7 +14,6 @@
 
 #include "simple_event_queue.hpp"
 
-
 BEGIN_NAMESPACE_CORE
 // TODO should be derived from simple_particle
 template <size_t DIM, class coord_type>
@@ -56,16 +55,11 @@ public:
   std::size_t dimension() const { return DIM; }
 
   coord_type coordinate(std::size_t cdim) const { return coords[cdim]; }
-  template <size_t cdim>
-  void set_coordinate(coord_type c)
+  template <size_t cdim> void set_coordinate(coord_type c) { coords[cdim] = c; }
+  template <size_t cdim> coord_type get_coordinate() const
   {
-    coords[cdim] = c;
-  }
-  template <size_t cdim>
-  coord_type get_coordinate() const
-  {
-//    if (cdim >= DIM)
-//      return coord_type(0);
+    //    if (cdim >= DIM)
+    //      return coord_type(0);
 
     return coords[cdim];
   }

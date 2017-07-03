@@ -8,12 +8,10 @@ namespace simbad
 {
 namespace core
 {
-
-template <class Listener, class Derived>
-class trackee
+template <class Listener, class Derived> class trackee
 {
 public:
-  explicit trackee(Listener c=Listener()) : m_listener(std::move(c))
+  explicit trackee(Listener c = Listener()) : m_listener(std::move(c))
   {
     m_listener.notify_constructed(raw_ptr());
   }
@@ -30,7 +28,7 @@ public:
 
   trackee &operator=(trackee const &o)
   {
-    if (&o != this)
+    if(&o != this)
     {
       m_listener = o.m_listener;
       m_listener.notify_copy_assigned(raw_ptr());
@@ -40,7 +38,7 @@ public:
 
   trackee &operator=(trackee &&o)
   {
-    if (&o != this)
+    if(&o != this)
     {
       std::swap(m_listener, o.m_listener);
       m_listener.notify_move_assigned(raw_ptr());

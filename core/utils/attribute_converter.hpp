@@ -305,7 +305,6 @@ template <class Target> struct convert_visitor
     return attribute_converter::convert_to<Target, Source>(val);
   }
 };
-
 }
 
 template <class Target> Target attribute_cast(attribute const &attr)

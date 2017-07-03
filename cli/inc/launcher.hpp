@@ -39,7 +39,6 @@ protected:
 
 private:
   std::unique_ptr<simbad::core::model> m_model_ptr;
-
 };
 
 END_NAMESPACE_CLI

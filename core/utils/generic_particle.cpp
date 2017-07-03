@@ -8,8 +8,7 @@
 BEGIN_NAMESPACE_CORE
 
 generic_particle::generic_particle() {}
-void generic_particle::visit_view(
-    configuration_view::particle_visitor v) const
+void generic_particle::visit_view(configuration_view::particle_visitor v) const
 {
   struct : attribute_list
   {

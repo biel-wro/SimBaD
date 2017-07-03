@@ -9,6 +9,7 @@ struct Base1
   std::vector<int> vec;
   char member_data[3];
   virtual ~Base1() {}
+
 protected:
   char member_data2[7];
 };
@@ -20,6 +21,7 @@ struct Base2 : public virtual Base1
   Base1 m2;
   char base_data2[5];
   virtual ~Base2() {}
+
 protected:
   char base_data3[1];
 };
@@ -31,6 +33,7 @@ struct Base3 : public virtual Base1
   Base1 m2;
   char base_data2[5];
   virtual ~Base3() {}
+
 protected:
   char base_data3[1];
 };
@@ -42,6 +45,7 @@ struct Parent : public Base2, public Base3
   bool bits;
   Base2 member2;
   virtual ~Parent() {}
+
 protected:
   char pdata2[2];
 };

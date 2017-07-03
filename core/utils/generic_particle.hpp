@@ -23,7 +23,7 @@ public:
 
   void visit_view(configuration_view::particle_visitor v
                   //,std::size_t id_attr_idx = NOT_STORED,
-                  //std::size_t coord_attr_idx = NOT_STORED
+                  // std::size_t coord_attr_idx = NOT_STORED
                   ) const;
 
   void clear_attributes();

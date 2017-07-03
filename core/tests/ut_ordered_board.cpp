@@ -3,9 +3,9 @@
 #include <boost/intrusive/unordered_set_hook.hpp>
 #include <boost/test/auto_unit_test.hpp>
 
-#include "coordinates/coordinates.hpp"
 #include "containers/spacetime/ordered_board.hpp"
 #include "containers/spacetime/queued_set.hpp"
+#include "coordinates/coordinates.hpp"
 #include "utils/auto_rehash.hpp"
 
 using namespace simbad::core;
@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(empty_board)
 BOOST_AUTO_TEST_CASE(single_empty_tile)
 {
   OrderedBoard board;
-  board.emplace(BoardCoords{0,0});
+  board.emplace(BoardCoords{0, 0});
 
   BOOST_REQUIRE(!board.empty());
   BOOST_REQUIRE_EQUAL(board.size(), 1);
@@ -80,7 +80,6 @@ BOOST_AUTO_TEST_CASE(one_nonempty_tile)
 
 BOOST_AUTO_TEST_CASE(two_nonempty_tiles)
 {
-
   BoardCoords coords1 = {1, 2};
   OrderedHashSet tile1;
   tile1.emplace(ParticleOrder(), Particle(1.5, 2.5, 20));

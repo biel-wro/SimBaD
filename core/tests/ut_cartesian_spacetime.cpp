@@ -3,10 +3,9 @@
 #include <boost/intrusive/unordered_set_hook.hpp>
 #include <boost/test/auto_unit_test.hpp>
 
-
+#include "containers/spacetime/cartesian_spacetime.hpp"
 #include "coordinates/coordinates.hpp"
 #include "coordinates/scale_coord_tiler.hpp"
-#include "containers/spacetime/cartesian_spacetime.hpp"
 
 using namespace simbad::core;
 namespace
@@ -78,15 +77,13 @@ BOOST_AUTO_TEST_CASE(visit_ball)
   coords origin{0, 0, 0};
 
   nvisited = 0;
-  cs.visit_ball(origin, 17.3, [origin, &nvisited](Particle const &p) {
-    nvisited++;
-  });
+  cs.visit_ball(origin, 17.3,
+                [origin, &nvisited](Particle const &p) { nvisited++; });
   BOOST_REQUIRE_EQUAL(nvisited, 0);
 
   nvisited = 0;
-  cs.visit_ball(origin, 17.4, [origin, &nvisited](Particle const &p) {
-    nvisited++;
-  });
+  cs.visit_ball(origin, 17.4,
+                [origin, &nvisited](Particle const &p) { nvisited++; });
   BOOST_REQUIRE_EQUAL(nvisited, 1);
 }
 BOOST_AUTO_TEST_SUITE_END()

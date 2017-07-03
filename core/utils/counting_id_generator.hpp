@@ -7,7 +7,7 @@ BEGIN_NAMESPACE_CORE
 class counting_id_generator
 {
 public:
-  counting_id_generator(std::size_t prev_id=0);
+  counting_id_generator(std::size_t prev_id = 0);
   std::size_t operator()();
 
 private:

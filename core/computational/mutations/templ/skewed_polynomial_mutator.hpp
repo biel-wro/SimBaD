@@ -14,7 +14,8 @@ public:
   static constexpr real_type max_value() { return 1; }
   static constexpr real_type min_value() { return 0; }
   skewed_polynomial_mutator(real_type improvement_prob,
-                            real_type improvement_power, real_type deterioration_power)
+                            real_type improvement_power,
+                            real_type deterioration_power)
       : m_impr_prob(improvement_prob),
         m_improvement_exponent(improvement_power),
         m_deterioraiton_exponent(deterioration_power)

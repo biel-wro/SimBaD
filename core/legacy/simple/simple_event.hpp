@@ -1,8 +1,6 @@
 #ifndef SIMPLE_EVENT_HPP
 #define SIMPLE_EVENT_HPP
 
-
-
 #include "interface/event_kind.hpp"
 
 #include "coordinates/coordinates.hpp"
@@ -12,8 +10,7 @@ namespace simbad
 {
 namespace core
 {
-template <class Time, class Coord, std::size_t DIM>
-class simple_event
+template <class Time, class Coord, std::size_t DIM> class simple_event
 {
 public:
   using time_type = Time;
@@ -40,7 +37,7 @@ public:
 
   coord_type coordinate(size_t cdim) const
   {
-    if (cdim >= DIM)
+    if(cdim >= DIM)
       return coord_type(0);
     return coords[cdim];
   }
@@ -59,9 +56,9 @@ operator<<(std::ostream &o,
 {
   o << "t=" << e.time();
 
-  if (e.dimension() > 0)
+  if(e.dimension() > 0)
     o << " (" << e.coordinate(0);
-  for (std::size_t i = 1; i < e.dimension(); ++i)
+  for(std::size_t i = 1; i < e.dimension(); ++i)
     o << e.coordinate(i) << ",";
 
   o << ") " << e.event_kind();

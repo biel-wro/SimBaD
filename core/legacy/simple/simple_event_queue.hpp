@@ -1,9 +1,9 @@
 #ifndef SIMPLE_EVENT_QUEUE_HPP
 #define SIMPLE_EVENT_QUEUE_HPP
 
-#include <functional>
 #include "core_def.hpp"
 #include "simple_event_schedule.hpp"
+#include <functional>
 
 //#include <boost/heap/fibonacci_heap.hpp>
 #include <boost/heap/pairing_heap.hpp>

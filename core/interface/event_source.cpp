@@ -12,7 +12,5 @@ void event_source::run(std::size_t sz)
   generate_events([](auto const &) {}, sz);
 }
 
-
-
 event_source::~event_source() {}
 END_NAMESPACE_CORE

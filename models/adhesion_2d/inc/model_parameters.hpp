@@ -27,7 +27,7 @@ struct model_parameters
   double brownian_displacement(std::mt19937_64 &rng, double t) const;
   double viscosity() const;
   double viscosus_speed(double dt, double old_speed) const;
-  double acceleration_with_friction(double f)const;
+  double acceleration_with_friction(double f) const;
   double min_time_step() const;
   double max_time_step() const;
 
@@ -43,7 +43,6 @@ private:
   double m_potential_depth;
   double m_potential_ground_pos;
   double m_potential_cutoff;
-
 };
 END_NAMESPACE_ADHESION_2D
 #endif // PARAMETERS_HPP

@@ -6,8 +6,7 @@
 #include "board_impl.hpp"
 
 BEGIN_NAMESPACE_CORE
-template <class T, class config>
-class space_impl
+template <class T, class config> class space_impl
 {
 public:
   using board_impl_type = board_impl<T, config>;
@@ -21,8 +20,7 @@ public:
    * constructors
    */
 
-  explicit space_impl(coord_tiler tiler = coord_tiler())
-      : m_coord_tiler(tiler)
+  explicit space_impl(coord_tiler tiler = coord_tiler()) : m_coord_tiler(tiler)
   {
   }
 
@@ -52,14 +50,12 @@ public:
   /*
    * visitors
    */
-  template <class Visitor>
-  void visit(Visitor v = Visitor())
+  template <class Visitor> void visit(Visitor v = Visitor())
   {
     m_board.visit(v);
   }
 
-  template <class Visitor>
-  void visit(Visitor v = Visitor()) const
+  template <class Visitor> void visit(Visitor v = Visitor()) const
   {
     m_board.visit(v);
   }

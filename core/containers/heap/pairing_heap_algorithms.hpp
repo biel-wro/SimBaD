@@ -170,7 +170,7 @@ template <class NodeTraits> struct pairing_heap_algorithms
     if(root == node)
       return pop(root, cmp);
 
-    remove_non_root(node,cmp);
+    remove_non_root(node, cmp);
     return root;
   }
 

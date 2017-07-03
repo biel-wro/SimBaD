@@ -1,13 +1,11 @@
-#define BEGIN_NAMESPACE_ADHESION_2D                                 \
+#define BEGIN_NAMESPACE_ADHESION_2D                                            \
   namespace simbad                                                             \
   {                                                                            \
   namespace models                                                             \
   {                                                                            \
-  namespace adhesion_2d                                             \
+  namespace adhesion_2d                                                        \
   {
-
-
-#define END_NAMESPACE_ADHESION_2D                                   \
+#define END_NAMESPACE_ADHESION_2D                                              \
   }                                                                            \
   }                                                                            \
   }

@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(set_default_attributes)
   attrs.put("abc", 123);
 
   default_attributed_configuration conf(initial_configuration, attrs);
-  //printer.set_configuration(conf);
+  // printer.set_configuration(conf);
 }
 
 BOOST_AUTO_TEST_CASE(load_static_configuration)

@@ -5,8 +5,6 @@
 #include "interface/model_factory.hpp"
 #include "interface/model_register.hpp"
 
-
-
 #define SIMBAD_MAKE_MODEL_NAMESPACE(model_name) model_name
 
 #define SIMBAD_MAKE_FACTORY_TYPENAME(model_name) model_name##_factory
@@ -35,16 +33,14 @@ namespace simbad
 {
 namespace models
 {
-
 BOOST_PP_REPEAT(SIMBAD_NMODELS, SIMBAD_MAKE_FACTORY_GETTER_DECLARATION, _)
 
 namespace common
 {
-
 const model_register &get_builtin_models()
 {
   static std::unique_ptr<model_register> p_reg(nullptr);
-  if (!p_reg)
+  if(!p_reg)
   {
     p_reg.reset(new model_register);
     model_register &reg = *p_reg;

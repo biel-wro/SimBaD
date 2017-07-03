@@ -8,9 +8,7 @@ namespace simbad
 {
 namespace core
 {
-
-template <class coord, int dim, int chunk_sz_>
-struct board_config
+template <class coord, int dim, int chunk_sz_> struct board_config
 {
   using board_coord_scalar = coord;
 
@@ -21,8 +19,7 @@ struct board_config
   static constexpr unsigned chunk_size = chunk_sz_;
 };
 
-template <class T, int dim, class coord = long, int chunk_sz = 1000>
-class board
+template <class T, int dim, class coord = long, int chunk_sz = 1000> class board
 {
 public:
   typedef board_config<coord, dim, chunk_sz> config;
@@ -85,8 +82,7 @@ public:
 
   size_type size() const { return m_impl.size(); }
 
-  template <class Visitor>
-  void visit(Visitor v = Visitor())
+  template <class Visitor> void visit(Visitor v = Visitor())
   {
     m_impl.visit(v);
   }

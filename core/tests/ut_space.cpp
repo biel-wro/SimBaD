@@ -1,6 +1,6 @@
-#include "coordinates/scale_coord_tiler.hpp"
 #include "containers/space/space.hpp"
 #include "containers/space/space_impl.hpp"
+#include "coordinates/scale_coord_tiler.hpp"
 
 #include <boost/test/auto_unit_test.hpp>
 
@@ -30,7 +30,6 @@ using my_space_impl = space_impl<std::string, my_config>;
 
 BOOST_AUTO_TEST_CASE(space_instantiation)
 {
-
   my_space_impl si;
   //    space_impl si;
   //    space s;

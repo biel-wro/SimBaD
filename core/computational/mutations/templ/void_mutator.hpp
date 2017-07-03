@@ -8,7 +8,8 @@ template <class RealType> class void_mutator
 
 public:
   void_mutator(property_tree const &) {}
-  template <class RNG> real_type operator()(real_type v, RNG &) const {
+  template <class RNG> real_type operator()(real_type v, RNG &) const
+  {
     return v;
   }
 };

@@ -5,11 +5,12 @@
 
 #include "dataframe.hpp"
 BEGIN_NAMESPACE_CORE
-class finite_dataframe : public dataframe{
+class finite_dataframe : public dataframe
+{
 public:
   virtual std::size_t size() const = 0;
   ~finite_dataframe() override;
 };
 END_NAMESPACE_CORE
 
-#endif //SIMBAD_FINITE_DATAFRAME_HPP
+#endif // SIMBAD_FINITE_DATAFRAME_HPP

@@ -17,7 +17,6 @@ using int_coords = int_board::coordinates_type;
 
 BOOST_AUTO_TEST_CASE(board_init)
 {
-
   int_board ib;
   string_board sb;
 
@@ -32,7 +31,7 @@ BOOST_AUTO_TEST_CASE(board_emplace_and_sweep)
   const unsigned TEST_SIZE = 1024;
 
   std::srand(0);
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     int x = std::rand() % 10;
     int y = std::rand() % 10;
@@ -49,7 +48,7 @@ BOOST_AUTO_TEST_CASE(board_emplace_and_sweep)
   int_board const &cib(ib);
 
   auto it = cib.begin();
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     unsigned idx = *it;
     BOOST_REQUIRE(!visited[idx]);
@@ -57,7 +56,7 @@ BOOST_AUTO_TEST_CASE(board_emplace_and_sweep)
     ++it;
   }
 
-  for (bool b : visited)
+  for(bool b : visited)
     BOOST_REQUIRE(b);
 }
 
@@ -68,7 +67,7 @@ BOOST_AUTO_TEST_CASE(board_remove)
 
   int_board ib;
 
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     std::srand(i);
     int x = std::rand() % AREA;
@@ -81,7 +80,7 @@ BOOST_AUTO_TEST_CASE(board_remove)
   std::vector<bool> visited;
   visited.assign(TEST_SIZE, false);
 
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     int &v = *ib.begin();
     BOOST_REQUIRE(!visited[v]);
@@ -99,7 +98,7 @@ BOOST_AUTO_TEST_CASE(board_remove)
     ib.remove(c, v);
   }
 
-  for (bool b : visited)
+  for(bool b : visited)
     BOOST_REQUIRE(b);
 }
 
@@ -115,13 +114,13 @@ BOOST_AUTO_TEST_CASE(board_box_iteration)
   std::vector<bool> within_box(TEST_SIZE, false);
   std::vector<bool> visited(TEST_SIZE, false);
 
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     std::srand(i);
     int x = std::rand() % AREA;
     int y = std::rand() % AREA;
 
-    if (min[0] <= x && x <= max[0] && min[1] <= y && y <= max[1])
+    if(min[0] <= x && x <= max[0] && min[1] <= y && y <= max[1])
       within_box[i] = true;
 
     int_coords c = {x, y};
@@ -129,14 +128,14 @@ BOOST_AUTO_TEST_CASE(board_box_iteration)
     ib.emplace(c, i);
   }
 
-  for (int idx : ib.get_box(min, max))
+  for(int idx : ib.get_box(min, max))
   {
     BOOST_REQUIRE(!visited[idx]);
     BOOST_REQUIRE(within_box[idx]);
     visited[idx] = true;
   }
 
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
     BOOST_REQUIRE(visited[i] == within_box[i]);
 }
 
@@ -151,13 +150,13 @@ BOOST_AUTO_TEST_CASE(board_box_visitation)
   std::vector<int_coords> assigned_tile(TEST_SIZE);
   std::vector<bool> within_box(TEST_SIZE, false);
 
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     std::srand(i);
     int x = std::rand() % AREA;
     int y = std::rand() % AREA;
 
-    if (min[0] <= x && x <= max[0] && min[1] <= y && y <= max[1])
+    if(min[0] <= x && x <= max[0] && min[1] <= y && y <= max[1])
       within_box[i] = true;
 
     int_coords c = {x, y};
@@ -184,6 +183,6 @@ BOOST_AUTO_TEST_CASE(board_box_visitation)
     visited[v] = true;
   });
 
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
     BOOST_REQUIRE(visited[i] == within_box[i]);
 }

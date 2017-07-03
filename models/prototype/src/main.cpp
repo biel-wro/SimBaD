@@ -16,14 +16,17 @@ using EventQueue = simbad::core::simple_event_queue;
 using ConstNeighbourhood = Board::const_box_region;
 using Neighbourhood = Board::box_region;
 
-struct TileMapper {
+struct TileMapper
+{
   TileMapper(float tile_size = 1.0f) : tile_size(tile_size) {}
 
-  BoardCoordinates operator()(Point const &p) const {
+  BoardCoordinates operator()(Point const &p) const
+  {
     return operator()(p.get_coordinate<0>(), p.get_coordinate<1>());
   }
 
-  BoardCoordinates operator()(double x, double y) const {
+  BoardCoordinates operator()(double x, double y) const
+  {
     BoardCoordinates bc;
     float bcx = std::floor(x / tile_size);
     float bcy = std::floor(y / tile_size);
@@ -36,10 +39,12 @@ struct TileMapper {
 
   float tile_size;
 };
-struct DeathRateAccumulator {
+struct DeathRateAccumulator
+{
   DeathRateAccumulator() : acc(0.0) {}
 
-  void accumulate(Point const &p, Point const &other) {
+  void accumulate(Point const &p, Point const &other)
+  {
     (void)p;
     (void)other;
   }
@@ -50,12 +55,14 @@ struct DeathRateAccumulator {
   double acc;
 };
 
-struct BirthRateAccumulator {
+struct BirthRateAccumulator
+{
   BirthRateAccumulator() : range(1.0), cnt(100) {}
-  void accumulate(Point const &p, Point const &other) {
+  void accumulate(Point const &p, Point const &other)
+  {
     double dx = p.get_coordinate<0>() - other.get_coordinate<0>();
     double dy = p.get_coordinate<1>() - other.get_coordinate<1>();
-    if (std::hypot(dx, dy) < get_range())
+    if(std::hypot(dx, dy) < get_range())
       cnt++;
   }
 
@@ -66,7 +73,8 @@ struct BirthRateAccumulator {
   int32_t cnt;
 };
 
-Board initial_configuration() {
+Board initial_configuration()
+{
   Board b;
   Point p;
   p.set_coordinate<0>(0.0f);
@@ -76,7 +84,8 @@ Board initial_configuration() {
   return b;
 }
 
-Event compute_event(std::mt19937_64 &rnd, Point const &p, Board const &b) {
+Event compute_event(std::mt19937_64 &rnd, Point const &p, Board const &b)
+{
   DeathRateAccumulator death_acc;
   double death_intrange = death_acc.get_range();
 
@@ -92,7 +101,8 @@ Event compute_event(std::mt19937_64 &rnd, Point const &p, Board const &b) {
 
   ConstNeighbourhood neighbourhood = b.get_box(min_coords, max_coords);
 
-  for (Point const &other : neighbourhood) {
+  for(Point const &other : neighbourhood)
+  {
     death_acc.accumulate(p, other);
     birth_acc.accumulate(p, other);
   }
@@ -109,10 +119,12 @@ Event compute_event(std::mt19937_64 &rnd, Point const &p, Board const &b) {
 
   return event;
 }
-EventQueue initial_event_queue(std::mt19937_64 &rnd, Board &board) {
+EventQueue initial_event_queue(std::mt19937_64 &rnd, Board &board)
+{
   EventQueue eq;
 
-  for (Point &p : board) {
+  for(Point &p : board)
+  {
     Event e = compute_event(rnd, p, board);
     e.set_particle_ptr(&p);
     EventHandle h = eq.emplace(std::move(e));
@@ -124,13 +136,15 @@ EventQueue initial_event_queue(std::mt19937_64 &rnd, Board &board) {
 
 void update_neighbourhood_events(std::mt19937_64 &rnd, EventQueue &eq,
                                  double cx, double cy, double r,
-                                 Board const &board, double time_offset) {
+                                 Board const &board, double time_offset)
+{
   BoardCoordinates min_coords = TileMapper()(cx - r, cy - r);
   BoardCoordinates max_coords = TileMapper()(cx + r, cy + r);
 
   ConstNeighbourhood neighbourhood = board.get_box(min_coords, max_coords);
 
-  for (Point const &point : neighbourhood) {
+  for(Point const &point : neighbourhood)
+  {
     Event event = compute_event(rnd, point, board);
     event.set_time(event.get_time() + time_offset);
     EventHandle h = point.get_handle();
@@ -139,14 +153,16 @@ void update_neighbourhood_events(std::mt19937_64 &rnd, EventQueue &eq,
   }
 }
 
-void execute_death(Board &board, EventQueue &eq) {
+void execute_death(Board &board, EventQueue &eq)
+{
   Point const &point = *static_cast<Point const *>(eq.top().get_particle_ptr());
   BoardCoordinates bc = TileMapper()(point);
   board.remove(bc, const_cast<Point &>(point));
   eq.pop();
 }
 
-Point &execute_birth(std::mt19937_64 &rnd, Board &board, EventQueue &eq) {
+Point &execute_birth(std::mt19937_64 &rnd, Board &board, EventQueue &eq)
+{
   Point const &point = *static_cast<Point const *>(eq.top().get_particle_ptr());
   double parent_x = point.get_coordinate<0>();
   double parent_y = point.get_coordinate<1>();
@@ -165,16 +181,18 @@ Point &execute_birth(std::mt19937_64 &rnd, Board &board, EventQueue &eq) {
 }
 
 void execute_event(double &t, std::mt19937_64 &rnd, Board &board,
-                   EventQueue &eq) {
+                   EventQueue &eq)
+{
   Point const &point = *static_cast<Point const *>(eq.top().get_particle_ptr());
   double cx = point.get_coordinate<0>();
   double cy = point.get_coordinate<1>();
   double r = 1;
   t = eq.top().get_time();
 
-  if (eq.top().get_event_type() == 0)
+  if(eq.top().get_event_type() == 0)
     execute_death(board, eq);
-  else {
+  else
+  {
     Point &offspring = execute_birth(rnd, board, eq);
     update_neighbourhood_events(rnd, eq, offspring.get_coordinate<0>(),
                                 offspring.get_coordinate<1>(), 1, board, t);
@@ -183,7 +201,8 @@ void execute_event(double &t, std::mt19937_64 &rnd, Board &board,
   update_neighbourhood_events(rnd, eq, cx, cy, r, board, t);
 }
 
-int main() {
+int main()
+{
   size_t niters = 1;
 
   std::mt19937_64 random_engine;
@@ -191,11 +210,13 @@ int main() {
   EventQueue eq = initial_event_queue(random_engine, board);
 
   double time = 0.0;
-  for (size_t iter = 0; iter < niters; ++iter) {
+  for(size_t iter = 0; iter < niters; ++iter)
+  {
     execute_event(time, random_engine, board, eq);
   }
 
-  for (Point const &p : board) {
+  for(Point const &p : board)
+  {
     std::cout << p.get_coordinate<0>() << " " << p.get_coordinate<1>()
               << std::endl;
   }

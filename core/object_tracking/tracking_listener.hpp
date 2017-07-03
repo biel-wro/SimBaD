@@ -40,6 +40,7 @@ public:
   void set_callback(Callback c) { m_callback = std::move(c); }
   Callback &get_callback() { return m_callback; }
   Callback const &get_callback() const { return m_callback; }
+
 private:
   Callback m_callback;
 };

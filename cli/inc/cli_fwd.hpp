@@ -8,5 +8,4 @@ class launcher;
 
 END_NAMESPACE_CLI
 
-
 #endif // CLI_FWD_HPP

@@ -11,8 +11,8 @@
 #include <iostream>
 #include <stdexcept>
 using namespace simbad::models::adhesion_2d;
-using simbad::core::property_tree;
 using simbad::core::EVENT_KIND;
+using simbad::core::property_tree;
 
 BEGIN_NAMESPACE_CORE
 template <>
@@ -42,6 +42,7 @@ public:
   }
   // TODO
   simbad::core::attribute get_attribute() const {}
+
 private:
   particle_view m_paricle_view;
   double m_time;

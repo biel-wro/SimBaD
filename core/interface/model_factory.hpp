@@ -25,12 +25,12 @@ public:
 class model_factory : public object_factory<model>
 {
 public:
-    using params = property_tree;
-    virtual std::size_t dimension() const =0;
-    virtual std::string model_name() const = 0;
-    std::string class_name() const override;
-    model_factory();
-    virtual ~model_factory();
+  using params = property_tree;
+  virtual std::size_t dimension() const = 0;
+  virtual std::string model_name() const = 0;
+  std::string class_name() const override;
+  model_factory();
+  virtual ~model_factory();
 };
 
 END_NAMESPACE_CORE

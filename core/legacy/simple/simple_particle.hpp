@@ -11,8 +11,7 @@
 
 BEGIN_NAMESPACE_CORE
 
-template <size_t DIM, class coord_type>
-class simple_particle
+template <size_t DIM, class coord_type> class simple_particle
 
 {
 public:
@@ -34,15 +33,10 @@ public:
   std::size_t dimension() const { return s_dimension(); }
 
   coord_type coordinate(std::size_t cdim) const { return coords[cdim]; }
-  template <size_t cdim>
-  void set_coordinate(coord_type c)
+  template <size_t cdim> void set_coordinate(coord_type c) { coords[cdim] = c; }
+  template <size_t cdim> coord_type get_coordinate() const
   {
-    coords[cdim] = c;
-  }
-  template <size_t cdim>
-  coord_type get_coordinate() const
-  {
-    if (cdim >= DIM)
+    if(cdim >= DIM)
       return coord_type(0);
 
     return coords[cdim];

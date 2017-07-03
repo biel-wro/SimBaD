@@ -36,9 +36,8 @@ void stream_printer::write_header(dataframe const &conf)
 
 void stream_printer::write_data(dataframe const &data)
 {
-  data.visit_records([&](attribute_list const &entry){
-    this->write_entry(entry);
-  });
+  data.visit_records(
+      [&](attribute_list const &entry) { this->write_entry(entry); });
 }
 
 /*
@@ -49,5 +48,3 @@ void stream_printer::read_configuration(const dataframe &conf)
   write_footer(conf);
 }*/
 END_NAMESPACE_CORE
-
-

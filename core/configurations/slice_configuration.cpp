@@ -1,7 +1,7 @@
 #include "slice_configuration.hpp"
 #include "interface/attribute.hpp"
-#include "interface/attribute_list.hpp"
 #include "interface/attribute_description.hpp"
+#include "interface/attribute_list.hpp"
 #include "interface/property_tree.hpp"
 
 BEGIN_NAMESPACE_CORE

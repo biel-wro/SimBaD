@@ -4,6 +4,6 @@
 #include "mutator.hpp"
 
 BEGIN_NAMESPACE_CORE
-    class_register<mutator> const &get_builtin_mutators();
+class_register<mutator> const &get_builtin_mutators();
 END_NAMESPACE_CORE
 #endif // BUILTIN_MUTATORS_HPP

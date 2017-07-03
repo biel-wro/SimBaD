@@ -68,6 +68,7 @@ public:
   }
   scalar_type get_gamma() const { return m_gamma; }
   scalar_type get_tolerance() const { return operator()(m_cutoff); }
+
 private:
   scalar_type m_gamma;
   scalar_type m_factor;

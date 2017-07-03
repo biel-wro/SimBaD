@@ -223,6 +223,7 @@ public:
   dirty_reference front_dirty() { return *m_subcontainer.begin(); }
   const_reference back() const { return *(--m_subcontainer.end()); }
   dirty_reference back_dirty() { return *(--m_subcontainer.end()); }
+
 protected:
   subcontainer_type m_subcontainer;
   dirty_iterator m_top_it;

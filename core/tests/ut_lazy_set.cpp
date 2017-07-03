@@ -35,14 +35,14 @@ BOOST_AUTO_TEST_CASE(fill_and_erase)
   string_set ss;
   int_set is;
 
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     BOOST_TEST_CHECKPOINT("i=" << i);
     is.emplace_back(i);
     ss.emplace_back(std::to_string(i));
   }
 
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     BOOST_TEST_CHECKPOINT("i=" << i);
 
@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE(lazy_set_visitor)
   const unsigned TEST_SIZE = 5678;
   string_set ss;
 
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
     ss.emplace_back(std::to_string(i));
 
   std::vector<bool> visited_ss(TEST_SIZE, false);
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(lazy_set_visitor)
   };
   ss.visit(string_visitor);
 
-  for (bool was_visited : visited_ss)
+  for(bool was_visited : visited_ss)
     BOOST_REQUIRE(was_visited);
 }
 
@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE(lazy_set_const_visitor)
   const unsigned TEST_SIZE = 8765;
   int_set is;
 
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
     is.emplace_back(i);
 
   std::vector<bool> visited_int(TEST_SIZE, false);
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(lazy_set_const_visitor)
   };
 
   static_cast<int_set const &>(is).visit(int_visitor);
-  for (bool was_visited : visited_int)
+  for(bool was_visited : visited_int)
     BOOST_REQUIRE(was_visited);
 }
 
@@ -103,7 +103,7 @@ BOOST_AUTO_TEST_CASE(iterator_sweep)
   string_set ss;
   int_set is;
   BOOST_TEST_CHECKPOINT("filling");
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     is.emplace_back(i);
     ss.emplace_back(std::to_string(i));
@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(iterator_sweep)
   BOOST_TEST_CHECKPOINT("forward pass");
   auto iis = is.begin();
   auto sis = ss.begin();
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     BOOST_TEST_CHECKPOINT("forward i=" << i);
     BOOST_REQUIRE_EQUAL(*iis, i);
@@ -125,7 +125,7 @@ BOOST_AUTO_TEST_CASE(iterator_sweep)
   BOOST_REQUIRE(sis == ss.end());
 
   BOOST_TEST_CHECKPOINT("backward pass");
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     BOOST_TEST_CHECKPOINT("backward i=" << i);
     --iis;
@@ -143,7 +143,7 @@ BOOST_AUTO_TEST_CASE(find)
   int_set is;
 
   BOOST_TEST_CHECKPOINT("filling");
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     is.emplace_back(i);
     ss.emplace_back(std::to_string(i));
@@ -153,7 +153,7 @@ BOOST_AUTO_TEST_CASE(find)
   auto iit = is.begin();
   auto sit = cis.begin();
 
-  for (unsigned i = 0; i < TEST_SIZE; ++i)
+  for(unsigned i = 0; i < TEST_SIZE; ++i)
   {
     auto ifit = is.find(*iit);
     BOOST_REQUIRE(ifit == iit);

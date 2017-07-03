@@ -6,7 +6,6 @@
   {                                                                            \
   namespace core                                                               \
   {
-
 #define END_NAMESPACE_CORE                                                     \
   }                                                                            \
   }

@@ -17,21 +17,15 @@ namespace simbad
 {
 namespace core
 {
-
 struct tile_disposer
 {
-  template <class tile>
-  void operator()(tile *ptr)
-  {
-    delete ptr;
-  }
+  template <class tile> void operator()(tile *ptr) { delete ptr; }
 };
 
 /*
  * Implementation of the main template class
  */
-template <class T, class config>
-class board_impl
+template <class T, class config> class board_impl
 {
 public:
   /*
@@ -90,8 +84,7 @@ public:
   /*
    * region
    */
-  template <class iter>
-  struct basic_region
+  template <class iter> struct basic_region
   {
     iter b, e;
     basic_region(iter beg, iter end) : b(beg), e(end) {}
@@ -135,7 +128,7 @@ public:
     double average_occupancy = (max_occupancy + min_occupancy) / 2;
     std::size_t optimal_size = std::size_t(average_occupancy * double(tc));
 
-    if (bc < MINIMAL_BUCKET_COUNT)
+    if(bc < MINIMAL_BUCKET_COUNT)
     {
       rehash(std::max(optimal_size, MINIMAL_BUCKET_COUNT));
       return true;
@@ -143,7 +136,7 @@ public:
 
     double occupancy = double(tc) / double(bc);
 
-    if (min_occupancy < occupancy && occupancy < max_occupancy)
+    if(min_occupancy < occupancy && occupancy < max_occupancy)
       return false;
 
     rehash(optimal_size);
@@ -151,7 +144,7 @@ public:
   }
 
   template <class... Args>
-  iterator emplace(coordinates_type const &cs, Args...args)
+  iterator emplace(coordinates_type const &cs, Args... args)
   {
     tile_iterator oit = find_tile_or_create(cs);
     inner_iterator iit = oit->emplace_back(std::forward<Args>(args)...);
@@ -178,17 +171,16 @@ public:
   /*
    * Visitors
    */
-  template <class Visitor>
-  void visit(Visitor v = Visitor())
+  template <class Visitor> void visit(Visitor v = Visitor())
   {
-    for( tile_type &tile: tile_set)
+    for(tile_type &tile : tile_set)
       tile.visit(v);
   }
 
   template <class ConstVisitor>
   void visit(ConstVisitor v = ConstVisitor()) const
   {
-    for( tile_type const &tile: tile_set)
+    for(tile_type const &tile : tile_set)
       tile.visit(v);
   }
 
@@ -199,9 +191,9 @@ public:
     do
     {
       auto it = self_ref.tile_set.find(coords);
-      if (it != self_ref.tile_set.end())
+      if(it != self_ref.tile_set.end())
         it->visit(v);
-    } while (inc.next(coords));
+    } while(inc.next(coords));
   }
 
   template <class Incrementer, class Visitor>
@@ -284,7 +276,7 @@ public:
     std::pair<tile_iterator, bool> result;
     result =
         tile_set.insert_check(cs, coord_hasher(), tile_comparator(), cdata);
-    if (result.second)
+    if(result.second)
     {
       tile_type *p_tile = new tile_type(cs);
       result.first = tile_set.insert_commit(*p_tile, cdata);

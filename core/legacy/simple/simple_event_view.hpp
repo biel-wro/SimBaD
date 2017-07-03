@@ -4,7 +4,6 @@
 #include "core_fwd.hpp"
 #include "interface/event.hpp"
 
-
 BEGIN_NAMESPACE_CORE
 /*
 template <class base_event>

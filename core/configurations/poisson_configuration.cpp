@@ -64,7 +64,7 @@ poisson_configuration::poisson_configuration(
     : m_rng(seed),
       m_radius(radius),
       m_dimension(dimension),
-      m_size(sample_poisson(lambda,m_rng)),
+      m_size(sample_poisson(lambda, m_rng)),
       m_is_ball(ball)
 {
 }

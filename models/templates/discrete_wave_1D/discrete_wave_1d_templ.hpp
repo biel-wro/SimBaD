@@ -10,7 +10,6 @@
 #include "interface/attribute.hpp"
 #include "interface/attribute_description.hpp"
 #include "interface/attribute_list.hpp"
-#include "interface/attribute_description.hpp"
 #include "interface/event.hpp"
 #include "interface/event_kind.hpp"
 #include "interface/particle.hpp"

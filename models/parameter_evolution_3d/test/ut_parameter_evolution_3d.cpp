@@ -1,8 +1,8 @@
 #include "parameter_evolution_3d.hpp"
 
 #include "configurations/cubic_crystal_configuration.hpp"
-#include "interface/property_tree.hpp"
 #include "interface/attribute_list.hpp"
+#include "interface/property_tree.hpp"
 #include "particle.hpp"
 #include "processors/csv_printer.hpp"
 #include "processors/text_configuration_printer.hpp"
@@ -126,7 +126,8 @@ BOOST_AUTO_TEST_CASE(short_run)
   //  text_configuration_printer configuration_printer(&std::cout);
   csv_printer configuration_printer(&std::cout);
 
-  //m.generate_events([](event const &e) { std::cout << e << std::endl; }, 100);
+  // m.generate_events([](event const &e) { std::cout << e << std::endl; },
+  // 100);
   m.check_accumulators();
   // configuration_printer.set_configuration(m);
   configuration_printer.write_header(m.current_configuration().descriptor());

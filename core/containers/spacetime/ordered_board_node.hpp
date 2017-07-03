@@ -119,6 +119,7 @@ public:
   data_pointer operator->() const { return &m_ptr->get_data(); }
   data_reference &operator*() const { return m_ptr->get_data(); }
   operator bool() const { return nullptr != m_ptr; }
+
 private:
   Node *m_ptr;
 };

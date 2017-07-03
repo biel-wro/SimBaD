@@ -2,8 +2,8 @@
 
 #include "configurations/cubic_crystal_configuration.hpp"
 #include "interface/model.hpp"
-#include "particle.hpp"
 #include "interface/property_tree.hpp"
+#include "particle.hpp"
 #include "processors/snapshotter.hpp"
 
 #include "core_fwd.hpp"
@@ -19,9 +19,9 @@
 // using namespace simbad::core;
 using namespace simbad::models::adhesion_2d;
 using namespace boost::property_tree;
-using simbad::core::property_tree;
-using simbad::core::model;
 using simbad::core::cubic_crystal_configuration;
+using simbad::core::model;
+using simbad::core::property_tree;
 using simbad::core::snapshotter;
 
 static property_tree make_test_model_parameters()

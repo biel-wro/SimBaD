@@ -10,6 +10,7 @@ public:
   attribute_list();
   attribute operator[](std::size_t idx) const;
   virtual ~attribute_list();
+
 protected:
   virtual attribute get_attribute(std::size_t idx) const = 0;
 };

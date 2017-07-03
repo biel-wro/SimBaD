@@ -23,8 +23,6 @@ template <class scalar_type_, std::size_t dimension_> struct coordinates;
 
 // fixed
 
-
-
 // legacy
 class event_partial;
 class simple_event_schedule;

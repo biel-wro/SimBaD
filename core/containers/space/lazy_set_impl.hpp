@@ -13,7 +13,6 @@ namespace simbad
 {
 namespace core
 {
-
 /*
  * Class that wraps chunks as nodes of list and search tree
  */
@@ -48,10 +47,10 @@ class LazySetIterator_
   using outer_iter =
       typename std::conditional<is_const, typename list_type::const_iterator,
                                 typename list_type::iterator>::type;
+
 public:
   using value_type = typename std::remove_const<D_>::type;
   using size_type = size_t;
-
 
   LazySetIterator_() : oit(), idx(0) {}
 
@@ -75,9 +74,8 @@ public:
   outer_iter get_outer() const { return oit; }
 
 protected:
-  friend class boost::iterator_core_access; // required by Boost
-  template <class, class>
-  friend class LazySetIterator_; // allows conversions
+  friend class boost::iterator_core_access;              // required by Boost
+  template <class, class> friend class LazySetIterator_; // allows conversions
 
   template <class OtherD_>
   bool equal(LazySetIterator_<OtherD_, Node> const &o) const
@@ -88,7 +86,7 @@ protected:
   void increment()
   {
     ++idx;
-    if (idx >= node_type::length())
+    if(idx >= node_type::length())
     {
       ++oit;
       idx = 0;
@@ -96,7 +94,7 @@ protected:
   }
   void decrement()
   {
-    if (idx == 0)
+    if(idx == 0)
     {
       --oit;
       idx = node_type::length() - 1;
@@ -145,17 +143,14 @@ struct LowerAddrThanEnd
  */
 struct DeleteNodeDisposer
 {
-  template <class Node>
-  void operator()(Node *delete_this)
+  template <class Node> void operator()(Node *delete_this)
   {
     delete delete_this;
   }
 };
 
-template <class SetChunk>
-class LazySet_impl
+template <class SetChunk> class LazySet_impl
 {
-
 public:
   /*
    * Types
@@ -204,16 +199,14 @@ public:
   /*
    * Modifiers
    */
-  template <class... Args>
-  iterator emplace_back(Args &&... args)
+  template <class... Args> iterator emplace_back(Args &&... args)
   {
-
     typename list_type::iterator itOuter = itEnd.get_outer();
     typename chunk_type::iterator itInner = itEnd.get_inner();
 
     itOuter->emplace_back(std::forward<Args>(args)...);
 
-    if (++(itInner) == itEnd.get_outer()->end())
+    if(++(itInner) == itEnd.get_outer()->end())
       pushChunk();
     iterator it = itEnd;
     ++itEnd;
@@ -231,21 +224,18 @@ public:
     typename list_type::iterator itNode = itEnd.get_outer();
     itNode->pop_back();
 
-    if (itNode->isEmpty())
+    if(itNode->isEmpty())
     {
       // just made one of the nodes empty
       // check if there is another one empty
       ++itNode;
-      if (itNode != list.end() && itNode->isEmpty())
+      if(itNode != list.end() && itNode->isEmpty())
         popChunk(); // and release it
     }
 
     --size_;
   }
-  void clear()
-  {
-    *this = LazySet_impl();
-  }
+  void clear() { *this = LazySet_impl(); }
 
   /*
    * Visitors
@@ -257,8 +247,7 @@ public:
     std::for_each(self_ref.begin(), self_ref.end(), v);
   }
 
-  template <class Visitor>
-  void visit(Visitor v = Visitor())
+  template <class Visitor> void visit(Visitor v = Visitor())
   {
     s_visit(*this, v);
   }
@@ -294,11 +283,11 @@ public:
   {
     typename tree_type::iterator tit;
     tit = tree.lower_bound(v, LowerAddrThanEnd());
-    if (tit == tree.end())
+    if(tit == tree.end())
       return end();
 
     typename chunk_type::iterator cit = tit->find(v);
-    if (tit->end() == cit)
+    if(tit->end() == cit)
       return end();
 
     typename list_type::iterator lit = list_type::s_iterator_to(*tit);
@@ -310,11 +299,11 @@ public:
   {
     typename tree_type::const_iterator tit;
     tit = tree.lower_bound(v, LowerAddrThanEnd());
-    if (tit == tree.end())
+    if(tit == tree.end())
       return end();
 
     typename chunk_type::const_iterator cit = tit->find(v);
-    if (tit->end() == cit)
+    if(tit->end() == cit)
       return end();
 
     typename list_type::const_iterator lit = list_type::s_iterator_to(*tit);

@@ -9,7 +9,6 @@ class json_configuration_printer : stream_printer
 {
 public:
   json_configuration_printer(std::ostream &ostream);
-
 };
 
 END_NAMESPACE_CORE

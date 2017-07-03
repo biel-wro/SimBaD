@@ -30,8 +30,7 @@ configuration_view const &stacked_view_configuration::last_layer() const
   return m_layers.empty() ? get_base() : *m_layers.back();
 }
 
-configuration_view::size_type
-stacked_view_configuration::size() const
+configuration_view::size_type stacked_view_configuration::size() const
 {
   return last_layer().size();
 }

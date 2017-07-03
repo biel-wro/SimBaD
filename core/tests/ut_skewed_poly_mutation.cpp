@@ -45,10 +45,10 @@ BOOST_AUTO_TEST_CASE(sampling2)
     double child_val = mut(parent_val, rng);
     histogram[child_val * histogram.size()]++;
   }
-/*
-  for(std::size_t i = 0; i < histogram.size(); ++i)
-    std::cout << double(i) / histogram.size() << "\t" << histogram[i]
-              << std::endl;*/
+  /*
+    for(std::size_t i = 0; i < histogram.size(); ++i)
+      std::cout << double(i) / histogram.size() << "\t" << histogram[i]
+                << std::endl;*/
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -21,7 +21,6 @@ enum class EVENT_KIND : std::uint32_t
 EVENT_KIND to_event_kind(std::uint32_t num);
 std::uint32_t to_numeric(EVENT_KIND ek);
 
-
 END_NAMESPACE_CORE
 
 std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek);

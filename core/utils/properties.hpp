@@ -12,11 +12,12 @@
 
 BEGIN_NAMESPACE_CORE
 
-class properties {
+class properties
+{
 public:
   using ptree_type = boost::property_tree::ptree;
 
-  //using ptree_type = property_tree;
+  // using ptree_type = property_tree;
   properties();
   ~properties();
 

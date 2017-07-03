@@ -26,9 +26,6 @@ enum class ATTRIBUTE_KIND : std::uint32_t
 class attribute_descriptor
 {
 public:
-  /*explicit attribute_descriptor(std::size_t attr_id, std::string name,
-                                ATTRIBUTE_KIND kind = ATTRIBUTE_KIND::INTRINSIC,
-                                std::size_t attribute_dimension = 0);*/
   explicit attribute_descriptor(
       std::size_t attr_id, std::string name,
       ATTRIBUTE_KIND kind = ATTRIBUTE_KIND::INTRINSIC,

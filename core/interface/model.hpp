@@ -12,6 +12,7 @@ class model : public event_source, public configuration_reader
 public:
   virtual configuration_view const &current_configuration() const = 0;
   ~model() override;
+
 protected:
   void generate_events(event_visitor, std::size_t) override = 0;
 };

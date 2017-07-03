@@ -392,7 +392,6 @@ struct hash<simbad::core::coordinates<Scalar, dimension>>
     return boost::hash_range(c.begin(), c.end());
   }
 };
-
 }
 
 #endif

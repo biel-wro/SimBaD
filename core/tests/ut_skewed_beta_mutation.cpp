@@ -28,12 +28,12 @@ BOOST_AUTO_TEST_CASE(sampling)
   skewed_beta_mutator<double> mut(alpha, improvement_prob);
   std::mt19937_64 rng;
 
-  //test is random, but probability of failing is low
+  // test is random, but probability of failing is low
   for(int i = 0; i < 100; ++i)
   {
     double child_val = mut(parent_val, rng);
-    BOOST_TEST_CHECKPOINT("i="<<i);
-    BOOST_REQUIRE_LE( child_val, parent_val);
+    BOOST_TEST_CHECKPOINT("i=" << i);
+    BOOST_REQUIRE_LE(child_val, parent_val);
   }
 }
 

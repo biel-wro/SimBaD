@@ -8,8 +8,9 @@
 using namespace simbad::core;
 using namespace boost::property_tree;
 
-BOOST_AUTO_TEST_CASE(simple_test) {
-  (void) 1;
+BOOST_AUTO_TEST_CASE(simple_test)
+{
+  (void)1;
   const char *argv[] = {"myprogram", "positional1", "--arg1=bla",
                         "--arg.arg2=ble", "positional 2"};
   const int argc = sizeof(argv) / sizeof(char *);

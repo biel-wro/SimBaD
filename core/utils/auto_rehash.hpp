@@ -4,7 +4,7 @@
 #include <memory>
 
 BEGIN_NAMESPACE_CORE
-template <class LoadFactorType=float> struct auto_rehash
+template <class LoadFactorType = float> struct auto_rehash
 {
   explicit auto_rehash(LoadFactorType max_load_factor = 1)
       : m_max_load_factor(max_load_factor)

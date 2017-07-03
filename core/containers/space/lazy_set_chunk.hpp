@@ -6,7 +6,6 @@
 #include "core_def.hpp"
 
 #include <algorithm>
-#include <algorithm>
 #include <array>
 #include <assert.h>
 #include <cstddef>
@@ -18,10 +17,8 @@ BEGIN_NAMESPACE_CORE
 
 constexpr size_t DEFAULT_CHUNK_SIZE = 1000;
 
-template <class D, size_t chunk_size = DEFAULT_CHUNK_SIZE>
-class LazySetChunk
+template <class D, size_t chunk_size = DEFAULT_CHUNK_SIZE> class LazySetChunk
 {
-
 public:
   /*
    * Types
@@ -49,7 +46,7 @@ public:
 
   ~LazySetChunk()
   {
-    while (occupancy() > 0)
+    while(occupancy() > 0)
     {
       pop_back();
     }
@@ -69,10 +66,9 @@ public:
    * Modifiers
    */
 
-  template <class... Args>
-  iterator emplace_back(Args &&... args)
+  template <class... Args> iterator emplace_back(Args &&... args)
   {
-    new (getPlace(occupied)) D(std::forward<Args>(args)...);
+    new(getPlace(occupied)) D(std::forward<Args>(args)...);
     iterator it = begin() + occupied;
     ++occupied;
 
@@ -88,7 +84,7 @@ public:
 
   void clear()
   {
-    for (size_t occ = occupancy(); occ > 0; --occ)
+    for(size_t occ = occupancy(); occ > 0; --occ)
       pop_back();
   }
 
@@ -104,9 +100,9 @@ public:
 
   bool containsByAddress(D const *ptr) const
   {
-    if (std::greater_equal<D const *>()(ptr, getEmulatedArray().data()) &&
-        std::less_equal<D const *>()(ptr, getEmulatedArray().data() +
-                                              this->length() - 1))
+    if(std::greater_equal<D const *>()(ptr, getEmulatedArray().data()) &&
+       std::less_equal<D const *>()(ptr, getEmulatedArray().data() +
+                                             this->length() - 1))
       return true;
     else
       return false;
@@ -119,7 +115,7 @@ public:
 
   iterator find(const_reference_type p)
   {
-    if (!containsByAddress(&p))
+    if(!containsByAddress(&p))
       return end();
     else
       return begin() + findIdx(p);
@@ -127,7 +123,7 @@ public:
 
   const_iterator find(const_reference_type p) const
   {
-    if (!containsByAddress(&p))
+    if(!containsByAddress(&p))
       return end();
     else
       return begin() + findIdx(p);
@@ -169,8 +165,7 @@ public:
     std::for_each(self_ref.begin(), self_ref.end(), v);
   }
 
-  template <typename Visitor>
-  void visit(Visitor v = Visitor())
+  template <typename Visitor> void visit(Visitor v = Visitor())
   {
     s_visit(*this, v);
   }

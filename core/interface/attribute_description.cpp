@@ -120,8 +120,7 @@ void attribute_description::add_attribute(std::size_t idx, std::string name,
 #if BOOST_VERSION >= 105500
   emplace(idx, std::move(name), kind, scalar, dimension);
 #else
-  insert(attribute_descriptor(idx, std::move(name), kind, scalar,
-                                     dimension));
+  insert(attribute_descriptor(idx, std::move(name), kind, scalar, dimension));
 #endif
 }
 
@@ -186,9 +185,8 @@ attribute_description::add_attributes(const property_tree &pt,
 
   pt.visit(
       [&](std::string const &name, std::string const &value) {
-        std::size_t idx =
-            add_attribute_auto_idx(0, name, ATTRIBUTE_KIND::INTRINSIC,
-                                   ATTRIBUTE_SCALAR ::UNKNOWN, 1);
+        std::size_t idx = add_attribute_auto_idx(
+            0, name, ATTRIBUTE_KIND::INTRINSIC, ATTRIBUTE_SCALAR ::UNKNOWN, 1);
         values.emplace(idx, value);
       },
       ignore_empty);

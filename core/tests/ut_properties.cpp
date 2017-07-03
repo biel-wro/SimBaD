@@ -99,10 +99,9 @@ BOOST_AUTO_TEST_CASE(const_visit)
   pt.put("prop3.prop5", "5.0");
 
   std::size_t cnt = 0;
-  pt.visit([&](std::string const &name, std::string const &val) {
-    ++cnt;
-  },true);
-  BOOST_REQUIRE_EQUAL(cnt,4);
+  pt.visit([&](std::string const &name, std::string const &val) { ++cnt; },
+           true);
+  BOOST_REQUIRE_EQUAL(cnt, 4);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
