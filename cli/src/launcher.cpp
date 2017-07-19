@@ -8,7 +8,7 @@
 #include "interface/model_factory.hpp"
 #include "interface/model_register.hpp"
 #include "interface/property_tree.hpp"
-#include "processors/csv_printer.hpp"
+#include "io/csv_printer.hpp"
 #include "processors/snapshotter.hpp"
 
 #include <boost/property_tree/ptree.hpp>

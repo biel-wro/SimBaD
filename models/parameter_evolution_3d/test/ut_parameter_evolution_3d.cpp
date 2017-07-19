@@ -4,8 +4,8 @@
 #include "interface/attribute_list.hpp"
 #include "interface/property_tree.hpp"
 #include "particle.hpp"
-#include "processors/csv_printer.hpp"
-#include "processors/text_configuration_printer.hpp"
+#include "io/csv_printer.hpp"
+#include "io/text_configuration_printer.hpp"
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/test/auto_unit_test.hpp>

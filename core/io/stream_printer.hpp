@@ -1,9 +1,10 @@
 #ifndef STREAM_PRINTER_HPP
 #define STREAM_PRINTER_HPP
+
 #include "core_fwd.hpp"
 #include <iosfwd>
-BEGIN_NAMESPACE_CORE
 
+BEGIN_NAMESPACE_CORE
 class stream_printer
 {
 public:

@@ -2,7 +2,7 @@
 #define JSON_CONFIGURATION_PRINTER_HPP
 
 #include "core_fwd.hpp"
-#include "processors/stream_printer.hpp"
+#include "stream_printer.hpp"
 
 BEGIN_NAMESPACE_CORE
 class json_configuration_printer : stream_printer

@@ -3,7 +3,7 @@
 #include "configurations/selected_attributes_configuration.hpp"
 #include "configurations/stacked_view_configuration.hpp"
 #include "processors/configuration_builder.hpp"
-#include "processors/text_configuration_printer.hpp"
+#include "io/text_configuration_printer.hpp"
 
 #include <boost/test/auto_unit_test.hpp>
 #include <iostream>
