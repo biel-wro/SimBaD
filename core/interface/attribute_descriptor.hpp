@@ -27,7 +27,7 @@ class attribute_descriptor
 {
 public:
   explicit attribute_descriptor(
-      std::size_t attr_id, std::string name,
+      std::size_t attr_id = 0, std::string name = "",
       ATTRIBUTE_KIND kind = ATTRIBUTE_KIND::INTRINSIC,
       ATTRIBUTE_SCALAR scalar = ATTRIBUTE_SCALAR::UNKNOWN,
       std::size_t attribute_dimension = 0);
