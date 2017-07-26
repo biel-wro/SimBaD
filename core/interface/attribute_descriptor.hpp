@@ -20,7 +20,8 @@ enum class ATTRIBUTE_KIND : std::uint32_t
   INTRINSIC,   // attributes stored in particle, non-recomputable
   ACCUMULATED, // attributes stored in particle, recomputable
   OBSERVABLE,  // attributes not-stored in particle, with physical meaning
-  INFO         // other attributes
+  INFO,        // other attributes
+  UNKNOWN,     // no information provided
 };
 
 class attribute_descriptor

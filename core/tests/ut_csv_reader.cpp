@@ -25,133 +25,12 @@ namespace qi = boost::spirit::qi;
 namespace ascii = boost::spirit::ascii;
 namespace phx = boost::phoenix;
 namespace fusion = boost::fusion;
+using pair_type = std::pair<std::string,std::size_t>;
 /*
-BOOST_AUTO_TEST_CASE(number_list)
-{
-  std::string test_val = "1.0, 3.4, 2.3";
-
-  std::vector<double> result;
-  bool r = qi::phrase_parse(test_val.begin(), test_val.end(),
-                            //  Begin grammar
-                            (qi::double_ % ','),
-                            //  End grammar
-                            qi::space, result);
-  BOOST_REQUIRE(r);
-}
-
-struct quoted_string : public qi::grammar<It, std::string()>
-{
-  quoted_string() : quoted_string::base_type(start)
-  {
-    start %= qi::lexeme['"' >> +(qi::char_ - '"') >> '"'];
-  }
-  qi::rule<It, std::string()> start;
-};
-
-BOOST_AUTO_TEST_CASE(quoted_string_test)
-{
-  std::string test_val = "\"A quoted string\"";
-  It first = test_val.begin(), last = test_val.end();
-  std::string result;
-
-  quoted_string parser;
-  bool r = qi::phrase_parse(first, last, parser, qi::space, result);
-  BOOST_REQUIRE(first == last);
-  BOOST_REQUIRE(r);
-}
-struct string_with_underline
-    : public qi::grammar<It, std::tuple<std::string, std::string>()>
-{
-  string_with_underline() : string_with_underline::base_type(start)
-  {
-    name = *(qi::char_  - '_');
-    name2 = *(qi::char_ );
-    start = name >> '_'>> name2;
-  }
-  qi::rule<It, std::string()> name;
-  qi::rule<It, std::string()> name2;
-  qi::rule<It, std::tuple<std::string, std::string>()> start;
-};
-
-BOOST_AUTO_TEST_CASE(string_with_underline_test)
-{
-  std::string test_val = "blabla_bla";
-  It first = test_val.begin(), last = test_val.end();
-  std::tuple<std::string, std::string> result;
-
-  string_with_underline parser;
-  bool r = qi::parse(first, last, parser, result);
-  std::cout << "result:" << std::endl;
-  std::cout << std::get<0>(result) << std::endl;
-  std::cout << std::get<1>(result) << std::endl;
-
-  BOOST_REQUIRE(first == last);
-  BOOST_REQUIRE(r);
-}
-//typedef std::map<std::string, std::string> pairs_type;
-using result_type = std::tuple<std::string, std::string>;
-template <typename Iterator>
-struct key_value_sequence : qi::grammar<Iterator, result_type()>
-{
-  key_value_sequence() : key_value_sequence::base_type(pair)
-  {
-    //query = pair >> *((qi::lit(';') | '&') >> pair);
-
-    key = qi::char_("a-zA-Z_") >> *qi::char_("a-zA-Z_0-9");
-    value = +qi::char_("a-zA-Z_0-9");
-    pair = key >> "=" >> value;
-  }
-
-//  qi::rule<Iterator, pairs_type()> query;
-  qi::rule<Iterator, result_type()> pair;
-  qi::rule<Iterator, std::string()> key, value;
- // qi::rule<Iterator, char()> delimiter;
-};
-
-BOOST_AUTO_TEST_CASE(key_value_test)
-{
-  std::string input("key1=value1");
-  std::string::const_iterator begin = input.begin();
-  std::string::const_iterator end = input.end();
-
-  //key_value_sequence<std::string::iterator> p;
-  key_value_sequence<std::string::const_iterator> parser;
-  result_type m;
-
-  if(!qi::parse(begin, end, parser, m))
-  {
-    std::cout << "-------------------------------- \n";
-    std::cout << "Parsing failed\n";
-    std::cout << "-------------------------------- \n";
-  }
-  else
-  {
-    std::cout << "-------------------------------- \n";
-    std::cout << "Parsing succeeded, found entries:\n";
-   // pairs_type::iterator end = m.end();
-    //for(pairs_type::iterator it = m.begin(); it != end; ++it)
-    {
-      std::cout << std::get<0>(m);
-      std::cout << "=" << std::get<1>(m);
-      std::cout << std::endl;
-    }
-    std::cout << "---------------------------------\n";
-  }
-}*/
-// using pair_type = std::pair<std::string, std::size_t>;
-struct pair_type
-{
-  explicit pair_type(std::string const &name = "", std::size_t size = 0)
-      : name(name), size(size)
-  {
-  }
-  std::string name;
-  std::size_t size;
-};
 BOOST_FUSION_ADAPT_STRUCT(pair_type,          //
                           (std::string, name) //
                           (std::size_t, size) //
-)
+)*/
 
 using result_type = std::vector<pair_type>;
 
@@ -214,7 +93,7 @@ BOOST_AUTO_TEST_CASE(key_value_test)
   header_grammar parser;
   bool ok = qi::phrase_parse(begin, end, parser, ascii::space, r);
   for(pair_type const &pair : r)
-    std::cout << pair.name << " " << pair.size << std::endl;
+    std::cout << pair.first << " " << pair.second << std::endl;
 
   BOOST_REQUIRE(ok);
   BOOST_REQUIRE(begin == end);

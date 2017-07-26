@@ -48,7 +48,7 @@ set( SOURCES
   utils/counting_id_generator.cpp
   utils/generic_particle.cpp
   utils/properties.cpp
-  io/stream_reader.cpp io/stream_reader.hpp io/csv_reader.cpp io/csv_reader.hpp)
+  io/stream_reader.cpp io/stream_reader.hpp io/csv_reader.cpp io/csv_reader.hpp io/detail/csv_header_grammar.hpp io/detail/csv_header_parser.cpp io/detail/csv_header_parser.hpp)
 
 set( LIBS
   ${Boost_LIBRARIES}
