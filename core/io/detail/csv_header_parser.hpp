@@ -2,6 +2,7 @@
 #define SIMBAD_CSV_HEADER_PARSER_HPP
 
 #include <cstddef>
+#include <memory>
 #include <string>
 #include <vector>
 
