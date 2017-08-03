@@ -1,5 +1,7 @@
+//#define BOOST_SPIRIT_DEBUG
 #ifndef SIMBAD_CSV_HEADER_GRAMMAR_HPP
 #define SIMBAD_CSV_HEADER_GRAMMAR_HPP
+
 #include "core_def.hpp"
 
 #include <boost/compressed_pair.hpp>
@@ -29,7 +31,7 @@ struct csv_header_grammar
           boost::spirit::ascii::space_type>
 {
   csv_header_grammar(std::string const &delim = ",",
-                 std::string const &numsep = "_")
+                     std::string const &numsep = "_")
       : csv_header_grammar::base_type(m_start)
   {
     namespace qi = boost::spirit::qi;
@@ -50,36 +52,34 @@ struct csv_header_grammar
 
     m_merged_columns %= m_first_partial_column[qi::_a = qi::_1] >>
                         m_remaining_partial_columns(qi::_a);
-    m_attribute = m_merged_columns | (m_singleton_column >> qi::attr(1));
+    m_attribute = qi::hold[m_merged_columns] | (m_singleton_column >> qi::attr(1));
 
     m_start = m_attribute % delim;
-    /*
-        BOOST_SPIRIT_DEBUG_NODE(start);
-        BOOST_SPIRIT_DEBUG_NODE(attribute);
-        BOOST_SPIRIT_DEBUG_NODE(merged_columns);
-        BOOST_SPIRIT_DEBUG_NODE(remaining_partial_columns);
-        BOOST_SPIRIT_DEBUG_NODE(another_partial_column);
-        BOOST_SPIRIT_DEBUG_NODE(first_partial_column);
-        BOOST_SPIRIT_DEBUG_NODE(singleton_column);*/
-  }
+
+  /*  BOOST_SPIRIT_DEBUG_NODE(m_start);
+    BOOST_SPIRIT_DEBUG_NODE(m_attribute);
+    BOOST_SPIRIT_DEBUG_NODE(m_merged_columns);
+    BOOST_SPIRIT_DEBUG_NODE(m_remaining_partial_columns);
+    BOOST_SPIRIT_DEBUG_NODE(m_another_partial_column);
+    BOOST_SPIRIT_DEBUG_NODE(m_first_partial_column);
+    BOOST_SPIRIT_DEBUG_NODE(m_singleton_column);
+  */}
+  template <class... T> using rule = boost::spirit::qi::rule<T...>;
+  template <class... T> using locals = boost::spirit::qi::locals<T...>;
+  using space_type = boost::spirit::ascii::space_type;
 
   using pair_type = std::pair<std::string, std::size_t>;
   using result_type = std::vector<pair_type>;
 
-  boost::spirit::qi::rule<Iterator, result_type(), boost::spirit::ascii::space_type> m_start;
-  boost::spirit::qi::rule<Iterator, pair_type(), boost::spirit::ascii::space_type> m_attribute;
-  boost::spirit::qi::rule<Iterator, boost::spirit::qi::locals<std::string>, pair_type(),
-           boost::spirit::ascii::space_type>
-      m_merged_columns;
-  boost::spirit::qi::rule<Iterator, std::string(), boost::spirit::ascii::space_type>
-      m_first_partial_column;
-  boost::spirit::qi::rule<Iterator, void(std::string, std::size_t),
-           boost::spirit::ascii::space_type>
+  rule<Iterator, result_type(), space_type> m_start;
+  rule<Iterator, pair_type(), space_type> m_attribute;
+  rule<Iterator, locals<std::string>, pair_type(), space_type> m_merged_columns;
+  rule<Iterator, std::string(), space_type> m_first_partial_column;
+  rule<Iterator, void(std::string, std::size_t), space_type>
       m_another_partial_column;
-  boost::spirit::qi::rule<Iterator, std::size_t(std::string), boost::spirit::ascii::space_type>
+  rule<Iterator, std::size_t(std::string), space_type>
       m_remaining_partial_columns;
-  boost::spirit::qi::rule<Iterator, std::string(), boost::spirit::ascii::space_type>
-      m_singleton_column;
+  rule<Iterator, std::string(), space_type> m_singleton_column;
 };
 END_NAMESPACE_CORE
 

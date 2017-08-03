@@ -14,7 +14,7 @@ public:
   std::istream &istream() const;
 
   virtual attribute_description read_header() = 0;
-  virtual attribute_list read_entry(attribute_description const &) = 0;
+  virtual attribute_list const &read_entry(attribute_description const &) = 0;
   virtual void read_footer(attribute_description const &) = 0;
 
 private:

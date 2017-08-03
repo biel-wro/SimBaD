@@ -17,7 +17,7 @@ template <class T> class array_attribute : public std::vector<T>
 public:
   using super = std::vector<T>;
   using super::super;
-
+  array_attribute(super const &s) : super(s) {}
   friend std::ostream &operator<<(std::ostream &os, array_attribute const &vec)
   {
     if(vec.empty())
@@ -62,9 +62,20 @@ public:
   // types
   using super = boost::variant<SIMBAD_CORE_ATTRIBUTE_SUBTYPES>;
   using self_type = attribute;
+  // scalar types
   using string_type = std::string;
   using real_type = double;
   using int_type = std::int64_t;
+
+  // array subtypes
+  using int2_type = coordinates<int_type, 2>;
+  using int3_type = coordinates<int_type, 3>;
+  using intn_type = array_attribute<int_type>;
+  using real2_type = coordinates<real_type, 2>;
+  using real3_type = coordinates<real_type, 3>;
+  using realn_type = array_attribute<real_type>;
+  using stringn_type = array_attribute<std::string>;
+
   static constexpr std::size_t max_inplace_dimension() { return 3; }
 
   // constructors

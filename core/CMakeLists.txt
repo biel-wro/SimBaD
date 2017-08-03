@@ -32,11 +32,17 @@ set( SOURCES
   interface/model.cpp
   interface/model_factory.cpp
   interface/model_register.cpp
+
   # io
   io/csv_printer.cpp
+  io/csv_reader.cpp
+  io/detail/csv_header_parser.cpp
+  io/detail/csv_record_parser.cpp
   io/json_configuration_printer.cpp
   io/stream_printer.cpp
+  io/stream_reader.cpp
   io/text_configuration_printer.cpp
+
   # processors
   processors/configuration_builder.cpp
   processors/launch_utils.cpp
@@ -48,7 +54,7 @@ set( SOURCES
   utils/counting_id_generator.cpp
   utils/generic_particle.cpp
   utils/properties.cpp
-  io/stream_reader.cpp io/stream_reader.hpp io/csv_reader.cpp io/csv_reader.hpp io/detail/csv_header_grammar.hpp io/detail/csv_header_parser.cpp io/detail/csv_header_parser.hpp)
+ )
 
 set( LIBS
   ${Boost_LIBRARIES}

@@ -24,17 +24,19 @@ attribute::attribute(std::initializer_list<std::int64_t> il)
   else
     *this = array_attribute<std::int64_t>(il);
 }
-attribute::attribute(const coordinates<int_type, 2> &val) : super(val) {}
-attribute::attribute(const coordinates<int_type, 3> &val) : super(val) {}
-attribute::attribute(array_attribute<int_type> &&v) : super(std::move(v)) {}
-attribute::attribute(const array_attribute<attribute::int_type> &val)
+attribute::attribute(int2_type const &val) : super(val) {}
+attribute::attribute(int3_type const &val) : super(val) {}
+attribute::attribute(intn_type &&v) : super(std::move(v)) {}
+attribute::attribute(intn_type const &val)
 {
-  if(3 == val.size())
-    super::operator=(attribute_cast<coordinates<int_type, 3>>(val));
-  else if(2 == val.size())
-    super::operator=(attribute_cast<coordinates<int_type, 2>>(val));
-  else if(1 == val.size())
-    super::operator=(attribute_cast<int_type>(val));
+  std::size_t const size = val.size();
+
+  if(3 == size)
+    super::operator=(attribute_converter::convert_to<int3_type>(val).get());
+  else if(2 == size)
+    super::operator=(attribute_converter::convert_to<int2_type>(val).get());
+  else if(1 == size)
+    super::operator=(attribute_converter::convert_to<int_type>(val).get());
   else
     super::operator=(val);
 }
@@ -51,19 +53,17 @@ attribute::attribute(std::initializer_list<real_type> il)
   else
     *this = array_attribute<real_type>(il);
 }
-attribute::attribute(coordinates<real_type, 2> const &val) : super(val) {}
-attribute::attribute(coordinates<real_type, 3> const &val) : super(val) {}
-attribute::attribute(array_attribute<real_type> &&val) : super(std::move(val))
+attribute::attribute(real2_type const &val) : super(val) {}
+attribute::attribute(real3_type const &val) : super(val) {}
+attribute::attribute(realn_type &&val) : super(std::move(val)) {}
+attribute::attribute(realn_type const &val)
 {
-}
-attribute::attribute(array_attribute<real_type> const &val)
-{
-  if(3 == val.size())
-    super::operator=(
-        attribute_converter::convert_to<coordinates<real_type, 3>>(val).get());
+  std::size_t const size = val.size();
+
+  if(3 == size)
+    super::operator=(attribute_converter::convert_to<real3_type>(val).get());
   else if(2 == val.size())
-    super::operator=(
-        attribute_converter::convert_to<coordinates<real_type, 2>>(val).get());
+    super::operator=(attribute_converter::convert_to<real2_type>(val).get());
   else if(1 == val.size())
     super::operator=(attribute_converter::convert_to<real_type>(val).get());
   else
