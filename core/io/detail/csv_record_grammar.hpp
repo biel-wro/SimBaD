@@ -7,12 +7,12 @@
 
 //#include <boost/compressed_pair.hpp>
 #include <boost/config/warning_disable.hpp>
-//#include <boost/fusion/include/adapt_struct.hpp>
+#include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/at_c.hpp>
-//#include <boost/fusion/include/io.hpp>
-//#include <boost/fusion/include/std_pair.hpp>
-//#include <boost/fusion/include/std_tuple.hpp>
-//#include <boost/fusion/sequence/intrinsic/at_c.hpp>
+#include <boost/fusion/include/io.hpp>
+#include <boost/fusion/include/std_pair.hpp>
+#include <boost/fusion/include/std_tuple.hpp>
+#include <boost/fusion/sequence/intrinsic/at_c.hpp>
 #include <boost/fusion/tuple.hpp>
 #include <boost/phoenix/fusion.hpp>
 #include <boost/phoenix/fusion/at.hpp>
