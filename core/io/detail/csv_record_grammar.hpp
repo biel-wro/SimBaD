@@ -11,14 +11,14 @@
 #include <boost/fusion/include/at_c.hpp>
 #include <boost/fusion/include/io.hpp>
 #include <boost/fusion/include/std_pair.hpp>
-#include <boost/fusion/include/std_tuple.hpp>
+#include <boost/fusion/include/tuple.hpp>
 #include <boost/fusion/sequence/intrinsic/at_c.hpp>
 #include <boost/fusion/tuple.hpp>
 #include <boost/phoenix/fusion.hpp>
 #include <boost/phoenix/fusion/at.hpp>
 #include <boost/phoenix/stl.hpp>
 #include <boost/phoenix/stl/container/container.hpp>
-//#include <boost/spirit/include/phoenix_bind.hpp>
+#include <boost/spirit/include/phoenix_bind.hpp>
 #include <boost/spirit/include/phoenix_core.hpp>
 #include <boost/spirit/include/phoenix_object.hpp>
 #include <boost/spirit/include/phoenix_operator.hpp>

@@ -17,7 +17,7 @@ template <class T> class array_attribute : public std::vector<T>
 public:
   using super = std::vector<T>;
   using super::super;
-  array_attribute(super const &s) : super(s) {}
+  //array_attribute(super const &s) : super(s) {}
   friend std::ostream &operator<<(std::ostream &os, array_attribute const &vec)
   {
     if(vec.empty())
