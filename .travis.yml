@@ -8,7 +8,7 @@ matrix:
       addons:
         apt:
           sources:
-            - ubuntu-toolchain-r-test
+            - debian-sid
           packages:
             - g++-4.9
             - libboost-dev-all
@@ -21,6 +21,7 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
+            - debian-sid
           packages:
             - g++-5
             - libboost1.60-all-dev
