@@ -11,7 +11,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-4.9
-            - libboost-all-dev
+            - libboost1.58-all-dev
       env: COMPILER=g++-4.9
     - compiler: gcc
       dist: trusty
@@ -23,7 +23,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - g++-5
-            - libboost-all-dev
+            - libboost1.58-all-dev
       env: COMPILER=g++-5
     - dist: trusty
       compiler: gcc
@@ -35,7 +35,7 @@ matrix:
             - llvm-toolchain-precise-3.6
           packages:
             - clang-3.6
-            - libboost-all-dev
+            - libboost1.58-all-dev
       env: COMPILER=clang++-3.6
     - dist: trusty
       compiler: clang-3.7
@@ -47,7 +47,7 @@ matrix:
             - llvm-toolchain-precise-3.7
           packages:
             - clang-3.7
-            - libboost-all-dev
+            - ibboost1.58-all-dev
       env: COMPILER=clang++-3.7
     - os: osx
       osx_image: xcode7.3
