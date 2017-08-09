@@ -1,6 +1,6 @@
 #ifndef CSV_PRINTER_HPP
 #define CSV_PRINTER_HPP
-#include "stream_printer.hpp"
+#include "interface/stream_printer.hpp"
 
 #include "core_fwd.hpp"
 

@@ -1,84 +1,104 @@
 #include "configuration_builder.hpp"
+
+#include "interface/attribute.hpp"
+#include "interface/attribute_descriptor.hpp"
 #include "interface/attribute_list.hpp"
+#include "interface/event_source.hpp"
+
+#include <boost/intrusive/set.hpp>
+#include <boost/intrusive/unordered_set.hpp>
+
+#include <cstddef>
 #include <limits>
 
 BEGIN_NAMESPACE_CORE
-/*
-configuration_builder::configuration_builder(bool store_coords,
-                                             ID_POLICY id_policy,
-                                             std::size_t nbuckets)
-    : m_id_policy(id_policy),
-      m_buckets(new bucket_type[nbuckets]),
-      m_configuration_buffer(bucket_traits(m_buckets.get(), nbuckets)),
-      m_rehash_watchdog(1.0)
+
+namespace
 {
+struct map_node : public boost::intrusive::unordered_set_base_hook<
+                      boost::intrusive::store_hash<true>>
+{
+  std::vector<attribute> attributes() { return m_attributes; }
+  std::vector<attribute> const attributes() const { return m_attributes; }
+
+private:
+  std::vector<attribute> m_attributes;
+};
 }
 
-configuration_builder::~configuration_builder()
+struct configuration_builder::particle_set
 {
-  m_configuration_buffer.clear_and_dispose(std::default_delete<node_type>());
-}
-void configuration_builder::process_event(const event &e) {}
-void configuration_builder::add_particle(std::unique_ptr<node_type> p)
-{
-  m_configuration_buffer.insert(*p);
-  m_rehash_watchdog(m_configuration_buffer, m_buckets);
-  p.release();
-}
-void configuration_builder::visit_configuration(
-    particle_visitor visitor) const
-{
-  //  std::size_t id_attr_idx = particle_id_attr_idx();
-  //  std::size_t coord_attr_idx = particle_coord_attr_idx();
-  for(generic_particle const &gp : m_configuration_buffer)
+  static constexpr std::size_t initial_bucket_size = 1 << 10;
+  using hasher_type = std::function<bool(map_node const &)>;
+  using comparator_type =
+      std::function<std::size_t(map_node const &, map_node const &)>;
+  using base_set = boost::intrusive::unordered_set< //
+      map_node,                                     //
+      boost::intrusive::equal<comparator_type>,     //
+      boost::intrusive::hash<hasher_type>,          //
+      boost::intrusive::compare_hash<true>          //
+      >;
+
+  particle_set(std::size_t keylen)
+      : m_buckets_ptr(new base_set::bucket_type[initial_bucket_size]),
+        m_bucket_traits(m_buckets_ptr.get(), initial_bucket_size),
+        // hasher should just hash key attributes
+        m_hasher([keylen](map_node const &node) {
+          std::vector<attribute> const &attributes(node.attributes());
+          return boost::hash_range(attributes.begin(),
+                                   std::next(attributes.begin(), keylen));
+        }),
+        // comparator should just compare key attributes
+        m_comparator([keylen](map_node const &lhs, map_node const &rhs) {
+          std::vector<attribute>::const_iterator left(lhs.attributes().begin());
+          std::vector<attribute>::const_iterator right(
+              rhs.attributes().begin());
+
+          return std::equal(left, std::next(left, keylen), //
+                            right, std::next(right, keylen));
+        }),
+        m_set(m_bucket_traits, m_hasher, m_comparator)
   {
-    gp.visit_view(visitor);
   }
-}
+  ~particle_set() { m_set.clear_and_dispose(std::default_delete<map_node>()); }
 
-configuration_builder::size_type
-configuration_builder::configuration_size() const
+private:
+  std::unique_ptr<base_set::bucket_type[]> m_buckets_ptr;
+  base_set::bucket_traits m_bucket_traits;
+  hasher_type m_hasher;
+  comparator_type m_comparator;
+  base_set m_set;
+};
+
+configuration_builder::configuration_builder(
+    event_source &source, std::vector<std::string> const &key_names,
+    std::vector<std::string> const &value_names)
+    : m_source(source),
+      m_key_size(key_names.size()),
+      m_particle_set_ptr(new particle_set(m_key_size))
 {
-  return m_configuration_buffer.size();
+  // get all the names together in the right order
+  std::vector<std::string> all_names(key_names);
+  all_names.insert(all_names.end(), value_names.begin(), value_names.end());
+
+  // set attribute mapping
+  std::unordered_map<std::size_t, std::size_t> attribute_map =
+      m_attribute_description.add_attributes(source.event_descriptor(),
+                                             all_names);
+
+  m_attribute_mapping.resize(attribute_map.size());
+  for(std::pair<std::size_t, std::size_t> const &key_value : attribute_map)
+    m_attribute_mapping[key_value.first] = key_value.second;
 }
 
-const attribute_description &configuration_builder::new_attr_map() const
+configuration_builder::~configuration_builder() {}
+
+void configuration_builder::operator()(std::size_t size)
 {
-  return m_attribute_descriptor;
+  auto visitor = [this](attribute_list const &event_attriubtes) {
+
+  };
+
 }
 
-void configuration_builder::read_configuration(const configuration_view &conf)
-{
-  if(ID_POLICY::COPY_IF_UNIQUE == m_id_policy && !conf.has_unique_id())
-    m_id_policy = ID_POLICY::DO_NOT_STORE;
-
-  // m_dimension = conf.dimension();
-
-  std::unordered_map<std::size_t, std::size_t> tgt2src;
-  tgt2src = m_attribute_descriptor.add_attributes(conf.new_attr_map(), 0);
-
-  conf.visit_configuration([&](attribute_list const &src) {
-    std::unique_ptr<node_type> p_tgt(new node_type);
-    // store_id(*p_tgt, src);
-    // store_coordinates(*p_tgt, src);
-    store_attributes(*p_tgt, src, tgt2src);
-
-    add_particle(std::move(p_tgt));
-  });
-}
-
-void configuration_builder::store_attributes(
-    generic_particle &tgt, const attribute_list &src,
-    std::unordered_map<std::size_t, std::size_t> tgt2src) const
-{
-  for(std::pair<std::size_t, std::size_t> const &t2s : tgt2src)
-  {
-    attribute const &attr = src[t2s.second];
-    tgt.set_attribute(t2s.first, attr);
-  }
-}
-
-std::size_t configuration_builder::generate_id() { return m_id_generator(); }
-void configuration_builder::generate_events(event_visitor, size_t) {}
-*/
 END_NAMESPACE_CORE

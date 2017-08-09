@@ -96,14 +96,28 @@ public:
   add_attributes(attribute_description const &other,
                  std::size_t start_target_idx = 0,
                  std::unordered_set<std::string> const *names = nullptr);
+
+  std::unordered_map<std::size_t, std::size_t>
+  add_attributes(attribute_description const &other,
+                 std::vector<std::string> const &names,
+                 std::size_t start_target_idx = 0);
+
   // unpacking
   std::pair<std::vector<std::size_t>, std::vector<std::string>>
   unpack_all() const;
   std::vector<std::size_t> unpack_indices() const;
+  std::vector<std::size_t>
+  names_to_indices(std::vector<std::string> const &names) const;
 
   // some standard mappings
   static attribute_description const &make_empty();
   static attribute_description const &make_position_only();
+
+private:
+  template <class Iterator>
+  std::unordered_map<std::size_t, std::size_t>
+  add_attributes(attribute_description const &other, Iterator first,
+                 Iterator last, std::size_t start_target_idx);
 };
 
 #undef SIMBAD_ATTRIBUTES_DESCRIPTION_SUPER

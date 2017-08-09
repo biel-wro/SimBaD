@@ -5,6 +5,7 @@
 #include "coordinates/coordinates.hpp"
 
 #include <boost/variant.hpp>
+
 #include <cstddef>
 #include <functional>
 #include <initializer_list>
@@ -17,7 +18,7 @@ template <class T> class array_attribute : public std::vector<T>
 public:
   using super = std::vector<T>;
   using super::super;
-  //array_attribute(super const &s) : super(s) {}
+  // array_attribute(super const &s) : super(s) {}
   friend std::ostream &operator<<(std::ostream &os, array_attribute const &vec)
   {
     if(vec.empty())
@@ -106,7 +107,10 @@ public:
 
   // access
   attribute get_scalar(std::size_t) const;
+
   real_type get_real_val(std::size_t idx = 0) const;
+  int_type get_int_val(std::size_t idx = 0) const;
+
   string_type &get_string_ref(std::size_t i = 0);
   string_type const &get_string_ref(std::size_t i = 0) const;
   real_type &get_real_ref(std::size_t i = 0);

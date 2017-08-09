@@ -1,7 +1,7 @@
 #ifndef TEXT_CONFIGURATION_PRINTER_HPP
 #define TEXT_CONFIGURATION_PRINTER_HPP
 
-#include "stream_printer.hpp"
+#include "interface/stream_printer.hpp"
 
 #include "core_fwd.hpp"
 

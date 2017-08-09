@@ -1,38 +1,35 @@
 #ifndef SIMBAD_CORE_CSV_READER_HPP
 #define SIMBAD_CORE_CSV_READER_HPP
 
-#include "io/stream_reader.hpp"
+#include "interface/stream_reader.hpp"
 
-#include "detail/csv_header_parser.hpp"
-#include "detail/csv_record_parser.hpp"
+#include "interface/attribute_description.hpp"
 
 #include <string>
 #include <vector>
 
 BEGIN_NAMESPACE_CORE
-class csv_reader : public stream_reader
+class csv_reader final : public stream_reader
 {
 public:
-  class attribute_readout;
-
   csv_reader(std::istream *istream, property_tree const &pt);
   csv_reader(std::istream *istream, std::string const &delimiter = ",",
              std::string const &numsep = "_");
   ~csv_reader();
+
   attribute_description read_header() override;
-  attribute_list const &
-  read_entry(attribute_description const &description) override;
-  void read_footer(attribute_description const &description) override;
+
+  void visit_entries(entry_visitor v, std::size_t max_reads=0) override;
 
 private:
+  attribute_description m_attribute_description;
   std::vector<std::size_t> m_attribute_sizes;
 
-  std::string m_line_readout;
-  std::unique_ptr<attribute_readout> m_attribute_readout;
+  struct header_parser;
+  struct record_parser;
 
-  using iterator_type = std::string::const_iterator;
-  csv_header_parser<iterator_type> m_header_parser;
-  csv_record_parser<iterator_type> m_record_parser;
+  std::unique_ptr<header_parser> m_header_parser_ptr;
+  std::unique_ptr<record_parser> m_record_parser_ptr;
 };
 END_NAMESPACE_CORE
 

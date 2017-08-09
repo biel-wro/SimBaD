@@ -5,6 +5,9 @@
 #include <boost/optional.hpp>
 #include <boost/version.hpp>
 
+#include <iterator>
+#include <type_traits>
+
 BEGIN_NAMESPACE_CORE
 attribute_description::attribute_description() {}
 attribute_description::attribute_description(
@@ -177,6 +180,24 @@ std::vector<std::size_t> attribute_description::unpack_indices() const
   return indices;
 }
 
+std::vector<std::size_t> attribute_description::names_to_indices(
+    std::vector<std::string> const &names) const
+{
+  std::vector<std::size_t> result;
+  result.reserve(names.size());
+
+  for(std::string const &name : names)
+  {
+    boost::optional<const attribute_descriptor &> descriptor =
+        get_descriptor(name);
+    if(!descriptor)
+      throw unrecognized_attribute_name(name);
+    result.push_back(descriptor->attribute_idx());
+  }
+
+  return result;
+}
+
 std::unordered_map<std::size_t, std::string>
 attribute_description::add_attributes(const property_tree &pt,
                                       bool ignore_empty)
@@ -186,7 +207,7 @@ attribute_description::add_attributes(const property_tree &pt,
   pt.visit(
       [&](std::string const &name, std::string const &value) {
         std::size_t idx = add_attribute_auto_idx(
-            0, name, ATTRIBUTE_KIND::INTRINSIC, ATTRIBUTE_SCALAR ::UNKNOWN, 1);
+            0, name, ATTRIBUTE_KIND::INTRINSIC, ATTRIBUTE_SCALAR::UNKNOWN, 1);
         values.emplace(idx, value);
       },
       ignore_empty);
@@ -196,8 +217,8 @@ attribute_description::add_attributes(const property_tree &pt,
 
 std::unordered_map<std::size_t, std::size_t>
 attribute_description::add_attributes(
-    const attribute_description &other, std::size_t start_target_idx,
-    const std::unordered_set<std::string> *names)
+    attribute_description const &other, std::size_t start_target_idx,
+    std::unordered_set<std::string> const *names)
 {
   std::unordered_map<std::size_t, std::size_t> new2old;
 
@@ -221,6 +242,14 @@ attribute_description::add_attributes(
   return new2old;
 }
 
+std::unordered_map<std::size_t, std::size_t>
+attribute_description::add_attributes(attribute_description const &other,
+                                      std::vector<std::string> const &names,
+                                      std::size_t start_target_idx)
+{
+  return add_attributes(other, names.begin(), names.end(), start_target_idx);
+}
+
 const attribute_description &attribute_description::make_empty()
 {
   static std::unique_ptr<attribute_description> mapping_ptr(
@@ -238,4 +267,39 @@ const attribute_description &attribute_description::make_position_only()
   }
   return *mapping_ptr;
 }
+
+template <class Iterator>
+std::unordered_map<std::size_t, std::size_t>
+attribute_description::add_attributes(const attribute_description &other,
+                                      Iterator first, Iterator last,
+                                      std::size_t start_target_idx)
+{
+  std::unordered_map<std::size_t, std::size_t> new_to_old;
+
+  if(std::is_convertible<
+         typename std::iterator_traits<Iterator>::iterator_category,
+         std::random_access_iterator_tag>::value)
+    new_to_old.reserve(std::distance(first, last));
+
+  std::size_t tgt_index = next_unused_idx(start_target_idx);
+
+  for(Iterator it = first; it < last; ++it)
+  {
+    std::string const &name = *it;
+
+    boost::optional<attribute_descriptor const &> descriptor =
+        other.get_descriptor(name);
+    if(!descriptor)
+      throw unrecognized_attribute_name(name);
+
+    std::size_t src_index = descriptor->attribute_idx();
+    new_to_old.emplace(tgt_index, src_index);
+    ATTRIBUTE_KIND kind = descriptor->kind();
+    insert(attribute_descriptor(tgt_index, name, kind));
+    tgt_index = next_unused_idx(tgt_index + 1);
+  }
+
+  return new_to_old;
+}
+
 END_NAMESPACE_CORE

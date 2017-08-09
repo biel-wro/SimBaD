@@ -32,6 +32,8 @@ set( SOURCES
   interface/model.cpp
   interface/model_factory.cpp
   interface/model_register.cpp
+  interface/stream_printer.cpp
+  interface/stream_reader.cpp
 
   # io
   io/csv_printer.cpp
@@ -39,18 +41,18 @@ set( SOURCES
   io/detail/csv_header_parser.cpp
   io/detail/csv_record_parser.cpp
   io/json_configuration_printer.cpp
-  io/stream_printer.cpp
-  io/stream_reader.cpp
   io/text_configuration_printer.cpp
 
   # processors
   processors/configuration_builder.cpp
   processors/launch_utils.cpp
   processors/snapshotter.cpp
+  processors/tree_builder
   legacy/simple/simple_event_view.cpp
   legacy/event_partial.cpp
   # utils
   utils/attribute_exceptions.cpp
+  utils/attribute_vector.cpp
   utils/counting_id_generator.cpp
   utils/generic_particle.cpp
   utils/properties.cpp

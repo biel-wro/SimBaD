@@ -3,9 +3,9 @@
 #include "configurations/cubic_crystal_configuration.hpp"
 #include "interface/attribute_list.hpp"
 #include "interface/property_tree.hpp"
-#include "particle.hpp"
 #include "io/csv_printer.hpp"
 #include "io/text_configuration_printer.hpp"
+#include "particle.hpp"
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/test/auto_unit_test.hpp>
@@ -124,15 +124,23 @@ BOOST_AUTO_TEST_CASE(short_run)
   m.set_configuration(initial_configuraiton, make_initial_vals());
 
   //  text_configuration_printer configuration_printer(&std::cout);
-  csv_printer configuration_printer(&std::cout);
 
-  // m.generate_events([](event const &e) { std::cout << e << std::endl; },
-  // 100);
+  csv_printer event_printer(&std::cout);
+  event_printer.write_header(m.event_descriptor());
+  m.generate_events(
+      [&event_printer](attribute_list const &attributes) {
+        event_printer.write_entry(attributes);
+      },
+      100);
+
+  std::cout << std::endl << std::endl << std::endl;
   m.check_accumulators();
-  // configuration_printer.set_configuration(m);
+  std::cout << std::endl << std::endl << std::endl;
+
+  csv_printer configuration_printer(&std::cout);
   configuration_printer.write_header(m.current_configuration().descriptor());
   configuration_printer.write_data(m.current_configuration());
-  // configuration_printer.write_footer(m);
+  configuration_printer.write_footer();
 }
 
 BOOST_AUTO_TEST_SUITE_END()

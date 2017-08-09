@@ -142,6 +142,12 @@ attribute::real_type attribute::get_real_val(std::size_t idx) const
   attribute scalar = get_scalar(idx);
   return attribute_cast<real_type>(scalar);
 }
+
+attribute::int_type attribute::get_int_val(std::size_t idx) const
+{
+  attribute scalar = get_scalar(idx);
+  return attribute_cast<int_type>(scalar);
+}
 namespace
 {
 template <class Ref, class Bind> struct getter
@@ -231,7 +237,7 @@ bool attribute::operator==(const attribute &rhs) const
 }
 bool attribute::operator!=(const attribute &rhs) const
 {
-  return !this->operator==(rhs);
+  return !(operator==(rhs));
 }
 namespace
 {
