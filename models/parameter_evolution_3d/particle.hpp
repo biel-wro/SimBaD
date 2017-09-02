@@ -8,8 +8,6 @@
 #include "coordinates/coordinates.hpp"
 #include "interface/event_kind.hpp"
 
-#include "intrinsic_params.hpp"
-
 #include <random>
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
@@ -20,7 +18,9 @@ public:
   using position_type = simbad::core::coordinates<float, 3>;
   using interaction_accumulator = simbad::core::additive_accumulator<float>;
   using EVENT_KIND = simbad::core::EVENT_KIND;
-  cell(position_type pos, cell_params params);
+  static core::attribute_description const &description();
+
+  cell(position_type pos, std::shared_ptr<cell_params> params_ptr);
   ~cell();
 
   position_type const &position() const;
@@ -34,16 +34,16 @@ public:
   void include_interaction(cell const &p, model_params const &mp);
   void exclude_interaction(cell const &p, model_params const &mp);
 
-  cell_params &params();
   cell_params const &params() const;
+  std::shared_ptr<cell_params const> params_ptr() const;
+  void set_params_ptr(std::shared_ptr<cell_params const> params_ptr);
 
   double density() const;
-  void mutate(model_params const &, std::mt19937_64 &rng);
 
 private:
   position_type m_position;
   float m_time;
-  cell_params m_params;
+  std::shared_ptr<cell_params const> m_params_ptr;
   double m_interaction_acc;
   EVENT_KIND m_event_kind;
 };

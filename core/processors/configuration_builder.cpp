@@ -39,6 +39,9 @@ struct configuration_builder::particle_set
       boost::intrusive::compare_hash<true>          //
       >;
 
+  using iterator = base_set::iterator;
+  using const_iterator = base_set::const_iterator;
+
   particle_set(std::size_t keylen)
       : m_buckets_ptr(new base_set::bucket_type[initial_bucket_size]),
         m_bucket_traits(m_buckets_ptr.get(), initial_bucket_size),
@@ -60,7 +63,10 @@ struct configuration_builder::particle_set
         m_set(m_bucket_traits, m_hasher, m_comparator)
   {
   }
+
   ~particle_set() { m_set.clear_and_dispose(std::default_delete<map_node>()); }
+
+
 
 private:
   std::unique_ptr<base_set::bucket_type[]> m_buckets_ptr;
@@ -98,7 +104,6 @@ void configuration_builder::operator()(std::size_t size)
   auto visitor = [this](attribute_list const &event_attriubtes) {
 
   };
-
 }
 
 END_NAMESPACE_CORE

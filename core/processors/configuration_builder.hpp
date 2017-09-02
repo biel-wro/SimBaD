@@ -19,9 +19,10 @@ public:
                         std::vector<std::string> const &value_attributes);
 
   ~configuration_builder();
-  void operator()(event_source &source, std::size_t size);
+  void operator()(std::size_t size);
 
 private:
+  event_source &m_source;
   std::size_t m_key_size;
   struct particle_set;
   std::unique_ptr<particle_set> m_particle_set_ptr;

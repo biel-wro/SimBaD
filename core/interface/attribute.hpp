@@ -63,7 +63,8 @@ public:
   // types
   using super = boost::variant<SIMBAD_CORE_ATTRIBUTE_SUBTYPES>;
   using self_type = attribute;
-  // scalar types
+
+  // scalar subtypes
   using string_type = std::string;
   using real_type = double;
   using int_type = std::int64_t;
@@ -77,28 +78,62 @@ public:
   using realn_type = array_attribute<real_type>;
   using stringn_type = array_attribute<std::string>;
 
+  // iterators
+  using int_iterator = int_type *;
+  using int_const_iterator = int_type const *;
+  using real_iterator = real_type *;
+  using real_const_iterator = real_type const *;
+  using string_iterator = string_type *;
+  using string_const_iterator = string_type const *;
+
   static constexpr std::size_t max_inplace_dimension() { return 3; }
 
   // constructors
   attribute();
 
+  // string
   attribute(std::string val);
   attribute(char const *cstr);
   attribute(array_attribute<std::string> val);
 
+  // integer
   attribute(int_type val);
   attribute(std::initializer_list<std::int64_t> il);
-  attribute(coordinates<int_type, 2> const &val);
-  attribute(coordinates<int_type, 3> const &val);
+  attribute(int2_type const &val);
+  attribute(int3_type const &val);
   attribute(array_attribute<int_type> &&val);
   attribute(array_attribute<int_type> const &val);
 
+
+  /*
+  // std::size_t
+  attribute(std::initializer_list<std::size_t> val);
+  attribute(std::size_t val);
+  attribute(coordinates<std::size_t, 2> const &val);
+  attribute(coordinates<std::size_t, 3> const &val);
+  attribute(std::vector<std::size_t> const &val);
+*/
+  // float
   attribute(real_type val);
   attribute(std::initializer_list<real_type> il);
   attribute(coordinates<real_type, 2> const &val);
   attribute(coordinates<real_type, 3> const &val);
   attribute(array_attribute<real_type> &&val);
   attribute(array_attribute<real_type> const &val);
+
+  // other integers
+  template <class T, std::enable_if_t<std::is_integral<T>::value, int> = 0>
+  attribute(T val);
+  template <class T, std::enable_if_t<std::is_integral<T>::value, int> = 0>
+  attribute(std::initializer_list<T> il);
+  template <class T, std::enable_if_t<std::is_integral<T>::value, int> = 0>
+  attribute(coordinates<T, 2> const &val);
+  template <class T, std::enable_if_t<std::is_integral<T>::value, int> = 0>
+  attribute(coordinates<T, 3> const &val);
+  template <class T, std::enable_if_t<std::is_integral<T>::value, int> = 0>
+  attribute(std::vector<T> const &val);
+
+
 
   // query
   bool empty() const;
@@ -108,6 +143,7 @@ public:
   // access
   attribute get_scalar(std::size_t) const;
 
+  string_type get_string_val(std::size_t idx = 0) const;
   real_type get_real_val(std::size_t idx = 0) const;
   int_type get_int_val(std::size_t idx = 0) const;
 
@@ -117,6 +153,14 @@ public:
   real_type const &get_real_ref(std::size_t i = 0) const;
   int_type &get_integer_ref(std::size_t i = 0);
   int_type const &get_integer_ref(std::size_t i = 0) const;
+
+  std::pair<string_iterator, string_iterator> get_string_data();
+  std::pair<string_const_iterator, string_const_iterator>
+  get_string_data() const;
+  std::pair<real_iterator, real_iterator> get_real_data();
+  std::pair<real_const_iterator, real_const_iterator> get_real_data() const;
+  std::pair<int_iterator, int_iterator> get_int_data();
+  std::pair<int_const_iterator, int_const_iterator> get_int_data() const;
 
   // modify
   void clear();

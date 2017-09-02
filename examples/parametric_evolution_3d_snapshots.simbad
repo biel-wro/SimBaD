@@ -2,7 +2,7 @@ mode "snapshots"
 run
 {
   time_step 1
-  max_steps 15 
+  max_steps 100
 }
 
 stacked_view
@@ -30,6 +30,10 @@ model
   class "parameter_evolution_3d"
   parameters
   {
+    dump
+    {
+      path tree.net
+    }
     space
     {
       tile_size 1
@@ -188,6 +192,14 @@ initial_configuration
     {
       efficiency 0.9
       resistance 0.5
+    }
+    mutation
+    {
+      id 1
+      parent
+      {
+        id 0
+      }
     }
     dummy 0.1
   }

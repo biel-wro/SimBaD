@@ -1,6 +1,12 @@
 #include "model_parameters.hpp"
-#include "computational/mutations/builtin_mutators.hpp"
+
 #include "intrinsic_params.hpp"
+#include "particle.hpp"
+
+#include "interface/attribute_description.hpp"
+#include "interface/attribute_descriptor.hpp"
+
+#include "computational/mutations/builtin_mutators.hpp"
 #include "utils/class_register.hpp"
 using simbad::core::get_builtin_mutators;
 
@@ -28,6 +34,7 @@ model_params::model_params(const simbad::core::property_tree &pt)
 {
 }
 model_params::~model_params() {}
+
 double model_params::birth_rate(double density, double eff, double res) const
 {
   double val = eff * birth_saturation(density / res);
@@ -46,13 +53,9 @@ double model_params::success_prob(double density, double eff, double res) const
   return val;
 }
 
-void model_params::mutate(cell_params &cp, std::mt19937_64 &rng) const
+bool model_params::sample_mutation(cell &cp, std::mt19937_64 &rng) const
 {
-  if(m_mutation_prob < std::uniform_real_distribution<>()(rng))
-    return;
-  mutate_birth(cp, rng);
-  mutate_lifespan(cp, rng);
-  mutate_success(cp, rng);
+  return m_mutation_prob >= std::uniform_real_distribution<>()(rng);
 }
 
 const model_params::interaction_type &model_params::interaction() const

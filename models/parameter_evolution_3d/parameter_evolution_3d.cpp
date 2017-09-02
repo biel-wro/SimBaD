@@ -1,8 +1,6 @@
 #include "parameter_evolution_3d.hpp"
 
-#include <cstddef>
-#include <iostream>
-#include <stdexcept>
+#include "intrinsic_params.hpp"
 
 #include "interface/attribute.hpp"
 #include "interface/attribute_description.hpp"
@@ -12,35 +10,71 @@
 #include "utils/attribute_converter.hpp"
 #include "utils/attribute_exceptions.hpp"
 
+#include <cstddef>
+#include <fstream>
+#include <iostream>
+#include <stdexcept>
+
 using simbad::core::EVENT_KIND;
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 
 static std::unique_ptr<simbad::core::attribute_description>
-make_attribute_descriptor()
+make_particle_descriptor()
 {
   using KIND = simbad::core::ATTRIBUTE_KIND;
   using SCALAR = simbad::core::ATTRIBUTE_SCALAR;
-  using rec = simbad::core::attribute_descriptor;
+  SCALAR REAL = SCALAR::REAL;
+  SCALAR INT = SCALAR::INT;
 
-  return std::unique_ptr<simbad::core::attribute_description>{
+  std::unique_ptr<core::attribute_description> description_ptr(
+      new core::attribute_description);
+  core::attribute_description &desc(*description_ptr);
 
-      new simbad::core::attribute_description{
-          rec{0, "position", KIND::POSITION, SCALAR::REAL, 3},
-          rec{1, "density", KIND::ACCUMULATED, SCALAR::REAL, 1},
-          rec{2, "event.time", KIND::INFO, SCALAR::REAL, 1},
-          rec{3, "event.kind", KIND::INFO, SCALAR::INT, 1},
-          rec{4, "birth.efficiency", KIND::INTRINSIC, SCALAR::REAL, 1},
-          rec{5, "birth.resistance", KIND::INTRINSIC, SCALAR::REAL, 1},
-          rec{6, "lifespan.efficiency", KIND::INTRINSIC, SCALAR::REAL, 1},
-          rec{7, "lifespan.resistance", KIND::INTRINSIC, SCALAR::REAL, 1},
-          rec{8, "success.efficiency", KIND::INTRINSIC, SCALAR::REAL, 1},
-          rec{9, "success.resistance", KIND::INTRINSIC, SCALAR::REAL, 1},
-          rec{10, "birth.rate", KIND::OBSERVABLE, SCALAR::REAL, 1},
-          rec{11, "death.rate", KIND::OBSERVABLE, SCALAR::REAL, 1},
-          rec{12, "success.probability", KIND::OBSERVABLE, SCALAR::REAL, 1},
-          rec{13, "lifespan", KIND::OBSERVABLE, SCALAR::REAL, 1},
-      }};
+  desc.add_attribute_auto_idx("position", KIND::POSITION, REAL, 3);
+  desc.add_attribute_auto_idx("density", KIND::ACCUMULATED, REAL, 1);
+  desc.add_attribute_auto_idx("event.time", KIND::INFO, REAL, 1);
+  desc.add_attribute_auto_idx("event.kind", KIND::INFO, INT, 1);
+  desc.add_attribute_auto_idx("birth.efficiency", KIND::INTRINSIC, REAL, 1);
+  desc.add_attribute_auto_idx("birth.resistance", KIND::INTRINSIC, REAL, 1);
+  desc.add_attribute_auto_idx("lifespan.efficiency", KIND::INTRINSIC, REAL, 1);
+  desc.add_attribute_auto_idx("lifespan.resistance", KIND::INTRINSIC, REAL, 1);
+  desc.add_attribute_auto_idx("success.efficiency", KIND::INTRINSIC, REAL, 1);
+  desc.add_attribute_auto_idx("success.resistance", KIND::INTRINSIC, REAL, 1);
+  desc.add_attribute_auto_idx("mutation.id", KIND::INTRINSIC, INT, 1);
+  desc.add_attribute_auto_idx("birth.rate", KIND::OBSERVABLE, REAL, 1);
+  desc.add_attribute_auto_idx("death.rate", KIND::OBSERVABLE, REAL, 1);
+  desc.add_attribute_auto_idx("success.probability", KIND::OBSERVABLE, REAL, 1);
+  desc.add_attribute_auto_idx("lifespan", KIND::OBSERVABLE, REAL, 1);
+  return description_ptr;
+}
+
+simbad::core::attribute
+parameter_evolution_3d::particle_attribute(const cell &c,
+                                           std::size_t attr_idx) const
+{
+  switch(attr_idx)
+  {
+  case 0:
+    return simbad::core::attribute_converter::convert_to<
+               simbad::core::coordinates<double, 3>>(c.position())
+        .get();
+  case 1: return c.density();
+  case 2: return c.event_time();
+  case 3: return std::int64_t(c.event_kind());
+  case 4: return c.params().birth_eff();
+  case 5: return c.params().birth_res();
+  case 6: return c.params().lifespan_eff();
+  case 7: return c.params().lifespan_res();
+  case 8: return c.params().success_eff();
+  case 9: return c.params().success_res();
+  case 10: return c.params().mutation_id();
+  case 11: return compute_birth_rate(c);
+  case 12: return compute_death_rate(c);
+  case 13: return compute_success_rate(c);
+  case 14: return 1.0 / compute_death_rate(c);
+  }
+  throw simbad::core::unrecognized_attribute_number(attr_idx);
 }
 
 static std::unique_ptr<simbad::core::attribute_description>
@@ -50,11 +84,11 @@ make_event_descriptor()
   using SCALAR = simbad::core::ATTRIBUTE_SCALAR;
 
   std::unique_ptr<simbad::core::attribute_description> map_ptr =
-      make_attribute_descriptor();
+      make_particle_descriptor();
 
-  map_ptr->add_attribute(15, "time", KIND::TIME, SCALAR::REAL, 1);
-  map_ptr->add_attribute(16, "delta time", KIND::TIME, SCALAR::INT, 1);
-  map_ptr->add_attribute(17, "event", KIND::EVENT_KIND, SCALAR::INT, 1);
+  map_ptr->add_attribute(100, "time", KIND::TIME, SCALAR::REAL, 1);
+  map_ptr->add_attribute(101, "delta time", KIND::TIME, SCALAR::INT, 1);
+  map_ptr->add_attribute(102, "event", KIND::EVENT_KIND, SCALAR::INT, 1);
 
   return map_ptr;
 }
@@ -94,7 +128,7 @@ public:
   simbad::core::attribute_description const &descriptor() const override
   {
     static std::unique_ptr<simbad::core::attribute_description> ptr =
-        make_attribute_descriptor();
+        make_particle_descriptor();
     return *ptr;
   }
 
@@ -111,14 +145,14 @@ struct event_view : public simbad::core::attribute_list
   }
   simbad::core::attribute get_attribute(std::size_t idx) const override
   {
-    if(15 > idx)
+    if(100 > idx)
       return m_model.particle_attribute(m_cell, idx);
 
     switch(idx)
     {
-    case 15: return m_model.time();
-    case 16: return PARTIALS_LEFT;
-    case 17: return std::int64_t(to_numeric(EK));
+    case 100: return m_model.time();
+    case 101: return PARTIALS_LEFT;
+    case 102: return std::int64_t(to_numeric(EK));
     default:
       throw std::invalid_argument("attribute index " + std::to_string(idx) +
                                   " is not recognized");
@@ -132,14 +166,22 @@ private:
 
 } // namespace
 
-parameter_evolution_3d::parameter_evolution_3d(
-    const simbad::core::property_tree &pt)
+parameter_evolution_3d::parameter_evolution_3d(const core::property_tree &pt)
     : m_time(0),
+      m_last_muatation_id(0),
       m_rng(pt.get<uint64_t>("seed")),
       m_spacetime(pt.get<double>("space.tile_size")),
       m_model_params(pt),
-      m_configurtation_view(new configuration_view(*this))
+      m_configurtation_view(new configuration_view(*this)),
+      m_tree_dump_path(pt.get("dump.path", std::string()))
 {
+}
+
+parameter_evolution_3d::~parameter_evolution_3d()
+{
+  if(m_tree_dump_path.empty())
+    return;
+  dump_mutation_tree(m_tree_dump_path);
 }
 
 const core::attribute_description &
@@ -192,15 +234,18 @@ void parameter_evolution_3d::read_configuration(
   std::vector<std::size_t> attribute_indices =
       cell_params::get_attribute_indices(conf.descriptor());
 
-  std::size_t idx = conf.position_attr_idx();
-  conf.visit_records(
-      [=](simbad::core::configuration_view::particle_attributes const &p) {
-        cell::position_type pos;
-        pos[0] = p[idx].get_real_ref(0);
-        pos[1] = p[idx].get_real_ref(1);
-        pos[2] = p[idx].get_real_ref(2);
-        insert(cell(pos, cell_params(p, attribute_indices)));
-      });
+  std::size_t pos_idx = conf.position_attr_idx();
+  std::size_t mut_idx = conf.descriptor()["mutation.id"].attribute_idx();
+  conf.visit_records([this, pos_idx, mut_idx, attribute_indices](
+      simbad::core::configuration_view::particle_attributes const &p) {
+    cell::position_type pos;
+    pos[0] = p[pos_idx].get_real_ref(0);
+    pos[1] = p[pos_idx].get_real_ref(1);
+    pos[2] = p[pos_idx].get_real_ref(2);
+    insert(cell(pos, std::make_shared<cell_params>(p, attribute_indices)));
+    std::size_t mutation_id = p[mut_idx].get_int_val();
+    m_last_muatation_id = std::max(m_last_muatation_id, mutation_id);
+  });
 }
 
 double parameter_evolution_3d::time() const { return m_time; }
@@ -232,7 +277,7 @@ void parameter_evolution_3d::pop()
   m_spacetime.visit_ball_guarded_order(c.position(), range, visitor);
 }
 
-void parameter_evolution_3d::check_accumulators()
+void parameter_evolution_3d::check_accumulators() const
 {
   double range = m_model_params.interaction().range();
   m_spacetime.visit([this, range](cell const &c) {
@@ -250,31 +295,40 @@ void parameter_evolution_3d::check_accumulators()
   });
 }
 
-simbad::core::attribute
-parameter_evolution_3d::particle_attribute(const cell &c,
-                                           std::size_t attr_idx) const
+void parameter_evolution_3d::dump_mutation_tree(const std::string &path) const
 {
-  switch(attr_idx)
+  std::vector<std::shared_ptr<cell_params const>> mutations = all_mutations();
+  std::ofstream output_file(path);
+
+  std::size_t i = 1;
+  output_file << "*vertices " << mutations.size() << std::endl;
+  for(std::shared_ptr<cell_params const> const &mutation_ptr : mutations)
   {
-  case 0:
-    return simbad::core::attribute_converter::convert_to<
-               simbad::core::coordinates<double, 3>>(c.position())
-        .get();
-  case 1: return c.density();
-  case 2: return c.event_time();
-  case 3: return std::int64_t(c.event_kind());
-  case 4: return c.params().birth_eff();
-  case 5: return c.params().birth_res();
-  case 6: return c.params().lifespan_eff();
-  case 7: return c.params().lifespan_res();
-  case 8: return c.params().success_eff();
-  case 9: return c.params().success_res();
-  case 10: return compute_birth_rate(c);
-  case 11: return compute_death_rate(c);
-  case 12: return compute_success_rate(c);
-  case 13: return 1.0 / compute_death_rate(c);
+    output_file << i << " \"" << mutation_ptr->mutation_id() << "\""
+                << std::endl;
+    ++i;
   }
-  throw simbad::core::unrecognized_attribute_number(attr_idx);
+
+  i = 1;
+  output_file << "*arcs " << std::endl;
+  for(std::shared_ptr<cell_params const> const &mutation_ptr : mutations)
+  {
+    std::shared_ptr<cell_params const> const &parent_ptr =
+        mutation_ptr->parent_ptr();
+    if(!parent_ptr)
+      continue;
+
+    std::size_t j = 1;
+    for(std::shared_ptr<cell_params const> const &search_ptr : mutations)
+    {
+      if(search_ptr->mutation_id() == parent_ptr->mutation_id())
+        break;
+      j++;
+    }
+
+    output_file << j << " " << i << std::endl;
+    ++i;
+  }
 }
 
 const spacetime &parameter_evolution_3d::current_spacetime() const
@@ -325,9 +379,27 @@ double parameter_evolution_3d::compute_success_rate(const cell &c) const
   return r;
 }
 
+std::size_t parameter_evolution_3d::generate_mutation_id()
+{
+  return ++m_last_muatation_id;
+}
+
 void parameter_evolution_3d::mutate(cell &c)
 {
-  m_model_params.mutate(c.params(), m_rng);
+  if(!m_model_params.sample_mutation(c, m_rng))
+    return;
+
+  std::shared_ptr<cell_params> mutated_params_ptr =
+      std::make_shared<cell_params>(c.params());
+
+  mutated_params_ptr->set_parent_ptr(c.params_ptr());
+  mutated_params_ptr->set_mutation_id(generate_mutation_id());
+
+  m_model_params.mutate_birth(*mutated_params_ptr, m_rng);
+  m_model_params.mutate_lifespan(*mutated_params_ptr, m_rng);
+  m_model_params.mutate_success(*mutated_params_ptr, m_rng);
+
+  c.set_params_ptr(mutated_params_ptr);
 }
 
 void parameter_evolution_3d::execute_death(event_visitor v)
@@ -362,6 +434,29 @@ void parameter_evolution_3d::execute_birth(
 
   event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
   v(child_birth_view);
+}
+
+std::vector<std::shared_ptr<cell_params const>>
+parameter_evolution_3d::all_mutations() const
+{
+  std::unordered_map<std::size_t, std::shared_ptr<cell_params const>>
+      id_to_ptr_map;
+  auto particle_visitor = [&id_to_ptr_map](cell const &c) {
+    for(std::shared_ptr<cell_params const> params_ptr = c.params_ptr();
+        nullptr != params_ptr; params_ptr = params_ptr->parent_ptr())
+    {
+      std::size_t id = params_ptr->mutation_id();
+      id_to_ptr_map.emplace(id, params_ptr);
+    }
+  };
+
+  m_spacetime.visit(particle_visitor);
+  std::vector<std::shared_ptr<cell_params const>> mutations;
+  mutations.reserve(id_to_ptr_map.size());
+  for(std::pair<std::size_t, std::shared_ptr<cell_params const>> const &pair :
+      id_to_ptr_map)
+    mutations.push_back(pair.second);
+  return mutations;
 }
 
 END_NAMESPACE_PARAMETER_EVOLUTION_3D

@@ -12,7 +12,8 @@ BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 class parameter_evolution_3d : public simbad::core::model
 {
 public:
-  parameter_evolution_3d(simbad::core::property_tree const &pt);
+  parameter_evolution_3d(core::property_tree const &pt);
+  ~parameter_evolution_3d();
 
   simbad::core::attribute_description const &event_descriptor() const override;
 
@@ -30,7 +31,8 @@ public:
   void resample_event(cell &c);
   void pop();
 
-  void check_accumulators();
+  void check_accumulators() const;
+  void dump_mutation_tree(std::string const &path) const;
   simbad::core::attribute particle_attribute(cell const &c,
                                              std::size_t attrname) const;
 
@@ -41,16 +43,20 @@ public:
   double compute_success_rate(cell const &c) const;
 
 protected:
+  std::size_t generate_mutation_id();
   void mutate(cell &c);
   void execute_death(event_visitor v);
   void execute_birth(event_visitor v);
+  std::vector<std::shared_ptr<cell_params const>> all_mutations() const;
 
 private:
   double m_time;
+  std::size_t m_last_muatation_id;
   std::mt19937_64 m_rng;
   spacetime m_spacetime;
   model_params m_model_params;
-  std::unique_ptr<simbad::core::configuration_view> m_configurtation_view;
+  std::unique_ptr<core::configuration_view> m_configurtation_view;
+  std::string m_tree_dump_path;
 };
 
 END_NAMESPACE_PARAMETER_EVOLUTION_3D

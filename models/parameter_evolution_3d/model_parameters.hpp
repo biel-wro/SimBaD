@@ -26,7 +26,10 @@ struct model_params
   double lifespan(double density, double efficiency, double resistance) const;
   double success_prob(double density, double efficiency, double resistan) const;
 
-  void mutate(cell_params &cp, std::mt19937_64 &rng) const;
+  bool sample_mutation(cell &cp, std::mt19937_64 &rng) const;
+  void mutate_birth(cell_params &cp, std::mt19937_64 &rnd) const;
+  void mutate_lifespan(cell_params &cp, std::mt19937_64 &rnd) const;
+  void mutate_success(cell_params &cp, std::mt19937_64 &rnd) const;
   interaction_type const &interaction() const;
   dispersion_type const &dispersion() const;
 
@@ -34,10 +37,6 @@ protected:
   double birth_saturation(double x) const;
   double lifespan_saturation(double x) const;
   double success_saturation(double x) const;
-
-  void mutate_birth(cell_params &cp, std::mt19937_64 &rnd) const;
-  void mutate_lifespan(cell_params &cp, std::mt19937_64 &rnd) const;
-  void mutate_success(cell_params &cp, std::mt19937_64 &rnd) const;
 
 private:
   double m_mutation_prob;

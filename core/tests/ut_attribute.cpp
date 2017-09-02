@@ -238,4 +238,24 @@ BOOST_AUTO_TEST_CASE(reference_getters)
   BOOST_REQUIRE_EQUAL(cattr0.get_real_ref(1), 2.0);
 }
 
+BOOST_AUTO_TEST_CASE(equal)
+{
+  BOOST_CHECK_EQUAL(attribute(0), attribute(0));
+  BOOST_CHECK_EQUAL(attribute(134), attribute(134));
+  BOOST_CHECK_EQUAL(attribute(17), attribute("17"));
+  BOOST_CHECK_EQUAL(attribute(17), attribute("17.0"));
+  BOOST_CHECK_EQUAL(attribute("67"), attribute(67));
+  BOOST_CHECK_EQUAL(attribute("45.0"), attribute(45));
+  BOOST_CHECK_EQUAL(attribute(56), attribute(56.0));
+  BOOST_CHECK_EQUAL(attribute(98.0), attribute(98));
+  BOOST_CHECK_EQUAL(attribute(34.5), attribute("34.5"));
+  BOOST_CHECK_EQUAL(attribute("43.25"), attribute(43.25));
+
+  BOOST_CHECK_NE(attribute(45), attribute(56));
+  BOOST_CHECK_NE(attribute(1), attribute(1.1));
+  BOOST_CHECK_NE(attribute(16.32), attribute(16));
+  BOOST_CHECK_NE(attribute(56), attribute(56.34));
+  BOOST_CHECK_NE(attribute(32), attribute());
+}
+
 BOOST_AUTO_TEST_SUITE_END()
