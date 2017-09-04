@@ -309,12 +309,14 @@ void parameter_evolution_3d::dump_mutation_tree(const std::string &path) const
     ++i;
   }
 
-  i = 1;
+  i = 0;
   output_file << "*arcs " << std::endl;
   for(std::shared_ptr<cell_params const> const &mutation_ptr : mutations)
   {
+    ++i;
     std::shared_ptr<cell_params const> const &parent_ptr =
         mutation_ptr->parent_ptr();
+
     if(!parent_ptr)
       continue;
 
@@ -328,7 +330,7 @@ void parameter_evolution_3d::dump_mutation_tree(const std::string &path) const
 
     assert(i != j);
     output_file << j << " " << i << std::endl;
-    ++i;
+
   }
 }
 

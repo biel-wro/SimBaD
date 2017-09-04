@@ -557,7 +557,13 @@ struct hash_scalar
   }
   result_type operator()(attribute::string_type const &str) const
   {
+    //TODO: do real parsing (boost::spirit) & dispatch
     std::stringstream ss(str);
+
+    attribute::real_type real_val;
+    ss >> real_val;
+    if(!ss.fail())
+      return operator()(real_val);
 
     attribute::int_type int_val;
     ss >> int_val;
@@ -565,10 +571,7 @@ struct hash_scalar
       return operator()(int_val);
 
     ss.str() = str;
-    attribute::real_type real_val;
-    ss >> real_val;
-    if(!ss.fail())
-      return operator()(real_val);
+
 
     return std::hash<attribute::string_type>()(str);
   }
@@ -584,7 +587,7 @@ struct hash_visitor
     typename getter::iterator_type it, beg, end;
     std::tie(beg, end) = getter()(val);
 
-    std::size_t seed;
+    std::size_t seed = 0;
     for(it = beg; it != end; ++it)
     {
       typename scalar_in<T>::type const &scalar = *it;
