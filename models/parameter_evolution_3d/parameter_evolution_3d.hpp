@@ -47,7 +47,8 @@ protected:
   void mutate(cell &c);
   void execute_death(event_visitor v);
   void execute_birth(event_visitor v);
-  std::vector<std::shared_ptr<cell_params const>> all_mutations() const;
+  std::vector<std::shared_ptr<cell_params const>>
+  all_mutations() const;
 
 private:
   double m_time;

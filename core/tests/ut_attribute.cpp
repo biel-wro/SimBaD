@@ -221,12 +221,6 @@ BOOST_AUTO_TEST_CASE(conversion_to_coord_double3)
                                   coords6.begin(), coords6.end());
 }
 
-BOOST_AUTO_TEST_CASE(hash)
-{
-  std::unordered_set<attribute> set;
-  set.emplace("string");
-}
-
 BOOST_AUTO_TEST_CASE(reference_getters)
 {
   attribute attr0{1.0, 2.0};
@@ -256,6 +250,32 @@ BOOST_AUTO_TEST_CASE(equal)
   BOOST_CHECK_NE(attribute(16.32), attribute(16));
   BOOST_CHECK_NE(attribute(56), attribute(56.34));
   BOOST_CHECK_NE(attribute(32), attribute());
+
+  BOOST_CHECK_EQUAL(attribute({1, 2, 3}), attribute({"1", "2.0", "3.00"}));
+  BOOST_CHECK_EQUAL(attribute({"2.0", "1"}), attribute({2, 1}));
+  BOOST_CHECK_EQUAL(attribute({0.0, 1.1, 2.2}), attribute({"0", "1.1", "2.2"}));
+  BOOST_CHECK_EQUAL(attribute({1, 2, 3}), attribute({1.0, 2.0, 3.0}));
+
+  BOOST_CHECK_NE(attribute({1,2}), attribute({1,2,3}));
+}
+
+BOOST_AUTO_TEST_CASE(hash)
+{
+  BOOST_CHECK_EQUAL(attribute(0).hash(), attribute(0).hash());
+  BOOST_CHECK_EQUAL(attribute(134).hash(), attribute(134).hash());
+  BOOST_CHECK_EQUAL(attribute(17).hash(), attribute("17").hash());
+  BOOST_CHECK_EQUAL(attribute("45.0").hash(), attribute(45).hash());
+  BOOST_CHECK_EQUAL(attribute(56).hash(), attribute(56.0).hash());
+  BOOST_CHECK_EQUAL(attribute("43.25").hash(), attribute(43.25).hash());
+
+  BOOST_CHECK_NE(attribute(45).hash(), attribute(56).hash());
+  BOOST_CHECK_NE(attribute(1).hash(), attribute(1.1).hash());
+  BOOST_CHECK_NE(attribute(16.32).hash(), attribute(16).hash());
+  BOOST_CHECK_NE(attribute(32).hash(), attribute().hash());
+
+  BOOST_CHECK_EQUAL(attribute({1, 2}).hash(), attribute({"1", "2.0"}).hash());
+  BOOST_CHECK_EQUAL(attribute({0.0, 1.1, 2.2}), attribute({"0", "1.1", "2.2"}));
+  BOOST_CHECK_EQUAL(attribute({1, 2, 3}), attribute({1.0, 2.0, 3.0}));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

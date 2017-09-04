@@ -45,8 +45,18 @@ template <class T, class Scalar> constexpr bool has_scalar()
 }
 
 attribute::attribute() : super("") {}
-attribute::attribute(std::string val) : super(std::move(val)) {}
+attribute::attribute(attribute::string_type val) : super(std::move(val)) {}
 attribute::attribute(const char *cstr) : attribute(std::string(cstr)) {}
+
+attribute::attribute(std::initializer_list<string_type> il)
+    : super(array_attribute<string_type>(il.begin(), il.end()))
+{
+}
+
+attribute::attribute(std::initializer_list<const char *> il)
+    : super(array_attribute<string_type>(il.begin(), il.end()))
+{
+}
 attribute::attribute(array_attribute<std::string> v) : super(std::move(v)) {}
 
 attribute::attribute(int_type val) : super(std::move(val)) {}
@@ -177,7 +187,6 @@ attribute::attribute(const std::vector<T> &val)
   template attribute::attribute(coordinates<T, 3> const &);                    \
   template attribute::attribute(std::vector<T> const &);
 
-
 INSTANTIATE_INTEGER_CONSTRUCTORS(int)
 INSTANTIATE_INTEGER_CONSTRUCTORS(std::size_t)
 
@@ -282,7 +291,7 @@ attribute::string_type attribute::get_string_val(std::size_t idx) const
 attribute::real_type attribute::get_real_val(std::size_t idx) const
 {
   attribute scalar = get_scalar(idx);
-  real_type val =  attribute_cast<real_type>(scalar);
+  real_type val = attribute_cast<real_type>(scalar);
   return val;
 }
 
@@ -520,29 +529,82 @@ struct equal_visitor
 bool attribute::operator==(const attribute &rhs) const
 {
   return boost::apply_visitor(equal_visitor(), *this, rhs);
-  /*
-    // TODO: provide a faster implementation
-    std::size_t dim = dimension();
-    if(dim != rhs.dimension())
-      return false;
-
-    for(std::size_t idx = 0; idx < dim; ++idx)
-      if(get_string_val(idx) != rhs.get_string_val(idx))
-        return false;
-    return true;*/
 }
 bool attribute::operator!=(const attribute &rhs) const
 {
   return !(operator==(rhs));
 }
 
+namespace
+{
+struct hash_scalar
+{
+  using result_type = std::size_t;
+  result_type operator()(attribute::int_type v) const
+  {
+    return std::hash<attribute::int_type>()(v);
+  }
+  result_type operator()(attribute::real_type v) const
+  {
+    attribute::real_type integral;
+    attribute::real_type fraction = std::modf(v, &integral);
+    // fraction can be Inf or NaN
+    bool is_integer = std::isfinite(v) && 0 == fraction;
+
+    if(is_integer)
+      return operator()(std::llround(v));
+    return std::hash<attribute::real_type>()(v);
+  }
+  result_type operator()(attribute::string_type const &str) const
+  {
+    std::stringstream ss(str);
+
+    attribute::int_type int_val;
+    ss >> int_val;
+    if(!ss.fail())
+      return operator()(int_val);
+
+    ss.str() = str;
+    attribute::real_type real_val;
+    ss >> real_val;
+    if(!ss.fail())
+      return operator()(real_val);
+
+    return std::hash<attribute::string_type>()(str);
+  }
+};
+
+struct hash_visitor
+{
+  using result_type = std::size_t;
+
+  template <class T> result_type operator()(T const &val) const
+  {
+    using getter = iter_getter<T, true>;
+    typename getter::iterator_type it, beg, end;
+    std::tie(beg, end) = getter()(val);
+
+    std::size_t seed;
+    for(it = beg; it != end; ++it)
+    {
+      typename scalar_in<T>::type const &scalar = *it;
+      std::size_t scalar_hash = hash_scalar()(scalar);
+      boost::hash_combine(seed, scalar_hash);
+    }
+    return seed;
+  }
+};
+}
+
 std::size_t attribute::hash() const
 {
-  std::size_t dim = dimension();
-  std::size_t seed = 0;
-  for(std::size_t idx = 0; idx < dim; ++idx)
-    boost::hash_combine(seed, get_string_val(idx));
-  return seed;
+  return boost::apply_visitor(hash_visitor(), *this);
+  /*
+    std::size_t dim = dimension();
+    std::size_t seed = 0;
+    for(std::size_t idx = 0; idx < dim; ++idx)
+      boost::hash_combine(seed, get_string_val(idx));
+    return seed;*/
 }
 
 END_NAMESPACE_CORE

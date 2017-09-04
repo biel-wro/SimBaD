@@ -326,6 +326,7 @@ void parameter_evolution_3d::dump_mutation_tree(const std::string &path) const
       j++;
     }
 
+    assert(i != j);
     output_file << j << " " << i << std::endl;
     ++i;
   }
@@ -381,7 +382,8 @@ double parameter_evolution_3d::compute_success_rate(const cell &c) const
 
 std::size_t parameter_evolution_3d::generate_mutation_id()
 {
-  return ++m_last_muatation_id;
+  ++m_last_muatation_id;
+  return m_last_muatation_id;
 }
 
 void parameter_evolution_3d::mutate(cell &c)

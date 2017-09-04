@@ -92,34 +92,27 @@ public:
   attribute();
 
   // string
-  attribute(std::string val);
+  attribute(string_type val);
   attribute(char const *cstr);
-  attribute(array_attribute<std::string> val);
+  attribute(std::initializer_list<string_type> il);
+  attribute(std::initializer_list<char const *> il);
+  attribute(array_attribute<string_type> val);
 
   // integer
   attribute(int_type val);
   attribute(std::initializer_list<std::int64_t> il);
   attribute(int2_type const &val);
   attribute(int3_type const &val);
-  attribute(array_attribute<int_type> &&val);
-  attribute(array_attribute<int_type> const &val);
+  attribute(intn_type &&val);
+  attribute(intn_type const &val);
 
-
-  /*
-  // std::size_t
-  attribute(std::initializer_list<std::size_t> val);
-  attribute(std::size_t val);
-  attribute(coordinates<std::size_t, 2> const &val);
-  attribute(coordinates<std::size_t, 3> const &val);
-  attribute(std::vector<std::size_t> const &val);
-*/
   // float
   attribute(real_type val);
   attribute(std::initializer_list<real_type> il);
-  attribute(coordinates<real_type, 2> const &val);
-  attribute(coordinates<real_type, 3> const &val);
-  attribute(array_attribute<real_type> &&val);
-  attribute(array_attribute<real_type> const &val);
+  attribute(real2_type const &val);
+  attribute(real3_type const &val);
+  attribute(realn_type &&val);
+  attribute(realn_type const &val);
 
   // other integers
   template <class T, std::enable_if_t<std::is_integral<T>::value, int> = 0>
@@ -132,8 +125,6 @@ public:
   attribute(coordinates<T, 3> const &val);
   template <class T, std::enable_if_t<std::is_integral<T>::value, int> = 0>
   attribute(std::vector<T> const &val);
-
-
 
   // query
   bool empty() const;
