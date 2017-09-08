@@ -8,11 +8,12 @@ matrix:
       addons:
         apt:
           sources:
-            - debian-sid
+            - ubuntu-toolchain-r-test
           packages:
-            - g++-4.9
+            - gcc-6
+            - g++-6
             - libboost-dev-all
-      env: COMPILER=g++-4.9
+      env: COMPILER=g++-6
     - compiler: gcc
       dist: trusty
       compiler: gcc
@@ -78,6 +79,7 @@ matrix:
 before_script:
   - mkdir build
   - cd build
+  - $COMPILER -v
   
 script:
   - cmake -DCMAKE_CXX_COMPILER=$COMPILER .. && make -j 2 && ctest --VV --output-on-failure

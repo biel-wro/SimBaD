@@ -17,6 +17,25 @@ attribute_description::attribute_description(
   for(attribute_descriptor const &record : list)
     add_attribute(record);
 }
+
+attribute_description
+attribute_description::mapped_from(attribute_description const &other)
+{
+  std::vector<std::string> names;
+  names.reserve(other.size());
+  for(attribute_descriptor const &descriptor : other)
+    names.emplace_back(descriptor.attribute_name());
+  return mapped_from(other, names);
+}
+
+attribute_description
+attribute_description::mapped_from(attribute_description const &other,
+                                   std::vector<std::string> const &names)
+{
+  attribute_description desc;
+  desc.add_attributes(other, names.begin(), names.end());
+  return desc;
+}
 attribute_description::index_iterator
 attribute_description::begin_indices() const
 {
@@ -199,8 +218,8 @@ std::vector<std::size_t> attribute_description::names_to_indices(
 }
 
 std::unordered_map<std::size_t, std::string>
-attribute_description::add_attributes(const property_tree &pt,
-                                      bool ignore_empty)
+attribute_description::add_and_map_attributes(const property_tree &pt,
+                                              bool ignore_empty)
 {
   std::unordered_map<std::size_t, std::string> values;
 
@@ -216,7 +235,7 @@ attribute_description::add_attributes(const property_tree &pt,
 }
 
 std::unordered_map<std::size_t, std::size_t>
-attribute_description::add_attributes(
+attribute_description::add_and_map_attributes(
     attribute_description const &other, std::size_t start_target_idx,
     std::unordered_set<std::string> const *names)
 {
@@ -243,11 +262,36 @@ attribute_description::add_attributes(
 }
 
 std::unordered_map<std::size_t, std::size_t>
-attribute_description::add_attributes(attribute_description const &other,
-                                      std::vector<std::string> const &names,
-                                      std::size_t start_target_idx)
+attribute_description::add_and_map_attributes(
+    attribute_description const &other, std::vector<std::string> const &names,
+    std::size_t start_target_idx)
 {
-  return add_attributes(other, names.begin(), names.end(), start_target_idx);
+  return add_and_map_attributes(other, names.begin(), names.end(),
+                                start_target_idx);
+}
+
+void attribute_description::add_attributes(
+    attribute_description const &other, std::vector<std::string> const &names)
+{
+  add_attributes(other, names.begin(), names.end());
+}
+
+std::vector<std::size_t> attribute_description::lin_mapping_from(
+    const attribute_description &other) const
+{
+  std::vector<std::size_t> mapping(size());
+
+  for(attribute_descriptor const &descriptor : get<0>())
+  {
+    std::string const &name = descriptor.attribute_name();
+    boost::optional<attribute_descriptor const &> other_descriptor =
+        other.get_descriptor(name);
+    std::size_t my_index = descriptor.attribute_idx();
+    std::size_t other_index = descriptor.attribute_idx();
+
+    mapping.at(my_index) = other_index;
+  }
+  return mapping;
 }
 
 const attribute_description &attribute_description::make_empty()
@@ -268,11 +312,33 @@ const attribute_description &attribute_description::make_position_only()
   return *mapping_ptr;
 }
 
+template <class NameIterator>
+void attribute_description::add_attributes(const attribute_description &other,
+                                           NameIterator first,
+                                           NameIterator last,
+                                           std::size_t start_target_idx)
+{
+  std::size_t current_idx = start_target_idx;
+  for(NameIterator it = first; it != last; ++it)
+  {
+    std::string const &name = *it;
+    boost::optional<attribute_descriptor const &> descriptor =
+        other.get_descriptor(name);
+    if(!descriptor)
+      throw unrecognized_attribute_name(name);
+
+    current_idx =
+        1 + add_attribute_auto_idx(current_idx, name, descriptor->kind(),
+                                   descriptor->scalar(),
+                                   descriptor->attribute_dimension());
+  }
+}
+
 template <class Iterator>
 std::unordered_map<std::size_t, std::size_t>
-attribute_description::add_attributes(const attribute_description &other,
-                                      Iterator first, Iterator last,
-                                      std::size_t start_target_idx)
+attribute_description::add_and_map_attributes(
+    const attribute_description &other, Iterator first, Iterator last,
+    std::size_t start_target_idx)
 {
   std::unordered_map<std::size_t, std::size_t> new_to_old;
 

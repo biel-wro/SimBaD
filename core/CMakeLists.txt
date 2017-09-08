@@ -48,10 +48,13 @@ set( SOURCES
   processors/launch_utils.cpp
   processors/snapshotter.cpp
   processors/tree_builder
+  processors/dataframe_tracker.cpp
+
   legacy/simple/simple_event_view.cpp
   legacy/event_partial.cpp
   # utils
   utils/attribute_exceptions.cpp
+  utils/attribute_mapping.cpp
   utils/attribute_vector.cpp
   utils/counting_id_generator.cpp
   utils/generic_particle.cpp

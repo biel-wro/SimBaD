@@ -49,6 +49,12 @@ public:
   attribute_description();
   attribute_description(std::initializer_list<attribute_descriptor> list);
 
+  // other constructions
+  static attribute_description mapped_from(attribute_description const &other);
+  static attribute_description
+  mapped_from(attribute_description const &other,
+              std::vector<std::string> const &names);
+
   // iterating
   index_iterator begin_indices() const;
   index_iterator end_indices() const;
@@ -89,18 +95,23 @@ public:
 
   // returned indices might be useful sometimes
   std::unordered_map<std::size_t, std::string>
-  add_attributes(property_tree const &pt, bool ignore_empty = true);
+  add_and_map_attributes(property_tree const &pt, bool ignore_empty = true);
 
   // optional map new_idx=>old_idx might be useful sometimes
-  std::unordered_map<std::size_t, std::size_t>
-  add_attributes(attribute_description const &other,
-                 std::size_t start_target_idx = 0,
-                 std::unordered_set<std::string> const *names = nullptr);
+  std::unordered_map<std::size_t, std::size_t> add_and_map_attributes(
+      attribute_description const &other, std::size_t start_target_idx = 0,
+      std::unordered_set<std::string> const *names = nullptr);
 
   std::unordered_map<std::size_t, std::size_t>
-  add_attributes(attribute_description const &other,
-                 std::vector<std::string> const &names,
-                 std::size_t start_target_idx = 0);
+  add_and_map_attributes(attribute_description const &other,
+                         std::vector<std::string> const &names,
+                         std::size_t start_target_idx = 0);
+
+  void add_attributes(attribute_description const &other,
+                      std::vector<std::string> const &names);
+  // mappings
+  std::vector<std::size_t>
+  lin_mapping_from(attribute_description const &other) const;
 
   // unpacking
   std::pair<std::vector<std::size_t>, std::vector<std::string>>
@@ -109,15 +120,18 @@ public:
   std::vector<std::size_t>
   names_to_indices(std::vector<std::string> const &names) const;
 
-  // some standard mappings
+  // some trivial descriptions
   static attribute_description const &make_empty();
   static attribute_description const &make_position_only();
 
 private:
+  template <class NameIterator>
+  void add_attributes(attribute_description const &other, NameIterator first,
+                      NameIterator last, std::size_t start_target_idx=0);
   template <class Iterator>
   std::unordered_map<std::size_t, std::size_t>
-  add_attributes(attribute_description const &other, Iterator first,
-                 Iterator last, std::size_t start_target_idx);
+  add_and_map_attributes(attribute_description const &other, Iterator first,
+                         Iterator last, std::size_t start_target_idx);
 };
 
 #undef SIMBAD_ATTRIBUTES_DESCRIPTION_SUPER

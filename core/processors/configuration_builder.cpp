@@ -89,7 +89,7 @@ configuration_builder::configuration_builder(
 
   // set attribute mapping
   std::unordered_map<std::size_t, std::size_t> attribute_map =
-      m_attribute_description.add_attributes(source.event_descriptor(),
+      m_attribute_description.add_and_map_attributes(source.event_descriptor(),
                                              all_names);
 
   m_attribute_mapping.resize(attribute_map.size());

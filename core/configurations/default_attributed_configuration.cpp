@@ -20,7 +20,7 @@ void default_attributed_configuration::on_base_reset()
 {
   m_merged_attr_desc.clear();
   m_merged_attr_desc = get_base().descriptor();
-  m_owned_attributes = m_merged_attr_desc.add_attributes(m_properties);
+  m_owned_attributes = m_merged_attr_desc.add_and_map_attributes(m_properties);
 }
 void default_attributed_configuration::visit_records(
     configuration_view::particle_visitor v) const

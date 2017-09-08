@@ -2,7 +2,7 @@ mode "snapshots"
 run
 {
   time_step 1
-  max_steps 100
+  max_steps 150
 }
 
 stacked_view
@@ -38,10 +38,10 @@ model
     {
       tile_size 1
     }
-    seed 0
+    seed 1
     mutation
     {
-      probability 0.1
+      probability 0.07
     }
     interaction
     {
