@@ -51,6 +51,6 @@ dataframe_tracker::dataframe_tracker(attribute_description const &description,
   m_attribute_description.add_attributes(description, val_names);
 }
 
-void dataframe_tracker::feed_record(const attribute_list &input) {}
+void dataframe_tracker::feed_record(const attribute_list &input) { -}
 
 END_NAMESPACE_CORE
