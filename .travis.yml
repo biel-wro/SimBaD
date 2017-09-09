@@ -3,54 +3,14 @@ language: generic
 matrix:
   include:
     - dist: trusty
-      compiler: gcc
       sudo: required
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-6
-            - g++-6
-            - libboost-dev-all
+      services:
+        - docker
+      script:
+        - mkdir build
+        - docker build travis/clang39/ -t simbad-build
+        - docker docker run -v ${PWD}/:/code simbad-build ./bin/bash -c "cd /code/build && cmake -DCMAKE_CXX_COMPILER=clang++-3.9 .. && make -j 2"
       env: COMPILER=g++-6
-    - compiler: gcc
-      dist: trusty
-      compiler: gcc
-      sudo: required
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - debian-sid
-          packages:
-            - g++-5
-            - libboost1.60-all-dev
-      env: COMPILER=g++-5
-    - dist: trusty
-      compiler: gcc
-      sudo: required
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.6
-          packages:
-            - clang-3.6
-            - libboost1.58-all-dev
-      env: COMPILER=clang++-3.6
-    - dist: trusty
-      compiler: clang-3.7
-      sudo: required
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - llvm-toolchain-precise-3.7
-          packages:
-            - clang-3.7
-            - libboost1.58-all-dev
-      env: COMPILER=clang++-3.7
     - os: osx
       osx_image: xcode7.3
       env: COMPILER=clang++
