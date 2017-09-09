@@ -5,5 +5,5 @@ RUN apt-get update &&\
         cmake \
         libboost-all-dev \
         
-RUN update-alternatives /usr/bin/cc  cc  /usr/bin/clang-3.9   1000 &&\
-    update-alternatives /usr/bin/c++ c++ /usr/bin/clang++-3.9 1000
+RUN update-alternatives --install /usr/bin/cc  cc  /usr/bin/clang-3.9   1000 &&\
+    update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-3.9 1000
