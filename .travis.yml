@@ -9,8 +9,8 @@ matrix:
       script:
         - docker -v
         - docker pull $DOCKERIMAGE
-        - docker run -v ${PWD}/:/code simbad-build sh -c "mkdir -p /code/build && cd /code/build && cmake .. && make -j 2"
-        - docker run -v ${PWD}/:/code simbad-build sh -c "cd /code/build && ctest --VV -output-on-failure"
+        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake .. && make -j 2"
+        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "cd /code/build && ctest --VV -output-on-failure"
       env: DOCKERIMAGE=tozanski/simbad-build:clang39
     - os: osx
       osx_image: xcode7.3
