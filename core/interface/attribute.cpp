@@ -552,7 +552,7 @@ struct hash_scalar
     bool is_integer = std::isfinite(v) && 0 == fraction;
 
     if(is_integer)
-      return operator()(std::llround(v));
+      return operator()(attribute::int_type(std::llround(v)));
     return std::hash<attribute::real_type>()(v);
   }
   result_type operator()(attribute::string_type const &str) const
