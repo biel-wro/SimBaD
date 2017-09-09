@@ -9,7 +9,7 @@ matrix:
       script:
         - mkdir build
         - docker build travis/clang39/ -t simbad-build
-        - docker docker run -v ${PWD}/:/code simbad-build ./bin/bash -c "cd /code/build && cmake -DCMAKE_CXX_COMPILER=clang++-3.9 .. && make -j 2"
+        - docker docker run -v ${PWD}/:/code simbad-build sh -c "cd /code/build && cmake -DCMAKE_CXX_COMPILER=clang++-3.9 .. && make -j 2"
       env: COMPILER=g++-6
     - os: osx
       osx_image: xcode7.3
