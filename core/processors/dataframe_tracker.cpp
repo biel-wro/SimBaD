@@ -105,13 +105,14 @@ dataframe_tracker::node_equal dataframe_tracker::equaler() const
 {
   return m_attribute_set.key_eq();
 }
+/*
 boost::optional<dataframe_tracker::const_iterator>
 dataframe_tracker::find(const attribute &attr) const
 {
-  const_iterator it = m_attribute_set.find(attr, hasher(), equaler());
+  const_iterator it = m_attribute_set.find(attr, hasher(), cmp());
   if(it == m_attribute_set.end())
     return boost::none;
   return it;
 }
-
+*/
 END_NAMESPACE_CORE
