@@ -1,0 +1,197 @@
+mode "simulation"
+run
+{
+  nevents 100
+}
+
+stacked_view
+{
+}
+configuration_printer
+{
+  class "csv_printer"
+  parameters
+  {
+    delimiter ","
+  }
+}
+reader
+{
+  class "text_configuration_printer"
+  parameters
+  {
+    output stdout
+  }
+  stream stdout
+}
+model
+{
+  class "parameter_evolution_3d"
+  parameters
+  {
+    space
+    {
+      tile_size 1
+    }
+    seed 0
+    mutation
+    {
+      probability 0.1
+    }
+    interaction
+    {
+      sigma 1
+      gamma 2
+      tolerance 0.1
+    }
+    
+    birth
+    {
+      dispersion
+      {
+        sigma 1
+      }
+      saturation
+      {
+        sigma 5
+        gamma 2
+        scale 10
+      }
+      efficiency
+      {
+        mutator
+        {
+          class "uniform_step_mutator"
+          parameters
+          {
+            increase_length 0.1
+            decrease_length 1.0
+          }
+        }
+      }
+      resistance
+      {
+        mutator
+        {
+          class "uniform_step_mutator"
+          parameters
+          {
+            increase_length 0.1
+            decrease_length 1.0
+          }
+        }
+      }        
+    }
+    lifespan
+    {
+      saturation
+      {
+        sigma 10
+        gamma 2
+        scale 1000
+      }
+      efficiency
+      {
+        mutator
+        {
+          class "uniform_step_mutator"
+          parameters
+          {
+            increase_length 0.1
+            decrease_length 1.0
+          }
+        }
+      }
+      resistance
+      {
+        mutator
+        {
+          class "uniform_step_mutator"
+          parameters
+          {
+            increase_length 0.1
+            decrease_length 1.0
+          }
+        }
+      }
+    }
+    success
+    {
+      saturation
+      {
+        sigma 5
+        gamma 2
+        scale 1
+      }
+      efficiency
+      {
+        mutator
+        {
+          class "uniform_step_mutator"
+          parameters
+          {
+            increase_length 0.1
+            decrease_length 1.0
+          }
+        }
+      }
+      resistance
+      {
+        mutator
+        {
+          class "uniform_step_mutator"
+          parameters
+          {
+            increase_length 0.1
+            decrease_length 1.0
+          }
+        }
+      }
+    }
+    dummy
+    {
+      mutator
+      {
+        class "uniform_step_mutator"
+        parameters
+        {
+          increase_length 0.1
+          decrease_length 1.0
+        }
+      }
+    }
+  }
+}
+initial_configuration
+{
+  class "cubic_crystal_configuration"
+  parameters
+  {
+    dimension 3
+    radius 2
+    spacing 1
+  }
+  default_attributes
+  {
+    birth
+    {
+      efficiency 0.1
+      resistance 0.5
+    }
+    lifespan
+    {
+      efficiency 0.1
+      resistance 0.5
+    }
+    success
+    {
+      efficiency 0.9
+      resistance 0.5
+    }
+    dummy 0.1
+  }
+}
+
+  
+
+
