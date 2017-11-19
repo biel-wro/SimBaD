@@ -27,12 +27,12 @@ private:
   struct node_equal
   {
     std::size_t const &m_key_size;
-    bool operator()(dataframe_tracker::node const &lhs,
-                    dataframe_tracker::node const &rhs) const;
-    bool operator()(dataframe_tracker::node const &node,
+    bool operator()(node const &lhs,
+                    node const &rhs) const;
+    bool operator()(node const &node,
                     attribute const &attr) const;
     bool operator()(attribute const &attr,
-                    dataframe_tracker::node const &node ) const;
+                    node const &node ) const;
     bool operator()(attribute const &lhs, attribute const &rhs) const;
   };
 

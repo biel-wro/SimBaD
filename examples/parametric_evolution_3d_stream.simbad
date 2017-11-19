@@ -188,6 +188,10 @@ initial_configuration
       efficiency 0.9
       resistance 0.5
     }
+    mutation
+    {
+      id 1
+    }
     dummy 0.1
   }
 }

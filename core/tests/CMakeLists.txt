@@ -15,6 +15,7 @@ set( TEST_SOURCES
   ut_configuration_builder.cpp
   ut_csv_reader.cpp
   ut_cubic_crystal_configuration.cpp
+  ut_dataframe_tracker.cpp
   ut_generic_particle.cpp
   ut_lazy_set.cpp
   ut_lazy_set_chunk.cpp

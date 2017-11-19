@@ -24,23 +24,32 @@ struct csv_header_grammar
       : csv_header_grammar::base_type(m_start)
   {
     namespace qi = boost::spirit::qi;
-    m_singleton_column = qi::lexeme[+(qi::char_ - delim)] |
-                         qi::lexeme['"' >> +(qi::char_ - '"') >> '"'] |
-                         qi::lexeme['\'' >> +(qi::char_ - '\'') >> '\''];
+    m_singleton_column = qi::lexeme['"' >> +(qi::char_ - '"') >> '"'] |
+                         qi::lexeme['\'' >> +(qi::char_ - '\'') >> '\''] |
+                         qi::lexeme[+(qi::char_ - delim)];
 
-    m_first_partial_column =
+    m_column_0_unquoted =
         qi::lexeme[*(qi::char_ - delim - numsep) >> numsep >> '0'];
+    m_column_0_quoted =
+        qi::lexeme['"' >> *(qi::char_ - numsep) >> numsep >> '0' >> '"'];
+    m_column_0 = qi::hold[m_column_0_quoted] | m_column_0_unquoted;
 
-    m_another_partial_column =
-        qi::lexeme[qi::lit(qi::_r1) >> numsep >>
-                   qi::uint_parser<std::size_t>()(qi::_r2)];
+    using col = qi::uint_parser<std::size_t>;
+
+    m_column_n_unquoted =
+        qi::lexeme[qi::lit(qi::_r1) >> numsep >> col()(qi::_r2)];
+    m_column_n_quoted =
+        qi::lexeme['"' >> qi::lit(qi::_r1) >> numsep >> col()(qi::_r2) >> '"'];
+
+    m_column_n = qi::hold[m_column_n_quoted(qi::_r1, qi::_r2)] |
+                 m_column_n_unquoted(qi::_r1, qi::_r2);
 
     m_remaining_partial_columns %=
         qi::eps[qi::_val = 1] >>
-        *(delim >> m_another_partial_column(qi::_r1, qi::_val)[qi::_val += 1]);
+        *(delim >> m_column_n(qi::_r1, qi::_val)[qi::_val += 1]);
 
-    m_merged_columns %= m_first_partial_column[qi::_a = qi::_1] >>
-                        m_remaining_partial_columns(qi::_a);
+    m_merged_columns %=
+        m_column_0[qi::_a = qi::_1] >> m_remaining_partial_columns(qi::_a);
     m_attribute =
         qi::hold[m_merged_columns] | (m_singleton_column >> qi::attr(1));
 
@@ -50,8 +59,15 @@ struct csv_header_grammar
     BOOST_SPIRIT_DEBUG_NODE(m_attribute);
     BOOST_SPIRIT_DEBUG_NODE(m_merged_columns);
     BOOST_SPIRIT_DEBUG_NODE(m_remaining_partial_columns);
-    BOOST_SPIRIT_DEBUG_NODE(m_another_partial_column);
-    BOOST_SPIRIT_DEBUG_NODE(m_first_partial_column);
+
+    BOOST_SPIRIT_DEBUG_NODE(m_column_0);
+    BOOST_SPIRIT_DEBUG_NODE(m_column_0_quoted);
+    BOOST_SPIRIT_DEBUG_NODE(m_column_0_unquoted);
+
+    BOOST_SPIRIT_DEBUG_NODE(m_column_n);
+    BOOST_SPIRIT_DEBUG_NODE(m_column_n_quoted);
+    BOOST_SPIRIT_DEBUG_NODE(m_column_n_unquoted);
+
     BOOST_SPIRIT_DEBUG_NODE(m_singleton_column);
   }
   template <class... T> using rule = boost::spirit::qi::rule<T...>;
@@ -64,9 +80,16 @@ struct csv_header_grammar
   rule<Iterator, result_type(), space_type> m_start;
   rule<Iterator, pair_type(), space_type> m_attribute;
   rule<Iterator, locals<std::string>, pair_type(), space_type> m_merged_columns;
-  rule<Iterator, std::string(), space_type> m_first_partial_column;
+
+  rule<Iterator, std::string(), space_type> m_column_0;
+  rule<Iterator, std::string(), space_type> m_column_0_unquoted;
+  rule<Iterator, std::string(), space_type> m_column_0_quoted;
+
+  rule<Iterator, void(std::string, std::size_t), space_type> m_column_n;
+  rule<Iterator, void(std::string, std::size_t), space_type> m_column_n_quoted;
   rule<Iterator, void(std::string, std::size_t), space_type>
-      m_another_partial_column;
+      m_column_n_unquoted;
+
   rule<Iterator, std::size_t(std::string), space_type>
       m_remaining_partial_columns;
   rule<Iterator, std::string(), space_type> m_singleton_column;

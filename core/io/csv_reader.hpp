@@ -22,7 +22,6 @@ public:
   void visit_entries(entry_visitor v, std::size_t max_reads=0) override;
 
 private:
-  attribute_description m_attribute_description;
   std::vector<std::size_t> m_attribute_sizes;
 
   struct header_parser;

@@ -47,7 +47,32 @@ BOOST_AUTO_TEST_CASE(read_header)
   BOOST_REQUIRE_EQUAL(desc_speed->attribute_idx(), 2);
   BOOST_REQUIRE_EQUAL(desc_speed->attribute_dimension(), 1);
 }
+BOOST_AUTO_TEST_CASE(read_quoted_header)
+{
+  std::string test_value = R"("aaa_0"; "aaa_1"; "aaa_2"; "bb_0"; "bb_1"; "c")";
+  std::istringstream test_stream(test_value);
 
+  simbad::core::csv_reader reader(&test_stream, ";");
+  attribute_description description = reader.read_header();
+
+  opt_descriptor desc_pos = description.get_descriptor("aaa");
+  BOOST_REQUIRE(desc_pos);
+  BOOST_REQUIRE_EQUAL(desc_pos->attribute_name(), "aaa");
+  BOOST_REQUIRE_EQUAL(desc_pos->attribute_idx(), 0);
+  BOOST_REQUIRE_EQUAL(desc_pos->attribute_dimension(), 3);
+
+  opt_descriptor desc_id = description.get_descriptor("bb");
+  BOOST_REQUIRE(desc_id);
+  BOOST_REQUIRE_EQUAL(desc_id->attribute_name(), "bb");
+  BOOST_REQUIRE_EQUAL(desc_id->attribute_idx(), 1);
+  BOOST_REQUIRE_EQUAL(desc_id->attribute_dimension(), 2);
+
+  opt_descriptor desc_speed = description.get_descriptor("c");
+  BOOST_REQUIRE(desc_speed);
+  BOOST_REQUIRE_EQUAL(desc_speed->attribute_name(), "c");
+  BOOST_REQUIRE_EQUAL(desc_speed->attribute_idx(), 2);
+  BOOST_REQUIRE_EQUAL(desc_speed->attribute_dimension(), 1);
+}
 BOOST_AUTO_TEST_CASE(read_records)
 {
   std::string test_string =
