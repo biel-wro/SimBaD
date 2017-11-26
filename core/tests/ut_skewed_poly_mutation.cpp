@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(sampling2)
 
   double parent_val = 0.1;
   std::vector<std::size_t> histogram(100);
-  for(int i = 0; i < SAMPLE_SIZE; ++i)
+  for(std::size_t i = 0; i < SAMPLE_SIZE; ++i)
   {
     double child_val = mut(parent_val, rng);
     histogram[child_val * histogram.size()]++;

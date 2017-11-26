@@ -31,6 +31,7 @@ BOOST_AUTO_TEST_CASE(instantiation)
     std::vector<std::string> key_names = {"position"};
     std::vector<std::string> observable_names = {"density"};
 
+    
     dataframe_tracker tracker(description, key_names, observable_names);
 
     std::cerr << test_input << std::endl;
