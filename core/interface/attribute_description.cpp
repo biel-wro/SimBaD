@@ -286,8 +286,10 @@ std::vector<std::size_t> attribute_description::lin_mapping_from(
     std::string const &name = descriptor.attribute_name();
     boost::optional<attribute_descriptor const &> other_descriptor =
         other.get_descriptor(name);
+    if(!other_descriptor)
+        throw unrecognized_attribute_name(name);
     std::size_t my_index = descriptor.attribute_idx();
-    std::size_t other_index = descriptor.attribute_idx();
+    std::size_t other_index = other_descriptor->attribute_idx();
 
     mapping.at(my_index) = other_index;
   }
@@ -366,6 +368,13 @@ attribute_description::add_and_map_attributes(
   }
 
   return new_to_old;
+}
+
+std::ostream &operator<<(std::ostream &os, attribute_description const &desc)
+{
+  for(attribute_descriptor const &descriptor : desc.get<0>())
+    os << descriptor << std::endl;
+  return os;
 }
 
 END_NAMESPACE_CORE

@@ -29,17 +29,21 @@ dataframe_tracker::node::node(attribute_list const &other_attributes,
 {
 }
 
-attribute const &dataframe_tracker::node::get_attribute(std::size_t idx) const
+std::vector<attribute> const &dataframe_tracker::node::attributes() const
 {
-  assert(m_attributes.size() > idx);
-  return m_attributes[idx];
+  return m_attributes;
+}
+
+std::vector<attribute> &dataframe_tracker::node::attributes()
+{
+  return m_attributes;
 }
 
 void dataframe_tracker::node::update(const attribute_list &new_values,
                                      const std::vector<std::size_t> &mapping,
                                      std::size_t key_size)
 {
-  for(std::size_t i = key_size; i < mapping.size(); ++i)
+  for(std::size_t i = key_size, size = mapping.size(); i < size; ++i)
   {
     std::size_t outer_idx = mapping[i];
     m_attributes[i] = new_values[outer_idx];
@@ -51,7 +55,7 @@ operator()(const dataframe_tracker::node &n) const
 {
   std::size_t seed = 0;
   for(std::size_t idx = 0; idx < m_key_size; ++idx)
-    boost::hash_combine(seed, n.get_attribute(idx));
+    boost::hash_combine(seed, n.attributes()[idx]);
   return seed;
 }
 
@@ -68,7 +72,7 @@ operator()(const dataframe_tracker::node &lhs,
            const dataframe_tracker::node &rhs) const
 {
   for(std::size_t idx = 0; idx < m_key_size; ++idx)
-    if(lhs.get_attribute(idx) != rhs.get_attribute(idx))
+    if(lhs.attributes()[idx] != rhs.attributes()[idx])
       return false;
   return true;
 }
@@ -77,7 +81,7 @@ bool dataframe_tracker::node_equal::
 operator()(dataframe_tracker::node const &node, attribute const &attr) const
 {
   assert(1 == m_key_size);
-  return node.get_attribute(0) == attr;
+  return node.attributes()[0] == attr;
 }
 bool dataframe_tracker::node_equal::
 operator()(attribute const &attr, dataframe_tracker::node const &node) const
@@ -101,9 +105,10 @@ dataframe_tracker::dataframe_tracker(attribute_description const &description,
           node_hash{key_names.size()}, node_equal{key_names.size()}),
       m_attribute_description(
           attribute_description::mapped_from(description, key_names)),
-      m_to_outer_indices(m_attribute_description.lin_mapping_from(description))
+      m_to_outer_indices(
+          (m_attribute_description.add_attributes(description, val_names),
+           m_attribute_description.lin_mapping_from(description)))
 {
-  m_attribute_description.add_attributes(description, val_names);
 }
 
 dataframe_tracker::~dataframe_tracker()
@@ -149,7 +154,7 @@ struct list_equaler
                   attribute_list const &rhs) const
   {
     for(std::size_t idx = 0; idx < m_key_size; ++idx)
-      if(lhs.get_attribute(idx) != rhs[idx])
+      if(lhs.attributes()[idx] != rhs[idx])
         return false;
     return true;
   }
@@ -161,6 +166,12 @@ struct list_equaler
 };
 }
 
+dataframe_tracker::const_iterator
+dataframe_tracker::find(attribute const &attr) const
+{
+  const_iterator it = m_attribute_set.find(attr, hasher(), equaler());
+  return it;
+}
 std::pair<dataframe_tracker::iterator, bool>
 dataframe_tracker::insert_check(attribute_list const &attributes,
                                 insert_commit_data &commit_data)
@@ -190,12 +201,38 @@ void dataframe_tracker::update(attribute_list const &attributes)
 
   if(insertable)
     return (void)insert_commit(attributes, commit_data);
+
+  it->update(attributes, m_to_outer_indices, m_key_size);
 }
-dataframe_tracker::const_iterator
-dataframe_tracker::find(attribute const &attr) const
+
+namespace
 {
-  const_iterator it = m_attribute_set.find(attr, hasher(), equaler());
-  return it;
+struct attribute_list_view final : public attribute_list
+{
+  using node_ref = dataframe_tracker::node const &;
+  attribute_list_view(node_ref ptr) : m_node_ptr(ptr) {}
+  attribute get_attribute(std::size_t idx) const override
+  {
+    return m_node_ptr.attributes()[idx];
+  }
+
+private:
+  node_ref m_node_ptr;
+};
+}
+
+void dataframe_tracker::visit_records(dataframe::record_visitor visitor) const
+{
+  for(node const &record : m_attribute_set)
+  {
+    attribute_list_view view(record);
+    visitor(view);
+  }
+}
+
+attribute_description const &dataframe_tracker::descriptor() const
+{
+  return m_attribute_description;
 }
 
 END_NAMESPACE_CORE

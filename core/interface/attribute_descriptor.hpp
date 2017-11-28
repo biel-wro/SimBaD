@@ -4,6 +4,7 @@
 #include "interface/interface_fwd.hpp"
 
 #include <cstddef>
+#include <iosfwd>
 #include <string>
 
 BEGIN_NAMESPACE_CORE
@@ -56,5 +57,10 @@ private:
   std::size_t m_attribue_dimension;
 };
 
+std::ostream &operator<<(std::ostream &, attribute_descriptor const &);
+std::ostream &operator<<(std::ostream &, ATTRIBUTE_KIND);
+
+
 END_NAMESPACE_CORE
+
 #endif

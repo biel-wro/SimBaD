@@ -44,10 +44,21 @@ template <class T, class Scalar> constexpr bool has_scalar()
 }
 }
 
+std::ostream &operator<<(std::ostream &os, ATTRIBUTE_SCALAR sc)
+{
+  switch(sc)
+  {
+  case ATTRIBUTE_SCALAR::UNKNOWN: return os << "UNKNOWN";
+  case ATTRIBUTE_SCALAR::STRING: return os << "STRING";
+  case ATTRIBUTE_SCALAR::REAL: return os << "REAL";
+  case ATTRIBUTE_SCALAR::INT: return os << "INT";
+  default: throw std::runtime_error("unhandled type");
+  }
+}
+
 attribute::attribute() : super("") {}
 attribute::attribute(attribute::string_type val) : super(std::move(val)) {}
 attribute::attribute(const char *cstr) : attribute(std::string(cstr)) {}
-
 attribute::attribute(std::initializer_list<string_type> il)
     : super(array_attribute<string_type>(il.begin(), il.end()))
 {
@@ -58,7 +69,6 @@ attribute::attribute(std::initializer_list<const char *> il)
 {
 }
 attribute::attribute(array_attribute<std::string> v) : super(std::move(v)) {}
-
 attribute::attribute(int_type val) : super(std::move(val)) {}
 attribute::attribute(std::initializer_list<std::int64_t> il)
 {
@@ -73,7 +83,6 @@ attribute::attribute(std::initializer_list<std::int64_t> il)
 }
 attribute::attribute(int2_type const &val) : super(val) {}
 attribute::attribute(int3_type const &val) : super(val) {}
-
 attribute::attribute(intn_type &&v) : super(std::move(v)) {}
 attribute::attribute(intn_type const &val)
 {
@@ -450,7 +459,6 @@ attribute::get_int_data() const
 }
 
 void attribute::clear() { *this = ""; }
-
 namespace
 {
 struct equal_scalar
@@ -557,7 +565,7 @@ struct hash_scalar
   }
   result_type operator()(attribute::string_type const &str) const
   {
-    //TODO: do real parsing (boost::spirit) & dispatch
+    // TODO: do real parsing (boost::spirit) & dispatch
     std::stringstream ss(str);
 
     attribute::real_type real_val;
@@ -571,7 +579,6 @@ struct hash_scalar
       return operator()(int_val);
 
     ss.str() = str;
-
 
     return std::hash<attribute::string_type>()(str);
   }

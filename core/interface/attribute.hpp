@@ -37,11 +37,13 @@ public:
 
 enum class ATTRIBUTE_SCALAR : std::uint32_t
 {
-  UNKNOWN,
-  STRING,
-  REAL,
-  INT,
+  UNKNOWN = 0,
+  STRING = 1,
+  REAL = 2,
+  INT = 3,
 };
+std::ostream &operator<<(std::ostream &, ATTRIBUTE_SCALAR);
+
 
 // clang-format off
 #define SIMBAD_CORE_ATTRIBUTE_SUBTYPES                                         \

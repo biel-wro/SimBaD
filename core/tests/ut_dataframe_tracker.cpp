@@ -20,22 +20,27 @@ BOOST_AUTO_TEST_CASE(instantiation)
          6, 7, 8, 5.32
 )TESTINPUT";
 
-    std::stringstream stream(test_input);
+  std::stringstream stream(test_input);
 
-    csv_reader reader(&stream);
-    csv_printer writer(&std::cerr);
+  csv_reader reader(&stream);
+  csv_printer writer(&std::cerr);
 
-    attribute_description description = reader.read_header();
-    writer.write_header(description);
+  attribute_description const description = reader.read_header();
 
-    std::vector<std::string> key_names = {"position"};
-    std::vector<std::string> observable_names = {"density"};
+  std::vector<std::string> key_names = {"position"};
+  std::vector<std::string> observable_names = {"density"};
 
-    
-    dataframe_tracker tracker(description, key_names, observable_names);
+  dataframe_tracker tracker(description, key_names, observable_names);
 
-    std::cerr << test_input << std::endl;
+  reader.visit_entries(
+      [&tracker](attribute_list const &record) { tracker.update(record); });
 
+  std::cerr<< tracker.descriptor();
+
+  writer.write_dataframe(tracker);
+
+
+  //std::cerr << test_input << std::endl;
 }
 
 BOOST_AUTO_TEST_SUITE_END()

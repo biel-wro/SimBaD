@@ -3,6 +3,8 @@
 #include "core_fwd.hpp"
 
 #include "interface/attribute_description.hpp"
+#include "interface/attribute_list.hpp"
+#include "interface/dataframe.hpp"
 
 #include <boost/intrusive/unordered_set.hpp>
 
@@ -10,7 +12,7 @@
 
 BEGIN_NAMESPACE_CORE
 
-class dataframe_tracker
+class dataframe_tracker : public dataframe
 {
 protected:
   using hook_type = boost::intrusive::unordered_set_base_hook<
@@ -25,8 +27,8 @@ public:
 
     node(attribute_list const &other_attributes,
          std::vector<std::size_t> const &mapping);
-    attribute const &get_attribute(std::size_t idx) const;
-
+    std::vector<attribute> const &attributes() const;
+    std::vector<attribute> &attributes();
     void update(attribute_list const &new_values,
                 std::vector<std::size_t> const &mapping, std::size_t key_size);
 
@@ -90,6 +92,9 @@ public:
   iterator insert_commit(attribute_list const &attributes,
                          insert_commit_data const &commit_data);
   void update(attribute_list const &attributes);
+
+  void visit_records(record_visitor visitor) const final override;
+  attribute_description const &descriptor() const final override;
 };
 END_NAMESPACE_CORE
 

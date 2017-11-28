@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <iosfwd>
 
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/mem_fun.hpp>
@@ -133,6 +134,8 @@ private:
   add_and_map_attributes(attribute_description const &other, Iterator first,
                          Iterator last, std::size_t start_target_idx);
 };
+
+std::ostream &operator<<(std::ostream &os, attribute_description const&desc);
 
 #undef SIMBAD_ATTRIBUTES_DESCRIPTION_SUPER
 END_NAMESPACE_CORE
