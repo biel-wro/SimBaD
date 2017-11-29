@@ -15,15 +15,14 @@ BOOST_AUTO_TEST_SUITE(test_dataframe_tracker)
 BOOST_AUTO_TEST_CASE(instantiation)
 {
   std::string test_input =
-      R"TESTINPUT("position_0",  "position_1",   "position_2",   "density"
+      R"TESTINPUT("position_0","position_1","position_2","density"
          1, 2, 3, 1.23
          6, 7, 8, 5.32
 )TESTINPUT";
 
-  std::stringstream stream(test_input);
+  std::stringstream input_stream(test_input);
 
-  csv_reader reader(&stream);
-  csv_printer writer(&std::cerr);
+  csv_reader reader(&input_stream);
 
   attribute_description const description = reader.read_header();
 
@@ -35,12 +34,15 @@ BOOST_AUTO_TEST_CASE(instantiation)
   reader.visit_entries(
       [&tracker](attribute_list const &record) { tracker.update(record); });
 
-  std::cerr<< tracker.descriptor();
+  std::size_t idx = 0;
+  tracker.visit_records([&idx](attribute_list const &record) {
+    if(record[0] == attribute{1, 2, 3})
+      BOOST_REQUIRE_EQUAL(record[1], attribute(1.23));
+    if(record[1] == attribute{6, 7, 8})
+      BOOST_REQUIRE_EQUAL(record[1], attribute(5.32));
+  });
 
-  writer.write_dataframe(tracker);
-
-
-  //std::cerr << test_input << std::endl;
+  // std::cerr << test_input << std::endl;
 }
 
 BOOST_AUTO_TEST_SUITE_END()

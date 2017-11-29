@@ -458,6 +458,13 @@ attribute::get_int_data() const
   return boost::apply_visitor(iter_getter<int_type, true>(), *this);
 }
 
+simbad::core::EVENT_KIND
+simbad::core::attribute::get_event_kind_val(std::size_t idx) const
+{
+    int_type int_val = get_int_val(idx);
+    return static_cast<EVENT_KIND>(int_val);
+}
+
 void attribute::clear() { *this = ""; }
 namespace
 {

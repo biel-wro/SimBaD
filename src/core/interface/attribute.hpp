@@ -155,6 +155,8 @@ public:
   std::pair<int_iterator, int_iterator> get_int_data();
   std::pair<int_const_iterator, int_const_iterator> get_int_data() const;
 
+  EVENT_KIND get_event_kind_val(std::size_t idx =0 ) const;
+
   // modify
   void clear();
 

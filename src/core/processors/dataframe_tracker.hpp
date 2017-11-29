@@ -63,11 +63,7 @@ protected:
                                       >;
 
   using bucket_type = set_type::bucket_type;
-  std::unique_ptr<bucket_type[]> m_buckets;
-  std::size_t const m_key_size;
-  set_type m_attribute_set;
-  attribute_description m_attribute_description;
-  std::vector<std::size_t> const m_to_outer_indices;
+
 
 public:
   static const std::size_t hash_seed = 0;
@@ -95,6 +91,13 @@ public:
 
   void visit_records(record_visitor visitor) const final override;
   attribute_description const &descriptor() const final override;
+
+private:
+  std::unique_ptr<bucket_type[]> m_buckets;
+  std::size_t const m_key_size;
+  set_type m_attribute_set;
+  attribute_description m_attribute_description;
+  std::vector<std::size_t> const m_to_outer_indices;
 };
 END_NAMESPACE_CORE
 

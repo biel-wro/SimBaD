@@ -34,8 +34,10 @@ template <size_t, class> class simple_particle;
 
 // processors
 class configuration_builder;
+class dataframe_tracker;
 class snapshotter;
 class stream_printer;
+class tree_builder;
 
 // utils
 class argument_parser;
