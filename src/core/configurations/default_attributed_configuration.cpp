@@ -19,7 +19,7 @@ default_attributed_configuration::default_attributed_configuration(
 void default_attributed_configuration::on_base_reset()
 {
   m_merged_attr_desc.clear();
-  m_merged_attr_desc = get_base().descriptor();
+  m_merged_attr_desc = get_base().description();
   m_owned_attributes = m_merged_attr_desc.add_and_map_attributes(m_properties);
 }
 void default_attributed_configuration::visit_records(
@@ -46,7 +46,7 @@ void default_attributed_configuration::visit_records(
 }
 
 const attribute_description &
-default_attributed_configuration::descriptor() const
+default_attributed_configuration::description() const
 {
   return m_merged_attr_desc;
 }

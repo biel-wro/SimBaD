@@ -230,7 +230,7 @@ void dataframe_tracker::visit_records(dataframe::record_visitor visitor) const
   }
 }
 
-attribute_description const &dataframe_tracker::descriptor() const
+attribute_description const &dataframe_tracker::description() const
 {
   return m_attribute_description;
 }

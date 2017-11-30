@@ -14,7 +14,7 @@ public:
 
   virtual void visit_records(record_visitor visitor) const = 0;
 
-  virtual attribute_description const &descriptor() const = 0;
+  virtual attribute_description const &description() const = 0;
   virtual ~dataframe();
 };
 END_NAMESPACE_CORE

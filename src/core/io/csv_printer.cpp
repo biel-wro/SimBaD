@@ -97,7 +97,7 @@ void csv_printer::write_entry(const attribute_list &entry)
 
 void csv_printer::write_data(dataframe const &conf)
 {
-  std::vector<std::size_t> indices = conf.descriptor().unpack_indices();
+  std::vector<std::size_t> indices = conf.description().unpack_indices();
   std::vector<std::size_t>::const_iterator beg = indices.begin(),
                                            end = indices.end();
   std::ostream &os = ostream();

@@ -94,7 +94,7 @@ void poisson_configuration::visit_records(
   }
 }
 
-const attribute_description &poisson_configuration::descriptor() const
+const attribute_description &poisson_configuration::description() const
 {
   return attribute_description::make_position_only();
 }

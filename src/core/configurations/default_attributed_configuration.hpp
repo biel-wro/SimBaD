@@ -19,7 +19,7 @@ public:
                                             property_tree const &attributes);
   virtual void on_base_reset() override;
   void visit_records(particle_visitor visitor) const override;
-  attribute_description const &descriptor() const override;
+  attribute_description const &description() const override;
 
 private:
   property_tree m_properties;

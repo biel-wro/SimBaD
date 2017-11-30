@@ -9,8 +9,8 @@ matrix:
       script:
         - docker -v
         - docker pull $DOCKERIMAGE
-        - docker run -v ${PWD}/src/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug && make -j 2"
-        - docker run -v ${PWD}/src/:/code $DOCKERIMAGE sh -c "cd /code/build && ctest --VV -output-on-failure"
+        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug && make -j 2"
+        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "cd /code/build && ctest --VV -output-on-failure"
       env: DOCKERIMAGE=tozanski/simbad-build:clang39
     - dist: trusty
       sudo: required
@@ -36,7 +36,7 @@ matrix:
         - docker
       script:
         - docker -v
-        - docker pull $DOCKERIMAGE
+        - docker pull $DEVIMAGE
         - docker run -v ${PWD}/:/code $DEVIMAGE sh -c "mkdir -p /code/build-release && cd /code/build-release && cmake ../src -DCMAKE_BUILD_TYPE=Release && make -j 2"
         - docker run -v ${PWD}/:/code $DEVIMAGE sh -c "cd /code/build-release && ctest --VV -output-on-failure"
         - docker build -f docker/simbad.Dockerfile . -t $OUTIMAGE

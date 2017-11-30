@@ -89,7 +89,7 @@ void cubic_crystal_configuration::visit_records(particle_visitor visitor) const
   } while(!last);
 }
 
-const attribute_description &cubic_crystal_configuration::descriptor() const
+const attribute_description &cubic_crystal_configuration::description() const
 {
   return *m_attr_mapping_ptr;
 }

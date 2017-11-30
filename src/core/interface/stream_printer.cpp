@@ -31,7 +31,7 @@ void stream_printer::write_dataframe(const dataframe &conf)
 
 void stream_printer::write_header(dataframe const &conf)
 {
-  write_header(conf.descriptor());
+  write_header(conf.description());
 }
 
 void stream_printer::write_data(dataframe const &data)

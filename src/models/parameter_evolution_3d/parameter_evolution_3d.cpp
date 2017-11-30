@@ -125,7 +125,7 @@ public:
       visitor(view);
     });
   }
-  simbad::core::attribute_description const &descriptor() const override
+  simbad::core::attribute_description const &description() const override
   {
     static std::unique_ptr<simbad::core::attribute_description> ptr =
         make_particle_descriptor();
@@ -232,10 +232,10 @@ void parameter_evolution_3d::read_configuration(
     const simbad::core::configuration_view &conf)
 {
   std::vector<std::size_t> attribute_indices =
-      cell_params::get_attribute_indices(conf.descriptor());
+      cell_params::get_attribute_indices(conf.description());
 
   std::size_t pos_idx = conf.position_attr_idx();
-  std::size_t mut_idx = conf.descriptor()["mutation.id"].attribute_idx();
+  std::size_t mut_idx = conf.description()["mutation.id"].attribute_idx();
   conf.visit_records([this, pos_idx, mut_idx, attribute_indices](
       simbad::core::configuration_view::particle_attributes const &p) {
     cell::position_type pos;

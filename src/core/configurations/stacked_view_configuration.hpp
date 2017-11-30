@@ -19,7 +19,7 @@ public:
   size_type size() const override;
   void visit_records(particle_visitor visitor) const override;
 
-  attribute_description const &descriptor() const override;
+  attribute_description const &description() const override;
 
   void push_layer(std::unique_ptr<enriched_configuration> layer);
   void push_layer(std::string const &layer_name, property_tree const &pt);

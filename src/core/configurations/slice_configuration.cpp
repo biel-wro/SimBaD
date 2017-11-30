@@ -28,7 +28,7 @@ slice_configuration::slice_configuration(configuration_view const &base,
 void slice_configuration::visit_records(
     configuration_view::particle_visitor v) const
 {
-  attribute_description const &map = get_base().descriptor();
+  attribute_description const &map = get_base().description();
   assert(map.get_descriptor(ATTRIBUTE_KIND::POSITION));
   attribute_descriptor d = map.get_descriptor(ATTRIBUTE_KIND::POSITION).get();
   std::size_t attr_idx = d.attribute_idx();

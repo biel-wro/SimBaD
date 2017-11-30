@@ -176,6 +176,17 @@ std::size_t attribute_description::add_attribute_auto_idx(
   return add_attribute_auto_idx(0, std::move(name), kind, scalar, dimension);
 }
 
+std::size_t attribute_description::copy_attribute_auto_idx(
+    const attribute_descriptor &source, std::size_t start_idx)
+{
+  return add_attribute_auto_idx(start_idx,                   //
+                                source.attribute_name(),     //
+                                source.kind(),               //
+                                source.scalar(),             //
+                                source.attribute_dimension() //
+                                );
+}
+
 std::pair<std::vector<std::size_t>, std::vector<std::string>>
 attribute_description::unpack_all() const
 {
@@ -287,7 +298,7 @@ std::vector<std::size_t> attribute_description::lin_mapping_from(
     boost::optional<attribute_descriptor const &> other_descriptor =
         other.get_descriptor(name);
     if(!other_descriptor)
-        throw unrecognized_attribute_name(name);
+      throw unrecognized_attribute_name(name);
     std::size_t my_index = descriptor.attribute_idx();
     std::size_t other_index = other_descriptor->attribute_idx();
 

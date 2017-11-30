@@ -35,8 +35,8 @@ void enriched_configuration::visit_records(particle_visitor v) const
 {
   get_base().visit_records(v);
 }
-const attribute_description &enriched_configuration::descriptor() const
+const attribute_description &enriched_configuration::description() const
 {
-  return get_base().descriptor();
+  return get_base().description();
 }
 END_NAMESPACE_CORE

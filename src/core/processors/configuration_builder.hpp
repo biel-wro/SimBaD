@@ -2,7 +2,8 @@
 #define SIMBAD_CORE_CONFIGURATION_BUILDER_HPP
 #include "core_fwd.hpp"
 
-#include "interface/attribute_description.hpp"
+#include "core_fwd.hpp"
+#include "processors/dataframe_tracker.hpp"
 
 #include <cstddef>
 #include <memory>
@@ -14,21 +15,21 @@ class configuration_builder
 public:
   configuration_builder(property_tree const &pt);
 
-  configuration_builder(event_source &source,
+  configuration_builder(attribute_description const &event_description,
                         std::vector<std::string> const &key_attributes,
                         std::vector<std::string> const &value_attributes);
 
   ~configuration_builder();
-  void operator()(std::size_t size);
+
+  void push_event(attribute_list const &event);
+
+  dataframe const &configuration() const;
 
 private:
-  event_source &m_source;
-  std::size_t m_key_size;
-  struct particle_set;
-  std::unique_ptr<particle_set> m_particle_set_ptr;
-
-  attribute_description m_attribute_description;
-  std::vector<std::size_t> m_attribute_mapping;
+  std::size_t const m_event_kind_idx;
+  std::size_t const m_key_size;
+  std::vector<std::size_t> m_input_indices;
+  dataframe_tracker m_configuration;
 };
 
 END_NAMESPACE_CORE

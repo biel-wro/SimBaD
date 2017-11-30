@@ -3,11 +3,11 @@
 #include "interface_fwd.hpp"
 
 #include <initializer_list>
+#include <iosfwd>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <iosfwd>
 
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/mem_fun.hpp>
@@ -94,6 +94,9 @@ public:
                          ATTRIBUTE_SCALAR scalar = ATTRIBUTE_SCALAR::UNKNOWN,
                          std::size_t dimension = 0);
 
+  std::size_t copy_attribute_auto_idx(attribute_descriptor const &source,
+                                      std::size_t start_idx = 0);
+
   // returned indices might be useful sometimes
   std::unordered_map<std::size_t, std::string>
   add_and_map_attributes(property_tree const &pt, bool ignore_empty = true);
@@ -128,14 +131,14 @@ public:
 private:
   template <class NameIterator>
   void add_attributes(attribute_description const &other, NameIterator first,
-                      NameIterator last, std::size_t start_target_idx=0);
+                      NameIterator last, std::size_t start_target_idx = 0);
   template <class Iterator>
   std::unordered_map<std::size_t, std::size_t>
   add_and_map_attributes(attribute_description const &other, Iterator first,
                          Iterator last, std::size_t start_target_idx);
 };
 
-std::ostream &operator<<(std::ostream &os, attribute_description const&desc);
+std::ostream &operator<<(std::ostream &os, attribute_description const &desc);
 
 #undef SIMBAD_ATTRIBUTES_DESCRIPTION_SUPER
 END_NAMESPACE_CORE

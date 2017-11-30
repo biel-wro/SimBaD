@@ -140,7 +140,7 @@ BOOST_AUTO_TEST_CASE(short_run)
   std::cout << std::endl << std::endl << std::endl;
 
   csv_printer configuration_printer(&std::cout);
-  configuration_printer.write_header(m.current_configuration().descriptor());
+  configuration_printer.write_header(m.current_configuration().description());
   configuration_printer.write_data(m.current_configuration());
   configuration_printer.write_footer();
 }

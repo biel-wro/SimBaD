@@ -54,11 +54,11 @@ set( SOURCES
   legacy/event_partial.cpp
   # utils
   utils/attribute_exceptions.cpp
-  utils/attribute_mapping.cpp
   utils/attribute_vector.cpp
   utils/counting_id_generator.cpp
   utils/generic_particle.cpp
   utils/properties.cpp
+  utils/record_transformation.cpp
  )
 
 set( LIBS

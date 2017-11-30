@@ -14,7 +14,7 @@ public:
   virtual void on_base_reset();
   size_type size() const override;
   void visit_records(particle_visitor) const override;
-  attribute_description const &descriptor() const override;
+  attribute_description const &description() const override;
 
 private:
   configuration_view const *m_base;

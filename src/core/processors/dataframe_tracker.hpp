@@ -90,7 +90,7 @@ public:
   void update(attribute_list const &attributes);
 
   void visit_records(record_visitor visitor) const final override;
-  attribute_description const &descriptor() const final override;
+  attribute_description const &description() const final override;
 
 private:
   std::unique_ptr<bucket_type[]> m_buckets;
