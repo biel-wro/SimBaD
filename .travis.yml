@@ -11,7 +11,7 @@ matrix:
         - docker pull $DOCKERIMAGE
         - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug && make -j 2"
         - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "cd /code/build && ctest --VV -output-on-failure"
-      env: DOCKERIMAGE=tozanski/simbad-build:clang39
+      env: DOCKERIMAGE=tozanski/simbad-dev:clang39
     - dist: trusty
       sudo: required
       services:
@@ -21,7 +21,7 @@ matrix:
         - docker pull $DOCKERIMAGE
         - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug && make -j 2"
         - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "cd /code/build && ctest --VV -output-on-failure"
-      env: DOCKERIMAGE=tozanski/simbad-build:gcc6  
+      env: DOCKERIMAGE=tozanski/simbad-dev:gcc6  
     - os: osx
       osx_image: xcode7.3
       script:
@@ -41,7 +41,7 @@ matrix:
         - docker run -v ${PWD}/:/code $DEVIMAGE sh -c "cd /code/build-release && ctest --VV -output-on-failure"
         - docker build -f docker/simbad.Dockerfile . -t $OUTIMAGE
       env: 
-        - DEVIMAGE=tozanski/simbad-build:clang
+        - DEVIMAGE=tozanski/simbad-dev:clang
         - OUTIMAGE=tozanski/simbad
         
 
