@@ -17,8 +17,14 @@ template <class T> class array_attribute : public std::vector<T>
 {
 public:
   using super = std::vector<T>;
-  using super::super;
-  // array_attribute(super const &s) : super(s) {}
+  // using super::super;
+  array_attribute() = default;
+  array_attribute(super const &s) : super(s) {}
+  array_attribute(T const &v) : super{v} {}
+  explicit array_attribute(std::size_t sz, T const &v = T()) : super(sz, v) {}
+  array_attribute(std::initializer_list<T> il) : super(il) {}
+  template <class It> array_attribute(It beg, It end) : super(beg, end) {}
+
   friend std::ostream &operator<<(std::ostream &os, array_attribute const &vec)
   {
     if(vec.empty())
@@ -43,7 +49,6 @@ enum class ATTRIBUTE_SCALAR : std::uint32_t
   INT = 3,
 };
 std::ostream &operator<<(std::ostream &, ATTRIBUTE_SCALAR);
-
 
 // clang-format off
 #define SIMBAD_CORE_ATTRIBUTE_SUBTYPES                                         \
@@ -155,7 +160,7 @@ public:
   std::pair<int_iterator, int_iterator> get_int_data();
   std::pair<int_const_iterator, int_const_iterator> get_int_data() const;
 
-  EVENT_KIND get_event_kind_val(std::size_t idx =0 ) const;
+  EVENT_KIND get_event_kind_val(std::size_t idx = 0) const;
 
   // modify
   void clear();
