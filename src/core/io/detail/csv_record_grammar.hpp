@@ -15,10 +15,11 @@
 BEGIN_NAMESPACE_CORE
 template <class Iterator>
 struct csv_record_grammar
-    : public boost::spirit::qi::grammar<Iterator, std::vector<attribute>(
+    : public boost::spirit::qi::grammar<Iterator, std::vector<core::attribute>(
                                                       std::vector<std::size_t>),
                                         boost::spirit::ascii::space_type>
 {
+  using attribute = core::attribute; // there also is one in qi::grammar
   using attr_list = std::vector<attribute>;
   using desc_type = std::vector<std::size_t>;
 
@@ -40,7 +41,7 @@ struct csv_record_grammar
     m_real_list = qi::double_ >> qi::repeat(qi::_r1 - 1)[delim >> qi::double_];
 
     m_int_list = qi::int_parser<int_type>() >> !qi::lit(".") //
-                 >> qi::repeat(qi::_r1 - 1)                 //
+                 >> qi::repeat(qi::_r1 - 1)                  //
                         [delim >> qi::int_parser<int_type>() >> !qi::lit(".")];
 
     m_int_attr = m_int_list(qi::_r1);
