@@ -10,6 +10,7 @@
 #include <boost/spirit/include/qi.hpp>
 
 #include <string>
+#include <vector>
 
 BEGIN_NAMESPACE_CORE
 template <class Iterator>
