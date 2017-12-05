@@ -29,11 +29,16 @@ BOOST_AUTO_TEST_CASE(instantiation)
   std::vector<std::string> key_names = {"position"};
   std::vector<std::string> observable_names = {"density"};
 
-  dataframe_tracker tracker(description, key_names, observable_names);
+  dataframe_tracker tracker(key_names.size() + observable_names.size(),
+                            key_names.size());
 
-  reader.visit_entries(
-      [&tracker](attribute_list const &record) { tracker.update(record); });
-
+  reader.visit_entries([&tracker](attribute_list const &record) {
+    attribute const &key = record[0];
+    dataframe_tracker::iterator it;
+    bool inserted;
+    std::tie(it, inserted) = tracker.insert(key);
+    it->get(1) = record[1];
+  });
   std::size_t idx = 0;
   tracker.visit_records([&idx](attribute_list const &record) {
     if(record[0] == attribute{1, 2, 3})

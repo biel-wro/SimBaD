@@ -292,7 +292,7 @@ std::vector<std::size_t> attribute_description::lin_mapping_from(
 {
   std::vector<std::size_t> mapping(size());
 
-  for(attribute_descriptor const &descriptor : get<0>())
+  for(attribute_descriptor const &descriptor : *this)
   {
     std::string const &name = descriptor.attribute_name();
     boost::optional<attribute_descriptor const &> other_descriptor =
