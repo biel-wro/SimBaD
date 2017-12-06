@@ -9,7 +9,6 @@
 BEGIN_NAMESPACE_CORE
 
 argument_parser::argument_parser() : tree_ptr(new ptree_type) {}
-
 argument_parser::argument_parser(int argc, const char **argv)
     : argument_parser()
 {
@@ -17,7 +16,6 @@ argument_parser::argument_parser(int argc, const char **argv)
 }
 
 argument_parser::~argument_parser() {}
-
 void argument_parser::parse(int argc, const char **argv)
 {
   namespace po = boost::program_options;

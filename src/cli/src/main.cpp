@@ -27,6 +27,23 @@ core::property_tree get_args(int argc, const char **argv)
   if(param_fname)
     prop.add_properties_auto(param_fname.get());
 
+  boost::optional<std::string> stdin_format =
+      tree.get_optional<std::string>("stdin");
+  if(stdin_format)
+  {
+    std::string format = stdin_format.get();
+    if("simbad" == format || "info" == format)
+      prop.add_properties_info(std::cin);
+    else if("json" == format)
+      prop.add_properties_json(std::cin);
+    else if("xml" == format)
+      prop.add_properties_xml(std::cin);
+    else if("ini" == format)
+      prop.add_properites_ini(std::cin);
+    else
+      throw std::runtime_error("unrecognized stdin format:" + format);
+  }
+
   return tree;
 }
 

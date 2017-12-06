@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <iosfwd>
 
 #include "interface/property_tree.hpp"
 //#include <boost/property_tree/ptree_fwd.hpp>
@@ -24,9 +25,13 @@ public:
   void add_properties(const ptree_type &tree);
 
   void add_properties_info(std::string const filepath);
+  void add_properties_info(std::istream &is);
   void add_properites_ini(std::string const filepath);
+  void add_properites_ini(std::istream &is);
   void add_properties_json(std::string const &filepath);
+  void add_properties_json(std::istream &input);
   void add_properties_xml(std::string const &filepath);
+  void add_properties_xml(std::istream &is);
 
   void add_properties_auto(std::string const &filepath);
   void add_properties_auto(std::vector<std::string> const &filepaths);
