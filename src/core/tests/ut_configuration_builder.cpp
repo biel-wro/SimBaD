@@ -2,6 +2,9 @@
 #include "configurations/default_attributed_configuration.hpp"
 #include "configurations/selected_attributes_configuration.hpp"
 #include "configurations/stacked_view_configuration.hpp"
+#include "interface/attribute_descriptor.hpp"
+#include "io/csv_printer.hpp"
+#include "io/csv_reader.hpp"
 #include "io/text_configuration_printer.hpp"
 #include "processors/configuration_builder.hpp"
 
@@ -9,17 +12,12 @@
 #include <iostream>
 
 char const *test_input =
-    R"TESTINPUT("position_0","position_1","position_2","density","event.time","event.kind","birth.efficiency","birth.resistance","lifespan.efficiency","lifespan.resistance","success.efficiency","success.resistance","mutation.id","birth.rate","death.rate","success.probability","lifespan","time","delta time","event"
--2,-1,-1,7.27422,0.00916802,2,0.1,0.5,0.1,0.5,0.9,0.5,1,0.0145068,0.0288142,0.0130561,34.7051,0.00916802,0,2
-2,2,1,5.11779,0.116703,1,0.1,0.5,0.1,0.5,0.9,0.5,1,0.123029,0.0168849,0.110726,59.2245,0.116703,0,2
-2,-2,1,5.11779,0.259171,1,0.1,0.5,0.1,0.5,0.9,0.5,1,0.123029,0.0168849,0.110726,59.2245,0.259171,0,2
--2,-2,-2,3.18449,0.501877,1,0.1,0.5,0.1,0.5,0.9,0.5,1,0.444291,0.0122485,0.399861,81.6426,0.501877,0,2
--2,-2,2,3.55237,0.514303,1,0.1,0.5,0.1,0.5,0.9,0.5,1,0.364385,0.0128709,0.327946,77.6945,0.514303,0,2
-1,-2,2,4.74991,0.690842,1,0.1,0.5,0.1,0.5,0.9,0.5,1,0.164486,0.0157025,0.148038,63.6843,0.690842,0,2
-2,2,-1,4.98245,0.781674,1,0.1,0.5,0.1,0.5,0.9,0.5,1,0.137245,0.0164295,0.123521,60.8659,0.781674,0,2
--2,2,2,3.55237,0.787124,2,0.1,0.5,0.1,0.5,0.9,0.5,1,0.364385,0.0128709,0.327946,77.6945,0.787124,0,2
--1,-2,-2,4.28813,0.874215,1,0.1,0.5,0.1,0.5,0.9,0.5,1,0.229686,0.014445,0.206718,69.2283,0.874215,0,2
-1,-1,-1,10.2448,0.88711,2,0.1,0.5,0.1,0.5,0.9,0.5,1,0.000225667,0.0815892,0.000203101,12.2565,0.88711,0,2
+    R"TESTINPUT("position_0","position_1","position_2","float_property", "int_property", "event_kind"
+1, 1, 1, 1.1, 10, 1
+2, 2, 2, 2.2, 20, 1
+3, 3, 3, 3.3, 30, 1
+1, 1, 1, 1.0, 10, 3
+3, 3, 3, 3.3, 30, 2
 )TESTINPUT";
 
 using namespace simbad::core;
@@ -44,7 +42,21 @@ BOOST_AUTO_TEST_CASE(set_default_attributes)
 BOOST_AUTO_TEST_CASE(read_stream)
 {
   std::stringstream stream(test_input);
+  csv_reader reader(&stream);
+  attribute_description description = reader.read_header();
 
+  description.standardize_record(ATTRIBUTE_KIND::EVENT_KIND, "event_kind");
+
+  std::vector<std::string> values_to_track = {"float_property", "int_property",
+                                              "event_kind"};
+
+  configuration_builder builder(description, "position", values_to_track);
+
+  reader.visit_entries(
+      [&builder](attribute_list const &event) { builder.push_event(event); });
+
+  csv_printer writer(&std::cout);
+  writer.write_dataframe(builder);
 
 }
 

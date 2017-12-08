@@ -11,13 +11,17 @@
 
 BEGIN_NAMESPACE_CORE
 
-dataframe_tracker::record::record(std::size_t s) : m_attributes(new attribute[s]) {}
+dataframe_tracker::record::record(std::size_t s)
+    : m_attributes(new attribute[s])
+{
+}
 dataframe_tracker::record::record(std::initializer_list<attribute> il)
 {
   std::move(il.begin(), il.end(), m_attributes.get());
 }
-dataframe_tracker::record::record(attribute_list const &values,
-                              dataframe_tracker::index_vector const &indices)
+dataframe_tracker::record::record(
+    attribute_list const &values,
+    dataframe_tracker::index_vector const &indices)
     : record(indices.size())
 {
   update(values, indices);
@@ -38,8 +42,8 @@ attribute &dataframe_tracker::record::get(std::size_t idx)
 }
 
 void dataframe_tracker::record::update(attribute_list const &new_values,
-                                     index_vector const &mapping,
-                                     std::size_t skip_size)
+                                       index_vector const &mapping,
+                                       std::size_t skip_size)
 {
   for(std::size_t i = skip_size, size = mapping.size(); i < size; ++i)
   {
@@ -188,20 +192,17 @@ void dataframe_tracker::erase(attribute const &key)
   m_attribute_set.erase_and_dispose(key,                             //
                                     m_attribute_set.hash_function(), //
                                     m_attribute_set.key_eq(),        //
-                                    std::default_delete<record>()      //
+                                    std::default_delete<record>()    //
                                     );
 }
 
-std::size_t dataframe_tracker::size() const{return m_attribute_set.size();}
-
+std::size_t dataframe_tracker::size() const { return m_attribute_set.size(); }
 std::size_t dataframe_tracker::record_size() const { return m_record_size; }
-
 std::size_t dataframe_tracker::key_size() const { return m_key_size; }
-
 void dataframe_tracker::rehash_if_needed()
 {
-    std::size_t suggested_size =
-            set_type::suggested_upper_bucket_count(m_attribute_set.size());
+  std::size_t suggested_size =
+      set_type::suggested_upper_bucket_count(m_attribute_set.size());
 
   if(m_attribute_set.bucket_count() > suggested_size)
     return;

@@ -124,6 +124,9 @@ public:
   std::vector<std::size_t>
   names_to_indices(std::vector<std::string> const &names) const;
 
+  void standardize_record(ATTRIBUTE_KIND attribute_kind,
+                          std::string const &name);
+
   // some trivial descriptions
   static attribute_description const &make_empty();
   static attribute_description const &make_position_only();

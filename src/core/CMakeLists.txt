@@ -19,6 +19,7 @@ set( SOURCES
   # interface
   interface/attribute.cpp
   interface/attribute_descriptor.cpp
+  interface/attribute_kind.cpp
   interface/attribute_list.cpp
   interface/attribute_description.cpp
   interface/configuration_reader.cpp

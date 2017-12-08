@@ -15,7 +15,7 @@
 #include <limits>
 
 BEGIN_NAMESPACE_CORE
-
+//TODO: key name must be added to description or value_names
 configuration_builder::configuration_builder(
     attribute_description const &event_description, //
     std::string const &key_name,                    //

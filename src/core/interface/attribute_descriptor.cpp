@@ -65,22 +65,6 @@ std::ostream &operator<<(std::ostream &os, attribute_descriptor const &desc)
   return os;
 }
 
-std::ostream &operator<<(std::ostream &os, ATTRIBUTE_KIND kind)
-{
-  switch(kind)
-  {
-  case ATTRIBUTE_KIND::POSITION: return os << "POSITION";
-  case ATTRIBUTE_KIND::EVENT_UID: return os << "EVENT_UID";
-  case ATTRIBUTE_KIND::TIME: return os << "TIME";
-  case ATTRIBUTE_KIND::DELTA_TIME: return os << "DELTA_TIME";
-  case ATTRIBUTE_KIND::EVENT_KIND: return os << "EVENT_KIND";
-  case ATTRIBUTE_KIND::INTRINSIC: return os << "INTRINSIC";
-  case ATTRIBUTE_KIND::ACCUMULATED: return os << "ACCUMULATED";
-  case ATTRIBUTE_KIND::OBSERVABLE: return os << "OBSERVABLE";
-  case ATTRIBUTE_KIND::INFO: return os << "INFO";
-  case ATTRIBUTE_KIND::UNKNOWN: return os << "UNKNOWN";
-  default: return os << std::underlying_type_t<ATTRIBUTE_KIND>(kind);
-  }
-}
+
 
 END_NAMESPACE_CORE

@@ -37,7 +37,7 @@ static std::ostream &write_header_part(std::ostream &os,
   return os;
 }
 
-void csv_printer::write_header(const attribute_description &desc)
+void csv_printer::write_header(attribute_description const &desc)
 {
   m_dimensions.clear();
   m_dimensions.reserve(desc.size());

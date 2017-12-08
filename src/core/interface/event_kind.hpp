@@ -9,7 +9,7 @@ BEGIN_NAMESPACE_CORE
 
 enum class EVENT_KIND : std::uint32_t
 {              // position   | ID         | attributes
-  NONE,        // preserved  | preserved  | preserved
+  NONE = 0,    // preserved  | preserved  | preserved
   CREATED,     // assigned   | assigned   | assigned
   REMOVED,     // freed      | freed      | undefined
   MODIFIED,    // preserved  | preserved  | changed

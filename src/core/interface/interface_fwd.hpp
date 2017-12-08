@@ -10,6 +10,7 @@ BEGIN_NAMESPACE_CORE
 class attribute;
 class attribute_description;
 class attribute_descriptor;
+class attribute_kind;
 class attribute_list;
 class attribute_range;
 class configuration_reader;

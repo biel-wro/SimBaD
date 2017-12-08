@@ -37,6 +37,14 @@ private:
   std::size_t m_attributeno;
 };
 
+class unrecognized_attribute_kind : public unrecognized_attribute
+{
+public: using super= unrecognized_attribute;
+    unrecognized_attribute_kind(ATTRIBUTE_KIND kind);
+
+
+};
+
 class bad_attribute : public std::bad_cast
 {
   using std::bad_cast::bad_cast;

@@ -228,6 +228,30 @@ std::vector<std::size_t> attribute_description::names_to_indices(
   return result;
 }
 
+static void standardize_event_kind(attribute_description &desc,
+                                   std::string const &event_kind_name)
+{
+  attribute_description::name_iterator it = desc.get<1>().find(event_kind_name);
+  if(desc.end_names() == it)
+    throw unrecognized_attribute_name(event_kind_name);
+
+  desc.get<1>().modify(it, [](attribute_descriptor &desc){
+      desc.set_kind(ATTRIBUTE_KIND::EVENT_KIND);
+      desc.set_scalar(ATTRIBUTE_SCALAR::INT);
+      desc.set_attribute_dimension(1);
+  });
+}
+
+void attribute_description::standardize_record(ATTRIBUTE_KIND attribute_kind,
+                                               std::string const &name)
+{
+  switch(attribute_kind)
+  {
+  case ATTRIBUTE_KIND::EVENT_KIND: return standardize_event_kind(*this, name);
+  default: throw unrecognized_attribute_kind(attribute_kind);
+  }
+}
+
 std::unordered_map<std::size_t, std::string>
 attribute_description::add_and_map_attributes(const property_tree &pt,
                                               bool ignore_empty)
