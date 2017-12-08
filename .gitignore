@@ -1,0 +1,3 @@
+src/CMakeLists.txt.user
+build-debug
+build-release
