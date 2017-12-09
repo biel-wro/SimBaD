@@ -100,14 +100,19 @@ void csv_printer::write_data(dataframe const &conf)
   std::vector<std::size_t> indices = conf.description().unpack_indices();
   std::vector<std::size_t>::const_iterator beg = indices.begin(),
                                            end = indices.end();
+
+  if(end == beg)
+    return;
+
   std::ostream &os = ostream();
-  conf.visit_records([=, &os](attribute_list const &a) {
-    if(end == beg)
-      return (void)(os << std::endl);
-    s_write_data_part(os, a[*beg], m_dimensions[*beg], m_delimiter);
-    std::vector<std::size_t>::const_iterator it = std::next(beg, 1);
-    for(; end != it; ++it)
-      s_write_data_part(os << m_delimiter, a[*it], m_dimensions[*it],
+
+  conf.visit_records([this, beg, end, &os](attribute_list const &attr) {
+
+    s_write_data_part(os, attr[*beg], m_dimensions[*beg], m_delimiter);
+
+    for(std::vector<std::size_t>::const_iterator it = std::next(beg, 1);
+        end != it; ++it)
+      s_write_data_part(os << m_delimiter, attr[*it], m_dimensions[*it],
                         m_delimiter);
 
     os << std::endl;

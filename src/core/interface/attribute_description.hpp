@@ -56,6 +56,11 @@ public:
   mapped_from(attribute_description const &other,
               std::vector<std::string> const &names);
 
+  template <class NameIterator>
+  static attribute_description mapped_from(attribute_description const &other,
+                                           NameIterator first,
+                                           NameIterator last);
+
   // iterating
   index_iterator begin_indices() const;
   index_iterator end_indices() const;

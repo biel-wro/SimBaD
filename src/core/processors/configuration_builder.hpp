@@ -28,6 +28,7 @@ public:
   const attribute_description &description() const override;
   std::size_t size() const override;
 protected:
+  //void create_on_event(attribute const &key, attribute_list const &event);
   void update_on_event(attribute const &key, attribute_list const &event);
   void remove_on_event(attribute const &key);
 

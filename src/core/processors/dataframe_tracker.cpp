@@ -167,7 +167,10 @@ dataframe_tracker::iterator dataframe_tracker::insert_commit(
 {
   assert(m_key_size == 1);
   std::unique_ptr<record> node_ptr(new record(m_record_size));
+  node_ptr->get(0) = key;
+
   iterator it = attribute_set().insert_commit(*node_ptr.release(), commit_data);
+
   return it;
 }
 
