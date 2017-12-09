@@ -236,16 +236,17 @@ void parameter_evolution_3d::read_configuration(
 
   std::size_t pos_idx = conf.position_attr_idx();
   std::size_t mut_idx = conf.description()["mutation.id"].attribute_idx();
-  conf.visit_records([this, pos_idx, mut_idx, attribute_indices](
-      simbad::core::configuration_view::particle_attributes const &p) {
-    cell::position_type pos;
-    pos[0] = p[pos_idx].get_real_ref(0);
-    pos[1] = p[pos_idx].get_real_ref(1);
-    pos[2] = p[pos_idx].get_real_ref(2);
-    insert(cell(pos, std::make_shared<cell_params>(p, attribute_indices)));
-    std::size_t mutation_id = p[mut_idx].get_int_val();
-    m_last_muatation_id = std::max(m_last_muatation_id, mutation_id);
-  });
+  conf.visit_records(
+      [this, pos_idx, mut_idx, attribute_indices](
+          simbad::core::configuration_view::particle_attributes const &p) {
+        cell::position_type pos;
+        pos[0] = p[pos_idx].get_real_ref(0);
+        pos[1] = p[pos_idx].get_real_ref(1);
+        pos[2] = p[pos_idx].get_real_ref(2);
+        insert(cell(pos, std::make_shared<cell_params>(p, attribute_indices)));
+        std::size_t mutation_id = p[mut_idx].get_int_val();
+        m_last_muatation_id = std::max(m_last_muatation_id, mutation_id);
+      });
 }
 
 double parameter_evolution_3d::time() const { return m_time; }
@@ -304,8 +305,8 @@ void parameter_evolution_3d::dump_mutation_tree(const std::string &path) const
   output_file << "*vertices " << mutations.size() << std::endl;
   for(std::shared_ptr<cell_params const> const &mutation_ptr : mutations)
   {
-    output_file << i << " \"" << mutation_ptr->mutation_id() << "\""
-                << std::endl;
+    output_file << i << " \"" << mutation_ptr->mutation_id() << "\" "
+                << mutation_ptr.use_count() - 2 << std::endl;
     ++i;
   }
 
@@ -330,7 +331,6 @@ void parameter_evolution_3d::dump_mutation_tree(const std::string &path) const
 
     assert(i != j);
     output_file << j << " " << i << std::endl;
-
   }
 }
 
