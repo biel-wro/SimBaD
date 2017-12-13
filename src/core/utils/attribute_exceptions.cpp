@@ -32,7 +32,7 @@ std::size_t unrecognized_attribute_number::attribute_idx() const
 
 unrecognized_attribute_kind::unrecognized_attribute_kind(ATTRIBUTE_KIND kind)
     : super(
-          dynamic_cast<std::stringstream &>(
+          dynamic_cast<std::stringstream &&>(
               std::stringstream("unrecognized attribute kind `") << kind << "`")
               .str())
 {

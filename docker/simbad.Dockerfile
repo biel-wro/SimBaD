@@ -7,4 +7,4 @@ RUN apk update && apk upgrade && apk add \
 
 COPY build-release /SimBaD/
 WORKDIR /SimBaD/
-CMD /SimBaD/cli/SimBaD-cli
+CMD /SimBaD/cli/SimBaD-cli --stdin=simbad
