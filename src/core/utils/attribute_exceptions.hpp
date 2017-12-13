@@ -1,7 +1,7 @@
 #ifndef ATTRIBUTE_EXCEPTIONS_HPP
 #define ATTRIBUTE_EXCEPTIONS_HPP
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include <exception>
 #include <stdexcept>

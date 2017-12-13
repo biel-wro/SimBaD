@@ -5,7 +5,7 @@
 
 #include "interface/interface_fwd.hpp"
 
-#include "utils/class_register.hpp"
+#include "interface/class_register.hpp"
 
 #include <boost/iterator/transform_iterator.hpp>
 

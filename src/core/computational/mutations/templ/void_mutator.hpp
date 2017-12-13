@@ -1,6 +1,9 @@
 #ifndef NVOID_MUTATOR_HPP
 #define NVOID_MUTATOR_HPP
-#include "core_fwd.hpp"
+
+#include "interface/interface_fwd.hpp"
+
+
 BEGIN_NAMESPACE_CORE
 template <class RealType> class void_mutator
 {

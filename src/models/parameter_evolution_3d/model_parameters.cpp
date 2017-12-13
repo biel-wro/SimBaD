@@ -7,7 +7,7 @@
 #include "interface/attribute_descriptor.hpp"
 
 #include "computational/mutations/builtin_mutators.hpp"
-#include "utils/class_register.hpp"
+#include "interface/class_register.hpp"
 using simbad::core::get_builtin_mutators;
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
@@ -34,7 +34,6 @@ model_params::model_params(const simbad::core::property_tree &pt)
 {
 }
 model_params::~model_params() {}
-
 double model_params::birth_rate(double density, double eff, double res) const
 {
   double val = eff * birth_saturation(density / res);

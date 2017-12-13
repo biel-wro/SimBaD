@@ -32,6 +32,10 @@ public:
   void pop();
 
   void check_accumulators() const;
+  std::unordered_map<std::size_t, std::size_t> count_clones() const;
+  std::unordered_map<std::size_t, std::size_t> count_mutations(
+      std::unordered_map<std::size_t, std::size_t> const &clone_counts) const;
+  void dump_mutation_stats(std::string const& path) const;
   void dump_mutation_tree(std::string const &path) const;
   simbad::core::attribute particle_attribute(cell const &c,
                                              std::size_t attrname) const;
@@ -47,8 +51,7 @@ protected:
   void mutate(cell &c);
   void execute_death(event_visitor v);
   void execute_birth(event_visitor v);
-  std::vector<std::shared_ptr<cell_params const>>
-  all_mutations() const;
+  std::vector<std::shared_ptr<cell_params const>> all_mutations() const;
 
 private:
   double m_time;
@@ -58,6 +61,7 @@ private:
   model_params m_model_params;
   std::unique_ptr<core::configuration_view> m_configurtation_view;
   std::string m_tree_dump_path;
+  std::string m_stats_dump_path;
 };
 
 END_NAMESPACE_PARAMETER_EVOLUTION_3D

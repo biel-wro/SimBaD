@@ -1,7 +1,7 @@
 #ifndef ATTRIBUTE_CONVERTER_HPP
 #define ATTRIBUTE_CONVERTER_HPP
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <boost/optional.hpp>

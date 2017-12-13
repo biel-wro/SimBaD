@@ -1,6 +1,6 @@
 #ifndef MAKE_FUNCTOR_HPP
 #define MAKE_FUNCTOR_HPP
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 #include <functional>
 
 BEGIN_NAMESPACE_CORE

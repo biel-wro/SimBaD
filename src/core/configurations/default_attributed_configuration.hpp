@@ -2,7 +2,7 @@
 #define ATTRIBUTE_DEFAULTED_CONFIGURATION_HPP
 
 #include "configurations/enriched_configuration.hpp"
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 #include "interface/attribute_description.hpp"
 #include "interface/property_tree.hpp"
 

@@ -1,6 +1,6 @@
 #include "adhesion_2d_def.hpp"
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 #include "interface/configuration_reader.hpp"
 #include "interface/configuration_view.hpp"
 #include "interface/model.hpp"
@@ -8,7 +8,7 @@
 #include "model_parameters.hpp"
 #include "spacetime.hpp"
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 #include <random>
 #include <string>
 

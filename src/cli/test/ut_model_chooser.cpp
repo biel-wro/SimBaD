@@ -2,7 +2,6 @@
 #include <boost/test/auto_unit_test.hpp>
 #include <iostream>
 
-//#include "core_fwd.hpp"
 #include "builtin_models.hpp"
 
 #include "interface/model_register.hpp"

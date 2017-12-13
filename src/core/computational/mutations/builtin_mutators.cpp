@@ -1,7 +1,8 @@
 #include "builtin_mutators.hpp"
 #include "mutator.hpp"
-#include "utils/class_register.hpp"
-#include "utils/object_factory.hpp"
+
+#include "interface/class_register.hpp"
+#include "interface/object_factory.hpp"
 
 #include "templ/skewed_beta_mutation.hpp"
 #include "templ/skewed_polynomial_mutator.hpp"

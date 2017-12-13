@@ -1,7 +1,7 @@
 #ifndef SIMPLE_PARTICLE_HPP
 #define SIMPLE_PARTICLE_HPP
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 #include <algorithm>
 #include <array>
 #include <cstddef>

@@ -1,7 +1,7 @@
 #ifndef SIMBAD_PROCESSORS_TREE_BUILDER_HPP
 #define SIMBAD_PROCESSORS_TREE_BUILDER_HPP
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include "dataframe_tracker.hpp"
 

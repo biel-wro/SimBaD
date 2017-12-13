@@ -1,6 +1,6 @@
 #ifndef PROPERTY_HPP
 #define PROPERTY_HPP
-#include "interface_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include "coordinates/coordinates.hpp"
 

@@ -1,7 +1,8 @@
 #ifndef SIMBAD_CORE_STREAM_READER_HPP
 #define SIMBAD_CORE_STREAM_READER_HPP
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
+
 #include <functional>
 #include <iosfwd>
 

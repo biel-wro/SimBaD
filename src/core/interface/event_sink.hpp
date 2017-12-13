@@ -1,7 +1,7 @@
 #ifndef EVENT_SINK_HPP
 #define EVENT_SINK_HPP
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include <functional>
 

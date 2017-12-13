@@ -1,8 +1,7 @@
 #ifndef CSV_PRINTER_HPP
 #define CSV_PRINTER_HPP
-#include "interface/stream_printer.hpp"
 
-#include "core_fwd.hpp"
+#include "interface/stream_printer.hpp"
 
 #include <string>
 #include <vector>

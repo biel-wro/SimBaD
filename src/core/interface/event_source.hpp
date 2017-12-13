@@ -1,6 +1,6 @@
 #ifndef CORE_EVENT_SOURCE_HPP
 #define CORE_EVENT_SOURCE_HPP
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 #include <functional>
 
 BEGIN_NAMESPACE_CORE

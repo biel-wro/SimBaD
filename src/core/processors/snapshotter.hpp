@@ -1,6 +1,6 @@
 #ifndef SNAPSHOTTER_HPP
 #define SNAPSHOTTER_HPP
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include <memory>
 

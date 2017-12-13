@@ -1,7 +1,7 @@
 #ifndef BUILTIN_MODELS_HPP
 #define BUILTIN_MODELS_HPP
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 namespace simbad
 {

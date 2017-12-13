@@ -56,6 +56,7 @@ void launcher::launch_snapshots(const property_tree &pt)
     std::cerr << "[" << double(100 * i) / double(nsteps) << "%] processed " << i
               << " snapshots out of " << nsteps << std::endl;
     std::cout << "time = " << processor.get_current_time() << std::endl;
+    //std::cout << "size = " << stacked_view.size() << std::endl;
     printer->write_dataframe(stacked_view);
   }
 }

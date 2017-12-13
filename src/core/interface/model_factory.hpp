@@ -1,9 +1,9 @@
 #ifndef MODEL_FACTORY_HPP
 #define MODEL_FACTORY_HPP
 
-#include "interface_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
-#include "utils/object_factory.hpp"
+#include "interface//object_factory.hpp"
 
 #include <memory>
 #include <string>

@@ -1,7 +1,7 @@
 #ifndef EVENT_PARTIAL_HPP
 #define EVENT_PARTIAL_HPP
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 BEGIN_NAMESPACE_CORE
 

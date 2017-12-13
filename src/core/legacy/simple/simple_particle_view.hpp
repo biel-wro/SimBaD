@@ -1,7 +1,7 @@
 #ifndef SIMPLE_PARTICLE_VIEW_HPP
 #define SIMPLE_PARTICLE_VIEW_HPP
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 #include "interface/particle.hpp"
 BEGIN_NAMESPACE_CORE
 

@@ -173,15 +173,17 @@ parameter_evolution_3d::parameter_evolution_3d(const core::property_tree &pt)
       m_spacetime(pt.get<double>("space.tile_size")),
       m_model_params(pt),
       m_configurtation_view(new configuration_view(*this)),
-      m_tree_dump_path(pt.get("dump.path", std::string()))
+      m_tree_dump_path(pt.get("dump.tree_path", std::string())),
+      m_stats_dump_path(pt.get("dump.stats_path", std::string()))
 {
 }
 
 parameter_evolution_3d::~parameter_evolution_3d()
 {
-  if(m_tree_dump_path.empty())
-    return;
-  dump_mutation_tree(m_tree_dump_path);
+  if(!m_tree_dump_path.empty())
+    dump_mutation_tree(m_tree_dump_path);
+  if(!m_stats_dump_path.empty())
+    dump_mutation_stats(m_stats_dump_path);
 }
 
 const core::attribute_description &
@@ -294,6 +296,67 @@ void parameter_evolution_3d::check_accumulators() const
     std::cout << "stored:" << c.density();
     std::cout << " measured:" << density << std::endl;
   });
+}
+
+namespace
+{
+using count_map = std::unordered_map<std::size_t, std::size_t>;
+}
+
+std::unordered_map<std::size_t, std::size_t>
+parameter_evolution_3d::count_clones() const
+{
+  count_map counts;
+  m_spacetime.visit([&counts](cell const &c) {
+    cell_params const &params = c.params();
+    std::size_t mutation_id = params.mutation_id();
+
+    count_map::iterator it;
+    bool inserted;
+    std::tie(it, inserted) = counts.emplace(mutation_id, 1);
+    if(inserted)
+      return;
+    std::size_t &count = it->second;
+    ++count;
+
+  });
+
+  return counts;
+}
+
+std::unordered_map<std::size_t, std::size_t>
+parameter_evolution_3d::count_mutations(
+    std::unordered_map<std::size_t, std::size_t> const &clone_counts) const
+{
+  count_map mutation_counts;
+  for(auto id_count_pair : clone_counts)
+  {
+    std::size_t clone_id = id_count_pair.first;
+    std::size_t clone_count = id_count_pair.second;
+    count_map::iterator it;
+    bool inserted;
+    std::tie(it, inserted) = mutation_counts.emplace(clone_id, clone_count);
+    if(inserted)
+      continue;
+    std::size_t &mutation_count = it->second;
+    mutation_count += clone_count;
+  }
+  return mutation_counts;
+}
+
+void parameter_evolution_3d::dump_mutation_stats(std::string const &path) const
+{
+  count_map clone_counts = count_clones();
+  count_map mutation_counts = count_mutations(clone_counts);
+  std::ofstream output_file(path);
+  output_file << "id, count" << std::endl;
+  for(auto id_count_pair : clone_counts)
+  {
+    std::size_t id = id_count_pair.first, clone_count = id_count_pair.second,
+                mutation_count = mutation_counts[id];
+    output_file << id << "," << clone_count << "," << mutation_count
+                << std::endl;
+  }
 }
 
 void parameter_evolution_3d::dump_mutation_tree(const std::string &path) const
