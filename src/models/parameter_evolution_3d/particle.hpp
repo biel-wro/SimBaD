@@ -2,7 +2,7 @@
 #define PARTICLE_HPP
 #include "parameter_evolution_3d_fwd.hpp"
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include "computational/templates/accumulator.hpp"
 #include "coordinates/coordinates.hpp"

@@ -1,7 +1,7 @@
 #ifndef ARGUMENT_PARSER_H
 #define ARGUMENT_PARSER_H
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include <boost/optional/optional_fwd.hpp>
 #include <boost/property_tree/ptree_fwd.hpp>

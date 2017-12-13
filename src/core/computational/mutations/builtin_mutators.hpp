@@ -1,6 +1,8 @@
 #ifndef BUILTIN_MUTATORS_HPP
 #define BUILTIN_MUTATORS_HPP
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
+#include "computational/computational_fwd.hpp"
+
 #include "mutator.hpp"
 
 BEGIN_NAMESPACE_CORE

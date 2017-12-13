@@ -1,6 +1,6 @@
 #ifndef GENERIC_PARTICLE_HPP
 #define GENERIC_PARTICLE_HPP
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include "interface/attribute.hpp"
 #include "interface/configuration_view.hpp"

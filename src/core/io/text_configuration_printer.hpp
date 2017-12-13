@@ -3,8 +3,6 @@
 
 #include "interface/stream_printer.hpp"
 
-#include "core_fwd.hpp"
-
 #include <string>
 #include <vector>
 

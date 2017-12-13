@@ -1,6 +1,6 @@
 #ifndef OBJECT_FACTORY_HPP
 #define OBJECT_FACTORY_HPP
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 #include <memory>
 #include <string>
 BEGIN_NAMESPACE_CORE

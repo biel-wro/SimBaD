@@ -1,6 +1,6 @@
 #ifndef ATTRIBUTE_DESCRIPTION_HPP
 #define ATTRIBUTE_DESCRIPTION_HPP
-#include "interface_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include <initializer_list>
 #include <iosfwd>

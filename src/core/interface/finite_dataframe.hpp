@@ -1,7 +1,7 @@
 #ifndef SIMBAD_FINITE_DATAFRAME_HPP
 #define SIMBAD_FINITE_DATAFRAME_HPP
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include "dataframe.hpp"
 BEGIN_NAMESPACE_CORE

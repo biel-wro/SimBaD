@@ -5,15 +5,10 @@
 #include <cstdint>
 #include <type_traits>
 
-#include "core_def.hpp"
-
+#include "computational/computational_fwd.hpp"
+#include "configurations/stacked_view_configuration.hpp"
 #include "interface/interface_fwd.hpp"
-
-BEGIN_NAMESPACE_CORE
-// computational
-class mutator;
-
-// configurations
+#include "processors/processors_fwd.hpp"
 
 // containters
 template <class, size_t> class LazySet;
@@ -32,23 +27,12 @@ template <class> class simple_particle_view;
 template <size_t, class> class simple_particle;
 // object tracking
 
-// processors
-class configuration_builder;
-class dataframe_tracker;
-class snapshotter;
-class stream_printer;
-class tree_builder;
 
-// utils
-class argument_parser;
-class counting_id_generator;
-class generic_particle;
 
 // other
 template <class T> class object_factory;
 template <class T> class class_register;
 template <class Object>
 Object *create_from_property_tree(property_tree const &);
-END_NAMESPACE_CORE
 
 #endif // CORE_FWD_HPP

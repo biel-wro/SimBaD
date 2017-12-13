@@ -1,8 +1,8 @@
 #ifndef SIMBAD_CORE_CONFIGURATION_BUILDER_HPP
 #define SIMBAD_CORE_CONFIGURATION_BUILDER_HPP
-#include "core_fwd.hpp"
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
+
 #include "interface/finite_dataframe.hpp"
 #include "processors/dataframe_tracker.hpp"
 

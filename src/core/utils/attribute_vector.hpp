@@ -1,7 +1,7 @@
 #ifndef ATTRIBUTE_VECTOR_HPP
 #define ATTRIBUTE_VECTOR_HPP
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include "interface/attribute_list.hpp"
 

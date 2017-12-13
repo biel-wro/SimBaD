@@ -1,7 +1,7 @@
 #ifndef PROPERTIES_HPP
 #define PROPERTIES_HPP
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include <memory>
 #include <string>

@@ -1,0 +1,10 @@
+#ifndef COMPUTATIONAL_FWD_HPP
+#define COMPUTATIONAL_FWD_HPP
+#include "core_def.hpp"
+
+BEGIN_NAMESPACE_CORE
+class mutator;
+
+END_NAMESPACE_CORE
+
+#endif // COMPUTATIONAL_FWD_HPP

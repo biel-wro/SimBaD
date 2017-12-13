@@ -1,6 +1,6 @@
 #ifndef DATAFRAME_TRACKER_HPP
 #define DATAFRAME_TRACKER_HPP
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include "interface/attribute_description.hpp"
 #include "interface/attribute_list.hpp"

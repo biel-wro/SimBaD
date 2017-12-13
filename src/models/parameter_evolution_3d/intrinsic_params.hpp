@@ -3,7 +3,7 @@
 
 #include "parameter_evolution_3d_fwd.hpp"
 
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 #include "interface/attribute_description.hpp"
 
 #include <random>

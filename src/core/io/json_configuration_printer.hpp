@@ -1,7 +1,6 @@
 #ifndef JSON_CONFIGURATION_PRINTER_HPP
 #define JSON_CONFIGURATION_PRINTER_HPP
 
-#include "core_fwd.hpp"
 #include "interface/stream_printer.hpp"
 
 BEGIN_NAMESPACE_CORE

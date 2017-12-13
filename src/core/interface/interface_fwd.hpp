@@ -24,6 +24,9 @@ class model_factory;
 class model_register;
 class object_descriptor;
 class property_tree;
+class stream_printer;
+class stream_reader;
+
 
 // enums
 enum class ATTRIBUTE_KIND : std::uint32_t;
@@ -32,6 +35,7 @@ enum class EVENT_KIND : std::uint32_t;
 
 // template classes
 template <class T> class array_attribute;
+template <class T> class class_register;
 
 // aliases
 using event = attribute_list;

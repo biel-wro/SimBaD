@@ -1,6 +1,6 @@
 #ifndef SIMBAD_CORE_CSV_RECORD_PARSER_HPP
 #define SIMBAD_CORE_CSV_RECORD_PARSER_HPP
-#include "core_fwd.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include <memory>
 #include <string>
