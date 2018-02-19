@@ -12,7 +12,7 @@
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 
-cell::cell(position_type pos, std::shared_ptr<cell_params> params_ptr)
+cell::cell(position_type pos, std::shared_ptr<cell_params const> params_ptr)
     : m_position(pos),
       m_time(0),
       m_params_ptr(params_ptr),

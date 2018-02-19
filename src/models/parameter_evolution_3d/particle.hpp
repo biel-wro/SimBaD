@@ -20,7 +20,7 @@ public:
   using EVENT_KIND = simbad::core::EVENT_KIND;
   static core::attribute_description const &description();
 
-  cell(position_type pos, std::shared_ptr<cell_params> params_ptr);
+  cell(position_type pos, std::shared_ptr<cell_params const> params_ptr);
   ~cell();
 
   position_type const &position() const;

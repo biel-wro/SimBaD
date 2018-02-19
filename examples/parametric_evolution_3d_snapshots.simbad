@@ -2,7 +2,7 @@ mode "snapshots"
 run
 {
   time_step 1
-  max_steps 10
+  max_steps 100
 }
 
 stacked_view
@@ -32,13 +32,15 @@ model
   {
     dump
     {
-      path tree.net
+      tree_path tree.net
+      stats_path stats.csv
+      parent_mutations parent_mutations.csv
     }
     space
     {
-      tile_size 1
+      tile_size 3
     }
-    seed 1
+    seed 13
     mutation
     {
       probability 0.07

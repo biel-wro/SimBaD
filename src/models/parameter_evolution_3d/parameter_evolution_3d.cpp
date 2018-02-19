@@ -46,6 +46,7 @@ make_particle_descriptor()
   desc.add_attribute_auto_idx("death.rate", KIND::OBSERVABLE, REAL, 1);
   desc.add_attribute_auto_idx("success.probability", KIND::OBSERVABLE, REAL, 1);
   desc.add_attribute_auto_idx("lifespan", KIND::OBSERVABLE, REAL, 1);
+  desc.add_attribute_auto_idx("parent.mutation.id", KIND::INFO, INT, 1);
   return description_ptr;
 }
 
@@ -73,6 +74,8 @@ parameter_evolution_3d::particle_attribute(const cell &c,
   case 12: return compute_death_rate(c);
   case 13: return compute_success_rate(c);
   case 14: return 1.0 / compute_death_rate(c);
+  case 15:
+    return c.params().parent_ptr() ? c.params().parent_ptr()->mutation_id() : 0;
   }
   throw simbad::core::unrecognized_attribute_number(attr_idx);
 }
@@ -174,7 +177,9 @@ parameter_evolution_3d::parameter_evolution_3d(const core::property_tree &pt)
       m_model_params(pt),
       m_configurtation_view(new configuration_view(*this)),
       m_tree_dump_path(pt.get("dump.tree_path", std::string())),
-      m_stats_dump_path(pt.get("dump.stats_path", std::string()))
+      m_stats_dump_path(pt.get("dump.stats_path", std::string())),
+      m_parent_mutations_dump_path(
+          pt.get("dump.parent_mutations", std::string()))
 {
 }
 
@@ -184,6 +189,8 @@ parameter_evolution_3d::~parameter_evolution_3d()
     dump_mutation_tree(m_tree_dump_path);
   if(!m_stats_dump_path.empty())
     dump_mutation_stats(m_stats_dump_path);
+  if(!m_parent_mutations_dump_path.empty())
+    dump_parent_mutations(m_parent_mutations_dump_path);
 }
 
 const core::attribute_description &
@@ -238,6 +245,8 @@ void parameter_evolution_3d::read_configuration(
 
   std::size_t pos_idx = conf.position_attr_idx();
   std::size_t mut_idx = conf.description()["mutation.id"].attribute_idx();
+
+
   conf.visit_records(
       [this, pos_idx, mut_idx, attribute_indices](
           simbad::core::configuration_view::particle_attributes const &p) {
@@ -245,7 +254,10 @@ void parameter_evolution_3d::read_configuration(
         pos[0] = p[pos_idx].get_real_ref(0);
         pos[1] = p[pos_idx].get_real_ref(1);
         pos[2] = p[pos_idx].get_real_ref(2);
-        insert(cell(pos, std::make_shared<cell_params>(p, attribute_indices)));
+        std::shared_ptr<cell_params const> params_ptr =
+            std::make_shared<cell_params>(p, attribute_indices);
+        m_all_mutations.push_back((params_ptr));
+        insert(cell(pos, params_ptr));
         std::size_t mutation_id = p[mut_idx].get_int_val();
         m_last_muatation_id = std::max(m_last_muatation_id, mutation_id);
       });
@@ -397,6 +409,21 @@ void parameter_evolution_3d::dump_mutation_tree(const std::string &path) const
   }
 }
 
+void parameter_evolution_3d::dump_parent_mutations(
+    const std::string &path) const
+{
+  std::vector<std::shared_ptr<cell_params const>> mutations = all_mutations();
+  std::ofstream output_file(path);
+  for(std::shared_ptr<cell_params const> mutation_ptr : mutations)
+  {
+    std::size_t mutation_id = mutation_ptr->mutation_id(),
+                parent_id = mutation_ptr->parent_ptr()
+                                ? mutation_ptr->parent_ptr()->mutation_id()
+                                : 0;
+    output_file << mutation_id << ", " << parent_id << std::endl;
+  }
+}
+
 const spacetime &parameter_evolution_3d::current_spacetime() const
 {
   return m_spacetime;
@@ -459,6 +486,8 @@ void parameter_evolution_3d::mutate(cell &c)
   std::shared_ptr<cell_params> mutated_params_ptr =
       std::make_shared<cell_params>(c.params());
 
+  m_all_mutations.push_back(mutated_params_ptr);
+
   mutated_params_ptr->set_parent_ptr(c.params_ptr());
   mutated_params_ptr->set_mutation_id(generate_mutation_id());
 
@@ -506,6 +535,8 @@ void parameter_evolution_3d::execute_birth(
 std::vector<std::shared_ptr<cell_params const>>
 parameter_evolution_3d::all_mutations() const
 {
+  return m_all_mutations;
+  /*
   std::unordered_map<std::size_t, std::shared_ptr<cell_params const>>
       id_to_ptr_map;
   auto particle_visitor = [&id_to_ptr_map](cell const &c) {
@@ -524,6 +555,7 @@ parameter_evolution_3d::all_mutations() const
       id_to_ptr_map)
     mutations.push_back(pair.second);
   return mutations;
+  */
 }
 
 END_NAMESPACE_PARAMETER_EVOLUTION_3D
