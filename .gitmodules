@@ -1,0 +1,6 @@
+[submodule "src/plugins/cbor_cpp/cbor-lite"]
+	path = src/plugins/cbor_cpp/cbor-lite
+	url = https://bitbucket.org/isode/cbor-lite.git
+[submodule "src/plugins/cbor_lite/extern/cbor-lite"]
+	path = src/plugins/cbor_lite/extern/cbor-lite
+	url = https://bitbucket.org/isode/cbor-lite.git

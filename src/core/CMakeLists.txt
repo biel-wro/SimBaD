@@ -3,7 +3,6 @@ set( TARGET_NAME ${CORE_NAME} )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 set( SOURCES
-  src/core.cpp
   # computational
   computational/mutations/builtin_mutators.cpp
   computational/mutations/mutator.cpp
@@ -29,6 +28,7 @@ set( SOURCES
   interface/event_sink.cpp
   interface/event_source.cpp
   interface/finite_dataframe.cpp
+  interface/launcher.cpp
   interface/property_tree.cpp
   interface/model.cpp
   interface/model_factory.cpp
@@ -42,7 +42,8 @@ set( SOURCES
   io/detail/csv_header_parser.cpp
   io/detail/csv_record_parser.cpp
   io/json_configuration_printer.cpp
-  io/text_configuration_printer.cpp
+  io/null_printer.cpp
+  io/text_printer.cpp
 
   # processors
   processors/configuration_builder.cpp
@@ -51,6 +52,10 @@ set( SOURCES
   processors/tree_builder
   processors/dataframe_tracker.cpp
 
+  # repositories
+  repositories/stream_printer_repository.cpp
+
+  #legacy
   legacy/simple/simple_event_view.cpp
   legacy/event_partial.cpp
   # utils

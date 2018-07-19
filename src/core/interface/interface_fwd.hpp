@@ -1,3 +1,6 @@
+#ifndef SIMBAD_CORE_INTERFACE_FWD_HPP
+#define SIMBAD_CORE_INTERFACE_FWD_HPP
+
 #include <cstddef>
 #include <cstdint>
 #include <type_traits>
@@ -19,6 +22,7 @@ class dataframe;
 class event_sink;
 class event_source;
 class finite_dataframe;
+class launcher;
 class model;
 class model_factory;
 class model_register;
@@ -41,3 +45,4 @@ template <class T> class class_register;
 using event = attribute_list;
 
 END_NAMESPACE_CORE
+#endif

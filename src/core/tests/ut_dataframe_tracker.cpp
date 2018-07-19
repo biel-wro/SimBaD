@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(instantiation)
     it->get(1) = record[1];
   });
   std::size_t idx = 0;
-  tracker.visit_records([&idx](attribute_list const &record) {
+  tracker.visit_records([](attribute_list const &record) {
     if(record[0] == attribute{1, 2, 3})
       BOOST_REQUIRE_EQUAL(record[1], attribute(1.23));
     if(record[1] == attribute{6, 7, 8})

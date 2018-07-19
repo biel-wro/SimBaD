@@ -55,6 +55,20 @@ std::ostream &operator<<(std::ostream &os, ATTRIBUTE_SCALAR sc)
   default: throw std::runtime_error("unhandled type");
   }
 }
+std::istream &operator>>(std::istream &is, ATTRIBUTE_SCALAR &sc)
+{
+  std::string str;
+  is >> str;
+  if("STRING" == str)
+    sc = ATTRIBUTE_SCALAR ::STRING;
+  else if("REAL" == str)
+    sc = ATTRIBUTE_SCALAR ::REAL;
+  else if("INT" == str)
+    sc = ATTRIBUTE_SCALAR ::INT;
+  else if("UNKNOWN" == str)
+    sc = ATTRIBUTE_SCALAR ::UNKNOWN;
+  return is;
+}
 
 attribute::attribute() : super("") {}
 attribute::attribute(attribute::string_type val) : super(std::move(val)) {}
@@ -461,8 +475,8 @@ attribute::get_int_data() const
 simbad::core::EVENT_KIND
 simbad::core::attribute::get_event_kind_val(std::size_t idx) const
 {
-    int_type int_val = get_int_val(idx);
-    return static_cast<EVENT_KIND>(int_val);
+  int_type int_val = get_int_val(idx);
+  return static_cast<EVENT_KIND>(int_val);
 }
 
 void attribute::clear() { *this = ""; }

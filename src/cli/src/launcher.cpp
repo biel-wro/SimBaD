@@ -1,4 +1,4 @@
-#include "launcher.hpp"
+#include "cli/launcher.hpp"
 #include "builtin_models.hpp"
 
 #include "configurations/cubic_crystal_configuration.hpp"
@@ -14,7 +14,10 @@
 #include <boost/property_tree/ptree.hpp>
 
 #include <iostream>
+#include <memory>
+#include <repositories/repository.hpp>
 #include <string>
+
 using namespace simbad::core;
 
 BEGIN_NAMESPACE_CLI
@@ -56,7 +59,7 @@ void launcher::launch_snapshots(const property_tree &pt)
     std::cerr << "[" << double(100 * i) / double(nsteps) << "%] processed " << i
               << " snapshots out of " << nsteps << std::endl;
     std::cout << "time = " << processor.get_current_time() << std::endl;
-    //std::cout << "size = " << stacked_view.size() << std::endl;
+    // std::cout << "size = " << stacked_view.size() << std::endl;
     printer->write_dataframe(stacked_view);
   }
 }
@@ -94,7 +97,9 @@ void launcher::launch_simulation(property_tree const &pt)
   core::attribute_description const &event_descriptor =
       m_model_ptr->event_descriptor();
   printer->write_header(event_descriptor);
-  m_model_ptr->run([&](event const &e) { printer->write_entry(e); }, nevents);
+
+  auto on_event = [&printer](event const &e) { printer->write_entry(e); };
+  m_model_ptr->run(on_event, nevents);
   printer->write_footer();
 }
 
@@ -118,11 +123,15 @@ launcher::make_configuration_printer(std::ostream *os,
 {
   std::string const &class_name = pt.get<std::string>("class");
   property_tree const &parameters =
-      pt.get_child("parameters", property_tree::get_empty());
+      pt.get_child("parameters");
 
-  if(class_name == "csv_printer")
-    return std::unique_ptr<stream_printer>(new csv_printer(os, parameters));
-  throw std::logic_error(std::string("unrecognized printer ") + class_name);
+  repository<stream_printer> const &printer_repo =
+      repository<stream_printer>::global_instance();
+  std::unique_ptr<stream_printer> printer_ptr =
+      printer_repo.at(class_name)(parameters);
+
+  printer_ptr->set_ostream(*os);
+  return printer_ptr;
 }
 
 std::unique_ptr<configuration_view>

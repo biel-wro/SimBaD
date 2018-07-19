@@ -1,5 +1,5 @@
-#ifndef LAUNCHER_H
-#define LAUNCHER_H
+#ifndef SIMBAD_CLI_LAUNCHER_H
+#define SIMBAD_CLI_LAUNCHER_H
 
 #include "cli_fwd.hpp"
 #include "interface/interface_fwd.hpp"

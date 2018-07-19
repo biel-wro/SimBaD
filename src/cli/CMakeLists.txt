@@ -1,6 +1,7 @@
-include_directories( inc )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/inc )
 include_directories( ${CMAKE_SOURCE_DIR}/core/ )
 include_directories( ${CMAKE_SOURCE_DIR}/models/common/inc )
+include_directories( ${CMAKE_SOURCE_DIR}/plugins/ )
 include_directories( ${Boost_INCLUDE_DIR} )
 
 set( MAIN_SOURCE src/main.cpp)
@@ -8,12 +9,13 @@ set( MAIN_SOURCE src/main.cpp)
 set(SOURCES
   src/argument_parser.cpp
   src/launcher.cpp
-)
+  )
 
 set( LIBS
   ${Boost_LIBRARIES}
   ${MODEL_COMMON}
   ${CORE_NAME}
+  plugins
 )
 
 add_library(${CLI_NAME}_obj OBJECT ${SOURCES} )
