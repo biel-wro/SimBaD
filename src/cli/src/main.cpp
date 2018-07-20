@@ -1,7 +1,9 @@
-#include "argument_parser.hpp"
-#include "launcher.hpp"
+#include "cli/argument_parser.hpp"
+#include "cli/launcher.hpp"
 
 #include "utils/properties.hpp"
+
+#include "plugin_common.hpp"
 
 #include <boost/property_tree/info_parser.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -49,6 +51,8 @@ core::property_tree get_args(int argc, const char **argv)
 
 int main(int argc, const char **argv)
 {
+  simbad::plugins::initialize_plugins();
+
   core::property_tree tree = get_args(argc, argv);
   pt::json_parser::write_json(
       std::cerr, static_cast<core::property_tree::super>(tree), true);

@@ -1,6 +1,6 @@
 #include <boost/test/auto_unit_test.hpp>
 
-#include "argument_parser.hpp"
+#include "cli/argument_parser.hpp"
 
 #include <boost/property_tree/xml_parser.hpp>
 #include <iostream>

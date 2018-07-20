@@ -513,6 +513,9 @@ void parameter_evolution_3d::execute_birth(
   new_position[1] += m_model_params.dispersion()(m_rng);
   new_position[2] += m_model_params.dispersion()(m_rng);
 
+  event_view<EVENT_KIND::TRANSFORMED, 1> parent_birth_view(parent, *this);
+  v(parent_birth_view);
+
   cell child(m_spacetime.top());
   child.set_position(new_position);
   child.reset_interaction();
@@ -524,9 +527,6 @@ void parameter_evolution_3d::execute_birth(
   mutate(*parent_handle);
   resample_event(*parent_handle);
   m_spacetime.repair_order(parent_handle);
-
-  event_view<EVENT_KIND::TRANSFORMED, 1> parent_birth_view(parent, *this);
-  v(parent_birth_view);
 
   event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
   v(child_birth_view);

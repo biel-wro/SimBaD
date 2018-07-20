@@ -4,6 +4,7 @@
 #include "interface/dataframe.hpp"
 
 BEGIN_NAMESPACE_CORE
+stream_printer::stream_printer() : m_ostream_ptr(nullptr) {}
 stream_printer::stream_printer(std::ostream *ostream) : m_ostream_ptr(ostream)
 {
 }

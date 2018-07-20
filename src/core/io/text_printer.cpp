@@ -1,4 +1,4 @@
-#include "text_configuration_printer.hpp"
+#include "text_printer.hpp"
 
 #include "interface/attribute.hpp"
 #include "interface/attribute_description.hpp"
@@ -9,24 +9,22 @@
 #include <iostream>
 
 BEGIN_NAMESPACE_CORE
-text_configuration_printer::text_configuration_printer()
-    : stream_printer(nullptr)
+text_printer::text_printer() : stream_printer(nullptr) {}
+text_printer::text_printer(property_tree const &pt) : text_printer(nullptr, pt)
 {
 }
-text_configuration_printer::text_configuration_printer(std::ostream *ostream,
-                                                       std::string delim)
+
+text_printer::text_printer(std::ostream *ostream, std::string delim)
     : stream_printer(*ostream), m_delimiter(std::move(delim))
 {
 }
 
-text_configuration_printer::text_configuration_printer(std::ostream *ostream,
-                                                       const property_tree &pt)
-    : text_configuration_printer(ostream,
-                                 pt.get<std::string>("delimiter", ", "))
+text_printer::text_printer(std::ostream *ostream, const property_tree &pt)
+    : text_printer(ostream, pt.get<std::string>("delimiter", ", "))
 {
 }
 
-void text_configuration_printer::write_header(attribute_description const &desc)
+void text_printer::write_header(attribute_description const &desc)
 {
   std::tie(m_indices, m_names) = desc.unpack_all();
 
@@ -40,7 +38,7 @@ void text_configuration_printer::write_header(attribute_description const &desc)
   ostream() << std::endl;
 }
 /*
-void text_configuration_printer::write_data(dataframe const &conf)
+void text_printer::write_data(dataframe const &conf)
 {
   std::vector<std::size_t>::const_iterator beg_idx = indices.begin(),
                                            end_idx = indices.end();
@@ -60,7 +58,7 @@ void text_configuration_printer::write_data(dataframe const &conf)
   });
 }*/
 
-void text_configuration_printer::write_entry(attribute_list const &entry)
+void text_printer::write_entry(attribute_list const &entry)
 {
   std::vector<std::size_t>::const_iterator beg_idx = m_indices.begin(),
                                            end_idx = m_indices.end();
@@ -77,5 +75,5 @@ void text_configuration_printer::write_entry(attribute_list const &entry)
     os << m_delimiter << *it_names << "=" << entry[*it_idx];
   os << std::endl;
 }
-void text_configuration_printer::write_footer() {}
+void text_printer::write_footer() {}
 END_NAMESPACE_CORE

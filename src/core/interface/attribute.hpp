@@ -49,7 +49,7 @@ enum class ATTRIBUTE_SCALAR : std::uint32_t
   INT = 3,
 };
 std::ostream &operator<<(std::ostream &, ATTRIBUTE_SCALAR);
-
+std::istream &operator>>(std::istream &, ATTRIBUTE_SCALAR);
 // clang-format off
 #define SIMBAD_CORE_ATTRIBUTE_SUBTYPES                                         \
   std::string,                                                                 \

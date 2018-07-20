@@ -5,7 +5,7 @@
 #include "interface/attribute_descriptor.hpp"
 #include "io/csv_printer.hpp"
 #include "io/csv_reader.hpp"
-#include "io/text_configuration_printer.hpp"
+#include "io/text_printer.hpp"
 #include "processors/configuration_builder.hpp"
 
 #include <boost/test/auto_unit_test.hpp>
@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(set_default_attributes)
   pt.put("spacing", 1);
 
   cubic_crystal_configuration initial_configuration(pt);
-  text_configuration_printer printer(&std::cout);
+  text_printer printer(&std::cout);
 
   property_tree attrs;
   attrs.put("abc", 123);

@@ -10,8 +10,9 @@ BEGIN_NAMESPACE_CORE
 class csv_printer final : public stream_printer
 {
 public:
+  explicit csv_printer(property_tree const &pt);
   csv_printer(std::ostream *ostream, property_tree const &pt);
-  csv_printer(std::ostream *ostream, std::string delimiter = ",");
+  explicit csv_printer(std::ostream *ostream, std::string delimiter = ",");
 
   void write_header(attribute_description const &desc) override;
   void write_entry(attribute_list const &entry) override;

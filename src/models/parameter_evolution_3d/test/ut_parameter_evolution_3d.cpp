@@ -4,7 +4,7 @@
 #include "interface/attribute_list.hpp"
 #include "interface/property_tree.hpp"
 #include "io/csv_printer.hpp"
-#include "io/text_configuration_printer.hpp"
+#include "io/text_printer.hpp"
 #include "particle.hpp"
 
 #include <boost/property_tree/ptree.hpp>
@@ -125,7 +125,7 @@ BOOST_AUTO_TEST_CASE(short_run)
 
   m.set_configuration(initial_configuraiton, make_initial_vals());
 
-  //  text_configuration_printer configuration_printer(&std::cout);
+  //  text_printer configuration_printer(&std::cout);
 
   csv_printer event_printer(&std::cout);
   event_printer.write_header(m.event_descriptor());

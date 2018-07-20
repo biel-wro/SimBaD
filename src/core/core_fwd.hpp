@@ -10,6 +10,8 @@
 #include "interface/interface_fwd.hpp"
 #include "processors/processors_fwd.hpp"
 
+
+BEGIN_NAMESPACE_CORE
 // containters
 template <class, size_t> class LazySet;
 
@@ -34,5 +36,6 @@ template <class T> class object_factory;
 template <class T> class class_register;
 template <class Object>
 Object *create_from_property_tree(property_tree const &);
+END_NAMESPACE_CORE
 
 #endif // CORE_FWD_HPP

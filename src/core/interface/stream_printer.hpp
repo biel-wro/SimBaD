@@ -8,8 +8,10 @@ BEGIN_NAMESPACE_CORE
 class stream_printer
 {
 public:
-  stream_printer(std::ostream *ostream);
-  stream_printer(std::ostream &ostream);
+  stream_printer();
+  virtual ~stream_printer() = default;
+  explicit stream_printer(std::ostream *ostream);
+  explicit stream_printer(std::ostream &ostream);
   void set_ostream(std::ostream &ostream);
   std::ostream &ostream();
 

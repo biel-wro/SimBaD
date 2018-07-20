@@ -1,7 +1,7 @@
 mode "simulation"
 run
 {
-  nevents 100
+  nevents 10000
 }
 
 stacked_view
@@ -9,9 +9,10 @@ stacked_view
 }
 configuration_printer
 {
-  class "csv_printer"
+  class "cbor_lite"
   parameters
   {
+    precision "single"
     delimiter ","
   }
 }

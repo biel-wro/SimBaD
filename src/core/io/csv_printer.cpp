@@ -8,6 +8,8 @@
 
 BEGIN_NAMESPACE_CORE
 
+csv_printer::csv_printer(property_tree const &pt) : csv_printer(nullptr, pt) {}
+
 csv_printer::csv_printer(std::ostream *ostream, const property_tree &pt)
     : csv_printer(ostream, pt.get<std::string>("delimiter", ","))
 {
@@ -119,4 +121,5 @@ void csv_printer::write_data(dataframe const &conf)
   });
 }
 void csv_printer::write_footer() { ostream() << std::endl; }
+
 END_NAMESPACE_CORE
