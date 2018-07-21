@@ -7,7 +7,6 @@ matrix:
       services:
         - docker
       script:
-        - git submodule init && git submodule update
         - docker -v
         - docker pull $DOCKERIMAGE
         - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug && make -j 2"
@@ -18,7 +17,6 @@ matrix:
       services:
         - docker
       script:
-        - git submodule init && git submodule update
         - docker -v
         - docker -v
         - docker pull $DOCKERIMAGE
@@ -29,7 +27,6 @@ matrix:
       osx_image: xcode7.3
       script:
         - mkdir build && cd build
-        - git submodule init && git submodule update
         - docker -v
         - cmake -DCMAKE_CXX_COMPILER=$COMPILER ../src
         - make -j 2
@@ -40,7 +37,6 @@ matrix:
       services:
         - docker
       script:
-        - git submodule init && git submodule update
         - docker -v
         - docker -v
         - docker pull $DEVIMAGE
