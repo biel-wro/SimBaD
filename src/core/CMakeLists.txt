@@ -56,7 +56,6 @@ set( SOURCES
   repositories/stream_printer_repository.cpp
 
   #legacy
-  legacy/simple/simple_event_view.cpp
   legacy/event_partial.cpp
   # utils
   utils/attribute_exceptions.cpp
