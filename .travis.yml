@@ -18,7 +18,6 @@ matrix:
         - docker
       script:
         - docker -v
-        - docker -v
         - docker pull $DOCKERIMAGE
         - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug && make -j 2"
         - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "cd /code/build && ctest --VV -output-on-failure"
@@ -27,7 +26,6 @@ matrix:
       osx_image: xcode7.3
       script:
         - mkdir build && cd build
-        - docker -v
         - cmake -DCMAKE_CXX_COMPILER=$COMPILER ../src
         - make -j 2
         - ctest --VV --output-onfailure
@@ -37,7 +35,6 @@ matrix:
       services:
         - docker
       script:
-        - docker -v
         - docker -v
         - docker pull $DEVIMAGE
         - docker run -v ${PWD}/:/code $DEVIMAGE sh -c "mkdir -p /code/build-release && cd /code/build-release && cmake ../src -DCMAKE_BUILD_TYPE=Release && make -j 2"
