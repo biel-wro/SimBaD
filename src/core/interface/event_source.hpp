@@ -10,8 +10,8 @@ public:
   using event_visitor =
       std::function<void(const simbad::core::attribute_list &)>;
 
-  virtual void run(event_visitor, std::size_t) final;
-  virtual void run(std::size_t) final;
+  virtual bool run(event_visitor, std::size_t) final;
+  virtual bool run(std::size_t) final;
 
   virtual attribute_description const &event_descriptor() const = 0;
 

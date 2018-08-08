@@ -10,10 +10,10 @@ class event_sink
 {
 public:
   virtual ~event_sink();
-  virtual void read_event(event const &e) final;
+  virtual void set_description(attribute_description const &) = 0;
+  virtual void read_event(std::size_t event_number, event const &) = 0;
 
 protected:
-  virtual void process_event(event const &e) = 0;
 };
 END_NAMESPACE_CORE
 #endif // EVENT_SINK_HPP

@@ -10,6 +10,7 @@
 BEGIN_NAMESPACE_CORE
 
 // non-enum types
+class advancer;
 class attribute;
 class attribute_description;
 class attribute_descriptor;
@@ -22,7 +23,6 @@ class dataframe;
 class event_sink;
 class event_source;
 class finite_dataframe;
-class launcher;
 class model;
 class model_factory;
 class model_register;

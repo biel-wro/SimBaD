@@ -7,7 +7,7 @@
 #include "interface/attribute_list.hpp"
 #include "interface/property_tree.hpp"
 #include "interface/stream_printer.hpp"
-#include "repositories/repository_registration.hpp"
+#include "repositories/factory_registration.hpp"
 
 #include <cbor-lite/codec.h>
 
@@ -136,7 +136,7 @@ private:
 void initialize_plugin()
 {
   core::register_creator<cbor_printer>(
-      core::repository<core::stream_printer>::global_instance_mutable(),
+      core::factory<core::stream_printer>::global_instance_mutable(),
       "cbor_lite");
 }
 } // namespace cbor_lite

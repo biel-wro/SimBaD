@@ -15,7 +15,7 @@
 
 #include <iostream>
 #include <memory>
-#include <repositories/repository.hpp>
+#include <repositories/factory.hpp>
 #include <string>
 
 using namespace simbad::core;
@@ -122,13 +122,10 @@ launcher::make_configuration_printer(std::ostream *os,
                                      const property_tree &pt) const
 {
   std::string const &class_name = pt.get<std::string>("class");
-  property_tree const &parameters =
-      pt.get_child("parameters");
+  property_tree const &parameters = pt.get_child("parameters");
 
-  repository<stream_printer> const &printer_repo =
-      repository<stream_printer>::global_instance();
   std::unique_ptr<stream_printer> printer_ptr =
-      printer_repo.at(class_name)(parameters);
+      factory<stream_printer>::global_instance().at(class_name)(parameters);
 
   printer_ptr->set_ostream(*os);
   return printer_ptr;
