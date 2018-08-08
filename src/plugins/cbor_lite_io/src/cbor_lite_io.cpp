@@ -1,5 +1,6 @@
 #include "cbor_lite_io.hpp"
 
+#include "interface/attribute.hpp"
 #include "interface/attribute_description.hpp"
 #include "interface/attribute_descriptor.hpp"
 #include "interface/attribute_kind.hpp"
@@ -110,9 +111,11 @@ public:
     std::string buffer;
 
     attribute_writer<precision> writer(buffer);
-    for(std::size_t attribute_index : m_indices)
-      boost::apply_visitor(writer, entry[attribute_index]);
-    ostream() << buffer;
+    for(std::size_t attribute_index : m_indices) {
+      core::attribute attr = entry[attribute_index];
+      boost::apply_visitor(writer, attr);
+    }
+      ostream() << buffer;
   }
   void write_entry(core::attribute_list const &entry) override
   {
