@@ -9,7 +9,7 @@ matrix:
       script:
         - docker -v
         - docker pull $DOCKERIMAGE
-        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug && make -j 2"
+        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug -DUSE_PLUGIN_cbor_lite_io=ON && make -j 2"
         - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "cd /code/build && ctest --VV -output-on-failure"
       env: DOCKERIMAGE=tozanski/simbad-dev:clang39
     - dist: trusty
@@ -19,14 +19,14 @@ matrix:
       script:
         - docker -v
         - docker pull $DOCKERIMAGE
-        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug && make -j 2"
+        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug -DUSE_PLUGIN_cbor_lite_io=ON && make -j 2"
         - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "cd /code/build && ctest --VV -output-on-failure"
       env: DOCKERIMAGE=tozanski/simbad-dev:gcc6  
     - os: osx
       osx_image: xcode7.3
       script:
         - mkdir build && cd build
-        - cmake -DCMAKE_CXX_COMPILER=$COMPILER ../src
+        - cmake -DCMAKE_CXX_COMPILER=$COMPILER -DUSE_PLUGIN_cbor_lite_io=ON ../src
         - make -j 2
         - ctest --VV --output-onfailure
       env: COMPILER=clang++
@@ -37,7 +37,7 @@ matrix:
       script:
         - docker -v
         - docker pull $DEVIMAGE
-        - docker run -v ${PWD}/:/code $DEVIMAGE sh -c "mkdir -p /code/build-release && cd /code/build-release && cmake ../src -DCMAKE_BUILD_TYPE=Release && make -j 2"
+        - docker run -v ${PWD}/:/code $DEVIMAGE sh -c "mkdir -p /code/build-release && cd /code/build-release && cmake ../src -DCMAKE_BUILD_TYPE=Release -DUSE_PLUGIN_cbor_lite_io=ON && make -j 2"
         - docker run -v ${PWD}/:/code $DEVIMAGE sh -c "cd /code/build-release && ctest --VV -output-on-failure"
         - docker build -f docker/simbad.Dockerfile . -t $OUTIMAGE
       env: 
