@@ -111,6 +111,7 @@ public:
     std::string buffer;
 
     attribute_writer<precision> writer(buffer);
+    CborLite::encodeArraySize(buffer, m_indices.size());
     for(std::size_t attribute_index : m_indices) {
       core::attribute attr = entry[attribute_index];
       boost::apply_visitor(writer, attr);
