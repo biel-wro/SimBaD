@@ -90,7 +90,7 @@ make_event_descriptor()
       make_particle_descriptor();
 
   map_ptr->add_attribute(100, "time", KIND::TIME, SCALAR::REAL, 1);
-  map_ptr->add_attribute(101, "delta time", KIND::TIME, SCALAR::INT, 1);
+  map_ptr->add_attribute(101, "delta time", KIND::DELTA_TIME, SCALAR::INT, 1);
   map_ptr->add_attribute(102, "event", KIND::EVENT_KIND, SCALAR::INT, 1);
 
   return map_ptr;
@@ -194,21 +194,21 @@ parameter_evolution_3d::~parameter_evolution_3d()
 }
 
 const core::attribute_description &
-parameter_evolution_3d::event_descriptor() const
+parameter_evolution_3d::event_description() const
 {
   static std::unique_ptr<simbad::core::attribute_description> ptr =
       make_event_descriptor();
   return *ptr;
 }
 
-void parameter_evolution_3d::generate_events(event_visitor v,
+bool parameter_evolution_3d::generate_events(event_visitor v,
                                              std::size_t nevents)
 {
   using simbad::core::EVENT_KIND;
   for(std::size_t iter = 0; iter < nevents; ++iter)
   {
     if(m_spacetime.empty())
-      return;
+      return false;
 
     cell const &c = m_spacetime.top();
 
@@ -229,6 +229,7 @@ void parameter_evolution_3d::generate_events(event_visitor v,
     else
       assert(false);
   }
+  return true;
 }
 
 const core::configuration_view &

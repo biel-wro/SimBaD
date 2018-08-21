@@ -13,12 +13,12 @@ public:
   virtual bool run(event_visitor, std::size_t) final;
   virtual bool run(std::size_t) final;
 
-  virtual attribute_description const &event_descriptor() const = 0;
+  virtual attribute_description const &event_description() const = 0;
 
   virtual ~event_source();
 
 protected:
-  virtual void generate_events(event_visitor, std::size_t) = 0;
+  virtual bool generate_events(event_visitor, std::size_t) = 0;
 };
 
 END_NAMESPACE_CORE

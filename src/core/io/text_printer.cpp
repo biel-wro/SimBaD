@@ -10,7 +10,9 @@
 
 BEGIN_NAMESPACE_CORE
 text_printer::text_printer() : stream_printer(nullptr) {}
-text_printer::text_printer(property_tree const &pt) : text_printer(nullptr, pt)
+text_printer::text_printer(property_tree const &pt)
+    : stream_printer(pt.get("file", "STDIN")),
+      m_delimiter(pt.get("delimiter", ", "))
 {
 }
 
@@ -20,7 +22,7 @@ text_printer::text_printer(std::ostream *ostream, std::string delim)
 }
 
 text_printer::text_printer(std::ostream *ostream, const property_tree &pt)
-    : text_printer(ostream, pt.get<std::string>("delimiter", ", "))
+    : text_printer(ostream, pt.get("delimiter", ", "))
 {
 }
 

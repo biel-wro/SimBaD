@@ -22,7 +22,7 @@ class adhesion_2d : public simbad::core::model,
 {
 public:
   // TODO
-  simbad::core::attribute_description const &event_descriptor() const override
+  simbad::core::attribute_description const &event_description() const override
   {
   }
 

@@ -11,7 +11,8 @@ class event_sink
 public:
   virtual ~event_sink();
   virtual void set_description(attribute_description const &) = 0;
-  virtual void read_event(std::size_t event_number, event const &) = 0;
+  virtual void read_event(std::size_t events_since_last_read,
+                          event const &) = 0;
 
 protected:
 };

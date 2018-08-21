@@ -3,6 +3,7 @@
 
 #include "cli_fwd.hpp"
 #include "interface/interface_fwd.hpp"
+#include "interface/property_tree.hpp"
 
 #include <iosfwd>
 #include <memory>
@@ -12,33 +13,24 @@ BEGIN_NAMESPACE_CLI
 class launcher
 {
 public:
-  using property_tree = simbad::core::property_tree;
+  using property_tree = core::property_tree;
 
-  launcher(property_tree const &pt);
+
+  explicit launcher(property_tree pt);
   ~launcher();
 
-  void launch(property_tree const &pt);
-
-  simbad::core::model &model();
+  void launch();
 
 protected:
   void launch_snapshots(property_tree const &pt);
-  void launch_final_snapshot(property_tree const &pt);
-  void launch_simulation(property_tree const &pt);
-
-  std::unique_ptr<simbad::core::model>
-  make_model(property_tree const &pt) const;
-
-  std::unique_ptr<simbad::core::stream_printer>
-  make_configuration_printer(std::ostream *os, property_tree const &pt) const;
-
-  std::unique_ptr<simbad::core::configuration_view>
-  make_initial_configuration(property_tree const &pt) const;
-
-  void set_initial_configuration(property_tree const &pt);
-
+  void launch_stream(property_tree const &pt);
+  /*
+   void launch_final_snapshot(property_tree const &pt);
+   void launch_simulation(property_tree const &pt);
+ */
 private:
-  std::unique_ptr<simbad::core::model> m_model_ptr;
+  property_tree m_property_tree;
+  std::unique_ptr<core::model> m_model_ptr;
 };
 
 END_NAMESPACE_CLI

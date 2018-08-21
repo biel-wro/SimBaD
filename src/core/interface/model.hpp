@@ -14,7 +14,7 @@ public:
   ~model() override;
 
 protected:
-  void generate_events(event_visitor, std::size_t) override = 0;
+  bool generate_events(event_visitor, std::size_t) override = 0;
 };
 
 END_NAMESPACE_CORE

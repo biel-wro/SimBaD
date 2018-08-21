@@ -1,19 +1,19 @@
-#include "population_size_advancer.hpp"
+#include "population_size.hpp"
 
 #include "interface/property_tree.hpp"
 
-BEGIN_NAMESPACE_CORE
-population_size_advancer::population_size_advancer(std::size_t initial,
+BEGIN_NAMESPACE_ADVANCE_ESTIMATORS
+population_size::population_size(std::size_t initial,
                                                    std::size_t step)
     : m_next_target(initial), m_target_step(step), m_target_achieved(false)
 {
 }
-population_size_advancer::population_size_advancer(property_tree const &pt)
-    : population_size_advancer(pt.get("start_size", std::size_t(0)),
+population_size::population_size(property_tree const &pt)
+    : population_size(pt.get("start_size", std::size_t(0)),
                                pt.get("size_step", std::size_t(0)))
 {
 }
-std::size_t population_size_advancer::estimate() const
+std::size_t population_size::estimate() const
 {
   if(m_target_achieved)
     return 0;
@@ -27,17 +27,17 @@ std::size_t population_size_advancer::estimate() const
     return 1000;
   return 10000;
 }
-bool population_size_advancer::next_target()
+bool population_size::next_target()
 {
   m_next_target += m_target_step;
   m_target_achieved = false;
   return true;
 }
-void population_size_advancer::configuration_update(
+void population_size::configuration_update(
     std::size_t, configuration_view const &conf)
 {
   std::size_t current_size = conf.size();
   if(current_size >= m_next_target)
     m_target_achieved = true;
 }
-END_NAMESPACE_CORE
+END_NAMESPACE_ADVANCE_ESTIMATORS

@@ -8,10 +8,13 @@
 
 BEGIN_NAMESPACE_CORE
 
-csv_printer::csv_printer(property_tree const &pt) : csv_printer(nullptr, pt) {}
-
-csv_printer::csv_printer(std::ostream *ostream, const property_tree &pt)
-    : csv_printer(ostream, pt.get<std::string>("delimiter", ","))
+csv_printer::csv_printer(property_tree const &pt)
+    : stream_printer(pt.get("file", "STDIN")),
+      m_delimiter(pt.get("delimiter", ""))
+{
+}
+csv_printer::csv_printer(property_tree const &pt, std::ostream *ostream_ptr)
+    : csv_printer(ostream_ptr, pt.get("delimiter", ","))
 {
 }
 csv_printer::csv_printer(std::ostream *ostream, std::string delimiter)

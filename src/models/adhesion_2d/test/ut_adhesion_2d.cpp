@@ -4,7 +4,7 @@
 #include "interface/model.hpp"
 #include "interface/property_tree.hpp"
 #include "particle.hpp"
-#include "processors/snapshotter.hpp"
+#include "processors/snapshoter.hpp"
 
 #include "core_fwd.hpp"
 
@@ -22,7 +22,7 @@ using namespace boost::property_tree;
 using simbad::core::cubic_crystal_configuration;
 using simbad::core::model;
 using simbad::core::property_tree;
-using simbad::core::snapshotter;
+using simbad::core::snapshoter;
 
 static property_tree make_test_model_parameters()
 {

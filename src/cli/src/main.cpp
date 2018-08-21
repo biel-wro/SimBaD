@@ -58,5 +58,5 @@ int main(int argc, const char **argv)
       std::cerr, static_cast<core::property_tree::super>(tree), true);
 
   simbad::cli::launcher l(tree);
-  l.launch(tree);
+  l.launch();
 }

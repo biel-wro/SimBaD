@@ -8,7 +8,7 @@
 
 BEGIN_NAMESPACE_CORE
 
-class advancer
+class advance_estimator
 {
 public:
   virtual std::size_t estimate() const = 0;
@@ -18,7 +18,7 @@ public:
    */
   virtual bool next_target() = 0;
 
-  virtual ~advancer();
+  virtual ~advance_estimator();
 };
 
 

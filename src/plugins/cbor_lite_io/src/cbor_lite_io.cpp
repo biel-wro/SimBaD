@@ -29,7 +29,7 @@ enum class PRECISION
   SINGLE
 }; // half not supported by cbor-lite
 
-static PRECISION from_string(std::string const &val)
+static PRECISION precision_from_string(std::string const &val)
 {
   if("double" == val)
     return PRECISION::DOUBLE;
@@ -42,7 +42,8 @@ class cbor_printer : public core::stream_printer
 {
 public:
   explicit cbor_printer(core::property_tree const &pt)
-      : m_precision(from_string(pt.get<std::string>("precision")))
+      : core::stream_printer(pt.get("file", "STDIN")),
+        m_precision(precision_from_string(pt.get("precision", "double")))
   {
   }
 
@@ -111,11 +112,12 @@ public:
     std::string buffer;
 
     attribute_writer<precision> writer(buffer);
-    for(std::size_t attribute_index : m_indices) {
+    for(std::size_t attribute_index : m_indices)
+    {
       core::attribute attr = entry[attribute_index];
       boost::apply_visitor(writer, attr);
     }
-      ostream() << buffer;
+    ostream() << buffer;
   }
   void write_entry(core::attribute_list const &entry) override
   {
@@ -128,7 +130,7 @@ public:
   void write_footer() override {}
 
 private:
-  PRECISION m_precision;
+  PRECISION const m_precision;
   std::vector<std::size_t> m_indices;
 };
 }

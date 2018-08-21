@@ -1,30 +1,23 @@
-mode "simulation"
-run
+stream
 {
-  nevents 10000
+  final_estimator
+  {
+    class population_size
+    parameters
+    {
+      start_size 10000
+    }
+  }
+  stream_printer
+  {
+    class csv_printer
+    parameters
+    {
+      delimiter ,
+    }
+  }
 }
 
-stacked_view
-{
-}
-configuration_printer
-{
-  class "cbor_lite"
-  parameters
-  {
-    precision "single"
-    delimiter ","
-  }
-}
-reader
-{
-  class "text_configuration_printer"
-  parameters
-  {
-    output stdout
-  }
-  stream stdout
-}
 model
 {
   class "parameter_evolution_3d"
@@ -163,15 +156,17 @@ model
     }
   }
 }
+
 initial_configuration
 {
-  class "cubic_crystal_configuration"
+  class "cubic_crystal"
   parameters
   {
     dimension 3
     radius 2
     spacing 1
   }
+  
   default_attributes
   {
     birth
