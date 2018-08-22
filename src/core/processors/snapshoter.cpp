@@ -26,7 +26,8 @@ snapshoter::snapshoter(model &model_ref, property_tree const &pt)
                  factory_create_from_property_tree<stream_printer>(
                      pt.get_child("configuration_printer")),
                  stacked_view_configuration(model_ref.current_configuration(),
-                                            pt.get_child("stacked_view")))
+                                            pt.get_child("stacked_view",
+                                                property_tree())))
 {
 }
 

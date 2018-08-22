@@ -15,7 +15,7 @@ snapshots
     class population_size
     parameters
     {
-      start_size 10000
+      start_size 1000
     }
   }
   
@@ -28,11 +28,14 @@ snapshots
       file STDIN
     }
   } 
+  stacked_view
+  {
+  }
 }
 
 initial_configuration
 {
-  class "cubic_crystal_configuration"
+  class "cubic_crystal"
   parameters
   {
     dimension 3
