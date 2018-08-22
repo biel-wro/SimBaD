@@ -10,24 +10,25 @@
 BEGIN_NAMESPACE_CORE
 
 // non-enum types
+class advancer;
+class advance_estimator;
 class attribute;
 class attribute_description;
 class attribute_descriptor;
 class attribute_kind;
 class attribute_list;
-class attribute_range;
 class configuration_reader;
 class configuration_view;
 class dataframe;
+class dynamic_advance_estimator;
 class event_sink;
 class event_source;
 class finite_dataframe;
-class launcher;
 class model;
 class model_factory;
 class model_register;
-class object_descriptor;
 class property_tree;
+class static_advance_estimator;
 class stream_printer;
 class stream_reader;
 

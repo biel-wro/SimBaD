@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_CASE(short_run)
   //  text_printer configuration_printer(&std::cout);
 
   csv_printer event_printer(&std::cout);
-  event_printer.write_header(m.event_descriptor());
+  event_printer.write_header(m.event_description());
   m.generate_events(
       [&event_printer](attribute_list const &attributes) {
         event_printer.write_entry(attributes);

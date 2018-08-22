@@ -1,5 +1,5 @@
-#ifndef SIMBAD_CORE_REPOSITORIES_HPP
-#define SIMBAD_CORE_REPOSITORIES_HPP
+#ifndef SIMBAD_CORE_FACTORY_HPP
+#define SIMBAD_CORE_FACTORY_HPP
 
 #include "interface/interface_fwd.hpp"
 #include "repositories/repositories_fwd.hpp"
@@ -18,20 +18,20 @@ template <class Interface>
 using creator_function = std::function<creator_signature<Interface>>;
 
 template <class Interface>
-using repository_base =
+using factory_base =
     std::unordered_map<std::string, creator_function<Interface>>;
 
-template <class Interface> struct repository : public repository_base<Interface>
+template <class Interface> struct factory : public factory_base<Interface>
 {
-  using repository_base<Interface>::repository_base;
+  using factory_base<Interface>::factory_base;
 
-  static repository<Interface> &global_instance_mutable()
+  static factory<Interface> &global_instance_mutable()
   {
-    static repository<Interface> repository =
+    static factory<Interface> repository =
         make_global_repository<Interface>();
     return repository;
   }
-  static repository<Interface> const &global_instance()
+  static factory<Interface> const &global_instance()
   {
     return global_instance_mutable();
   }
@@ -39,4 +39,4 @@ template <class Interface> struct repository : public repository_base<Interface>
 
 END_NAMESPACE_CORE
 
-#endif // SIMBAD_CORE_REPOSITORIES_HPP
+#endif // SIMBAD_CORE_FACTORY_HPP

@@ -1,4 +1,4 @@
-#include "repositories/repository_registration.hpp"
+#include "repositories/factory_registration.hpp"
 
 #include "io/csv_printer.hpp"
 #include "io/json_configuration_printer.hpp"
@@ -9,13 +9,13 @@ BEGIN_NAMESPACE_CORE
 
 SIMBAD_MAKE_REPOSITORY_EXPLICIT_SPECIALIZATION_DECLARATION(stream_printer)
 {
-  repository<stream_printer> repository;
+  factory<stream_printer> factory;
 
-  register_creator<csv_printer>(repository, "csv_printer");
-  register_creator<null_printer>(repository, "null_printer");
-  register_creator<text_printer>(repository, "text_printer");
+  register_creator<csv_printer>(factory, "csv_printer");
+  register_creator<null_printer>(factory, "null_printer");
+  register_creator<text_printer>(factory, "text_printer");
 
-  return repository;
+  return factory;
 }
 
 END_NAMESPACE_CORE

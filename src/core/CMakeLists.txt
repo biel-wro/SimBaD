@@ -3,6 +3,7 @@ set( TARGET_NAME ${CORE_NAME} )
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 set( SOURCES
+
   # computational
   computational/mutations/builtin_mutators.cpp
   computational/mutations/mutator.cpp
@@ -24,15 +25,17 @@ set( SOURCES
   interface/configuration_reader.cpp
   interface/configuration_view.cpp
   interface/dataframe.cpp
+  interface/dynamic_advance_estimator.cpp
   interface/event_kind.cpp
   interface/event_sink.cpp
   interface/event_source.cpp
   interface/finite_dataframe.cpp
-  interface/launcher.cpp
+  interface/advance_estimator.cpp
   interface/property_tree.cpp
   interface/model.cpp
   interface/model_factory.cpp
   interface/model_register.cpp
+  interface/static_advance_estimator.cpp
   interface/stream_printer.cpp
   interface/stream_reader.cpp
 
@@ -45,15 +48,24 @@ set( SOURCES
   io/null_printer.cpp
   io/text_printer.cpp
 
+  # advance_estimators
+  processors/advance_estimators/num_events.cpp
+  processors/advance_estimators/in_simulation_time.cpp
+  processors/advance_estimators/population_size.cpp
+
   # processors
   processors/configuration_builder.cpp
-  processors/launch_utils.cpp
-  processors/snapshotter.cpp
+  processors/advancer.cpp
+  processors/snapshoter.cpp
+  processors/streamer.cpp
   processors/tree_builder
   processors/dataframe_tracker.cpp
 
   # repositories
+  repositories/advance_estimator_repository.cpp
+  repositories/configuration_repository.cpp
   repositories/stream_printer_repository.cpp
+
 
   #legacy
   legacy/event_partial.cpp
