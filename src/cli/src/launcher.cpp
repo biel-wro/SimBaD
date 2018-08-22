@@ -55,15 +55,12 @@ launcher::~launcher() = default;
 
 void launcher::launch()
 {
-  boost::optional<boost::property_tree::ptree const &> mode_subtree;
 
-  mode_subtree = m_property_tree.get_child_optional("snapshots");
-  if(mode_subtree)
-    launch_snapshots(mode_subtree.get());
+  if(m_property_tree.count("snapshots"))
+    launch_snapshots(m_property_tree.get_child("snapshots"));
 
-  mode_subtree = m_property_tree.get_child_optional("stream");
-  if(mode_subtree)
-    launch_stream(mode_subtree.get());
+  else if(m_property_tree.count("stream"))
+    launch_stream(m_property_tree.get_child("stream"));
   /*
     else if("simulation" == mode)
       launch_simulation(pt);
