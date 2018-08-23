@@ -39,6 +39,10 @@ advancer::advancer(model &model_ref, estimator_ptr_vec advancers)
 {
   for(dynamic_advance_estimator *estimator_ptr : m_dynamic_estimators)
     estimator_ptr->set_description(m_model_ref.event_description());
+
+  configuration_view const &view = m_model_ref.current_configuration();
+  for(static_advance_estimator *estimator_ptr : m_static_estimators)
+    estimator_ptr->initialize(0, view);
 }
 
 advancer::~advancer() = default;

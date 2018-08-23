@@ -15,6 +15,7 @@ public:
 
   std::size_t estimate() const override;
   bool next_target() override;
+  void initialize(std::size_t, configuration_view const &) override;
   void configuration_update(std::size_t events_since_last_update,
                             configuration_view const &) override;
 

@@ -5,14 +5,15 @@
 #include "interface/configuration_reader.hpp"
 
 BEGIN_NAMESPACE_CORE
-class static_advance_estimator : public advance_estimator{
+class static_advance_estimator : public advance_estimator
+{
 public:
+  virtual void initialize(std::size_t events_before, configuration_view const
+  &) = 0;
   virtual void configuration_update(std::size_t event_number,
                                     configuration_view const &) = 0;
-
 };
 
 END_NAMESPACE_CORE
 
-
-#endif //SIMBAD_CORE_STATIC_ADVANCER_HPP
+#endif // SIMBAD_CORE_STATIC_ADVANCER_HPP

@@ -20,9 +20,9 @@ const std::string &attribute_descriptor::attribute_name() const
   return m_attribute_name;
 }
 
-void attribute_descriptor::set_attribute_name(const std::string &attribute_name)
+void attribute_descriptor::set_attribute_name(std::string attribute_name)
 {
-  m_attribute_name = attribute_name;
+  m_attribute_name = std::move(attribute_name);
 }
 
 std::size_t attribute_descriptor::attribute_idx() const

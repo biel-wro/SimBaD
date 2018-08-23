@@ -30,7 +30,11 @@ bool num_events::next_target()
   m_next_target += m_num_events_step;
   return true;
 }
-
+void num_events::initialize(std::size_t initial_events,
+                            configuration_view const &)
+{
+  m_total_events = initial_events;
+}
 void num_events::configuration_update(std::size_t events_since_last_update,
                                       configuration_view const &)
 {
