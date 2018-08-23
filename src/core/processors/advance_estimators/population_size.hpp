@@ -15,14 +15,15 @@ public:
   std::size_t estimate() const override;
   bool next_target() override;
 
+  void initialize(std::size_t initial_events,
+                  configuration_view const &) override;
   void configuration_update(std::size_t event_number,
                             configuration_view const &conf) override;
 
 private:
   std::size_t m_next_target;
   std::size_t m_target_step;
-
-  bool m_target_achieved;
+  std::size_t m_last_observed;
 };
 END_NAMESPACE_ADVANCE_ESTIMATORS
 #endif

@@ -22,7 +22,7 @@ public:
       std::size_t attribute_dimension = 0);
 
   std::string const &attribute_name() const;
-  void set_attribute_name(std::string const &attribute_name);
+  void set_attribute_name(std::string attribute_name);
 
   std::size_t attribute_idx() const;
   void set_attribute_id(std::size_t attribute_idx);
