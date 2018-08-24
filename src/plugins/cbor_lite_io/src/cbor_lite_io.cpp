@@ -7,13 +7,16 @@
 #include "interface/attribute_list.hpp"
 #include "interface/property_tree.hpp"
 #include "interface/stream_printer.hpp"
+#include "interface/stream_reader.hpp"
 #include "repositories/factory_registration.hpp"
 
 #include <cbor-lite/codec.h>
 
 #include <boost/lexical_cast.hpp>
 
+#include <exception>
 #include <iostream>
+#include <iterator>
 
 namespace simbad
 {
@@ -114,7 +117,8 @@ public:
     attribute_writer<precision> writer(buffer);
 
     CborLite::encodeArraySize(buffer, m_indices.size());
-    for(std::size_t attribute_index : m_indices) {
+    for(std::size_t attribute_index : m_indices)
+    {
       core::attribute attr = entry[attribute_index];
       boost::apply_visitor(writer, attr);
     }
@@ -135,7 +139,59 @@ private:
   std::vector<std::size_t> m_indices;
 };
 }
+/*
+class cbor_reader : public core::stream_reader
+{
+public:
+  core::attribute_description read_header() override
+  {
+    std::istream_iterator<char> eos;
+    std::istream_iterator<char> it(istream());
 
+    std::size_t record_length;
+    CborLite::decodeArraySize(it, eos, record_length);
+    m_descriptors.resize(record_length);
+    m_last_record.resize(record_length);
+
+    core::attribute_description description;
+    for(std::size_t idx = 0; idx < record_length; ++idx)
+    {
+      std::size_t descriptor_length;
+      CborLite::decodeArraySize(it, eos, descriptor_length);
+      if(descriptor_length != 4)
+        throw std::runtime_error("bad description");
+
+      std::string name;
+      CborLite::decodeText(it, eos, name);
+
+      std::size_t dimension;
+      CborLite::decodeInteger(it, eos, dimension);
+
+      std::string kind_str;
+      CborLite::decodeText(it, eos, kind_str);
+      core::ATTRIBUTE_KIND attribute_kind =
+          boost::lexical_cast<core::ATTRIBUTE_KIND>(kind_str);
+
+      std::string scalar_str;
+      CborLite::decodeText(it, eos, scalar_str);
+      core::ATTRIBUTE_SCALAR attribute_scalar =
+          boost::lexical_cast<core::ATTRIBUTE_SCALAR>(scalar_str);
+
+      core::attribute_descriptor descriptor{
+          idx, std::move(name), attribute_kind, attribute_scalar, dimension};
+      description.add_attribute(descriptor);
+    }
+
+    return description;
+  }
+
+  void visit_entries(entry_visitor v, std::size_t max_reads = 0) override {}
+
+private:
+  std::vector<core::attribute_descriptor> m_descriptors;
+  std::vector<core::attribute> m_last_record;
+};
+*/
 void initialize_plugin()
 {
   core::register_creator<cbor_printer>(
