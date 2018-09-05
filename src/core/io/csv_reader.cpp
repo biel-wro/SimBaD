@@ -28,6 +28,7 @@ private:
   std::vector<attribute> m_attributes;
 };
 }
+
 constexpr char csv_reader::DEFAULT_DELIMITER[];
 constexpr char csv_reader::DEFAULT_SUBCOL_SEP[];
 
