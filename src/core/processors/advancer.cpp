@@ -33,8 +33,9 @@ advancer::advancer(model &model_ref, estimator_ptr_vec advancers)
       m_dynamic_estimators(
           get_filtered_estimators<dynamic_advance_estimator>(m_all_advancers)),
       m_delta_time_attribute_idx(model_ref.event_description()
-                                     .get_descriptor(ATTRIBUTE_KIND::DELTA_TIME)
-                                     .get()
+                                     .get_descriptor
+                                     (ATTRIBUTE_KIND::EVENT_DELTA_TIME, true)
+                                     .value()
                                      .attribute_idx())
 {
   for(dynamic_advance_estimator *estimator_ptr : m_dynamic_estimators)

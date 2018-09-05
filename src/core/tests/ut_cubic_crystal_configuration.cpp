@@ -32,8 +32,8 @@ BOOST_AUTO_TEST_CASE(single_check_3d)
   cubic_crystal_configuration configuration(3, 0, 1);
   BOOST_REQUIRE_EQUAL(configuration.size(), 1);
   std::size_t idx = configuration.description()
-                        .get_descriptor(ATTRIBUTE_KIND::POSITION)
-                        .get()
+                        .get_descriptor(ATTRIBUTE_KIND::PARTICLE_POSITION)
+                        .value()
                         .attribute_idx();
 
   configuration.visit_records([=](attribute_list const &al) {
@@ -56,8 +56,8 @@ BOOST_AUTO_TEST_CASE(grid_check)
   std::vector<bool> visited(nparticles, false);
 
   std::size_t idx = configuration.description()
-                        .get_descriptor(ATTRIBUTE_KIND::POSITION)
-                        .get()
+                        .get_descriptor(ATTRIBUTE_KIND::PARTICLE_POSITION)
+                        .value()
                         .attribute_idx();
   configuration.visit_records([=, &visited](attribute_list const &p) {
     std::size_t id0 = p[idx].get_real_ref(0) + radius;

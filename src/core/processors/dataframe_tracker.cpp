@@ -129,6 +129,19 @@ private:
 };
 }
 
+void dataframe_tracker::update(attribute_list const &values,
+                               dataframe_tracker::index_vector const &indices)
+{
+  insert_commit_data commit_data;
+  iterator it;
+  bool ok;
+  std::tie(it, ok) = insert_check(values, indices.begin(),
+                                  indices.begin() + m_key_size, commit_data);
+  if(ok)
+    insert_commit(values,indices.begin(), indices.end(),commit_data);
+
+}
+
 void dataframe_tracker::visit_records(attribute_visitor visitor) const
 {
   for(record const &record : m_attribute_set)
@@ -157,7 +170,7 @@ std::pair<dataframe_tracker::iterator, bool> dataframe_tracker::insert_check(
                                    m_attribute_set.hash_function(), //
                                    m_attribute_set.key_eq(),        //
                                    commit_data                      //
-                                   );
+      );
   return result;
 }
 
@@ -196,7 +209,7 @@ void dataframe_tracker::erase(attribute const &key)
                                     m_attribute_set.hash_function(), //
                                     m_attribute_set.key_eq(),        //
                                     std::default_delete<record>()    //
-                                    );
+  );
 }
 
 std::size_t dataframe_tracker::size() const { return m_attribute_set.size(); }

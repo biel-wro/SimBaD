@@ -31,10 +31,10 @@ make_particle_descriptor()
       new core::attribute_description);
   core::attribute_description &desc(*description_ptr);
 
-  desc.add_attribute_auto_idx("position", KIND::POSITION, REAL, 3);
+  desc.add_attribute_auto_idx("position", KIND::PARTICLE_POSITION, REAL, 3);
   desc.add_attribute_auto_idx("density", KIND::ACCUMULATED, REAL, 1);
-  desc.add_attribute_auto_idx("event.time", KIND::INFO, REAL, 1);
-  desc.add_attribute_auto_idx("event.kind", KIND::INFO, INT, 1);
+  desc.add_attribute_auto_idx("next_event.time", KIND::INFO, REAL, 1);
+  desc.add_attribute_auto_idx("next_event.kind", KIND::INFO, INT, 1);
   desc.add_attribute_auto_idx("birth.efficiency", KIND::INTRINSIC, REAL, 1);
   desc.add_attribute_auto_idx("birth.resistance", KIND::INTRINSIC, REAL, 1);
   desc.add_attribute_auto_idx("lifespan.efficiency", KIND::INTRINSIC, REAL, 1);
@@ -89,9 +89,10 @@ make_event_descriptor()
   std::unique_ptr<simbad::core::attribute_description> map_ptr =
       make_particle_descriptor();
 
-  map_ptr->add_attribute(100, "time", KIND::TIME, SCALAR::REAL, 1);
-  map_ptr->add_attribute(101, "delta time", KIND::DELTA_TIME, SCALAR::INT, 1);
-  map_ptr->add_attribute(102, "event", KIND::EVENT_KIND, SCALAR::INT, 1);
+  map_ptr->add_attribute(100, "event.time", KIND::EVENT_TIME, SCALAR::REAL, 1);
+  map_ptr->add_attribute(101, "event.delta_time", KIND::EVENT_DELTA_TIME,
+                         SCALAR::INT, 1);
+  map_ptr->add_attribute(102, "event.kind", KIND::EVENT_KIND, SCALAR::INT, 1);
 
   return map_ptr;
 }
@@ -246,7 +247,6 @@ void parameter_evolution_3d::read_configuration(
 
   std::size_t pos_idx = conf.position_attr_idx();
   std::size_t mut_idx = conf.description()["mutation.id"].attribute_idx();
-
 
   conf.visit_records(
       [this, pos_idx, mut_idx, attribute_indices](

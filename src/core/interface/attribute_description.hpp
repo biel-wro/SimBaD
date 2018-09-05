@@ -77,7 +77,7 @@ public:
   get_descriptor(std::size_t index) const;
   attribute_descriptor const &operator[](std::string const &name) const;
   boost::optional<attribute_descriptor const &>
-  get_descriptor(ATTRIBUTE_KIND kind) const;
+  get_descriptor(ATTRIBUTE_KIND kind, bool try_default_name_too = false) const;
 
   std::size_t next_unused_idx(std::size_t start = 0) const;
 
@@ -126,15 +126,22 @@ public:
   std::pair<std::vector<std::size_t>, std::vector<std::string>>
   unpack_all() const;
   std::vector<std::size_t> unpack_indices() const;
+  static std::unordered_map<std::size_t, std::size_t>
+  reverse_mapping(std::vector<std::size_t> const &mapping);
   std::vector<std::size_t>
   names_to_indices(std::vector<std::string> const &names) const;
 
-  void standardize_record(ATTRIBUTE_KIND attribute_kind,
-                          std::string const &name);
+  bool standardize_all();
+  bool standardize_record(std::string const &attribute_name);
+  bool standardize_record(ATTRIBUTE_KIND attribute_kind);
 
   // some trivial descriptions
   static attribute_description const &make_empty();
   static attribute_description const &make_position_only();
+
+  // simple description getters
+  std::size_t get_attribute_idx(std::string const &attribute_name) const;
+  std::size_t get_attribute_idx(ATTRIBUTE_KIND kind) const;
 
 private:
   template <class NameIterator>

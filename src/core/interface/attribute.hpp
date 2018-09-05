@@ -133,6 +133,8 @@ public:
   template <class T, std::enable_if_t<std::is_integral<T>::value, int> = 0>
   attribute(std::vector<T> const &val);
 
+  attribute(EVENT_KIND);
+
   // query
   bool empty() const;
   std::size_t dimension() const;

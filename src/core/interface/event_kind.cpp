@@ -17,6 +17,8 @@ std::uint32_t to_numeric(EVENT_KIND ek)
 }
 END_NAMESPACE_CORE
 
+namespace std
+{
 std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek)
 {
   using simbad::core::EVENT_KIND;
@@ -30,4 +32,5 @@ std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek)
   case EVENT_KIND::JUMPED_OUT: return o << "JUMPED_OUT";
   case EVENT_KIND::JUMPED_IN: return o << "JUMPED_IN";
   }
+}
 }

@@ -5,7 +5,7 @@ stream
     class population_size
     parameters
     {
-      start_size 10000
+      start_size 100000
     }
   }
   stream_printer
@@ -13,7 +13,8 @@ stream
     class csv_printer
     parameters
     {
-      delimiter ,
+      file STDOUT
+      delimiter ";"
     }
   }
 }

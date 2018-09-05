@@ -15,7 +15,6 @@ class advance_estimator;
 class attribute;
 class attribute_description;
 class attribute_descriptor;
-class attribute_kind;
 class attribute_list;
 class configuration_reader;
 class configuration_view;

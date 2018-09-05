@@ -36,6 +36,14 @@ public:
   std::size_t attribute_dimension() const;
   void set_attribute_dimension(std::size_t attribute_dimension);
 
+  static ATTRIBUTE_KIND default_kind(std::string const &name);
+  static std::string default_name(ATTRIBUTE_KIND);
+  static ATTRIBUTE_SCALAR default_scalar(ATTRIBUTE_KIND);
+  static std::size_t default_dimension(ATTRIBUTE_KIND);
+
+  bool set_default_by_name(bool force=false);
+  void set_default_by_kind(bool force=false);
+
 private:
   std::size_t m_attribute_id;
   std::string m_attribute_name;

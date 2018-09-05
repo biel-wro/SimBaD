@@ -27,6 +27,8 @@ set( TEST_SOURCES
   ut_power_law_distribution.cpp
   ut_properties.cpp
   ut_skewed_beta_mutation.cpp
+  ut_stream_as_configuration.cpp
+  ut_stream_as_model.cpp
   ut_simple_point_and_event.cpp
   ut_space.cpp
   ut_text_io.cpp

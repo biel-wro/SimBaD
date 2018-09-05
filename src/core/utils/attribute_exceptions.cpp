@@ -30,12 +30,22 @@ std::size_t unrecognized_attribute_number::attribute_idx() const
   return m_attributeno;
 }
 
+static std::underlying_type_t<ATTRIBUTE_KIND>
+kind_as_integer(ATTRIBUTE_KIND kind)
+{
+  return static_cast<std::underlying_type_t<ATTRIBUTE_KIND>>(kind);
+}
+
 unrecognized_attribute_kind::unrecognized_attribute_kind(ATTRIBUTE_KIND kind)
-    : super(
-          dynamic_cast<std::stringstream &&>(
-              std::stringstream("unrecognized attribute kind `") << kind << "`")
-              .str())
+    : base("unrecognized attribute kind no`" +
+           std::to_string(kind_as_integer(kind)) + "`")
 {
 }
 
+unrecognized_special_attribute_kind::unrecognized_special_attribute_kind(
+    ATTRIBUTE_KIND kind)
+    : base("unrecognized special attribute kind `" +
+           std::to_string(kind_as_integer(kind)) + "`")
+{
+}
 END_NAMESPACE_CORE

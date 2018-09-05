@@ -65,7 +65,7 @@ set( SOURCES
   repositories/advance_estimator_repository.cpp
   repositories/configuration_repository.cpp
   repositories/stream_printer_repository.cpp
-
+  repositories/stream_reader_repository.cpp
 
   #legacy
   legacy/event_partial.cpp
@@ -76,6 +76,9 @@ set( SOURCES
   utils/generic_particle.cpp
   utils/properties.cpp
   utils/record_transformation.cpp
+  utils/stream_as_configuration.cpp
+  utils/stream_as_model.cpp
+  utils/stream_from_name.cpp
  )
 
 set( LIBS
