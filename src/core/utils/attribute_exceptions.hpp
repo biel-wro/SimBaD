@@ -30,7 +30,7 @@ class unrecognized_attribute_number : public unrecognized_attribute
 {
 public:
   using super = unrecognized_attribute;
-  unrecognized_attribute_number(std::size_t attrno);
+  explicit unrecognized_attribute_number(std::size_t attrno);
   std::size_t attribute_idx() const;
 
 private:
@@ -39,10 +39,16 @@ private:
 
 class unrecognized_attribute_kind : public unrecognized_attribute
 {
-public: using super= unrecognized_attribute;
-    unrecognized_attribute_kind(ATTRIBUTE_KIND kind);
+public:
+  using base = unrecognized_attribute;
+  explicit unrecognized_attribute_kind(ATTRIBUTE_KIND kind);
+};
 
-
+class unrecognized_special_attribute_kind : public unrecognized_attribute
+{
+public:
+  using base = unrecognized_attribute;
+  explicit unrecognized_special_attribute_kind(ATTRIBUTE_KIND kind);
 };
 
 class bad_attribute : public std::bad_cast

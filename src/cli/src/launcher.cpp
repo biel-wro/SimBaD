@@ -10,6 +10,7 @@
 #include "processors/streamer.hpp"
 #include "repositories/create_from_property_tree.hpp"
 #include "repositories/factory.hpp"
+#include "utils/stream_as_model.hpp"
 
 #include <iostream>
 
@@ -30,6 +31,14 @@ static std::unique_ptr<core::model> make_model(property_tree const &pt)
   return factory.create_instance(parameters_props);
 }
 
+static std::unique_ptr<core::model>
+make_model_or_replay(property_tree const &pt)
+{
+  if(pt.count("replay"))
+    return std::unique_ptr<core::model>(new core::stream_as_model(pt.get_child("replay")));
+  return make_model(pt.get_child("model"));
+}
+
 static void set_initial_configuration(core::model &model,
                                       property_tree const &pt)
 {
@@ -46,16 +55,15 @@ static void set_initial_configuration(core::model &model,
 
 launcher::launcher(launcher::property_tree pt)
     : m_property_tree(std::move(pt)),
-      m_model_ptr(make_model(m_property_tree.get_child("model")))
+      m_model_ptr(make_model_or_replay(m_property_tree))
 {
   set_initial_configuration(*m_model_ptr,
-                            pt.get_child("initial_configuration"));
+                            m_property_tree.get_child("initial_configuration"));
 }
 launcher::~launcher() = default;
 
 void launcher::launch()
 {
-
   if(m_property_tree.count("snapshots"))
     launch_snapshots(m_property_tree.get_child("snapshots"));
 

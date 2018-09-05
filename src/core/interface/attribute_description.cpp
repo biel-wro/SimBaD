@@ -1,4 +1,6 @@
 #include "attribute_description.hpp"
+#include "attribute_descriptor.hpp"
+
 #include "property_tree.hpp"
 #include "utils/attribute_exceptions.hpp"
 
@@ -105,16 +107,27 @@ operator[](const std::string &name) const
 }
 
 boost::optional<const attribute_descriptor &>
-attribute_description::get_descriptor(ATTRIBUTE_KIND kind) const
+attribute_description::get_descriptor(ATTRIBUTE_KIND kind,
+                                      bool try_default_name_too) const
 {
-  assert(ATTRIBUTE_KIND::POSITION != kind || is_uniquely_defined(kind));
+  assert(ATTRIBUTE_KIND::PARTICLE_POSITION != kind ||
+         is_uniquely_defined(kind));
   assert(ATTRIBUTE_KIND::PARTICLE_UID != kind || is_uniquely_defined(kind));
   assert(ATTRIBUTE_KIND::EVENT_UID != kind || is_uniquely_defined(kind));
-  kind_iterator it = get<2>().find(kind);
-  if(end_kinds() == it)
-    return boost::none;
 
-  return *it;
+  kind_iterator it = get<2>().find(kind);
+  if(end_kinds() != it)
+    return *it;
+
+  if(try_default_name_too)
+  {
+    std::string standard_name = attribute_descriptor::default_name(kind);
+    name_iterator name_it = get<1>().find(standard_name);
+    if(end_names() != name_it)
+      return *name_it;
+  }
+
+  return boost::none;
 }
 
 std::size_t attribute_description::next_unused_idx(std::size_t start) const
@@ -183,7 +196,7 @@ std::size_t attribute_description::copy_attribute_auto_idx(
                                 source.kind(),               //
                                 source.scalar(),             //
                                 source.attribute_dimension() //
-                                );
+  );
 }
 
 std::pair<std::vector<std::size_t>, std::vector<std::string>>
@@ -209,6 +222,20 @@ std::vector<std::size_t> attribute_description::unpack_indices() const
   return indices;
 }
 
+std::unordered_map<std::size_t, std::size_t>
+attribute_description::reverse_mapping(std::vector<std::size_t> const &mapping)
+{
+  std::unordered_map<std::size_t, std::size_t> reversed;
+  reversed.reserve(mapping.size());
+
+  for(std::size_t from_idx = 0; from_idx != mapping.size(); ++from_idx)
+  {
+    std::size_t to_idx = mapping[from_idx];
+    reversed[to_idx] = from_idx;
+  }
+  return reversed;
+}
+
 std::vector<std::size_t> attribute_description::names_to_indices(
     std::vector<std::string> const &names) const
 {
@@ -227,28 +254,35 @@ std::vector<std::size_t> attribute_description::names_to_indices(
   return result;
 }
 
-static void standardize_event_kind(attribute_description &desc,
-                                   std::string const &event_kind_name)
+bool attribute_description::standardize_all()
 {
-  attribute_description::name_iterator it = desc.get<1>().find(event_kind_name);
-  if(desc.end_names() == it)
-    throw unrecognized_attribute_name(event_kind_name);
+  std::vector<std::string> names;
+  names.reserve(this->size());
+  for(attribute_descriptor const &descriptor : *this)
+    names.push_back(descriptor.attribute_name());
 
-  desc.get<1>().modify(it, [](attribute_descriptor &desc){
-      desc.set_kind(ATTRIBUTE_KIND::EVENT_KIND);
-      desc.set_scalar(ATTRIBUTE_SCALAR::INT);
-      desc.set_attribute_dimension(1);
-  });
+  bool ok = true;
+  for(std::string const &name : names)
+    ok = ok && standardize_record(name);
+  return ok;
 }
-
-void attribute_description::standardize_record(ATTRIBUTE_KIND attribute_kind,
-                                               std::string const &name)
+bool attribute_description::standardize_record(std::string const &name)
 {
-  switch(attribute_kind)
-  {
-  case ATTRIBUTE_KIND::EVENT_KIND: return standardize_event_kind(*this, name);
-  default: throw unrecognized_attribute_kind(attribute_kind);
-  }
+  name_iterator it = get<1>().find(name);
+  if(end_names() == it)
+    return false;
+
+  return get<1>().modify(
+      it, [](attribute_descriptor &desc) { desc.set_default_by_name(false); });
+}
+bool attribute_description::standardize_record(ATTRIBUTE_KIND kind)
+{
+  kind_iterator it = get<2>().find(kind);
+  if(end_kinds() == it)
+    return false;
+
+  return get<2>().modify(
+      it, [](attribute_descriptor &desc) { desc.set_default_by_kind(false); });
 }
 
 std::unordered_map<std::size_t, std::string>
@@ -313,7 +347,7 @@ void attribute_description::add_attributes(
 std::vector<std::size_t> attribute_description::lin_mapping_from(
     const attribute_description &other) const
 {
-  std::vector<std::size_t> mapping(size());
+  std::vector<std::size_t> mapping(this->size());
 
   for(attribute_descriptor const &descriptor : *this)
   {
@@ -343,14 +377,22 @@ const attribute_description &attribute_description::make_position_only()
   if(nullptr == mapping_ptr)
   {
     mapping_ptr.reset(new attribute_description);
-    mapping_ptr->add_attribute(0, "position", ATTRIBUTE_KIND::POSITION);
+    mapping_ptr->add_attribute(0, "position",
+                               ATTRIBUTE_KIND::PARTICLE_POSITION);
   }
   return *mapping_ptr;
 }
 
+std::size_t attribute_description::get_attribute_idx(
+    std::string const &attribute_name) const
+{
+  return get_descriptor(attribute_name).value().attribute_idx();
+}
 
-
-
+std::size_t attribute_description::get_attribute_idx(ATTRIBUTE_KIND kind) const
+{
+  return get_descriptor(kind).value().attribute_idx();
+}
 
 std::ostream &operator<<(std::ostream &os, attribute_description const &desc)
 {

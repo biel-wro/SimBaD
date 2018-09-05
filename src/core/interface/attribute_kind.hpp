@@ -10,12 +10,12 @@ BEGIN_NAMESPACE_CORE
 enum class ATTRIBUTE_KIND : std::uint32_t
 {
   /* Special attributes */
-  PARTICLE_UID, // optional, unique, integer, scalar
-  EVENT_UID,    // optional, unique, integer, scalar
-  POSITION,     // optional, numeric values, fixed dimension
-  TIME,         // numeric scalar
-  DELTA_TIME,   // integer scalar
-  EVENT_KIND,   // special case, same values as in event_kind enum
+  PARTICLE_UID,      // optional, unique, integer, scalar
+  PARTICLE_POSITION, // optional, numeric values, fixed dimension
+  EVENT_UID,         // optional, unique, integer, scalar
+  EVENT_TIME,        // numeric scalar
+  EVENT_DELTA_TIME,  // integer scalar
+  EVENT_KIND,        // special case, same values as in event_kind enum
   /* Model-dependent attributes */
   INTRINSIC,   // attributes stored in particle, non-recomputable
   ACCUMULATED, // attributes stored in particle, recomputable

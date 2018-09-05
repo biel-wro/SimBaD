@@ -58,7 +58,10 @@ public:
     {
       std::size_t idx = offset;
       for(RecordIdxIt it = first_idx; it != last_idx; ++it, ++idx)
-        m_attributes[idx] = new_values[idx];
+      {
+        std::size_t source_idx = *it;
+        m_attributes[idx] = new_values[source_idx];
+      }
     }
 
   private:
@@ -174,7 +177,7 @@ public:
         make_list_hasher(first_key_idx, last_key_idx),  //
         make_list_equaler(first_key_idx, last_key_idx), //
         commit_data                                     //
-        );
+    );
     return result;
   }
   template <class AttributeList, class RecordIdxIterator>
@@ -183,8 +186,10 @@ public:
                          insert_commit_data &commit_data)
   {
     std::unique_ptr<record> node_ptr(
-        new record(std::forward(list), first_idx, last_idx));
-    attribute_set().insert_commit(*node_ptr.release(), commit_data);
+        new record(std::forward<AttributeList>(list), first_idx, last_idx));
+    iterator it =
+        attribute_set().insert_commit(*node_ptr.release(), commit_data);
+    return it;
   }
 
   std::pair<iterator, bool> insert(attribute const &key);

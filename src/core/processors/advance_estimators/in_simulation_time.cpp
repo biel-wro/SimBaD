@@ -48,7 +48,8 @@ void in_simulation_time::set_description(
     attribute_description const &description)
 {
   m_time_attribute_idx =
-      description.get_descriptor(ATTRIBUTE_KIND::TIME).get().attribute_idx();
+      description.get_descriptor(ATTRIBUTE_KIND::EVENT_TIME, true).value()
+      .attribute_idx();
 }
 void in_simulation_time::event_update(std::size_t, event const &e)
 {

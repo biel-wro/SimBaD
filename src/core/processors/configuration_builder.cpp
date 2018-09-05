@@ -18,42 +18,51 @@
 
 BEGIN_NAMESPACE_CORE
 
-static std::vector<std::string>
-record_names(std::string const &key_name,
-             std::vector<std::string> const &value_names)
-{
-  std::array<std::string const, 1> key_arr{{key_name}};
-  auto joined_range = boost::join(key_arr, value_names);
-  std::vector<std::string> result;
-  std::copy(joined_range.begin(), joined_range.end(),
-            std::back_inserter(result));
-  return result;
-}
-
 configuration_builder::configuration_builder(
-    attribute_description const &event_description, //
-    std::string const &key_name,                    //
-    std::vector<std::string> const &value_names     //
+    attribute_description const &event_description,        //
+    std::string const &key_name,                           //
+    std::vector<std::string> const &nonkey_attribute_names //
     )
-    : m_configuration_description(attribute_description::mapped_from(
-          event_description, record_names(key_name, value_names))),
+    : m_configuration_description{attribute_description::mapped_from(
+          event_description,
+          [&]() {
+            std::vector<std::string> names{key_name};
+            names.insert(names.end(), nonkey_attribute_names.begin(),
+                         nonkey_attribute_names.end());
+            return names;
+          }())},
       m_index_mapping(
           m_configuration_description.lin_mapping_from(event_description)),
       m_configuration(m_configuration_description.size(), key_size),
       m_event_kind_idx(
-          event_description.get_descriptor(ATTRIBUTE_KIND::EVENT_KIND)
-              .get()
+          event_description.get_descriptor(ATTRIBUTE_KIND::EVENT_KIND, true)
+              .value()
               .attribute_idx()),
       m_key_idx(
-          event_description.get_descriptor(key_name).get().attribute_idx())
+          event_description.get_descriptor(key_name).value().attribute_idx())
 {
-  if(value_names.end() !=
-     std::find(value_names.begin(), value_names.end(), key_name))
+  if(nonkey_attribute_names.end() != std::find(nonkey_attribute_names.begin(),
+                                               nonkey_attribute_names.end(),
+                                               key_name))
     throw std::logic_error("key `" + key_name +
-                           "` already defined in valuenames");
+                           "` found in non-key attribute names");
 }
 
-configuration_builder::~configuration_builder() {}
+configuration_builder::~configuration_builder() = default;
+
+void configuration_builder::set_configuration(
+    finite_dataframe const &configuration)
+{
+  std::vector<std::size_t> mapping =
+      m_configuration_description.lin_mapping_from(configuration.description());
+
+  auto visitor = [this, &mapping](attribute_list const &entry) {
+    m_configuration.update(entry, mapping);
+  };
+
+  configuration.visit_records(visitor);
+}
+
 void configuration_builder::push_event(attribute_list const &event)
 {
   EVENT_KIND event_kind = event[m_event_kind_idx].get_event_kind_val();
@@ -74,9 +83,13 @@ void configuration_builder::push_event(attribute_list const &event)
     remove_on_event(id);
     break;
 
-  case EVENT_KIND::JUMPED_IN:   //
-  case EVENT_KIND::JUMPED_OUT:  //
   case EVENT_KIND::TRANSFORMED: //
+    remove_on_event(id);
+    update_on_event(id, event);
+
+    break;
+  case EVENT_KIND::JUMPED_IN:  //
+  case EVENT_KIND::JUMPED_OUT: //
     std::logic_error("not supported yet");
 
   default: throw std::logic_error("unexpected enum value");
@@ -109,7 +122,7 @@ void configuration_builder::update_on_event(attribute const &id,
              std::next(m_index_mapping.begin(), key_size), //
              m_index_mapping.end(),                        //
              key_size                                      //
-             );
+  );
 }
 
 void configuration_builder::remove_on_event(attribute const &key)

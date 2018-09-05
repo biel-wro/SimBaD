@@ -15,14 +15,12 @@ public:
   parameter_evolution_3d(core::property_tree const &pt);
   ~parameter_evolution_3d();
 
-  simbad::core::attribute_description const &event_description() const override;
+  core::attribute_description const &event_description() const override;
 
   bool generate_events(event_visitor, std::size_t nevents) override;
-  simbad::core::configuration_view const &
-  current_configuration() const override;
+  core::configuration_view const &current_configuration() const override;
 
-  void
-  read_configuration(simbad::core::configuration_view const &conf) override;
+  void read_configuration(core::configuration_view const &conf) override;
 
   double time() const;
 
@@ -35,11 +33,10 @@ public:
   std::unordered_map<std::size_t, std::size_t> count_clones() const;
   std::unordered_map<std::size_t, std::size_t> count_mutations(
       std::unordered_map<std::size_t, std::size_t> const &clone_counts) const;
-  void dump_mutation_stats(std::string const& path) const;
+  void dump_mutation_stats(std::string const &path) const;
   void dump_mutation_tree(std::string const &path) const;
   void dump_parent_mutations(std::string const &path) const;
-  simbad::core::attribute particle_attribute(cell const &c,
-                                             std::size_t attrname) const;
+  core::attribute particle_attribute(cell const &c, std::size_t attrname) const;
 
   spacetime const &current_spacetime() const;
 

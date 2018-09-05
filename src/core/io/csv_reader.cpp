@@ -28,6 +28,9 @@ private:
   std::vector<attribute> m_attributes;
 };
 }
+const char csv_reader::DEFAULT_DELIMITER[];
+const char csv_reader::DEFAULT_SUBCOL_SEP[];
+
 using iterator_type = std::string::const_iterator;
 
 struct csv_reader::header_parser : public csv_header_parser<iterator_type>
@@ -40,14 +43,32 @@ struct csv_reader::record_parser : public csv_record_parser<iterator_type>
   using csv_record_parser<iterator_type>::csv_record_parser;
 };
 
-csv_reader::csv_reader(std::istream *istream, const property_tree &pt)
-    : csv_reader(istream, pt.get<std::string>("delimiter", ","))
+csv_reader::csv_reader(property_tree const &pt)
+    : csv_reader(pt.get<std::string>("file", "STDIN"),
+                 pt.get<std::string>("delimiter", DEFAULT_DELIMITER),
+                 pt.get<std::string>("subcol_sep", DEFAULT_SUBCOL_SEP))
 {
 }
 
-csv_reader::csv_reader(std::istream *istream, std::string const &delimiter,
-                       std::string const &numsep)
-    : stream_reader(istream),
+csv_reader::csv_reader(std::istream &istream_ref, std::string const &delimiter,
+                       std::string const &subcol_separator)
+    : stream_reader(&istream_ref),
+      m_header_parser_ptr(new header_parser(delimiter, subcol_separator)),
+      m_record_parser_ptr(new record_parser(delimiter))
+{
+}
+
+csv_reader::csv_reader(std::istream *istream_ptr, std::string const &delimiter,
+                       std::string const &subcol_separator)
+    : stream_reader(istream_ptr),
+      m_header_parser_ptr(new header_parser(delimiter, subcol_separator)),
+      m_record_parser_ptr(new record_parser(delimiter))
+{
+}
+
+csv_reader::csv_reader(std::string const &filename,
+                       std::string const &delimiter, std::string const &numsep)
+    : stream_reader(filename),
       m_header_parser_ptr(new header_parser(delimiter, numsep)),
       m_record_parser_ptr(new record_parser(delimiter))
 {
@@ -76,10 +97,14 @@ attribute_description csv_reader::read_header()
     description.add_attribute_auto_idx(pair.first, ATTRIBUTE_KIND::INFO,
                                        ATTRIBUTE_SCALAR::UNKNOWN, pair.second);
   }
+  ok = description.standardize_all();
+  if(!ok)
+    throw std::runtime_error("conflict ih header detected");
+
   return description;
 }
 
-void csv_reader::visit_entries(entry_visitor v, std::size_t max_reads)
+bool csv_reader::visit_entries(entry_visitor v, std::size_t max_reads)
 {
   std::string line_buffer;
   attribute_list_view view;
@@ -88,10 +113,11 @@ void csv_reader::visit_entries(entry_visitor v, std::size_t max_reads)
   for(std::size_t i = 0; max_reads == 0 || i < max_reads; ++i)
   {
     std::getline(istream(), line_buffer);
+
     iterator_type first = line_buffer.begin(), last = line_buffer.end();
 
     if(first == last)
-      break;
+      return false;
 
     attribute_buffer.clear();
     bool ok = m_record_parser_ptr->parse(first, last, m_attribute_sizes,
@@ -104,6 +130,7 @@ void csv_reader::visit_entries(entry_visitor v, std::size_t max_reads)
                                std::string(first, last)));
     v(view);
   }
+  return true;
 }
 
 END_NAMESPACE_CORE

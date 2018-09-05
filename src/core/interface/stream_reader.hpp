@@ -2,6 +2,7 @@
 #define SIMBAD_CORE_STREAM_READER_HPP
 
 #include "interface/interface_fwd.hpp"
+#include "utils/stream_from_name.hpp"
 
 #include <functional>
 #include <iosfwd>
@@ -12,17 +13,20 @@ class stream_reader
 public:
   using entry_visitor = std::function<void(attribute_list const &)>;
 
-  stream_reader(std::istream *istream);
-  stream_reader(std::istream &istream);
+  explicit stream_reader(std::istream *ptr);
+  explicit stream_reader(std::istream &ref);
+  explicit stream_reader(std::string const &stream_name);
+  virtual ~stream_reader();
+
   void set_istream(std::istream &istream);
   std::istream &istream() const;
 
   virtual attribute_description read_header() = 0;
 
-  virtual void visit_entries(entry_visitor v, std::size_t max_reads = 0) = 0;
+  virtual bool visit_entries(entry_visitor v, std::size_t max_reads = 0) = 0;
 
 private:
-  std::istream *m_istream_ptr;
+  istream_ptr m_istream_ptr;
 };
 END_NAMESPACE_CORE
 

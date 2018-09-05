@@ -8,7 +8,7 @@ class event_source
 {
 public:
   using event_visitor =
-      std::function<void(const simbad::core::attribute_list &)>;
+      std::function<void(simbad::core::attribute_list const &)>;
 
   virtual bool run(event_visitor, std::size_t) final;
   virtual bool run(std::size_t) final;

@@ -2,6 +2,7 @@
 #define STREAM_PRINTER_HPP
 
 #include "interface/interface_fwd.hpp"
+#include "utils/stream_from_name.hpp"
 
 #include <boost/optional/optional_fwd.hpp>
 
@@ -19,9 +20,6 @@ public:
   explicit stream_printer(std::string const &stream_name);
   virtual ~stream_printer() = default;
 
-  void set_ostream(std::ostream *ostream);
-  void set_ostream(std::ostream &ostream);
-  void set_stream(std::string const &stream_name);
   std::ostream &ostream();
 
   virtual void write_dataframe(dataframe const &conf) final;
@@ -33,14 +31,10 @@ public:
   virtual void write_footer() = 0;
 
 protected:
-  using stream_deleter = std::function<void(std::ostream *)>;
-  using stream_ptr = std::unique_ptr<std::ostream, stream_deleter>;
-  static stream_ptr stream_from_name(std::string const &stream_name);
-
-  explicit stream_printer(stream_ptr);
+  explicit stream_printer(ostream_ptr);
 
 private:
-  stream_ptr m_ostream_ptr;
+  ostream_ptr m_ostream_ptr;
 };
 
 END_NAMESPACE_CORE

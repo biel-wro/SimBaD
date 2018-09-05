@@ -4,6 +4,8 @@
 #include "io/csv_reader.hpp"
 #include "processors/dataframe_tracker.hpp"
 
+#include <boost/optional.hpp>
+
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -29,25 +31,29 @@ BOOST_AUTO_TEST_CASE(instantiation)
   std::vector<std::string> key_names = {"position"};
   std::vector<std::string> observable_names = {"density"};
 
+  std::size_t position_idx =
+      description.get_descriptor("position").get().attribute_idx();
+  std::size_t observable_idx =
+      description.get_descriptor("density").get().attribute_idx();
+
   dataframe_tracker tracker(key_names.size() + observable_names.size(),
                             key_names.size());
 
-  reader.visit_entries([&tracker](attribute_list const &record) {
-    attribute const &key = record[0];
-    dataframe_tracker::iterator it;
-    bool inserted;
-    std::tie(it, inserted) = tracker.insert(key);
-    it->get(1) = record[1];
-  });
-  std::size_t idx = 0;
+  reader.visit_entries(
+      [&tracker, position_idx, observable_idx](attribute_list const &record) {
+        attribute const &key = record[position_idx];
+        dataframe_tracker::iterator it;
+        bool inserted;
+        std::tie(it, inserted) = tracker.insert(key);
+        it->get(1) = record[observable_idx];
+      });
+
   tracker.visit_records([](attribute_list const &record) {
     if(record[0] == attribute{1, 2, 3})
       BOOST_REQUIRE_EQUAL(record[1], attribute(1.23));
     if(record[1] == attribute{6, 7, 8})
       BOOST_REQUIRE_EQUAL(record[1], attribute(5.32));
   });
-
-  // std::cerr << test_input << std::endl;
 }
 
 BOOST_AUTO_TEST_SUITE_END()

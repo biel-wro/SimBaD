@@ -213,6 +213,11 @@ attribute::attribute(const std::vector<T> &val)
 INSTANTIATE_INTEGER_CONSTRUCTORS(int)
 INSTANTIATE_INTEGER_CONSTRUCTORS(std::size_t)
 
+attribute::attribute(EVENT_KIND kind)
+    : attribute(static_cast<std::underlying_type_t<EVENT_KIND>>(kind))
+{
+}
+
 namespace
 {
 struct empty_checker

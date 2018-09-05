@@ -18,11 +18,11 @@ public:
   using mapping = attribute_description;
   using size_type = std::size_t;
 
-  std::size_t position_attr_idx() const;
-  std::size_t dimension() const;
-  bool has_unique_id() const;
+  [[deprecated]] std::size_t position_attr_idx() const;
+  [[deprecated]] std::size_t dimension() const;
+  [[deprecated]] bool has_unique_id() const;
 
-  virtual ~configuration_view();
+  virtual ~configuration_view() override;
 };
 
 END_NAMESPACE_CORE
