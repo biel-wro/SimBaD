@@ -28,8 +28,9 @@ private:
   std::vector<attribute> m_attributes;
 };
 }
-const char csv_reader::DEFAULT_DELIMITER[];
-const char csv_reader::DEFAULT_SUBCOL_SEP[];
+
+constexpr char csv_reader::DEFAULT_DELIMITER[];
+constexpr char csv_reader::DEFAULT_SUBCOL_SEP[];
 
 using iterator_type = std::string::const_iterator;
 

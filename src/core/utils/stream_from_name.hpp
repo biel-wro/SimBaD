@@ -5,6 +5,7 @@
 
 #include <functional>
 #include <iosfwd>
+#include <memory>
 #include <string>
 
 BEGIN_NAMESPACE_CORE
