@@ -2,7 +2,6 @@
 #define SIMBAD_CORE_CSV_READER_HPP
 
 #include "interface/stream_reader.hpp"
-
 #include "interface/attribute_description.hpp"
 
 #include <string>
