@@ -78,7 +78,7 @@ replay
     class csv_reader
     parameters
     {
-      file /Users/tomek/SimBaD/stream.csv
+      file STDIN
       delimiter ";"
     }
   }
