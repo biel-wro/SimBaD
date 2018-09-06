@@ -3,7 +3,7 @@
 
 #include "interface/interface_fwd.hpp"
 
-#include "dataframe_tracker.hpp"
+#include "processors/dataframe_tracker.hpp"
 
 #include <vector>
 
@@ -17,13 +17,14 @@ public:
 
   void push_event(attribute_list const &event);
 
-  //dataframe const &mutations() const;
-
+  // dataframe const &mutations() const;
 private:
-  std::vector<std::size_t> m_indices;
   std::size_t m_key_size;
-//  dataframe_tracker m_mutations;
   std::size_t const m_event_kind_idx;
+  dataframe_tracker m_mutations;
+  std::vector<std::size_t> m_indices;
+  attribute_description m_mutation_description;
+  std::vector<std::size_t> m_mutation_counts;
 };
 END_NAMESPACE_CORE
 #endif
