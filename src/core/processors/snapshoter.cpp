@@ -100,7 +100,7 @@ bool snapshoter::next_step()
     std::size_t next_step = std::min(final_estimate, step_estimate);
 
     m_advancer_ptr->advance(next_step);
-  } while(0 == step_estimate);
+  } while(0 != step_estimate);
 
   return true;
 }
