@@ -1,6 +1,7 @@
 #include "stream_as_model.hpp"
 
 #include "interface/attribute_description.hpp"
+#include "interface/attribute_descriptor.hpp"
 #include "interface/configuration_reader.hpp"
 #include "interface/configuration_view.hpp"
 #include "interface/property_tree.hpp"
@@ -18,7 +19,16 @@ stream_as_model::stream_as_model(
       m_event_description_ptr(
           new attribute_description{m_stream_reader_ptr->read_header()}),
       m_configuration_builder_ptr{new configuration_builder(
-          *m_event_description_ptr, key_attribute, nonkey_observables)}
+          *m_event_description_ptr, key_attribute, nonkey_observables)},
+      m_maybe_delta_time_idx([this] {
+        boost::optional<std::size_t> result;
+        boost::optional<attribute_descriptor const &> maybe_descriptor =
+            m_event_description_ptr->get_descriptor(
+                ATTRIBUTE_KIND::EVENT_DELTA_TIME);
+        if(maybe_descriptor)
+          result = maybe_descriptor.get().attribute_idx();
+        return result;
+      }())
 {
 }
 stream_as_model::stream_as_model(property_tree const &pt)
@@ -42,14 +52,38 @@ configuration_view const &stream_as_model::current_configuration() const
 bool stream_as_model::generate_events(event_source::event_visitor visitor,
                                       std::size_t num_events)
 {
-  auto meta_visitor = [&visitor, &builder(*m_configuration_builder_ptr)](
-      attribute_list const &event)
+  if(!m_maybe_delta_time_idx)
+  {
+    auto meta_visitor = [&visitor, &builder(*m_configuration_builder_ptr)](
+        attribute_list const &event)
+    {
+      builder.push_event(event);
+      visitor(event);
+    };
+
+    return m_stream_reader_ptr->visit_entries(meta_visitor, num_events);
+  }
+
+  std::size_t full_event_count = 0;
+
+  auto meta_visitor = [
+    &full_event_count, delta_time_idx(m_maybe_delta_time_idx.get()), &visitor,
+    &builder(*m_configuration_builder_ptr)
+  ](attribute_list const &event)
   {
     builder.push_event(event);
     visitor(event);
+    if(0 == event[delta_time_idx].get_int_val())
+      ++full_event_count;
   };
 
-  return m_stream_reader_ptr->visit_entries(meta_visitor, num_events);
+  while(full_event_count < num_events)
+  {
+    bool ok = m_stream_reader_ptr->visit_entries(meta_visitor, 1);
+    if(!ok)
+      return false;
+  }
+  return true;
 }
 attribute_description const &
 simbad::core::stream_as_model::event_description() const

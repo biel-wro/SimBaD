@@ -25,9 +25,9 @@ snapshoter::snapshoter(model &model_ref, property_tree const &pt)
                      pt.get_child("final_estimator")),
                  factory_create_from_property_tree<stream_printer>(
                      pt.get_child("configuration_printer")),
-                 stacked_view_configuration(model_ref.current_configuration(),
-                                            pt.get_child("stacked_view",
-                                                property_tree())))
+                 stacked_view_configuration(
+                     model_ref.current_configuration(),
+                     pt.get_child("stacked_view", property_tree())))
 {
 }
 
@@ -84,25 +84,25 @@ model const &snapshoter::get_model() const
 
 bool snapshoter::next_step()
 {
-  std::size_t step_estimate;
-  do
+  bool next_step_exists = m_step_estimator.next_target();
+  if(!next_step_exists)
+    return false;
+
+  while(true)
   {
     std::size_t final_estimate = m_final_estimator.estimate();
     if(0 == final_estimate)
       return false;
 
-    bool next_step_exist = m_step_estimator.next_target();
-    if(!next_step_exist)
-      return false;
+    std::size_t step_estimate = m_step_estimator.estimate();
 
-    step_estimate = m_step_estimator.estimate();
+    if(0 == step_estimate)
+      return true;
 
     std::size_t next_step = std::min(final_estimate, step_estimate);
 
     m_advancer_ptr->advance(next_step);
-  } while(0 != step_estimate);
-
-  return true;
+  };
 }
 
 END_NAMESPACE_CORE

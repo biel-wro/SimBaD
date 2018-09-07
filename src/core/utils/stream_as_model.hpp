@@ -6,6 +6,7 @@
 #include "core_fwd.hpp"
 
 #include <string>
+#include <boost/optional.hpp>
 
 BEGIN_NAMESPACE_CORE
 class stream_as_model : public model
@@ -27,6 +28,7 @@ private:
   std::unique_ptr<stream_reader> const m_stream_reader_ptr;
   std::unique_ptr<attribute_description> const m_event_description_ptr;
   std::unique_ptr<configuration_builder> const m_configuration_builder_ptr;
+  boost::optional<std::size_t> const m_maybe_delta_time_idx;
 };
 
 END_NAMESPACE_CORE
