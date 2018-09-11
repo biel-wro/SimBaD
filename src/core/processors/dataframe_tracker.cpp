@@ -239,9 +239,17 @@ void dataframe_tracker::rehash_if_needed()
 
   if(current_size > m_bucket_count * fill_factor_upper_bound)
   {
+    std::cerr << "REALLOC:"
+              << " m_bucket:" << m_bucket_count
+              << " current_size:" << current_size << std::endl;
+    std::cerr.flush();
+
     realloc_buckets(m_bucket_count * 2);
+
     return;
   }
+
+  /*
   if(current_size * 2 < m_bucket_count * fill_factor_upper_bound)
   {
     std::cerr << "ZMNIEJSZANIE:"
@@ -251,7 +259,7 @@ void dataframe_tracker::rehash_if_needed()
 
     realloc_buckets(std::max(m_bucket_count / 2, minimal_bucket_count));
     return;
-  }
+  }*/
 }
 
 END_NAMESPACE_CORE
