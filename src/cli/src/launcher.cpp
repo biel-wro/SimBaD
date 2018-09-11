@@ -6,6 +6,7 @@
 #include "interface/model_factory.hpp"
 #include "interface/model_register.hpp"
 #include "interface/property_tree.hpp"
+#include "processors/final_snapshot.hpp"
 #include "processors/snapshoter.hpp"
 #include "processors/streamer.hpp"
 #include "repositories/create_from_property_tree.hpp"
@@ -35,7 +36,8 @@ static std::unique_ptr<core::model>
 make_model_or_replay(property_tree const &pt)
 {
   if(pt.count("replay"))
-    return std::unique_ptr<core::model>(new core::stream_as_model(pt.get_child("replay")));
+    return std::unique_ptr<core::model>(
+        new core::stream_as_model(pt.get_child("replay")));
   return make_model(pt.get_child("model"));
 }
 
@@ -69,12 +71,10 @@ void launcher::launch()
 
   else if(m_property_tree.count("stream"))
     launch_stream(m_property_tree.get_child("stream"));
-  /*
-    else if("simulation" == mode)
-      launch_simulation(pt);
-    else if("final_snapshot" == mode)
-      launch_final_snapshot(pt.get_child("final_snapshot"));
-  */
+
+  else if(m_property_tree.count("final_snapshot"))
+    launch_final_snapshot(m_property_tree.get_child("final_snapshot"));
+
   else
     throw std::runtime_error("unrecognized mode");
 }
@@ -87,6 +87,11 @@ void launcher::launch_snapshots(property_tree const &pt)
 void launcher::launch_stream(property_tree const &pt)
 {
   streamer processor(*m_model_ptr, pt);
+  processor.launch();
+}
+void launcher::launch_final_snapshot(property_tree const &pt)
+{
+  final_snapshot processor(*m_model_ptr, pt);
   processor.launch();
 }
 

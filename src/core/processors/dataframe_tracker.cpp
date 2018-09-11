@@ -11,6 +11,8 @@
 
 BEGIN_NAMESPACE_CORE
 
+constexpr std::size_t dataframe_tracker::minimal_bucket_count;
+
 dataframe_tracker::record::record(std::size_t s)
     : m_attributes(new attribute[s])
 {

@@ -114,6 +114,8 @@ void configuration_builder::update_on_event(attribute const &id,
                                             attribute_list const &event)
 {
   dataframe_tracker::iterator it;
+  dataframe_tracker::insert_commit_data commit_data;
+
   bool already_exists;
   std::tie(it, already_exists) = m_configuration.insert(id);
 

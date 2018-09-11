@@ -24,10 +24,8 @@ public:
 protected:
   void launch_snapshots(property_tree const &pt);
   void launch_stream(property_tree const &pt);
-  /*
-   void launch_final_snapshot(property_tree const &pt);
-   void launch_simulation(property_tree const &pt);
- */
+  void launch_final_snapshot(property_tree const &pt);
+
 private:
   property_tree m_property_tree;
   std::unique_ptr<core::model> m_model_ptr;

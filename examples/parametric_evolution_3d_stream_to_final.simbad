@@ -1,14 +1,5 @@
-snapshots
-{
-  step_estimator
-  {
-    class population_size
-    parameters
-    {
-      start_size 100000
-    }
-  }
-  
+final_snapshot
+{  
   final_estimator
   {
     class population_size

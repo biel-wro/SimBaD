@@ -56,6 +56,7 @@ set( SOURCES
   # processors
   processors/configuration_builder.cpp
   processors/advancer.cpp
+  processors/final_snapshot.cpp
   processors/snapshoter.cpp
   processors/streamer.cpp
   processors/tree_builder

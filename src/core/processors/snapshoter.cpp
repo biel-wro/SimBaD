@@ -13,7 +13,6 @@
 
 #include <assert.h>
 #include <boost/optional.hpp>
-#include <iterator>
 
 BEGIN_NAMESPACE_CORE
 
@@ -68,11 +67,10 @@ void snapshoter::launch()
   bool should_continue;
   do
   {
-    m_stacked_view.set_base(get_model().current_configuration());
-
-    m_stream_printer_ptr->write_dataframe(m_stacked_view);
-
     should_continue = next_step();
+
+    m_stacked_view.set_base(get_model().current_configuration());
+    m_stream_printer_ptr->write_dataframe(m_stacked_view);
 
   } while(should_continue);
 }
