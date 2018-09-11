@@ -15,9 +15,9 @@
 BEGIN_NAMESPACE_CORE
 template <class Iterator>
 struct csv_record_grammar
-    : public boost::spirit::qi::grammar<Iterator, std::vector<core::attribute>(
-                                                      std::vector<std::size_t>),
-                                        boost::spirit::ascii::space_type>
+    : public boost::spirit::qi::grammar<
+          Iterator, std::vector<core::attribute>(std::vector<std::size_t>),
+          boost::spirit::ascii::space_type>
 {
   using attribute = core::attribute; // there also is one in qi::grammar
   using attr_list = std::vector<attribute>;
@@ -36,13 +36,14 @@ struct csv_record_grammar
                | ("'" >> *(qi::char_ - "'") >> "'") //
                | (*(qi::char_ - delim));
 
+    m_int = qi::int_parser<int_type>() >>
+            !(qi::lit(".") | qi::lit("e") | qi::lit("E"));
+
     m_string_list = m_string >> qi::repeat(qi::_r1 - 1)[delim >> m_string];
 
     m_real_list = qi::double_ >> qi::repeat(qi::_r1 - 1)[delim >> qi::double_];
 
-    m_int_list = qi::int_parser<int_type>() >> !qi::lit(".") //
-                 >> qi::repeat(qi::_r1 - 1)                  //
-                        [delim >> qi::int_parser<int_type>() >> !qi::lit(".")];
+    m_int_list = m_int >> qi::repeat(qi::_r1 - 1)[delim >> m_int];
 
     m_int_attr = m_int_list(qi::_r1);
 
@@ -67,6 +68,7 @@ struct csv_record_grammar
     BOOST_SPIRIT_DEBUG_NODE(m_real_list);
     BOOST_SPIRIT_DEBUG_NODE(m_string_list);
     BOOST_SPIRIT_DEBUG_NODE(m_string);
+    BOOST_SPIRIT_DEBUG_NODE(m_int);
   }
 
   template <class... T> using rule = boost::spirit::qi::rule<T...>;
@@ -86,6 +88,7 @@ struct csv_record_grammar
   rule<Iterator, attribute(std::size_t), space_type> m_int_attr;
   rule<Iterator, string_list(std::size_t), space_type> m_string_list;
 
+  rule<Iterator, attribute::int_type()> m_int;
   rule<Iterator, std::string()> m_string;
 };
 

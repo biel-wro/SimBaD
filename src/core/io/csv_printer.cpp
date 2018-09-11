@@ -6,6 +6,8 @@
 #include "interface/configuration_view.hpp"
 #include "interface/property_tree.hpp"
 
+#include <sstream>
+
 BEGIN_NAMESPACE_CORE
 
 csv_printer::csv_printer(property_tree const &pt)
@@ -78,12 +80,12 @@ void csv_printer::write_entry(const attribute_list &entry)
   std::vector<std::size_t>::const_iterator beg = m_indices.begin(),
                                            end = m_indices.end();
 
-  std::ostream &os = ostream();
+  std::stringstream buf;
 
   if(end == beg)
-    return (void)(os << std::endl);
+    return (void)(buf << std::endl);
 
-  s_write_data_part(os, entry[*beg], m_dimensions[*beg], m_delimiter);
+  s_write_data_part(buf, entry[*beg], m_dimensions[*beg], m_delimiter);
 
   std::vector<std::size_t>::const_iterator ind_it = std::next(beg, 1);
   std::vector<std::size_t>::const_iterator dim_it =
@@ -94,10 +96,12 @@ void csv_printer::write_entry(const attribute_list &entry)
     std::size_t attr_idx = *ind_it;
     attribute const &attr = entry[attr_idx];
     std::size_t dim = *dim_it;
-    os << m_delimiter;
-    s_write_data_part(os, attr, dim, m_delimiter);
+    buf << m_delimiter;
+    s_write_data_part(buf, attr, dim, m_delimiter);
   }
-  os << std::endl;
+  buf << std::endl;
+
+  ostream() << buf.str();
 }
 
 void csv_printer::write_data(dataframe const &conf)

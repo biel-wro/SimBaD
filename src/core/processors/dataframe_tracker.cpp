@@ -137,9 +137,11 @@ void dataframe_tracker::update(attribute_list const &values,
   bool ok;
   std::tie(it, ok) = insert_check(values, indices.begin(),
                                   indices.begin() + m_key_size, commit_data);
-  if(ok)
-    insert_commit(values,indices.begin(), indices.end(),commit_data);
+  if(!ok)
+    return;
 
+  insert_commit(values, indices.begin(), indices.end(), commit_data);
+  rehash_if_needed();
 }
 
 void dataframe_tracker::visit_records(attribute_visitor visitor) const
@@ -195,6 +197,7 @@ dataframe_tracker::insert(const attribute &key)
   if(!check_result.second)
     return std::make_pair(check_result.first, false);
   iterator it = insert_commit(key, commit_data);
+  rehash_if_needed();
   return std::make_pair(it, true);
 }
 

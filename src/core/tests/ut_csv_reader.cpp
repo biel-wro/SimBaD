@@ -135,4 +135,16 @@ BOOST_AUTO_TEST_CASE(read_records)
   });
 }
 
+BOOST_AUTO_TEST_CASE(csv_reader_some_bad_record)
+{
+  std::string data =
+      R"("position_0";"position_1";"position_2";"density"
+            -14.6503;   -74.2607;     -12.9507;    1e10)";
+
+  std::istringstream test_stream(data);
+  simbad::core::csv_reader reader(&test_stream, ";");
+  simbad::core::attribute_description description = reader.read_header();
+  reader.visit_entries([](attribute_list const &v){},1);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
