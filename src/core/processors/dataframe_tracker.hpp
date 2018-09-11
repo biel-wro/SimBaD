@@ -152,7 +152,7 @@ public:
 
   using attribute_visitor = std::function<void(attribute_list const &)>;
 
-  static constexpr std::size_t initial_bucket_count = 1024;
+  static constexpr std::size_t minimal_bucket_count = 1024;
   dataframe_tracker(std::size_t record_size, std::size_t key_size);
   ~dataframe_tracker();
 
@@ -189,6 +189,7 @@ public:
         new record(std::forward<AttributeList>(list), first_idx, last_idx));
     iterator it =
         attribute_set().insert_commit(*node_ptr.release(), commit_data);
+    rehash_if_needed();
     return it;
   }
 
@@ -199,11 +200,15 @@ public:
   std::size_t size() const;
   std::size_t record_size() const;
   std::size_t key_size() const;
+
+  void realloc_buckets(std::size_t new_bucket_count);
   void rehash_if_needed();
 
 private:
   std::size_t const m_record_size;
   std::size_t const m_key_size;
+
+  std::size_t m_bucket_count;
   std::unique_ptr<bucket_type[]> m_buckets;
 
   set_type m_attribute_set;

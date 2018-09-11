@@ -101,9 +101,10 @@ dataframe_tracker::dataframe_tracker(std::size_t record_size,
                                      std::size_t key_size)
     : m_record_size(record_size),
       m_key_size(key_size),
-      m_buckets(new bucket_type[initial_bucket_count]),
+      m_bucket_count(minimal_bucket_count),
+      m_buckets(new bucket_type[minimal_bucket_count]),
       m_attribute_set(
-          set_type::bucket_traits(m_buckets.get(), initial_bucket_count),
+          set_type::bucket_traits(m_buckets.get(), minimal_bucket_count),
           node_hash{key_size}, node_equal{key_size})
 {
 }
@@ -218,18 +219,32 @@ void dataframe_tracker::erase(attribute const &key)
 std::size_t dataframe_tracker::size() const { return m_attribute_set.size(); }
 std::size_t dataframe_tracker::record_size() const { return m_record_size; }
 std::size_t dataframe_tracker::key_size() const { return m_key_size; }
+
+void dataframe_tracker::realloc_buckets(std::size_t new_bucket_count)
+{
+  std::unique_ptr<bucket_type[]> new_buckets(new bucket_type[new_bucket_count]);
+
+  m_attribute_set.rehash(
+      set_type::bucket_traits(new_buckets.get(), new_bucket_count));
+  std::swap(m_buckets, new_buckets);
+  m_bucket_count = new_bucket_count;
+}
+
 void dataframe_tracker::rehash_if_needed()
 {
-  std::size_t suggested_size =
-      set_type::suggested_upper_bucket_count(m_attribute_set.size());
+  double fill_factor = 0.7;
+  std::size_t current_size = m_attribute_set.size();
 
-  if(m_attribute_set.bucket_count() > suggested_size)
+  if(current_size > m_bucket_count * fill_factor)
+  {
+    realloc_buckets(m_bucket_count * 2);
     return;
-
-  std::unique_ptr<bucket_type[]> new_buckets(new bucket_type[suggested_size]);
-  m_attribute_set.rehash(
-      set_type::bucket_traits(new_buckets.get(), suggested_size));
-  std::swap(m_buckets, new_buckets);
+  }
+  if(current_size * 2 < m_bucket_count * fill_factor)
+  {
+    realloc_buckets(std::max(current_size / 2, minimal_bucket_count));
+    return;
+  }
 }
 
 END_NAMESPACE_CORE
