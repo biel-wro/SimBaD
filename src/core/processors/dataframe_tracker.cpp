@@ -234,7 +234,7 @@ void dataframe_tracker::realloc_buckets(std::size_t new_bucket_count)
 
 void dataframe_tracker::rehash_if_needed()
 {
-  double fill_factor_upper_bound = 0.25;
+  double fill_factor_upper_bound = 0.7;
   std::size_t current_size = m_attribute_set.size();
 
   if(current_size > m_bucket_count * fill_factor_upper_bound)
