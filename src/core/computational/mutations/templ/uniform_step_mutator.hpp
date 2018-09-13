@@ -13,7 +13,7 @@ public:
       : m_increase_length(increase_lenght), m_decrease_length(decrease_length)
   {
   }
-  uniform_step_mutator(property_tree const &pt)
+  explicit uniform_step_mutator(property_tree const &pt)
       : uniform_step_mutator(pt.get<real_type>("increase_length"),
                              pt.get<real_type>("decrease_length"))
   {

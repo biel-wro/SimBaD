@@ -1,14 +1,5 @@
 final_snapshot
 {  
-  final_estimator
-  {
-    class population_size
-    parameters
-    {
-      start_size 100000
-    }
-  }
-  
   configuration_printer
   {
     class "csv_printer"
@@ -78,6 +69,12 @@ replay
   nonkey_attributes
   {
     "" mutation.id
+    "" birth.efficiency
+    "" birth.resistance
+    "" lifespan.efficiency
+    "" lifespan.resistance
+    "" success.efficiency
+    "" success.resistance
   }
   
 }
