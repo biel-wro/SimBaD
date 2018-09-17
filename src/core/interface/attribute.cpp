@@ -13,7 +13,7 @@ BEGIN_NAMESPACE_CORE
 namespace
 {
 // clang-format off
-template <class T> struct scalar_in{ using type = void;};
+template <class T> struct scalar_in{};
 
 struct scalar_string{using type = attribute::string_type;};
 struct scalar_real{using type = attribute::real_type;};
