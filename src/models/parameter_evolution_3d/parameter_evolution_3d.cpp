@@ -46,7 +46,9 @@ make_particle_descriptor()
   desc.add_attribute_auto_idx("death.rate", KIND::OBSERVABLE, REAL, 1);
   desc.add_attribute_auto_idx("success.probability", KIND::OBSERVABLE, REAL, 1);
   desc.add_attribute_auto_idx("lifespan", KIND::OBSERVABLE, REAL, 1);
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
   desc.add_attribute_auto_idx("parent.mutation.id", KIND::INFO, INT, 1);
+#endif
   return description_ptr;
 }
 
@@ -74,8 +76,10 @@ parameter_evolution_3d::particle_attribute(const cell &c,
   case 12: return compute_death_rate(c);
   case 13: return compute_success_rate(c);
   case 14: return 1.0 / compute_death_rate(c);
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
   case 15:
     return c.params().parent_ptr() ? c.params().parent_ptr()->mutation_id() : 0;
+#endif
   }
   throw simbad::core::unrecognized_attribute_number(attr_idx);
 }
@@ -176,22 +180,27 @@ parameter_evolution_3d::parameter_evolution_3d(const core::property_tree &pt)
       m_rng(pt.get<uint64_t>("seed")),
       m_spacetime(pt.get<double>("space.tile_size")),
       m_model_params(pt),
-      m_configurtation_view(new configuration_view(*this)),
+      m_configurtation_view(new configuration_view(*this))
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
+      ,
       m_tree_dump_path(pt.get("dump.tree_path", std::string())),
       m_stats_dump_path(pt.get("dump.stats_path", std::string())),
       m_parent_mutations_dump_path(
           pt.get("dump.parent_mutations", std::string()))
+#endif
 {
 }
 
 parameter_evolution_3d::~parameter_evolution_3d()
 {
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
   if(!m_tree_dump_path.empty())
     dump_mutation_tree(m_tree_dump_path);
   if(!m_stats_dump_path.empty())
     dump_mutation_stats(m_stats_dump_path);
   if(!m_parent_mutations_dump_path.empty())
     dump_parent_mutations(m_parent_mutations_dump_path);
+#endif
 }
 
 const core::attribute_description &
@@ -257,7 +266,9 @@ void parameter_evolution_3d::read_configuration(
         pos[2] = p[pos_idx].get_real_ref(2);
         std::shared_ptr<cell_params const> params_ptr =
             std::make_shared<cell_params>(p, attribute_indices);
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
         m_all_mutations.push_back((params_ptr));
+#endif
         insert(cell(pos, params_ptr));
         std::size_t mutation_id = p[mut_idx].get_int_val();
         m_last_muatation_id = std::max(m_last_muatation_id, mutation_id);
@@ -315,7 +326,7 @@ namespace
 {
 using count_map = std::unordered_map<std::size_t, std::size_t>;
 }
-
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
 std::unordered_map<std::size_t, std::size_t>
 parameter_evolution_3d::count_clones() const
 {
@@ -424,6 +435,7 @@ void parameter_evolution_3d::dump_parent_mutations(
     output_file << mutation_id << ", " << parent_id << std::endl;
   }
 }
+#endif
 
 const spacetime &parameter_evolution_3d::current_spacetime() const
 {
@@ -486,10 +498,10 @@ void parameter_evolution_3d::mutate(cell &c)
 
   std::shared_ptr<cell_params> mutated_params_ptr =
       std::make_shared<cell_params>(c.params());
-
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
   m_all_mutations.push_back(mutated_params_ptr);
-
   mutated_params_ptr->set_parent_ptr(c.params_ptr());
+#endif
   mutated_params_ptr->set_mutation_id(generate_mutation_id());
 
   m_model_params.mutate_birth(*mutated_params_ptr, m_rng);
@@ -532,33 +544,13 @@ void parameter_evolution_3d::execute_birth(
   event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
   v(child_birth_view);
 }
-
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
 std::vector<std::shared_ptr<cell_params const>>
 parameter_evolution_3d::all_mutations() const
 {
   return m_all_mutations;
-  /*
-  std::unordered_map<std::size_t, std::shared_ptr<cell_params const>>
-      id_to_ptr_map;
-  auto particle_visitor = [&id_to_ptr_map](cell const &c) {
-    for(std::shared_ptr<cell_params const> params_ptr = c.params_ptr();
-        nullptr != params_ptr; params_ptr = params_ptr->parent_ptr())
-    {
-      std::size_t id = params_ptr->mutation_id();
-      id_to_ptr_map.emplace(id, params_ptr);
-    }
-  };
-
-  m_spacetime.visit(particle_visitor);
-  std::vector<std::shared_ptr<cell_params const>> mutations;
-  mutations.reserve(id_to_ptr_map.size());
-  for(std::pair<std::size_t, std::shared_ptr<cell_params const>> const &pair :
-      id_to_ptr_map)
-    mutations.push_back(pair.second);
-  return mutations;
-  */
 }
-
+#endif
 END_NAMESPACE_PARAMETER_EVOLUTION_3D
 
 SIMBAD_MAKE_MODEL_FACTORY(parameter_evolution_3d, 3)
