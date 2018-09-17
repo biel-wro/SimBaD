@@ -263,7 +263,7 @@ struct scalar_type_getter_visitor
   template <class T>
   ATTRIBUTE_SCALAR
   operator()(T const &,
-             std::enable_if_t<has_scalar<T, attribute::string_type>(), T *> =
+             std::enable_if_t<has_scalar<T, attribute::string_type>(), void *> =
                  nullptr) const
   {
     return ATTRIBUTE_SCALAR::STRING;
@@ -272,7 +272,7 @@ struct scalar_type_getter_visitor
   template <class T>
   ATTRIBUTE_SCALAR
   operator()(T const &,
-             std::enable_if_t<has_scalar<T, attribute::real_type>(), T *> =
+             std::enable_if_t<has_scalar<T, attribute::real_type>(), double *> =
                  nullptr) const
   {
     return ATTRIBUTE_SCALAR::REAL;
@@ -281,7 +281,7 @@ struct scalar_type_getter_visitor
   template <class T>
   ATTRIBUTE_SCALAR
   operator()(T const &,
-             std::enable_if_t<has_scalar<T, attribute::int_type>(), T *> =
+             std::enable_if_t<has_scalar<T, attribute::int_type>(), int *> =
                  nullptr) const
   {
     return ATTRIBUTE_SCALAR::INT;
