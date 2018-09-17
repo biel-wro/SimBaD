@@ -659,3 +659,20 @@ std::size_t attribute::hash() const
 }
 
 END_NAMESPACE_CORE
+
+namespace std
+{
+size_t hash<::simbad::core::attribute>::
+operator()(::simbad::core::attribute const &attr) const
+{
+  return attr.hash();
+}
+}
+namespace boost
+{
+std::size_t hash<::simbad::core::attribute>::
+operator()(::simbad::core::attribute const &attr) const
+{
+  return attr.hash();
+}
+}

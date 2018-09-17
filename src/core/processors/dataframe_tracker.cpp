@@ -55,11 +55,13 @@ void dataframe_tracker::record::update(attribute_list const &new_values,
 }
 
 std::size_t dataframe_tracker::node_hash::
-operator()(const dataframe_tracker::record &n) const
+operator()(dataframe_tracker::record const &n) const
 {
   std::size_t seed = 0;
-  for(std::size_t idx = 0; idx < m_key_size; ++idx)
-    boost::hash_combine(seed, n[idx]);
+  for(std::size_t idx = 0; idx < m_key_size; ++idx) {
+  attribute const &attr = n[idx];
+    boost::hash_combine(seed, attr);
+  }
   return seed;
 }
 

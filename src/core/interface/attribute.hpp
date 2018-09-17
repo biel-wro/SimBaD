@@ -182,12 +182,15 @@ END_NAMESPACE_CORE
 namespace std
 {
 template <> struct hash<::simbad::core::attribute>
-//    : public boost::hash<::simbad::core::attribute::super>
 {
-  std::size_t operator()(::simbad::core::attribute const &attr) const
-  {
-    return attr.hash();
-  }
+  size_t operator()(::simbad::core::attribute const &attr) const;
+};
+}
+namespace boost
+{
+template <> struct hash<::simbad::core::attribute>
+{
+  std::size_t operator()(::simbad::core::attribute const &attr) const;
 };
 }
 
