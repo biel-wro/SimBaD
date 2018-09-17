@@ -3,8 +3,8 @@
 
 #include "parameter_evolution_3d_fwd.hpp"
 
-#include "interface/interface_fwd.hpp"
 #include "interface/attribute_description.hpp"
+#include "interface/interface_fwd.hpp"
 
 #include <random>
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
@@ -23,18 +23,23 @@ public:
               std::vector<std::size_t> const &attribute_indices);
   cell_params(float birth_eff, float birth_res, float lifespan_eff,
               float lifespan_res, float success_eff, float success_res,
-              std::size_t mutation_id,
-              std::shared_ptr<cell_params const> parent_ptr = nullptr);
+              std::size_t mutation_id
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
+              ,
+              std::shared_ptr<cell_params const> parent_ptr = nullptr
+#endif
+  );
 
   // accessors
   core::attribute get_attribute(std::size_t attr_idx) const;
 
   std::size_t mutation_id() const;
   void set_mutation_id(std::size_t mutation_id);
-
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
   std::shared_ptr<cell_params const> parent_ptr() const;
   void set_parent_ptr(std::shared_ptr<cell_params const> parent_ptr);
   core::attribute ancestry_ids() const;
+#endif
   float lifespan_eff() const;
   float &lifespan_eff();
   float lifespan_res() const;
@@ -49,7 +54,9 @@ public:
   float &success_res();
 
 private:
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
   std::shared_ptr<cell_params const> m_parent_ptr;
+#endif
   std::size_t m_mutation_id;
   float m_birth_eff;
   float m_birth_res;

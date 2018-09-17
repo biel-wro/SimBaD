@@ -74,8 +74,10 @@ parameter_evolution_3d::particle_attribute(const cell &c,
   case 12: return compute_death_rate(c);
   case 13: return compute_success_rate(c);
   case 14: return 1.0 / compute_death_rate(c);
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
   case 15:
     return c.params().parent_ptr() ? c.params().parent_ptr()->mutation_id() : 0;
+#endif
   }
   throw simbad::core::unrecognized_attribute_number(attr_idx);
 }
@@ -496,8 +498,8 @@ void parameter_evolution_3d::mutate(cell &c)
       std::make_shared<cell_params>(c.params());
 #ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
   m_all_mutations.push_back(mutated_params_ptr);
-#endif
   mutated_params_ptr->set_parent_ptr(c.params_ptr());
+#endif
   mutated_params_ptr->set_mutation_id(generate_mutation_id());
 
   m_model_params.mutate_birth(*mutated_params_ptr, m_rng);

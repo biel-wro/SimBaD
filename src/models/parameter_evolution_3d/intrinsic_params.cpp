@@ -38,14 +38,18 @@ const core::attribute_description &cell_params::description()
 }
 
 cell_params::cell_params(const simbad::core::property_tree &pt)
-    : cell_params(pt.get<float>("birth.efficiency"),     //
-                  pt.get<float>("birth.resistance"),     //
-                  pt.get<float>("lifespan.efficiency"),  //
-                  pt.get<float>("lifespan.resistance"),  //
-                  pt.get<float>("success.efficiency"),   //
-                  pt.get<float>("success.resistance"),   //
-                  pt.get("mutation.id", std::size_t(0)), //
-                  nullptr)                               //
+    : cell_params(pt.get<float>("birth.efficiency"),    //
+                  pt.get<float>("birth.resistance"),    //
+                  pt.get<float>("lifespan.efficiency"), //
+                  pt.get<float>("lifespan.resistance"), //
+                  pt.get<float>("success.efficiency"),  //
+                  pt.get<float>("success.resistance"),  //
+                  pt.get("mutation.id", std::size_t(0)) //
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
+                  ,
+                  nullptr
+#endif
+                  ) //
 {
 }
 
@@ -57,14 +61,25 @@ cell_params::cell_params(const core::attribute_list &p,
                   p[attribute_indices[3]].get_real_val(),
                   p[attribute_indices[4]].get_real_val(),
                   p[attribute_indices[5]].get_real_val(),
-                  p[attribute_indices[6]].get_int_val(), nullptr)
+                  p[attribute_indices[6]].get_int_val()
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
+                      ,
+                  nullptr
+#endif
+      )
 {
 }
 cell_params::cell_params(float birth_eff, float birth_res, float lifespan_eff,
                          float lifespan_res, float success_eff,
-                         float success_res, std::size_t mutation_id,
-                         std::shared_ptr<const cell_params> parent_ptr)
-    : m_parent_ptr(parent_ptr),
+                         float success_res, std::size_t mutation_id
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
+                         ,std::shared_ptr<const cell_params> parent_ptr
+                             PARAMETER_EVOLUTION_3D_MUTATION_TREE
+#endif
+):
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
+      m_parent_ptr(parent_ptr),
+#endif
       m_mutation_id(mutation_id),
       m_birth_eff(birth_eff),
       m_birth_res(birth_res),
@@ -111,6 +126,7 @@ void cell_params::set_mutation_id(std::size_t mutation_id)
   m_mutation_id = mutation_id;
 }
 
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
 std::shared_ptr<cell_params const> cell_params::parent_ptr() const
 {
   return m_parent_ptr;
@@ -148,7 +164,7 @@ core::attribute cell_params::ancestry_ids() const
     vector.push_back(static_cast<int_type>(parentn_ptr->mutation_id()));
   return vector;
 }
-
+#endif
 float cell_params::lifespan_eff() const { return m_lifespan_eff; }
 float &cell_params::lifespan_eff() { return m_lifespan_eff; }
 float cell_params::lifespan_res() const { return m_lifespan_res; }
