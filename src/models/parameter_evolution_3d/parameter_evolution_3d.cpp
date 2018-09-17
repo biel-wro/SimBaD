@@ -46,7 +46,9 @@ make_particle_descriptor()
   desc.add_attribute_auto_idx("death.rate", KIND::OBSERVABLE, REAL, 1);
   desc.add_attribute_auto_idx("success.probability", KIND::OBSERVABLE, REAL, 1);
   desc.add_attribute_auto_idx("lifespan", KIND::OBSERVABLE, REAL, 1);
+#ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
   desc.add_attribute_auto_idx("parent.mutation.id", KIND::INFO, INT, 1);
+#endif
   return description_ptr;
 }
 
