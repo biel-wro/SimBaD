@@ -261,15 +261,18 @@ struct scalar_type_getter_visitor
   // clang-format off
   using result_type = ATTRIBUTE_SCALAR;
   template <class T>
-  std::enable_if_t<has_scalar<T, attribute::string_type>(), ATTRIBUTE_SCALAR>
+  typename std::enable_if<has_scalar<T, attribute::string_type>(),
+      ATTRIBUTE_SCALAR>::type
   operator()(T const &) const { return ATTRIBUTE_SCALAR::STRING; }
 
   template <class T>
-  std::enable_if_t<has_scalar<T, attribute::real_type>(), ATTRIBUTE_SCALAR>
+  typename std::enable_if_t<has_scalar<T, attribute::real_type>(),
+      ATTRIBUTE_SCALAR>::type
   operator()(T const &) const { return ATTRIBUTE_SCALAR::REAL; }
 
   template <class T>
-  std::enable_if_t<has_scalar<T, attribute::int_type>(), ATTRIBUTE_SCALAR>
+  typename std::enable_if_t<has_scalar<T, attribute::int_type>(),
+      ATTRIBUTE_SCALAR>::type
   operator()(T const &) const { return ATTRIBUTE_SCALAR::INT; }
   // clang-format on
 };
