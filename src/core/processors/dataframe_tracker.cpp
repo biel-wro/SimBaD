@@ -241,10 +241,10 @@ void dataframe_tracker::rehash_if_needed()
 
   if(current_size > m_bucket_count * fill_factor_upper_bound)
   {
-    std::cerr << "REALLOC:"
-              << " m_bucket:" << m_bucket_count
-              << " current_size:" << current_size << std::endl;
-    std::cerr.flush();
+    //std::cerr << "REALLOC:"
+    //          << " m_bucket:" << m_bucket_count
+    //          << " current_size:" << current_size << std::endl;
+    //std::cerr.flush();
 
     realloc_buckets(m_bucket_count * 2);
 
