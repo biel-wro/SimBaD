@@ -13,7 +13,7 @@ BEGIN_NAMESPACE_CORE
 namespace
 {
 // clang-format off
-template <class T> struct scalar_in{ using type = void;};
+template <class T> struct scalar_in{};
 
 struct scalar_string{using type = attribute::string_type;};
 struct scalar_real{using type = attribute::real_type;};
@@ -258,19 +258,34 @@ namespace
 {
 struct scalar_type_getter_visitor
 {
-  // clang-format off
+  // //clang-format off
   using result_type = ATTRIBUTE_SCALAR;
   template <class T>
-  std::enable_if_t<has_scalar<T, attribute::string_type>(), ATTRIBUTE_SCALAR>
-  operator()(T const &) const { return ATTRIBUTE_SCALAR::STRING; }
+  ATTRIBUTE_SCALAR
+  operator()(T const &,
+             std::enable_if_t<has_scalar<T, attribute::string_type>(), void *> =
+                 nullptr) const
+  {
+    return ATTRIBUTE_SCALAR::STRING;
+  }
 
   template <class T>
-  std::enable_if_t<has_scalar<T, attribute::real_type>(), ATTRIBUTE_SCALAR>
-  operator()(T const &) const { return ATTRIBUTE_SCALAR::REAL; }
+  ATTRIBUTE_SCALAR
+  operator()(T const &,
+             std::enable_if_t<has_scalar<T, attribute::real_type>(), double *> =
+                 nullptr) const
+  {
+    return ATTRIBUTE_SCALAR::REAL;
+  }
 
   template <class T>
-  std::enable_if_t<has_scalar<T, attribute::int_type>(), ATTRIBUTE_SCALAR>
-  operator()(T const &) const { return ATTRIBUTE_SCALAR::INT; }
+  ATTRIBUTE_SCALAR
+  operator()(T const &,
+             std::enable_if_t<has_scalar<T, attribute::int_type>(), int *> =
+                 nullptr) const
+  {
+    return ATTRIBUTE_SCALAR::INT;
+  }
   // clang-format on
 };
 }
@@ -644,3 +659,20 @@ std::size_t attribute::hash() const
 }
 
 END_NAMESPACE_CORE
+
+namespace std
+{
+size_t hash<::simbad::core::attribute>::
+operator()(::simbad::core::attribute const &attr) const
+{
+  return attr.hash();
+}
+}
+namespace boost
+{
+std::size_t hash<::simbad::core::attribute>::
+operator()(::simbad::core::attribute const &attr) const
+{
+  return attr.hash();
+}
+}

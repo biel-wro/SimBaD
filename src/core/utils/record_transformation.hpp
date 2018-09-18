@@ -17,7 +17,7 @@ public:
   record_transformation();
 
 protected:
-  attribute get_attribute(std::size_t idx) const override;
+  //attribute get_attribute(std::size_t idx) const override;
 
   void add_forwarding(attribute_description const &input_description,
                       std::string const &name);

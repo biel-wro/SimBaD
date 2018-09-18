@@ -81,4 +81,4 @@ add_subdirectory(cli)
 add_subdirectory(models)
 add_subdirectory(plugins)
 
-install(DIRECTORY examples DESTINATION examples)
+install(DIRECTORY ../examples DESTINATION examples)
