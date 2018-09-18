@@ -1,3 +1,4 @@
+#define PARAMETER_EVOLUTION_3D_MUTATION_TREE
 #include "parameter_evolution_3d_fwd.hpp"
 #include <string>
 
@@ -7,7 +8,6 @@
 #include "model_parameters.hpp"
 #include "spacetime.hpp"
 
-//#define PARAMETER_EVOLUTION_3D_MUTATION_TREE
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 
