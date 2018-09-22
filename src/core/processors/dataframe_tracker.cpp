@@ -1,115 +1,40 @@
 #include "dataframe_tracker.hpp"
 
 #include "interface/attribute.hpp"
+
 #include "utils/attribute_exceptions.hpp"
 #include "utils/attribute_vector.hpp"
 
 #include <boost/intrusive/unordered_set.hpp>
 #include <boost/optional.hpp>
+#include <boost/pool/pool.hpp>
 
 #include <algorithm>
 
 BEGIN_NAMESPACE_CORE
 
-constexpr std::size_t dataframe_tracker::minimal_bucket_count;
+struct set_type : public boost::intrusive::unordered_set<
+                      tracker_record,                                       //
+                      boost::intrusive::hash<tracker_record::key_hasher>,   //
+                      boost::intrusive::equal<tracker_record::key_equaler>, //
+                      boost::intrusive::compare_hash<true>,                 //
+                      boost::intrusive::power_2_buckets<true>               //
+                      >
+{
+};
 
-dataframe_tracker::record::record(std::size_t s)
-    : m_attributes(new attribute[s])
+struct bucket_type : public set_type::bucket_type
 {
-}
-dataframe_tracker::record::record(std::initializer_list<attribute> il)
-{
-  std::move(il.begin(), il.end(), m_attributes.get());
-}
-dataframe_tracker::record::record(
-    attribute_list const &values,
-    dataframe_tracker::index_vector const &indices)
-    : record(indices.size())
-{
-  update(values, indices);
-}
-attribute const &dataframe_tracker::record::operator[](std::size_t idx) const
-{
-  return m_attributes[idx];
-}
+};
 
-attribute &dataframe_tracker::record::operator[](std::size_t idx)
-{
-  return m_attributes[idx];
-}
-
-attribute &dataframe_tracker::record::get(std::size_t idx)
-{
-  return m_attributes[idx];
-}
-
-void dataframe_tracker::record::update(attribute_list const &new_values,
-                                       index_vector const &mapping,
-                                       std::size_t skip_size)
-{
-  for(std::size_t i = skip_size, size = mapping.size(); i < size; ++i)
-  {
-    std::size_t outer_idx = mapping[i];
-    m_attributes[i] = new_values[outer_idx];
-  }
-}
-
-std::size_t dataframe_tracker::node_hash::
-operator()(dataframe_tracker::record const &n) const
-{
-  std::size_t seed = 0;
-  for(std::size_t idx = 0; idx < m_key_size; ++idx) {
-  attribute const &attr = n[idx];
-    boost::hash_combine(seed, attr);
-  }
-  return seed;
-}
-
-std::size_t dataframe_tracker::node_hash::
-operator()(attribute const &attr) const
-{
-  std::size_t hash(hash_seed);
-  boost::hash_combine(hash, attr);
-  return hash;
-}
-
-bool dataframe_tracker::node_equal::
-operator()(const dataframe_tracker::record &lhs,
-           const dataframe_tracker::record &rhs) const
-{
-  for(std::size_t idx = 0; idx < m_key_size; ++idx)
-    if(lhs[idx] != rhs[idx])
-      return false;
-  return true;
-}
-
-bool dataframe_tracker::node_equal::
-operator()(dataframe_tracker::record const &node, attribute const &attr) const
-{
-  assert(1 == m_key_size);
-  return node[0] == attr;
-}
-bool dataframe_tracker::node_equal::
-operator()(attribute const &attr, dataframe_tracker::record const &node) const
-{
-  return operator()(node, attr);
-}
-
-bool dataframe_tracker::node_equal::operator()(const attribute &lhs,
-                                               const attribute &rhs) const
-{
-  return lhs == rhs;
-}
-
-dataframe_tracker::dataframe_tracker(std::size_t record_size,
-                                     std::size_t key_size)
+dataframe_tracker::dataframe_tracker(std::size_t record_size)
     : m_record_size(record_size),
-      m_key_size(key_size),
       m_bucket_count(minimal_bucket_count),
       m_buckets(new bucket_type[minimal_bucket_count]),
       m_attribute_set(
           set_type::bucket_traits(m_buckets.get(), minimal_bucket_count),
-          node_hash{key_size}, node_equal{key_size})
+          tracker_record::key_hasher{}, tracker_record::key_equaler{}),
+      m_record_pool(sizeof(attribute) * m_record_size)
 {
 }
 
@@ -241,10 +166,10 @@ void dataframe_tracker::rehash_if_needed()
 
   if(current_size > m_bucket_count * fill_factor_upper_bound)
   {
-    //std::cerr << "REALLOC:"
+    // std::cerr << "REALLOC:"
     //          << " m_bucket:" << m_bucket_count
     //          << " current_size:" << current_size << std::endl;
-    //std::cerr.flush();
+    // std::cerr.flush();
 
     realloc_buckets(m_bucket_count * 2);
 

@@ -61,6 +61,7 @@ set( SOURCES
   processors/streamer.cpp
   processors/tree_builder
   processors/dataframe_tracker.cpp
+  processors/tracker_record.cpp
 
   # repositories
   repositories/advance_estimator_repository.cpp
