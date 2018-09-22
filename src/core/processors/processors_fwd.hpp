@@ -6,6 +6,7 @@
 BEGIN_NAMESPACE_CORE
 class configuration_builder;
 class dataframe_tracker;
+class tracker_record;
 class snapshoter;
 class stream_printer;
 class tree_builder;

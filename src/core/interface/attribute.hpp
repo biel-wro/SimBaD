@@ -172,7 +172,7 @@ public:
   bool operator!=(attribute const &rhs) const;
 
   // hash
-  std::size_t hash() const;
+  std::size_t hash_value() const;
 };
 
 #undef SIMBAD_CORE_ATTRIBUTE_SUBTYPES

@@ -647,15 +647,9 @@ struct hash_visitor
 };
 }
 
-std::size_t attribute::hash() const
+std::size_t attribute::hash_value() const
 {
   return boost::apply_visitor(hash_visitor(), *this);
-  /*
-    std::size_t dim = dimension();
-    std::size_t seed = 0;
-    for(std::size_t idx = 0; idx < dim; ++idx)
-      boost::hash_combine(seed, get_string_val(idx));
-    return seed;*/
 }
 
 END_NAMESPACE_CORE
@@ -665,7 +659,7 @@ namespace std
 size_t hash<::simbad::core::attribute>::
 operator()(::simbad::core::attribute const &attr) const
 {
-  return attr.hash();
+  return attr.hash_value();
 }
 }
 namespace boost
@@ -673,6 +667,6 @@ namespace boost
 std::size_t hash<::simbad::core::attribute>::
 operator()(::simbad::core::attribute const &attr) const
 {
-  return attr.hash();
+  return attr.hash_value();
 }
 }
