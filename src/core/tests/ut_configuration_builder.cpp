@@ -16,7 +16,7 @@ char const *test_input =
 1, 1, 1, 1.1, 10, 1, unused
 2, 2, 2, 2.2, 20, 1, unused
 3, 3, 3, 3.3, 30, 1, unused
-1, 1, 1, 1.0, 10, 3, unused
+1, 1, 1, 1.0, -10, 3, unused
 3, 3, 3, 3.3, 30, 2, unused
 )";
 
@@ -58,8 +58,12 @@ BOOST_AUTO_TEST_CASE(read_stream)
 
   configuration_builder builder(description, "position", values_to_track);
 
-  reader.visit_entries(
-      [&builder](attribute_list const &event) { builder.push_event(event); });
+  reader.visit_entries([&builder](attribute_list const &event) {
+    builder.push_event(event);
+//    csv_printer printer(&std::cout);
+//    printer.write_dataframe(builder);
+//    std::cout<< "next..." << std::endl;
+  });
 
   assert(3 == builder.description().size());
   // std::cerr << builder.description();

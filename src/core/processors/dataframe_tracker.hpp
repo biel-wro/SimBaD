@@ -32,70 +32,68 @@ public:
   using const_iterator = set_type::const_iterator;
   using insert_commit_data = set_type::insert_commit_data;
 
-public:
-  using attribute_visitor = std::function<void(attribute_list const &)>;
+  using record_visitor = std::function<void(attribute_list const &)>;
 
   static constexpr std::size_t minimal_bucket_count = 1024;
-  dataframe_tracker(std::size_t record_size);
+  explicit dataframe_tracker(std::size_t record_length);
   ~dataframe_tracker();
 
-  void update(attribute_list const &values, index_vector const &indices);
-  void visit_records(attribute_visitor visitor) const;
+  tracker_record *create_record();
+  tracker_record *create_record(attribute const &key);
+  template <class AttributeList, class RecordIdxIterator>
+  tracker_record *create_record(AttributeList &&list, RecordIdxIterator beg_idx,
+                                RecordIdxIterator last_idx);
+  void destroy_record(tracker_record *record_ptr);
+
+  std::pair<iterator, bool> insert_check(attribute const &key,
+                                         insert_commit_data &commit_data);
+
+  iterator insert_commit(tracker_record *record_ptr,
+                         insert_commit_data const &commit_data);
+
+  iterator insert_commit(attribute const &key,
+                         insert_commit_data const &commit_data);
+
+  template <class AttributeList, class RecordIdxIterator>
+  iterator insert_commit(AttributeList &&list, RecordIdxIterator first_idx,
+                         RecordIdxIterator last_idx,
+                         insert_commit_data const &commit_data);
+
+  std::pair<iterator, bool> insert(tracker_record *record_ptr);
+  template <class AttributeList, class RecordIdxIterator>
+  std::pair<iterator, bool> insert(AttributeList &&list,
+                                   RecordIdxIterator first_idx,
+                                   RecordIdxIterator last_idx);
+  std::pair<iterator, bool> insert(attribute const &key);
+
+  template <class AttributeList, class RecordIdxIterator>
+  bool update(AttributeList &&list, RecordIdxIterator first_idx,
+              RecordIdxIterator last_idx);
+
+  void visit_records(record_visitor visitor) const;
+
+  void erase(const_iterator it);
+  void erase(attribute const &key);
 
   set_type const &attribute_set() const;
   set_type &attribute_set();
 
-  std::pair<iterator, bool> insert_check(attribute const &key,
-                                         insert_commit_data &commit_data);
-  iterator insert_commit(attribute const &key,
-                         insert_commit_data const &commit_data);
-
-  template <class KeyIdxIterator>
-  std::pair<iterator, bool>
-  insert_check(attribute_list const &list, KeyIdxIterator first_key_idx,
-               KeyIdxIterator last_key_idx, insert_commit_data &commit_data)
-  {
-    std::pair<iterator, bool> result = attribute_set().insert_check(
-        list,                                           //
-        make_list_hasher(first_key_idx, last_key_idx),  //
-        make_list_equaler(first_key_idx, last_key_idx), //
-        commit_data                                     //
-    );
-    return result;
-  }
-  template <class AttributeList, class RecordIdxIterator>
-  iterator insert_commit(AttributeList &&list, RecordIdxIterator first_idx,
-                         RecordIdxIterator last_idx,
-                         insert_commit_data &commit_data)
-  {
-    std::unique_ptr<record> node_ptr(
-        new record(std::forward<AttributeList>(list), first_idx, last_idx));
-    iterator it =
-        attribute_set().insert_commit(*node_ptr.release(), commit_data);
-    rehash_if_needed();
-    return it;
-  }
-
-  std::pair<iterator, bool> insert(attribute const &key);
-  void erase(const_iterator it);
-  void erase(attribute const &key);
-
   std::size_t size() const;
-  std::size_t record_size() const;
-  std::size_t key_size() const;
+  std::size_t record_length() const;
 
+protected:
   void realloc_buckets(std::size_t new_bucket_count);
   void rehash_if_needed();
 
 private:
-  std::size_t const m_record_size;
-  std::size_t m_bucket_count;
-  std::unique_ptr<bucket_type[]> m_buckets;
+  std::size_t const m_record_length;
+  std::size_t const m_record_bytes;
 
   boost::pool<boost::default_user_allocator_malloc_free> m_record_pool;
-  set_type m_attribute_set;
 
-  //  boost::object_pool<
+  std::size_t m_bucket_count;
+  std::unique_ptr<bucket_type[]> m_buckets;
+  set_type m_attribute_set;
 };
 END_NAMESPACE_CORE
 

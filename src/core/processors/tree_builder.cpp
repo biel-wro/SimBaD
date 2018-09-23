@@ -12,7 +12,7 @@ tree_builder::tree_builder(attribute_description const &event_description,
                            std::vector<std::string> const &observable_names)
     : m_indices(), // initialized in-body
       m_key_size(key_names.size()),
-      m_mutations(key_names.size(), key_names.size() + observable_names.size()),
+      m_mutations(key_names.size() + observable_names.size()),
       m_event_kind_idx(
           event_description.get_attribute_idx(ATTRIBUTE_KIND::EVENT_KIND)),
       m_mutation_description() // initialized in-body

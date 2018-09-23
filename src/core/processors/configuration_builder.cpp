@@ -33,7 +33,7 @@ configuration_builder::configuration_builder(
           }())},
       m_index_mapping(
           m_configuration_description.lin_mapping_from(event_description)),
-      m_configuration(m_configuration_description.size(), key_size),
+      m_configuration(m_configuration_description.size()),
       m_event_kind_idx(
           event_description.get_descriptor(ATTRIBUTE_KIND::EVENT_KIND, true)
               .value()
@@ -57,7 +57,15 @@ void configuration_builder::set_configuration(
       m_configuration_description.lin_mapping_from(configuration.description());
 
   auto visitor = [this, &mapping](attribute_list const &entry) {
-    m_configuration.update(entry, mapping);
+
+    dataframe_tracker::iterator it;
+    bool ok;
+    std::tie(it, ok) =
+        m_configuration.insert(entry, mapping.begin(), mapping.end());
+    if(!ok)
+      throw std::runtime_error(
+          "initial configuration has two particles with same"
+          " key attribute");
   };
 
   configuration.visit_records(visitor);
@@ -74,7 +82,10 @@ void configuration_builder::push_event(attribute_list const &event)
   case EVENT_KIND::NONE:
     break; // no need to do anything
 
-  case EVENT_KIND::CREATED:  //
+  case EVENT_KIND::CREATED: //
+    create_on_event(id, event);
+    break;
+
   case EVENT_KIND::MODIFIED: //
     update_on_event(id, event);
     break;
@@ -85,7 +96,7 @@ void configuration_builder::push_event(attribute_list const &event)
 
   case EVENT_KIND::TRANSFORMED: //
     remove_on_event(id);
-    update_on_event(id, event);
+    create_on_event(id, event);
 
     break;
   case EVENT_KIND::JUMPED_IN:  //
@@ -109,22 +120,25 @@ std::size_t configuration_builder::size() const
 {
   return m_configuration.size();
 }
-
-void configuration_builder::update_on_event(attribute const &id,
+void configuration_builder::create_on_event(attribute const &key,
                                             attribute_list const &event)
 {
   dataframe_tracker::iterator it;
-  dataframe_tracker::insert_commit_data commit_data;
-
-  bool already_exists;
-  std::tie(it, already_exists) = m_configuration.insert(id);
-
-  // assert(already_exists);
-  it->update(event,                                        //
-             std::next(m_index_mapping.begin(), key_size), //
-             m_index_mapping.end(),                        //
-             key_size                                      //
-  );
+  bool ok;
+  std::tie(it, ok) = m_configuration.insert(event, m_index_mapping.begin(),
+                                            m_index_mapping.end());
+  if(!ok)
+    throw std::runtime_error("attempted to create a particle with a key that "
+                             "is already present");
+}
+void configuration_builder::update_on_event(attribute const &id,
+                                            attribute_list const &event)
+{
+  bool ok = m_configuration.update(event, m_index_mapping.begin(),
+                                   m_index_mapping.end());
+  if(!ok)
+    throw std::runtime_error("there was an update event for a particle which "
+                             "does not exist yet");
 }
 
 void configuration_builder::remove_on_event(attribute const &key)

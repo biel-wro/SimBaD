@@ -5,14 +5,57 @@
 #include "processors/dataframe_tracker.hpp"
 
 #include <boost/optional.hpp>
+#include <boost/pool/pool.hpp>
 
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <type_traits>
 
 using namespace simbad::core;
 
 BOOST_AUTO_TEST_SUITE(test_dataframe_tracker)
+
+BOOST_AUTO_TEST_CASE(allocation_test)
+{
+  BOOST_CHECK_EQUAL(tracker_record::attribute_offset(16, 8), 16);
+  BOOST_CHECK_EQUAL(tracker_record::attribute_offset(8, 8), 8);
+  BOOST_CHECK_EQUAL(tracker_record::attribute_offset(20, 8), 24);
+  BOOST_CHECK_EQUAL(tracker_record::attribute_offset(8, 16), 16);
+  BOOST_CHECK_EQUAL(tracker_record::attribute_offset(24, 8), 24);
+  BOOST_CHECK_EQUAL(tracker_record::attribute_offset(24, 24), 24);
+  BOOST_CHECK_EQUAL(tracker_record::attribute_offset(24, 32), 32);
+  BOOST_CHECK_EQUAL(tracker_record::attribute_offset(16, 24), 24);
+
+  // std::cout << "sizeof(record):" << sizeof(new_record) << std::endl;
+  // std::cout << "sizeof(attribute):" << sizeof(attribute) << std::endl;
+  // std::cout << "alignof(attribute):" << alignof(attribute) << std::endl;
+
+  constexpr std::size_t record_length = 7;
+  boost::pool<boost::default_user_allocator_malloc_free> pool(
+      tracker_record::record_bytes(record_length));
+
+  char *memory_ptr = reinterpret_cast<char *>(pool.malloc());
+
+  tracker_record *record_ptr =
+      tracker_record::initialize(memory_ptr, record_length);
+
+  for(std::size_t i = 0; i < record_length; ++i)
+  {
+    attribute &attr = record_ptr->get(i);
+    attr = std::to_string(i);
+  }
+
+  for(std::size_t i = 0; i < record_length; ++i)
+  {
+    attribute const &attr = record_ptr->get(i);
+    BOOST_CHECK_EQUAL(attr, std::to_string(i));
+  }
+
+  tracker_record::deinitialize(record_ptr, record_length);
+
+  pool.free(memory_ptr);
+}
 
 BOOST_AUTO_TEST_CASE(instantiation)
 {
@@ -36,8 +79,7 @@ BOOST_AUTO_TEST_CASE(instantiation)
   std::size_t observable_idx =
       description.get_descriptor("density").get().attribute_idx();
 
-  dataframe_tracker tracker(key_names.size() + observable_names.size(),
-                            key_names.size());
+  dataframe_tracker tracker(key_names.size() + observable_names.size() );
 
   reader.visit_entries(
       [&tracker, position_idx, observable_idx](attribute_list const &record) {
