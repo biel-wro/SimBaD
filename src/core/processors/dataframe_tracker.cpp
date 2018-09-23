@@ -124,6 +124,7 @@ std::pair<dataframe_tracker::iterator, bool>
 dataframe_tracker::insert(tracker_record *record_ptr)
 {
   std::pair<iterator, bool> result = m_attribute_set.insert(*record_ptr);
+  rehash_if_needed();
   return result;
 }
 
@@ -137,7 +138,7 @@ dataframe_tracker::insert(AttributeList &&list, RecordIdxIterator first_idx,
 
   if(!result.second)
     destroy_record(record_ptr);
-
+  rehash_if_needed();
   return result;
 }
 std::pair<dataframe_tracker::iterator, bool>
@@ -148,7 +149,7 @@ dataframe_tracker::insert(const simbad::core::attribute &key)
 
   if(!result.second)
     destroy_record(record_ptr);
-
+  rehash_if_needed();
   return result;
 }
 
