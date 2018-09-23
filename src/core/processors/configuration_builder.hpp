@@ -30,7 +30,7 @@ public:
   std::size_t size() const override;
 
 protected:
-  // void create_on_event(attribute const &key, attribute_list const &event);
+  void create_on_event(attribute const &key, attribute_list const &event);
   void update_on_event(attribute const &key, attribute_list const &event);
   void remove_on_event(attribute const &key);
 
@@ -40,7 +40,6 @@ private:
   dataframe_tracker m_configuration;
   std::size_t const m_event_kind_idx;
   std::size_t const m_key_idx;
-  static constexpr std::size_t key_size = 1;
 };
 
 END_NAMESPACE_CORE
