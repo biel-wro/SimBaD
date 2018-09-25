@@ -59,16 +59,15 @@ tracker_record::initialize(void *memory_ptr, AttributeList &&list,
 {
   tracker_record *rec_ptr = new(memory_ptr) tracker_record;
 
-  std::size_t record_length = std::distance(beg_idx, end_idx);
-  pointer attr_beg = s_attribute_ptr(rec_ptr, 0),
-          attr_end = s_attribute_ptr(rec_ptr, record_length);
+  pointer attr_beg = s_attribute_ptr(rec_ptr, 0);
 
   RecordIdxIterator it_idx = beg_idx;
   pointer attr_ptr = attr_beg;
 
   for(; it_idx != end_idx; ++it_idx, ++attr_ptr)
   {
-    assert(attr_ptr != attr_end);
+    assert(s_attribute_ptr(rec_ptr, static_cast<std::size_t>(std::distance(
+                                        beg_idx, end_idx))) != attr_ptr);
 
     std::size_t source_idx = *it_idx;
     new(attr_ptr) attribute{list[source_idx]};
