@@ -59,7 +59,7 @@ set( SOURCES
   processors/final_snapshot.cpp
   processors/snapshoter.cpp
   processors/streamer.cpp
-#  processors/tree_builder
+  processors/tree_builder
   processors/dataframe_tracker.cpp
   processors/tracker_record.cpp
 
