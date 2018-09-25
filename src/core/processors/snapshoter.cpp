@@ -69,10 +69,12 @@ void snapshoter::launch()
   {
     should_continue = next_step();
 
-    m_stacked_view.set_base(get_model().current_configuration());
     m_stream_printer_ptr->write_dataframe(m_stacked_view);
 
   } while(should_continue);
+
+  m_stacked_view.set_base(get_model().current_configuration());
+  m_stream_printer_ptr->write_dataframe(m_stacked_view);
 }
 
 model const &snapshoter::get_model() const
