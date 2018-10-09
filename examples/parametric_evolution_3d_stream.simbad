@@ -31,7 +31,7 @@ model
     seed 0
     mutation
     {
-      probability 0.1
+      probability 0.05
     }
     interaction
     {
