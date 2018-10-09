@@ -5,9 +5,15 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 set( SOURCES
 
   # computational
+
   computational/mutations/builtin_mutators.cpp
   computational/mutations/mutator.cpp
   computational/mutations/mutator_register.cpp
+
+  computational/time_dependent_scalars/time_dependent_scalar.cpp
+  computational/time_dependent_scalars/constant_scalar.cpp
+  computational/time_dependent_scalars/repository.cpp
+
   # configuration
   configurations/default_attributed_configuration.cpp
   configurations/enriched_configuration.cpp
@@ -16,6 +22,7 @@ set( SOURCES
   configurations/poisson_configuration.cpp
   configurations/selected_attributes_configuration.cpp
   configurations/stacked_view_configuration.cpp
+
   # interface
   interface/attribute.cpp
   interface/attribute_descriptor.cpp

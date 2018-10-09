@@ -5,7 +5,7 @@
 #include "processors/advance_estimators/population_size.hpp"
 BEGIN_NAMESPACE_CORE
 
-SIMBAD_MAKE_REPOSITORY_EXPLICIT_SPECIALIZATION_DECLARATION(advance_estimator)
+SIMBAD_MAKE_REPOSITORY_EXPLICIT_SPECIALIZATION_DECL(advance_estimator)
 {
   factory<advance_estimator> f;
 

@@ -3,14 +3,30 @@
 #include "intrinsic_params.hpp"
 #include "particle.hpp"
 
+#include "computational/mutations/builtin_mutators.hpp"
+#include "computational/time_dependent_scalars/constant_scalar.hpp"
 #include "interface/attribute_description.hpp"
 #include "interface/attribute_descriptor.hpp"
-
-#include "computational/mutations/builtin_mutators.hpp"
 #include "interface/class_register.hpp"
+#include "repositories/create_from_property_tree.hpp"
+
 using simbad::core::get_builtin_mutators;
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
+
+static core::property_tree const &default_time_dependence()
+{
+  static std::unique_ptr<core::property_tree> const result_ptr{
+      new core::property_tree{{"class", "constant_scalar"}}};
+  return *result_ptr;
+}
+
+static std::unique_ptr<core::time_dependent_scalar>
+make_time_dependence(core::property_tree const &pt, std::string const &path)
+{
+  return core::factory_create_from_property_tree<core::time_dependent_scalar>(
+      pt.get_child(path, default_time_dependence()));
+}
 
 model_params::model_params(const simbad::core::property_tree &pt)
     : m_mutation_prob(pt.get<double>("mutation.probability")),
@@ -30,7 +46,12 @@ model_params::model_params(const simbad::core::property_tree &pt)
       m_success_eff_mutator_ptr(get_builtin_mutators().create_instance(
           pt.get_child("success.efficiency.mutator"))),
       m_success_res_mutator_ptr(get_builtin_mutators().create_instance(
-          pt.get_child("success.resistance.mutator")))
+          pt.get_child("success.resistance.mutator"))),
+      m_success_eff_time_dep(
+          make_time_dependence(pt, "success.efficiency.time_dependency")),
+      m_success_res_time_dep(
+          make_time_dependence(pt, "succeess.resistane.time_dependency"))
+
 {
 }
 model_params::~model_params() {}

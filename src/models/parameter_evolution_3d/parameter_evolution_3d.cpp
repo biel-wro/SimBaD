@@ -174,9 +174,9 @@ private:
 
 } // namespace
 
-parameter_evolution_3d::parameter_evolution_3d(const core::property_tree &pt)
+parameter_evolution_3d::parameter_evolution_3d(core::property_tree const &pt)
     : m_time(0),
-      m_last_muatation_id(0),
+      m_last_mutation_id(0),
       m_rng(pt.get<uint64_t>("seed")),
       m_spacetime(pt.get<double>("space.tile_size")),
       m_model_params(pt),
@@ -230,7 +230,7 @@ bool parameter_evolution_3d::generate_events(event_visitor v,
     if(EVENT_KIND::CREATED == event_kind)
     {
       if(compute_success_rate(c) >= std::uniform_real_distribution<>()(m_rng))
-        execute_birth(v);
+        execute_division(v);
       else
         execute_death(v);
     }
@@ -271,7 +271,7 @@ void parameter_evolution_3d::read_configuration(
 #endif
         insert(cell(pos, params_ptr));
         std::size_t mutation_id = p[mut_idx].get_int_val();
-        m_last_muatation_id = std::max(m_last_muatation_id, mutation_id);
+        m_last_mutation_id = std::max(m_last_mutation_id, mutation_id);
       });
 }
 
@@ -485,10 +485,14 @@ double parameter_evolution_3d::compute_success_rate(const cell &c) const
   return r;
 }
 
-std::size_t parameter_evolution_3d::generate_mutation_id()
+std::size_t parameter_evolution_3d::last_mutation_id() const{
+    return m_last_mutation_id;
+}
+
+std::size_t parameter_evolution_3d::next_mutation_id()
 {
-  ++m_last_muatation_id;
-  return m_last_muatation_id;
+  ++m_last_mutation_id;
+  return m_last_mutation_id;
 }
 
 void parameter_evolution_3d::mutate(cell &c)
@@ -502,7 +506,7 @@ void parameter_evolution_3d::mutate(cell &c)
   m_all_mutations.push_back(mutated_params_ptr);
   mutated_params_ptr->set_parent_ptr(c.params_ptr());
 #endif
-  mutated_params_ptr->set_mutation_id(generate_mutation_id());
+  mutated_params_ptr->set_mutation_id(next_mutation_id());
 
   m_model_params.mutate_birth(*mutated_params_ptr, m_rng);
   m_model_params.mutate_lifespan(*mutated_params_ptr, m_rng);
@@ -517,19 +521,17 @@ void parameter_evolution_3d::execute_death(event_visitor v)
   v(death_view);
   pop();
 }
-void parameter_evolution_3d::execute_birth(
+void parameter_evolution_3d::execute_division(
     parameter_evolution_3d::event_visitor v)
 {
   cell const &parent = m_spacetime.top();
+
   cell::position_type new_position(parent.position());
   new_position[0] += m_model_params.dispersion()(m_rng);
   new_position[1] += m_model_params.dispersion()(m_rng);
   new_position[2] += m_model_params.dispersion()(m_rng);
 
-  event_view<EVENT_KIND::TRANSFORMED, 1> parent_birth_view(parent, *this);
-  v(parent_birth_view);
-
-  cell child(m_spacetime.top());
+  cell child(parent);
   child.set_position(new_position);
   child.reset_interaction();
 
@@ -540,6 +542,9 @@ void parameter_evolution_3d::execute_birth(
   mutate(*parent_handle);
   resample_event(*parent_handle);
   m_spacetime.repair_order(parent_handle);
+
+  event_view<EVENT_KIND::TRANSFORMED, 1> parent_birth_view(parent, *this);
+  v(parent_birth_view);
 
   event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
   v(child_birth_view);

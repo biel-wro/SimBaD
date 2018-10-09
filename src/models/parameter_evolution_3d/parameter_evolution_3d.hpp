@@ -48,18 +48,19 @@ public:
   double compute_birth_rate(cell const &c) const;
   double compute_death_rate(cell const &c) const;
   double compute_success_rate(cell const &c) const;
-
+  std::size_t last_mutation_id() const;
 protected:
-  std::size_t generate_mutation_id();
+  std::size_t next_mutation_id();
+  bool sample_mutation(cell const &c) const;
   void mutate(cell &c);
   void execute_death(event_visitor v);
-  void execute_birth(event_visitor v);
+  void execute_division(event_visitor v);
 #ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
   std::vector<std::shared_ptr<cell_params const>> all_mutations() const;
 #endif
 private:
   double m_time;
-  std::size_t m_last_muatation_id;
+  std::size_t m_last_mutation_id;
   std::mt19937_64 m_rng;
   spacetime m_spacetime;
   model_params m_model_params;

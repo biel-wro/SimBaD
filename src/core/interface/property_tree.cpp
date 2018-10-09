@@ -8,6 +8,15 @@ const property_tree &property_tree::get_empty()
 }
 property_tree::property_tree() {}
 property_tree::property_tree(const property_tree::super &s) : super(s) {}
+property_tree::property_tree(
+    std::initializer_list<std::pair<std::string, std::string>> const &pairs)
+{
+  for(std::pair<std::string, std::string> const &pair : pairs)
+  {
+    put(pair.first, pair.second);
+  }
+}
+
 std::size_t property_tree::total_size(bool ignore_empty) const
 {
   std::size_t cnt = 0;

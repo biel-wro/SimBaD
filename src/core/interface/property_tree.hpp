@@ -15,6 +15,8 @@ public:
   static property_tree const &get_empty();
   property_tree();
   property_tree(super const &s);
+  property_tree(
+      std::initializer_list<std::pair<std::string, std::string>> const &pairs);
   template <class Visitor>
   void visit(Visitor v, bool ignore_empty = true, std::string prefix = "") const
   {
