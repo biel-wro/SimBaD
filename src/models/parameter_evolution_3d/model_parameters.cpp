@@ -17,7 +17,8 @@ BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 static core::property_tree const &default_time_dependence()
 {
   static std::unique_ptr<core::property_tree> const result_ptr{
-      new core::property_tree{{"class", "constant_scalar"}}};
+      new core::property_tree{{"class", "constant_scalar"},
+                              {"parameters.scalar", "1"}}};
   return *result_ptr;
 }
 
