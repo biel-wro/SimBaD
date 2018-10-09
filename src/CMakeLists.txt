@@ -7,27 +7,18 @@ set( GUI_NAME gui )
 set( MODELS_NAME models )
 set( MODEL_COMMON model_common )
 
-# C++11
-#include(CheckCXXCompilerFlag)
-
-#CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-#CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-#if(COMPILER_SUPPORTS_CXX11)
-#        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-#elseif(COMPILER_SUPPORTS_CXX0X)
-#        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-#else()
-#        message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-#endif()
-
-#set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "-std=c++14")
+set(CMAKE_CXX_STANDARD 14)
+#set(CMAKE_CXX_FLAGS "-std=c++14")
 message("compiler=" ${CMAKE_CXX_COMPILER})
 
+set(SANITIZER "" CACHE STRING "use ADDRESS or MEMORY sanitizer when building" )
 
-if( BUILD_WITH_ADDRESS_SANITIZER )
-    message("using address sanitizer")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer")
+if( SANITIZER STREQUAL ADDRESS )
+  message("using ADDRESS sanitizer")
+  add_compile_options(-fsanitize=address -fno-omit-frame-pointer)
+elseif( SANITIZER STREQUAL MEMORY)
+  message("using MEMORY sanitizer")
+  add_compile_options(-fsanitize=memory -fno-omit-frame-pointer)
 endif()
 
 #warnings
