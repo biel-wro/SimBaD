@@ -342,7 +342,6 @@ parameter_evolution_3d::count_clones() const
       return;
     std::size_t &count = it->second;
     ++count;
-
   });
 
   return counts;
@@ -485,8 +484,9 @@ double parameter_evolution_3d::compute_success_rate(const cell &c) const
   return r;
 }
 
-std::size_t parameter_evolution_3d::last_mutation_id() const{
-    return m_last_mutation_id;
+std::size_t parameter_evolution_3d::last_mutation_id() const
+{
+  return m_last_mutation_id;
 }
 
 std::size_t parameter_evolution_3d::next_mutation_id()
@@ -536,14 +536,15 @@ void parameter_evolution_3d::execute_division(
   child.reset_interaction();
 
   mutate(child);
-  insert(child);
+  insert(child); // invalidates parent reference
 
   spacetime::dirty_handle_type parent_handle = m_spacetime.first_dirty();
   mutate(*parent_handle);
   resample_event(*parent_handle);
   m_spacetime.repair_order(parent_handle);
 
-  event_view<EVENT_KIND::TRANSFORMED, 1> parent_birth_view(parent, *this);
+  event_view<EVENT_KIND::TRANSFORMED, 1> parent_birth_view(*parent_handle,
+                                                           *this);
   v(parent_birth_view);
 
   event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
