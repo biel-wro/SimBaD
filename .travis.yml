@@ -9,9 +9,10 @@ matrix:
       script:
         - docker -v
         - docker pull $DOCKERIMAGE
-        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug -DUSE_PLUGIN_cbor_lite_io=ON && make -j 2"
+        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug -DSANITIZER=ADDRESS -DUSE_PLUGIN_cbor_lite_io=ON  && make -j 2"
         - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "cd /code/build && ctest --VV -output-on-failure"
       env: DOCKERIMAGE=tozanski/simbad-dev:clang39
+      
     - dist: trusty
       sudo: required
       services:
@@ -19,9 +20,21 @@ matrix:
       script:
         - docker -v
         - docker pull $DOCKERIMAGE
-        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug -DUSE_PLUGIN_cbor_lite_io=ON && make -j 2"
+        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug -DSANITIZER=MEMORY -DUSE_PLUGIN_cbor_lite_io=ON  && make -j 2"
+        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "cd /code/build && ctest --VV -output-on-failure"
+      env: DOCKERIMAGE=tozanski/simbad-dev:clang39
+      
+    - dist: trusty
+      sudo: required
+      services:
+        - docker
+      script:
+        - docker -v
+        - docker pull $DOCKERIMAGE
+        - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "mkdir -p /code/build && cd /code/build && cmake ../src -DCMAKE_BUILD_TYPE=Debug -BUILD_WITH_ADDRESS_SANITIZER -DUSE_PLUGIN_cbor_lite_io=ON && make -j 2"
         - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "cd /code/build && ctest --VV -output-on-failure"
       env: DOCKERIMAGE=tozanski/simbad-dev:gcc6  
+    
     - os: osx
       osx_image: xcode7.3
       script:
@@ -30,6 +43,7 @@ matrix:
         - make -j 2
         - ctest --VV --output-onfailure
       env: COMPILER=clang++
+    
     - dist: trusty
       sudo: required
       services:
