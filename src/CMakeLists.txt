@@ -15,10 +15,10 @@ set(SANITIZER "" CACHE STRING "use ADDRESS or MEMORY sanitizer when building" )
 
 if( SANITIZER STREQUAL ADDRESS )
   message("using ADDRESS sanitizer")
-  add_compile_options(-fsanitize=address -fno-omit-frame-pointer)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 elseif( SANITIZER STREQUAL MEMORY)
   message("using MEMORY sanitizer")
-  add_compile_options(-fsanitize=memory -fno-omit-frame-pointer)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=memory -fno-omit-frame-pointer")
 endif()
 
 #warnings
