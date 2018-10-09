@@ -11,8 +11,9 @@ class csv_printer final : public stream_printer
 {
 public:
   explicit csv_printer(property_tree const &pt);
+  explicit csv_printer(std::ostream *);
   csv_printer(property_tree const &pt, std::ostream *);
-  explicit csv_printer(std::ostream *ostream, std::string delimiter = ",");
+  csv_printer(std::ostream *, std::size_t digits, std::string delimiter = ",");
 
   void write_header(attribute_description const &desc) override;
   void write_entry(attribute_list const &entry) override;
@@ -20,7 +21,8 @@ public:
   void write_footer() override;
 
 private:
-  std::string m_delimiter;
+  std::string const m_delimiter;
+  std::size_t const m_num_digits;
   std::vector<std::size_t> m_dimensions;
   std::vector<std::size_t> m_indices;
 };

@@ -6,21 +6,37 @@
 #include "interface/configuration_view.hpp"
 #include "interface/property_tree.hpp"
 
+#include <limits>
+#include <iomanip>
 #include <sstream>
 
 BEGIN_NAMESPACE_CORE
 
+constexpr char default_delimiter[] = ",";
+constexpr std::size_t default_digits =
+    std::numeric_limits<attribute::real_type>::max_digits10;
+
 csv_printer::csv_printer(property_tree const &pt)
     : stream_printer(pt.get("file", "STDIN")),
-      m_delimiter(pt.get("delimiter", ""))
+      m_delimiter(pt.get("delimiter", default_delimiter)),
+      m_num_digits(pt.get("digits", default_digits))
 {
 }
 csv_printer::csv_printer(property_tree const &pt, std::ostream *ostream_ptr)
-    : csv_printer(ostream_ptr, pt.get("delimiter", ","))
+    : csv_printer(ostream_ptr, pt.get("digits", default_digits),
+                  pt.get<std::string>("delimiter", default_delimiter))
 {
 }
-csv_printer::csv_printer(std::ostream *ostream, std::string delimiter)
-    : stream_printer(ostream), m_delimiter(std::move(delimiter))
+csv_printer::csv_printer(std::ostream *ostream_ptr)
+    : csv_printer(ostream_ptr, default_digits, default_delimiter)
+{
+}
+
+csv_printer::csv_printer(std::ostream *ostream, std::size_t digits,
+                         std::string delimiter)
+    : stream_printer(ostream),
+      m_delimiter(std::move(delimiter)),
+      m_num_digits(digits)
 {
 }
 
@@ -81,6 +97,7 @@ void csv_printer::write_entry(const attribute_list &entry)
                                            end = m_indices.end();
 
   std::stringstream buf;
+  buf.precision(m_num_digits);
 
   if(end == beg)
     return (void)(buf << std::endl);
@@ -116,7 +133,6 @@ void csv_printer::write_data(dataframe const &conf)
   std::ostream &os = ostream();
 
   conf.visit_records([this, beg, end, &os](attribute_list const &attr) {
-
     s_write_data_part(os, attr[*beg], m_dimensions[*beg], m_delimiter);
 
     for(std::vector<std::size_t>::const_iterator it = std::next(beg, 1);
