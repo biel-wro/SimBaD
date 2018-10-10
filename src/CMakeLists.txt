@@ -18,7 +18,7 @@ if( SANITIZER STREQUAL ADDRESS )
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 elseif( SANITIZER STREQUAL MEMORY)
   message("using MEMORY sanitizer")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=memory -fno-omit-frame-pointer")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=memory -fno-omit-frame-pointer -fsanitize-memory-track-origins")
 endif()
 
 #warnings
