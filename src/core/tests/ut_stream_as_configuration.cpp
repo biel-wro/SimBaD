@@ -4,8 +4,8 @@
 #include "interface/attribute_list.hpp"
 #include "io/csv_reader.hpp"
 
-#include <boost/test/auto_unit_test.hpp>
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/test/auto_unit_test.hpp>
 
 #include <sstream>
 

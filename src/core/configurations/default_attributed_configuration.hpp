@@ -2,8 +2,8 @@
 #define ATTRIBUTE_DEFAULTED_CONFIGURATION_HPP
 
 #include "configurations/enriched_configuration.hpp"
-#include "interface/interface_fwd.hpp"
 #include "interface/attribute_description.hpp"
+#include "interface/interface_fwd.hpp"
 #include "interface/property_tree.hpp"
 
 #include <unordered_map>

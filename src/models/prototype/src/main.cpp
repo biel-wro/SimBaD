@@ -19,7 +19,6 @@ using Neighbourhood = Board::box_region;
 struct TileMapper
 {
   TileMapper(float tile_size = 1.0f) : tile_size(tile_size) {}
-
   BoardCoordinates operator()(Point const &p) const
   {
     return operator()(p.get_coordinate<0>(), p.get_coordinate<1>());
@@ -42,7 +41,6 @@ struct TileMapper
 struct DeathRateAccumulator
 {
   DeathRateAccumulator() : acc(0.0) {}
-
   void accumulate(Point const &p, Point const &other)
   {
     (void)p;
@@ -51,7 +49,6 @@ struct DeathRateAccumulator
 
   double get_range() const { return 0.0; }
   double get_intensity() const { return 0.1; }
-
   double acc;
 };
 
@@ -68,7 +65,6 @@ struct BirthRateAccumulator
 
   double get_intensity() const { return cnt < 0 ? 0 : 1; }
   double get_range() const { return range; }
-
   double range;
   int32_t cnt;
 };

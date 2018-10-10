@@ -24,7 +24,7 @@ cubic_crystal_configuration::cubic_crystal_configuration(size_type dimension,
 {
   m_attr_mapping_ptr->add_attribute(0, "position",
                                     ATTRIBUTE_KIND::PARTICLE_POSITION,
-                                    ATTRIBUTE_SCALAR ::REAL, m_dimension);
+                                    ATTRIBUTE_SCALAR::REAL, m_dimension);
 }
 configuration_view::size_type cubic_crystal_configuration::size() const
 {

@@ -74,7 +74,5 @@ attribute_description::add_and_map_attributes(
   return new_to_old;
 }
 
-
-
 END_NAMESPACE_CORE
 #endif // ATTRIBUTE_DESCRIPTION_TEMPL_HPP

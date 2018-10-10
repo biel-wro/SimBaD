@@ -13,6 +13,7 @@ class attribute_vector : public attribute_list
 public:
   attribute_vector();
   attribute get_attribute(std::size_t idx) const override;
+
 private:
   std::vector<attribute> m_attributes;
 };

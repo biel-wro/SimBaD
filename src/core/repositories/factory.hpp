@@ -27,8 +27,7 @@ template <class Interface> struct factory : public factory_base<Interface>
 
   static factory<Interface> &global_instance_mutable()
   {
-    static factory<Interface> repository =
-        make_global_repository<Interface>();
+    static factory<Interface> repository = make_global_repository<Interface>();
     return repository;
   }
   static factory<Interface> const &global_instance()

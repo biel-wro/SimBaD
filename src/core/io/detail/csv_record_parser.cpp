@@ -11,7 +11,6 @@ csv_record_parser<Iterator>::csv_record_parser(std::string const &delimiter)
 }
 
 template <class Iterator> csv_record_parser<Iterator>::~csv_record_parser() {}
-
 template <class Iterator>
 bool csv_record_parser<Iterator>::parse(
     Iterator &first, Iterator last,

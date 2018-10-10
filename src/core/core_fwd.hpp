@@ -10,7 +10,6 @@
 #include "interface/interface_fwd.hpp"
 #include "processors/processors_fwd.hpp"
 
-
 BEGIN_NAMESPACE_CORE
 // containters
 template <class, size_t> class LazySet;
@@ -28,8 +27,6 @@ template <class> class simple_event_view;
 template <class> class simple_particle_view;
 template <size_t, class> class simple_particle;
 // object tracking
-
-
 
 // other
 template <class T> class object_factory;

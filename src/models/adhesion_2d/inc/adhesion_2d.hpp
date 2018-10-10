@@ -1,8 +1,8 @@
 #include "adhesion_2d_def.hpp"
 
-#include "interface/interface_fwd.hpp"
 #include "interface/configuration_reader.hpp"
 #include "interface/configuration_view.hpp"
+#include "interface/interface_fwd.hpp"
 #include "interface/model.hpp"
 #include "interface/particle.hpp"
 #include "model_parameters.hpp"

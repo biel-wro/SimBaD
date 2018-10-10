@@ -53,7 +53,6 @@ simbad::gui::Dialog_open_model::Dialog_open_model(Model_of_space *B_Model,
 }
 
 simbad::gui::Dialog_open_model::~Dialog_open_model() { delete ui; }
-
 void simbad::gui::Dialog_open_model::on_pushButton_4_clicked()
 {
   New_event_dialog my_New_event_dialog;

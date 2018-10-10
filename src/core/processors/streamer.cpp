@@ -7,9 +7,8 @@
 BEGIN_NAMESPACE_CORE
 
 streamer::streamer(model &m, property_tree const &pt)
-    : streamer{m,
-               factory_create_from_property_tree<advance_estimator>(
-                   pt.get_child("final_estimator")),
+    : streamer{m, factory_create_from_property_tree<advance_estimator>(
+                      pt.get_child("final_estimator")),
                factory_create_from_property_tree<stream_printer>(
                    pt.get_child("stream_printer"))}
 {

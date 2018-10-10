@@ -2,7 +2,6 @@
 #include "iostream"
 #include "points_of_type.h"
 simbad::gui::Points_of_model::Points_of_model() { Number_of_types = 0; }
-
 simbad::gui::Points_of_model::Points_of_model(const Points_of_model &that)
 {
   Number_of_types = that.Number_of_types;

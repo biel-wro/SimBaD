@@ -38,7 +38,6 @@ void simbad::gui::Simulation_Dialog::setModel_of_space(Model_of_space *Model)
 }
 
 simbad::gui::Simulation_Dialog::~Simulation_Dialog() { delete ui; }
-
 void simbad::gui::Simulation_Dialog::on_pushButton_start_sim_clicked()
 {
   this->ui->pushButton_pause->setEnabled(true);
@@ -77,8 +76,9 @@ void simbad::gui::Simulation_Dialog::dynamics()
 {
   int Number_of_occurings_bigen = this->Big_model->Number_of_occurings;
   bool i = true;
-  while(i && Number_of_occurings_bigen + step_for_number_of_event >
-                 this->Big_model->Number_of_occurings)
+  while(i &&
+        Number_of_occurings_bigen + step_for_number_of_event >
+            this->Big_model->Number_of_occurings)
   {
     i = this->Big_model->timer();
   };
@@ -176,7 +176,6 @@ void simbad::gui::Simulation_Dialog::on_pushButton_Save_results_clicked()
 }
 
 void simbad::gui::Simulation_Dialog::on_pushButton_Save_conf_clicked() {}
-
 void simbad::gui::Simulation_Dialog::on_spinBox_saving_step_valueChanged(
     int arg1)
 {

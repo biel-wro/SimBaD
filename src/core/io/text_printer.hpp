@@ -12,9 +12,7 @@ class text_printer : public stream_printer
 public:
   text_printer();
   explicit text_printer(property_tree const &pt);
-  explicit
-  text_printer(std::ostream *ostream,
-                             std::string delimiter = ", ");
+  explicit text_printer(std::ostream *ostream, std::string delimiter = ", ");
   text_printer(std::ostream *ostream, property_tree const &pt);
 
   void write_header(attribute_description const &desc) override;

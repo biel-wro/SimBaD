@@ -31,7 +31,6 @@ class static_advance_estimator;
 class stream_printer;
 class stream_reader;
 
-
 // enums
 enum class ATTRIBUTE_KIND : std::uint32_t;
 enum class ATTRIBUTE_SCALAR : std::uint32_t;

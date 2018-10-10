@@ -88,9 +88,7 @@ void GLWidjet_for_init_model::paintEvent(QPaintEvent *event)
 }
 
 void GLWidjet_for_init_model::mouseMoveEvent(QMouseEvent *event) { repaint(); }
-
 void GLWidjet_for_init_model::setBrushRadius(int value) { BrushRadius = value; }
-
 void GLWidjet_for_init_model::setIntensityValue(int value)
 {
   IntensityValue = value;
@@ -118,18 +116,18 @@ void GLWidjet_for_init_model::drawSpacePoints(QPainter &painter)
       //           (512*Big_model->ModelPoints.Vector_of_types[i].SpacePointArray[j].getXcoordinate()),
       //                            256+(int)
       //                            (512*Big_model->ModelPoints.Vector_of_types[i].SpacePointArray[j].getYcoordinate()));
-      painter.drawPoint(
-          256 + (int)(512 * Big_model->ModelPoints.Vector_of_types[i]
-                                .SpacePointArray[j]
-                                .Xcoordinate),
-          256 - (int)(512 * Big_model->ModelPoints.Vector_of_types[i]
-                                .SpacePointArray[j]
-                                .Ycoordinate));
+      painter.drawPoint(256 + (int)(512 *
+                                    Big_model->ModelPoints.Vector_of_types[i]
+                                        .SpacePointArray[j]
+                                        .Xcoordinate),
+                        256 - (int)(512 *
+                                    Big_model->ModelPoints.Vector_of_types[i]
+                                        .SpacePointArray[j]
+                                        .Ycoordinate));
     }
   };
 }
 void GLWidjet_for_init_model::setCurrent_type(int Type) { Current_type = Type; }
-
 void GLWidjet_for_init_model::set_regime(bool random_reg)
 {
   random_regime = random_reg;
@@ -186,7 +184,7 @@ void GLWidjet_for_init_model::mousePressEvent(QMouseEvent *event)
                (Y_probable_point - YCoord_Widjet)) <=
           BrushRadius * BrushRadius / 4)
 
-      )
+             )
       {
         simbad::gui::Point_of_space CurrentPoint;
         //+++
@@ -225,7 +223,7 @@ void GLWidjet_for_init_model::mousePressEvent(QMouseEvent *event)
                  (Y_probable_point - YCoord_Widjet)) <=
             (int((BrushRadius * BrushRadius) / 4.0)))
 
-        )
+               )
         {
           simbad::gui::Point_of_space CurrentPoint;
           //+++

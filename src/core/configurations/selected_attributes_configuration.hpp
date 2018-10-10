@@ -1,9 +1,9 @@
 #ifndef SELECTED_ATTRIBUTES_CONFIGURATION_HPP
 #define SELECTED_ATTRIBUTES_CONFIGURATION_HPP
 #include "configurations/enriched_configuration.hpp"
-#include "interface/interface_fwd.hpp"
 #include "interface/attribute_description.hpp"
 #include "interface/configuration_view.hpp"
+#include "interface/interface_fwd.hpp"
 
 BEGIN_NAMESPACE_CORE
 

@@ -24,7 +24,6 @@ simbad::gui::function_for_component_rate::function_for_component_rate(
 }
 
 simbad::gui::function_for_component_rate::~function_for_component_rate() {}
-
 void simbad::gui::function_for_component_rate::set_Functions_from_string(
     QString A)
 {

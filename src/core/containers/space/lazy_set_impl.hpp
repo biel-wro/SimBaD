@@ -53,7 +53,6 @@ public:
   using size_type = size_t;
 
   LazySetIterator_() : oit(), idx(0) {}
-
   LazySetIterator_(outer_iter oit, size_type idx) : oit(oit), idx(idx) {}
   LazySetIterator_(outer_iter oit, inner_iter iit)
       : oit(oit), idx(iit - oit->begin())
@@ -70,9 +69,7 @@ public:
   }
 
   inner_iter get_inner() const { return oit->begin() + idx; }
-
   outer_iter get_outer() const { return oit; }
-
 protected:
   friend class boost::iterator_core_access;              // required by Boost
   template <class, class> friend class LazySetIterator_; // allows conversions
@@ -105,7 +102,6 @@ protected:
     }
   }
   D_ &dereference() const { return oit->at(idx); }
-
 private:
   outer_iter oit;
   size_type idx; // TODO: change to  inner_iter iit;
@@ -193,9 +189,7 @@ public:
    * Status accessors
    */
   size_type size() const { return size_; }
-
   bool isEmpty() const { return list.front().isEmpty(); }
-
   /*
    * Modifiers
    */
@@ -236,7 +230,6 @@ public:
     --size_;
   }
   void clear() { *this = LazySet_impl(); }
-
   /*
    * Visitors
    */
@@ -269,7 +262,6 @@ public:
     return iterator(oi, ii);
   }
   iterator end() { return itEnd; }
-
   const_iterator begin() const
   {
     typename list_type::const_iterator oi = list.begin();
@@ -278,7 +270,6 @@ public:
     return const_iterator(oi, ii);
   }
   const_iterator end() const { return itEnd; }
-
   iterator find(const_reference_type v)
   {
     typename tree_type::iterator tit;

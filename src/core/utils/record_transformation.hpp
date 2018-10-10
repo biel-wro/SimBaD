@@ -3,8 +3,8 @@
 
 #include "core_def.hpp"
 
-#include "interface/attribute_list.hpp"
 #include "interface/attribute_description.hpp"
+#include "interface/attribute_list.hpp"
 
 #include <functional>
 #include <unordered_map>
@@ -17,7 +17,7 @@ public:
   record_transformation();
 
 protected:
-  //attribute get_attribute(std::size_t idx) const override;
+  // attribute get_attribute(std::size_t idx) const override;
 
   void add_forwarding(attribute_description const &input_description,
                       std::string const &name);
@@ -25,8 +25,8 @@ protected:
   // void add_
 
 private:
-  using transform_function = std::function<attribute(attribute_list const &,
-  attribute const &)>;
+  using transform_function =
+      std::function<attribute(attribute_list const &, attribute const &)>;
   std::unordered_map<std::size_t, transform_function> m_getter_mapping;
   attribute_description m_output_description;
 };

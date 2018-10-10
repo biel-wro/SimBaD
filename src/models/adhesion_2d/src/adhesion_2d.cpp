@@ -42,7 +42,6 @@ public:
   }
   // TODO
   simbad::core::attribute get_attribute() const {}
-
 private:
   particle_view m_paricle_view;
   double m_time;

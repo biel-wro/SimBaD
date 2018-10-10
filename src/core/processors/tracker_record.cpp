@@ -203,11 +203,11 @@ bool tracker_record::key_equaler::operator()(const attribute &lhs,
                                                           Iter) const;
 
 #define TRACKER_RECORD_EXPLICIT_INSTANTIATION(Iter)                            \
-  TRACKER_RECORD_EXPLICIT_INSTANTIATION_ATTR(attribute_list const &, Iter);    \
-  TRACKER_RECORD_EXPLICIT_INSTANTIATION_ATTR(attribute_list &, Iter);          \
-  TRACKER_RECORD_EXPLICIT_INSTANTIATION_ATTR(attribute_list &&, Iter);
+  TRACKER_RECORD_EXPLICIT_INSTANTIATION_ATTR(attribute_list const &, Iter)     \
+  TRACKER_RECORD_EXPLICIT_INSTANTIATION_ATTR(attribute_list &, Iter)           \
+  TRACKER_RECORD_EXPLICIT_INSTANTIATION_ATTR(attribute_list &&, Iter)
 
-TRACKER_RECORD_EXPLICIT_INSTANTIATION(std::vector<std::size_t>::iterator);
-TRACKER_RECORD_EXPLICIT_INSTANTIATION(std::vector<std::size_t>::const_iterator);
+TRACKER_RECORD_EXPLICIT_INSTANTIATION(std::vector<std::size_t>::iterator)
+TRACKER_RECORD_EXPLICIT_INSTANTIATION(std::vector<std::size_t>::const_iterator)
 
 END_NAMESPACE_CORE

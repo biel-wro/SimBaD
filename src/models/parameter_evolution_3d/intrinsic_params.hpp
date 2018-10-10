@@ -28,7 +28,7 @@ public:
               ,
               std::shared_ptr<cell_params const> parent_ptr = nullptr
 #endif
-  );
+              );
 
   // accessors
   core::attribute get_attribute(std::size_t attr_idx) const;

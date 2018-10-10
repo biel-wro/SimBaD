@@ -39,7 +39,6 @@ simbad::gui::Dialog_for_init_model::Dialog_for_init_model(
 }
 
 simbad::gui::Dialog_for_init_model::~Dialog_for_init_model() { delete ui; }
-
 void simbad::gui::Dialog_for_init_model::
     on_pushButton_color_for_init_conf_clicked()
 {

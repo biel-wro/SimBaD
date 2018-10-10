@@ -45,7 +45,6 @@ class board_region_iterator
   }; // for std::enable_if
 public:
   board_region_iterator() : p_board(nullptr), p_tile(nullptr), incrementer() {}
-
   board_region_iterator(board_type &board, INC inc = INC())
       : p_board(&board), p_tile(nullptr), incrementer(inc)
   {
@@ -106,7 +105,6 @@ protected:
   }
 
   inline D_ &dereference() const { return *it; }
-
 protected:
   inline tile_type *next_nonempty_tile(tile_type *p_tile)
   {

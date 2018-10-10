@@ -60,13 +60,13 @@ std::istream &operator>>(std::istream &is, ATTRIBUTE_SCALAR &sc)
   std::string str;
   is >> str;
   if("STRING" == str)
-    sc = ATTRIBUTE_SCALAR ::STRING;
+    sc = ATTRIBUTE_SCALAR::STRING;
   else if("REAL" == str)
-    sc = ATTRIBUTE_SCALAR ::REAL;
+    sc = ATTRIBUTE_SCALAR::REAL;
   else if("INT" == str)
-    sc = ATTRIBUTE_SCALAR ::INT;
+    sc = ATTRIBUTE_SCALAR::INT;
   else if("UNKNOWN" == str)
-    sc = ATTRIBUTE_SCALAR ::UNKNOWN;
+    sc = ATTRIBUTE_SCALAR::UNKNOWN;
   return is;
 }
 

@@ -14,7 +14,6 @@ class object_descriptor
 
   std::string name() const { return m_name; }
   std::size_t dimension() const { return m_dimension; }
-
 private:
   std::string m_name;
   std::size_t m_dimension;

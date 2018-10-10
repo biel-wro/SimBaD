@@ -15,7 +15,6 @@ class launcher
 public:
   using property_tree = core::property_tree;
 
-
   explicit launcher(property_tree pt);
   ~launcher();
 

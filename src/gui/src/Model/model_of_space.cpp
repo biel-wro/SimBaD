@@ -99,9 +99,9 @@ QStringList simbad::gui::Model_of_space::get_configuration_setting_for_file()
   Conf_Q_String_List.push_back(
       "Number of dimensions: " +
       QString::number(this->get_number_of_dimentsions()) + "\n");
-  Conf_Q_String_List.push_back(
-      "Number of point types: " + QString::number(this->get_number_of_types()) +
-      "\n");
+  Conf_Q_String_List.push_back("Number of point types: " +
+                               QString::number(this->get_number_of_types()) +
+                               "\n");
 
   for(int i = 0; i < this->get_number_of_types(); i++)
   {
@@ -136,10 +136,9 @@ QStringList simbad::gui::Model_of_space::get_configuration_setting_for_file()
         j++)
     {
       Conf_Q_String_List.push_back(
-          "BirthTime: " +
-          QString::number(this->ModelPoints.Vector_of_types[i]
-                              .SpacePointArray[j]
-                              .BirthTime) +
+          "BirthTime: " + QString::number(this->ModelPoints.Vector_of_types[i]
+                                              .SpacePointArray[j]
+                                              .BirthTime) +
           "\n");
       Conf_Q_String_List.push_back(
           "number of point in cell: " +
@@ -174,9 +173,9 @@ QStringList simbad::gui::Model_of_space::get_model_settings_for_file()
   Model_Q_String_List.push_back(
       "Number of dimensions: " +
       QString::number(this->get_number_of_dimentsions()) + "\n");
-  Model_Q_String_List.push_back(
-      "Number of point types: " + QString::number(this->get_number_of_types()) +
-      "\n");
+  Model_Q_String_List.push_back("Number of point types: " +
+                                QString::number(this->get_number_of_types()) +
+                                "\n");
   Model_Q_String_List.push_back(
       "Number of events in model: " +
       QString::number(this->List_of_events_of_model.size()) + "\n");
@@ -274,8 +273,8 @@ QStringList simbad::gui::Model_of_space::get_model_settings_for_file()
       if(Approach == product)
         Str_Approach = "product";
 
-      Model_Q_String_List.push_back(
-          "Approach of the influence: " + Str_Approach + "\n");
+      Model_Q_String_List.push_back("Approach of the influence: " +
+                                    Str_Approach + "\n");
 
       Model_Q_String_List.push_back(
           "Constant rate plus: " +
@@ -530,7 +529,6 @@ int simbad::gui::Model_of_space::get_number_of_dimentsions()
 }
 
 simbad::gui::Model_of_space::~Model_of_space() {}
-
 void simbad::gui::Model_of_space::set_name_of_model(QString Name_of_the_model)
 {
   Name_of_model = Name_of_the_model;
@@ -808,8 +806,7 @@ void simbad::gui::Model_of_space::initiale_Dzeta()
 
                     // this->List_of_events_of_model[i].Code_of_event[0][0]
 
-      ]
-               .size() -
+      ].size() -
            1) *
           Vector_max_of_rate_functions[i][j];
       // cout<<"Vector_of_Dzeta_type_event["<<i<<"]["<<j<<"]"<<Vector_of_Dzeta_type_event[i][j]
@@ -1074,9 +1071,10 @@ void simbad::gui::Model_of_space::one_birth(int number_of_type_of_child,
                           .Xcoordinate +
                   matrix_scaling_factor * 5) +
       10 * matrix_scaling_factor *
-          floorf(10 * this->ModelPoints.Vector_of_types[number_of_type_of_child]
-                          .SpacePointArray[Number_of_child_type_points - 1]
-                          .Ycoordinate +
+          floorf(10 *
+                     this->ModelPoints.Vector_of_types[number_of_type_of_child]
+                         .SpacePointArray[Number_of_child_type_points - 1]
+                         .Ycoordinate +
                  matrix_scaling_factor * 5);
   // cout<<"1"<<endl;
   //добавить индекс элемента в ячейку отвечающую родившейся точке
@@ -1138,7 +1136,7 @@ void simbad::gui::Model_of_space::one_birth(int number_of_type_of_child,
   else
   {
     //уменьшаем кол-во ячеек на -1 с размером
-    //Array_of_cells_a_mаinus[addtional_variable].size() - 1 ( -1 вычитаем в
+    // Array_of_cells_a_mаinus[addtional_variable].size() - 1 ( -1 вычитаем в
     //силу того, что до прибавления нового элемента ячейка была именно с этим
     //кол-во элементов)
 
@@ -1183,11 +1181,11 @@ void simbad::gui::Model_of_space::one_birth(int number_of_type_of_child,
 
   //		} else {
   //			structure_for_dynamic_changes_of_Dzetas.
-  //Number_of_birth_events_without_birth_occuring =
+  // Number_of_birth_events_without_birth_occuring =
   //				structure_for_dynamic_changes_of_Dzetas.
-  //Number_of_birth_events_without_birth_occuring + 1;
+  // Number_of_birth_events_without_birth_occuring + 1;
   //			structure_for_dynamic_changes_of_Dzetas.
-  //Number_of_birth_occurings_without_birth_impracticable_event = 0;
+  // Number_of_birth_occurings_without_birth_impracticable_event = 0;
 }
 
 void simbad::gui::Model_of_space::jump_of_particle(
@@ -1599,14 +1597,14 @@ void simbad::gui::Model_of_space::one_death(
   //			structure_for_dynamic_changes_of_Dzetas.Number_of_death_occurings_without_death_impracticable_event=structure_for_dynamic_changes_of_Dzetas.Number_of_death_occurings_without_death_impracticable_event+1;
 
   //В этом блоке работаем с ситуацией, когда выбраная точка для смерти
-  //number_of_dead_man не крайняя тоесть не с номером = Number_of_points - 1
+  // number_of_dead_man не крайняя тоесть не с номером = Number_of_points - 1
   if(Number_of_points - 1 != number_of_dead_man)
   {
     // ///////////////////////////////////////////////////////////////
     //Этот блок относиться к изменению массива отвечающего за Dzeta//
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!///////////
     //если кол-во ячеек с размером (кол-вом точек в ячейке)
-    //Array_of_cells_a_minus[addtional_variable].size() больше одной, то
+    // Array_of_cells_a_minus[addtional_variable].size() больше одной, то
     // уменьшаем кол-во ячеек с размером
     // Array_of_cells_a_minus[addtional_variable].size() на 1;
 
@@ -1643,11 +1641,12 @@ void simbad::gui::Model_of_space::one_death(
        (this->CellMap
             .Array_of_cells[addtional_variable]
                            [number_of_type_of_death_particle]
-            .size() == this->CellMap
-                               .Types_Array_numbers_of_sizes_of_cells
-                                   [number_of_type_of_death_particle]
-                               .size() -
-                           1))
+            .size() ==
+        this->CellMap
+                .Types_Array_numbers_of_sizes_of_cells
+                    [number_of_type_of_death_particle]
+                .size() -
+            1))
     {
       this->CellMap
           .Types_Array_numbers_of_sizes_of_cells
@@ -1815,7 +1814,7 @@ void simbad::gui::Model_of_space::one_death(
     // Array_of_points[Number_of_points-1].number_of_point_in_cell;
 
     //В этом блоке работаем с ситуацией, когда выбраная точка для смерти
-    //number_of_dead_man крайняя тоесть с номером = Number_of_points - 1
+    // number_of_dead_man крайняя тоесть с номером = Number_of_points - 1
   }
   else
   {
@@ -1823,7 +1822,7 @@ void simbad::gui::Model_of_space::one_death(
     //Этот блок относиться к изменению массива отвечающего за Dzeta//
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!///////////
     //если кол-во ячеек с размером (кол-вом точек в ячейке)
-    //Array_of_cells_a_minus[addtional_variable].size() больше одной, то
+    // Array_of_cells_a_minus[addtional_variable].size() больше одной, то
     // уменьшаем кол-во ячеек с размером
     // Array_of_cells_a_minus[addtional_variable].size() на 1;
 
@@ -1869,11 +1868,12 @@ void simbad::gui::Model_of_space::one_death(
        (this->CellMap
             .Array_of_cells[addtional_variable]
                            [number_of_type_of_death_particle]
-            .size() == this->CellMap
-                               .Types_Array_numbers_of_sizes_of_cells
-                                   [number_of_type_of_death_particle]
-                               .size() -
-                           1))
+            .size() ==
+        this->CellMap
+                .Types_Array_numbers_of_sizes_of_cells
+                    [number_of_type_of_death_particle]
+                .size() -
+            1))
     {
       // то просто уменьшаем размер максимума по всем ячейкам на 1 (больше не
       // нужно так-как появилась ячейка с размером на ед. меньше чем пред макс
@@ -2085,10 +2085,11 @@ float simbad::gui::Model_of_space::rate_linear_on_configuration(
   };
 
   if(Numberfunctionforcomponentrate - 1 == Number_of_type_of_particle)
-    sum = sum - this->List_of_events_of_model[EventNumber]
-                    .Table_of_component_rates_for_event_of_model
-                    .Table[Numberfunctionforcomponentrate]
-                    .get_value_of_Function(0);
+    sum = sum -
+          this->List_of_events_of_model[EventNumber]
+              .Table_of_component_rates_for_event_of_model
+              .Table[Numberfunctionforcomponentrate]
+              .get_value_of_Function(0);
 
   // if (sum >
   // Vector_of_Dzeta_type_event[EventNumber][Numberfunctionforcomponentrate])

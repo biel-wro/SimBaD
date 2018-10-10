@@ -28,7 +28,6 @@ public:
    *  accessors
    */
   std::size_t size() const { return m_board.size(); }
-
   /*
    *  modifiers
    */
@@ -46,7 +45,6 @@ public:
   }
 
   void clear() { m_board.clear(); }
-
   /*
    * visitors
    */

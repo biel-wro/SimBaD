@@ -15,9 +15,9 @@
 BEGIN_NAMESPACE_CORE
 template <class Iterator>
 struct csv_record_grammar
-    : public boost::spirit::qi::grammar<
-          Iterator, std::vector<core::attribute>(std::vector<std::size_t>),
-          boost::spirit::ascii::space_type>
+    : public boost::spirit::qi::grammar<Iterator, std::vector<core::attribute>(
+                                                      std::vector<std::size_t>),
+                                        boost::spirit::ascii::space_type>
 {
   using attribute = core::attribute; // there also is one in qi::grammar
   using attr_list = std::vector<attribute>;

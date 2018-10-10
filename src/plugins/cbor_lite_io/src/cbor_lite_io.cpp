@@ -72,7 +72,6 @@ public:
   template <PRECISION precision> struct attribute_writer
   {
     explicit attribute_writer(std::string &buffer) : m_buf(buffer) {}
-
     void operator()(std::string const &s) const
     {
       CborLite::encodeText(m_buf, s);
@@ -114,7 +113,8 @@ public:
     attribute_writer<precision> writer(buffer);
 
     CborLite::encodeArraySize(buffer, m_indices.size());
-    for(std::size_t attribute_index : m_indices) {
+    for(std::size_t attribute_index : m_indices)
+    {
       core::attribute attr = entry[attribute_index];
       boost::apply_visitor(writer, attr);
     }
@@ -129,7 +129,6 @@ public:
   }
 
   void write_footer() override {}
-
 private:
   PRECISION const m_precision;
   std::vector<std::size_t> m_indices;

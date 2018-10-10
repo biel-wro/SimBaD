@@ -21,7 +21,6 @@ bool csv_header_parser<Iterator>::parse(
 }
 
 template <class Iterator> csv_header_parser<Iterator>::~csv_header_parser() {}
-
 template class csv_header_parser<std::string::const_iterator>;
 
 END_NAMESPACE_CORE

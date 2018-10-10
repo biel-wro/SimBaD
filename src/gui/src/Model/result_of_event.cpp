@@ -25,7 +25,6 @@ simbad::gui::result_of_event::result_of_event(const result_of_event &that)
 }
 
 simbad::gui::result_of_event::~result_of_event() {}
-
 QVector<simbad::gui::result_point_of_space>
 simbad::gui::result_of_event::get_vector_of_dead_points()
 {

@@ -47,16 +47,12 @@ public:
   }
 
   ~trackee() { m_listener.notify_destroyed(raw_ptr()); }
-
   void force_listener_update() { m_listener.notify_forced(raw_ptr()); }
-
   void set_listener(Listener _new) { m_listener = std::move(_new); }
   Listener &get_listener() { return m_listener; }
   Listener const &get_listener() const { return m_listener; }
-
   Derived const *raw_ptr() const { return static_cast<Derived *>(this); }
   Derived *raw_ptr() { return static_cast<Derived *>(this); }
-
 protected:
   Listener m_listener;
 };

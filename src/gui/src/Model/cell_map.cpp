@@ -3,7 +3,6 @@
 #include "points_of_model.h"
 
 simbad::gui::Cell_Map::Cell_Map() {}
-
 void simbad::gui::Cell_Map::setInitConfiguration(Points_of_model &Model_P)
 {
   // cout << "simbad::gui::Cell_Map::setInitConfiguration(Points_of_model &
@@ -43,11 +42,11 @@ void simbad::gui::Cell_Map::setInitConfiguration(Points_of_model &Model_P)
           (int)floorf(
               10 * Model_P.Vector_of_types[k].SpacePointArray[i].Xcoordinate +
               matrix_scaling_factor * 5) +
-          matrix_scaling_factor * 10 *
-              floorf(10 * Model_P.Vector_of_types[k]
-                              .SpacePointArray[i]
-                              .Ycoordinate +
-                     matrix_scaling_factor * 5);
+          matrix_scaling_factor * 10 * floorf(10 *
+                                                  Model_P.Vector_of_types[k]
+                                                      .SpacePointArray[i]
+                                                      .Ycoordinate +
+                                              matrix_scaling_factor * 5);
 
       //добавить индекс элемента в список
       Array_of_cells[addtional_variable][k].push_back(i);

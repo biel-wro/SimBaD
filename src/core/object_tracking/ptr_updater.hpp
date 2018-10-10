@@ -13,7 +13,6 @@ template <class Pointee> struct ptr_updater
 {
   ptr_updater() : listener(nullptr) {}
   explicit ptr_updater(Pointee *&ref_listener) : listener(&ref_listener) {}
-
   void operator()(Pointee *ptr)
   {
     if(nullptr != listener)

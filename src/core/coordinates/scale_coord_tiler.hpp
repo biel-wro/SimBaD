@@ -26,7 +26,6 @@ public:
 
   board_scalar_type tile_size() const { return m_tile_size; }
   void set_tile_size(board_scalar_type ts) { m_tile_size = ts; }
-
 private:
   space_scalar_type m_tile_size;
 };

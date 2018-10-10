@@ -186,9 +186,8 @@ static void link_at_random(std::mt19937_64 &rng, MyTreeNode *root,
 
   while(true)
   {
-    MyTreeNode *spot = parent;
     rand_bit = rng() & 1;
-    spot =
+    MyTreeNode *spot =
         rand_bit ? algo::get_left_child(parent) : algo::get_right_child(parent);
     if(nullptr == spot)
       break;

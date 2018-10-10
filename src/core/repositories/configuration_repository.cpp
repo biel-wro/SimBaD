@@ -9,8 +9,8 @@ SIMBAD_MAKE_REPOSITORY_EXPLICIT_SPECIALIZATION_DECL(configuration_view)
 {
   factory<configuration_view> f;
 
-  register_creator<cubic_crystal_configuration>(f,"cubic_crystal");
-  register_creator<poisson_configuration>(f,"poisson");
+  register_creator<cubic_crystal_configuration>(f, "cubic_crystal");
+  register_creator<poisson_configuration>(f, "poisson");
   return f;
 }
 END_NAMESPACE_CORE

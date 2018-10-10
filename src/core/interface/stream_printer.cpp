@@ -9,8 +9,6 @@
 
 BEGIN_NAMESPACE_CORE
 
-
-
 stream_printer::stream_printer() : m_ostream_ptr(nullptr) {}
 stream_printer::stream_printer(std::ostream *ptr)
     : m_ostream_ptr(ostream_from_unmanaged(ptr))
@@ -50,11 +48,9 @@ void stream_printer::write_data(dataframe const &data)
       [&](attribute_list const &entry) { this->write_entry(entry); });
 }
 
-stream_printer::stream_printer(ostream_ptr ptr)
-    : m_ostream_ptr(std::move(ptr))
+stream_printer::stream_printer(ostream_ptr ptr) : m_ostream_ptr(std::move(ptr))
 {
 }
-
 
 /*
 void stream_printer::read_configuration(const dataframe &conf)

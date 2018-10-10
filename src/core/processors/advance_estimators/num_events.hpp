@@ -9,8 +9,8 @@ BEGIN_NAMESPACE_ADVANCE_ESTIMATORS
 class num_events final : public static_advance_estimator
 {
 public:
-  explicit num_events(std::size_t start_num_events, std::size_t
-  num_events_step = 1);
+  explicit num_events(std::size_t start_num_events,
+                      std::size_t num_events_step = 1);
   explicit num_events(property_tree const &pt);
 
   std::size_t estimate() const override;

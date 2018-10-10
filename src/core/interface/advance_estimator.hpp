@@ -2,9 +2,9 @@
 #define SIMBAD_CORE_INTERFACE_ADVANCER_HPP
 
 #include "core_fwd.hpp"
-#include "interface/event_source.hpp"
 #include "interface/configuration_reader.hpp"
 #include "interface/event_sink.hpp"
+#include "interface/event_source.hpp"
 
 BEGIN_NAMESPACE_CORE
 
@@ -20,7 +20,6 @@ public:
 
   virtual ~advance_estimator();
 };
-
 
 END_NAMESPACE_CORE
 #endif // SIMBAD_CORE_INTERFACE_ADVANCER_HPP

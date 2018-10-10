@@ -256,7 +256,7 @@ BOOST_AUTO_TEST_CASE(equal)
   BOOST_CHECK_EQUAL(attribute({0.0, 1.1, 2.2}), attribute({"0", "1.1", "2.2"}));
   BOOST_CHECK_EQUAL(attribute({1, 2, 3}), attribute({1.0, 2.0, 3.0}));
 
-  BOOST_CHECK_NE(attribute({1,2}), attribute({1,2,3}));
+  BOOST_CHECK_NE(attribute({1, 2}), attribute({1, 2, 3}));
 }
 
 BOOST_AUTO_TEST_CASE(hash)
@@ -266,7 +266,8 @@ BOOST_AUTO_TEST_CASE(hash)
   BOOST_CHECK_EQUAL(attribute(17).hash_value(), attribute("17").hash_value());
   BOOST_CHECK_EQUAL(attribute("45.0").hash_value(), attribute(45).hash_value());
   BOOST_CHECK_EQUAL(attribute(56).hash_value(), attribute(56.0).hash_value());
-  BOOST_CHECK_EQUAL(attribute("43.25").hash_value(), attribute(43.25).hash_value());
+  BOOST_CHECK_EQUAL(attribute("43.25").hash_value(),
+                    attribute(43.25).hash_value());
 
   BOOST_CHECK_NE(attribute(45).hash_value(), attribute(56).hash_value());
   BOOST_CHECK_NE(attribute(1).hash_value(), attribute(1.1).hash_value());

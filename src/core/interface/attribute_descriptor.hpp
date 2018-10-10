@@ -41,8 +41,8 @@ public:
   static ATTRIBUTE_SCALAR default_scalar(ATTRIBUTE_KIND);
   static std::size_t default_dimension(ATTRIBUTE_KIND);
 
-  bool set_default_by_name(bool force=false);
-  void set_default_by_kind(bool force=false);
+  bool set_default_by_name(bool force = false);
+  void set_default_by_kind(bool force = false);
 
 private:
   std::size_t m_attribute_id;

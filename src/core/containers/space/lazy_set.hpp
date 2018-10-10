@@ -40,7 +40,6 @@ public:
    */
   reference_type front() { return *m_impl.begin(); }
   const_reference_type front() const { return *m_impl.begin(); }
-
   reference_type back()
   {
     iterator it = m_impl.end();
@@ -62,7 +61,6 @@ public:
   }
 
   void pop_back() { m_impl.pop_back(); }
-
   void swap_and_delete(const_reference_type cref)
   {
     std::swap(const_cast<reference_type>(cref), back());
@@ -70,13 +68,11 @@ public:
   }
 
   void clear() { m_impl.clear(); }
-
   /*
    * Status
    */
   size_t size() const { return m_impl.size(); }
   bool empty() const { return 0 == m_impl.size(); }
-
   /*
    * Visitors
    */
@@ -96,17 +92,11 @@ public:
    * Iterators
    */
   iterator begin() { return m_impl.begin(); }
-
   iterator end() { return m_impl.end(); }
-
   const_iterator begin() const { return m_impl.begin(); }
-
   const_iterator end() const { return m_impl.end(); }
-
   iterator find(value_type const &v) { return m_impl.find(v); }
-
   const_iterator find(value_type const &v) const { return m_impl.find(v); }
-
 private:
   impl m_impl;
 };

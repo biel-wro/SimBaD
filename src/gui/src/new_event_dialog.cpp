@@ -125,7 +125,6 @@ void simbad::gui::New_event_dialog::initialisation_of_changing_event_dialog(
 }
 
 New_event_dialog::~New_event_dialog() { delete ui; }
-
 void New_event_dialog::on_comboBox_currentIndexChanged(const QString &arg1)
 {
   int number_of_types;

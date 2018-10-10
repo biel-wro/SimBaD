@@ -5,7 +5,6 @@
 
 BEGIN_NAMESPACE_CORE
 attribute_vector::attribute_vector() {}
-
 attribute attribute_vector::get_attribute(std::size_t idx) const
 {
   if(m_attributes.size() >= idx)

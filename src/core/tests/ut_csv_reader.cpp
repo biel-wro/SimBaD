@@ -144,7 +144,7 @@ BOOST_AUTO_TEST_CASE(csv_reader_some_bad_record)
   std::istringstream test_stream(data);
   simbad::core::csv_reader reader(&test_stream, ";");
   simbad::core::attribute_description description = reader.read_header();
-  reader.visit_entries([](attribute_list const &v){},1);
+  reader.visit_entries([](attribute_list const &v) {}, 1);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

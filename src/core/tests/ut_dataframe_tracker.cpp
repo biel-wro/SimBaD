@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE(instantiation)
   std::size_t observable_idx =
       description.get_descriptor("density").get().attribute_idx();
 
-  dataframe_tracker tracker(key_names.size() + observable_names.size() );
+  dataframe_tracker tracker(key_names.size() + observable_names.size());
 
   reader.visit_entries(
       [&tracker, position_idx, observable_idx](attribute_list const &record) {

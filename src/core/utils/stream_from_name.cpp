@@ -28,7 +28,6 @@ ostream_ptr ostream_from_name(std::string const &stream_name)
   });
 }
 ostream_ptr ostream_from_unmanaged(std::ostream *ptr) { return {ptr, nop()}; }
-
 istream_ptr istream_from_name(std::string const &stream_name)
 {
   if(stream_name.empty())
@@ -44,5 +43,4 @@ istream_ptr istream_from_name(std::string const &stream_name)
   });
 }
 istream_ptr istream_from_unmanaged(std::istream *ptr) { return {ptr, nop()}; }
-
 END_NAMESPACE_CORE

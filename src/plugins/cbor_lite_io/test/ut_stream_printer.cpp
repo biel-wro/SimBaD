@@ -5,8 +5,4 @@
 
 #include <iostream>
 
-BOOST_AUTO_TEST_CASE(cbor_printer) {
-
-
-
-}
+BOOST_AUTO_TEST_CASE(cbor_printer) {}

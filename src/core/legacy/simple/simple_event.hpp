@@ -18,7 +18,6 @@ public:
 
   static constexpr std::size_t s_dimension() { return DIM; }
   constexpr std::size_t dimension() const { return DIM; }
-
   explicit simple_event(time_type t = 0.0, EVENT_KIND ek = EVENT_KIND::NONE)
       : t(t), ek(ek)
   {
@@ -27,14 +26,11 @@ public:
   void set_time(time_type time) { t = time; }
   time_type &time() { return t; }
   time_type time() const { return t; }
-
   void set_event_kind(EVENT_KIND event_kind) { ek = event_kind; }
   EVENT_KIND &event_kind() { return ek; }
   EVENT_KIND event_kind() const { return ek; }
-
   void set_coordinate(size_t cdim, coord_type c) { coords[cdim] = c; }
   coord_type &coordinate_ref(size_t cdim) { return coords[cdim]; }
-
   coord_type coordinate(size_t cdim) const
   {
     if(cdim >= DIM)

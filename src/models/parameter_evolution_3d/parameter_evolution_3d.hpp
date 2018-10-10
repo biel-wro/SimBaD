@@ -49,6 +49,7 @@ public:
   double compute_death_rate(cell const &c) const;
   double compute_success_rate(cell const &c) const;
   std::size_t last_mutation_id() const;
+
 protected:
   std::size_t next_mutation_id();
   bool sample_mutation(cell const &c) const;

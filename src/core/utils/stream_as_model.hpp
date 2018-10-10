@@ -5,16 +5,16 @@
 
 #include "core_fwd.hpp"
 
-#include <string>
 #include <boost/optional.hpp>
+#include <string>
 
 BEGIN_NAMESPACE_CORE
 class stream_as_model : public model
 {
 public:
   explicit stream_as_model(std::unique_ptr<stream_reader>,
-                          std::string const &key_name,
-                          std::vector<std::string> const &nonkey_observables );
+                           std::string const &key_name,
+                           std::vector<std::string> const &nonkey_observables);
 
   explicit stream_as_model(property_tree const &pt);
   ~stream_as_model();

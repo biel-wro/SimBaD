@@ -215,10 +215,8 @@ public:
 
   iterator begin() { return iterator(tile_set); }
   const_iterator begin() const { return const_iterator(tile_set); }
-
   iterator end() { return iterator(false); }
   const_iterator end() const { return const_iterator(false); }
-
   iterator iterator_to(coordinates_type const &cs, T const &v)
   {
     tile_iterator oit = find_tile(cs);
@@ -257,10 +255,8 @@ public:
    */
   tile_iterator begin_tiles() { return tile_set.begin(); }
   const_tile_iterator begin_tiles() const { return tile_set.begin(); }
-
   tile_iterator end_tiles() { return tile_set.end(); }
   const_tile_iterator end_tiles() const { return tile_set.end(); }
-
   tile_iterator find_tile(coordinates_type const &cs)
   {
     return tile_set.find(cs, coord_hasher(), tile_comparator());

@@ -81,10 +81,10 @@ static kind_to_default_name const &get_kind_to_default_name_mapping()
 ATTRIBUTE_KIND attribute_descriptor::default_kind(std::string const &name)
 {
   kind_to_default_name const &mapping = get_kind_to_default_name_mapping();
-  kind_to_default_name ::right_const_iterator it = mapping.right.find(name);
+  kind_to_default_name::right_const_iterator it = mapping.right.find(name);
 
   if(mapping.right.end() == it)
-    return ATTRIBUTE_KIND ::UNKNOWN;
+    return ATTRIBUTE_KIND::UNKNOWN;
   return it->second;
 }
 
@@ -122,9 +122,9 @@ attribute_descriptor::default_scalar(simbad::core::ATTRIBUTE_KIND kind)
   {
   case ATTRIBUTE_KIND::PARTICLE_UID: return ATTRIBUTE_SCALAR::INT;
   case ATTRIBUTE_KIND::PARTICLE_POSITION: return ATTRIBUTE_SCALAR::UNKNOWN;
-  case ATTRIBUTE_KIND::EVENT_UID: return ATTRIBUTE_SCALAR ::INT;
-  case ATTRIBUTE_KIND::EVENT_TIME: return ATTRIBUTE_SCALAR ::UNKNOWN;
-  case ATTRIBUTE_KIND::EVENT_KIND: return ATTRIBUTE_SCALAR ::INT;
+  case ATTRIBUTE_KIND::EVENT_UID: return ATTRIBUTE_SCALAR::INT;
+  case ATTRIBUTE_KIND::EVENT_TIME: return ATTRIBUTE_SCALAR::UNKNOWN;
+  case ATTRIBUTE_KIND::EVENT_KIND: return ATTRIBUTE_SCALAR::INT;
 
   default: return ATTRIBUTE_SCALAR::UNKNOWN;
   }

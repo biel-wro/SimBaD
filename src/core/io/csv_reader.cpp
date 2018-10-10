@@ -23,7 +23,6 @@ public:
   std::vector<attribute> &attributes() { return m_attributes; }
   std::vector<attribute> const &attributes() const { return m_attributes; }
   ~attribute_list_view() {}
-
 private:
   std::vector<attribute> m_attributes;
 };
@@ -76,7 +75,6 @@ csv_reader::csv_reader(std::string const &filename,
 }
 
 csv_reader::~csv_reader() {}
-
 attribute_description csv_reader::read_header()
 {
   std::string line_readout;

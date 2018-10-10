@@ -17,8 +17,8 @@ public:
 
   explicit csv_reader(property_tree const &pt);
   explicit csv_reader(std::istream &stream_ref,
-      std::string const &delimiter = DEFAULT_DELIMITER,
-      std::string const &subcol_sep = DEFAULT_SUBCOL_SEP);
+                      std::string const &delimiter = DEFAULT_DELIMITER,
+                      std::string const &subcol_sep = DEFAULT_SUBCOL_SEP);
 
   explicit csv_reader(std::istream *istream_ptr,
                       std::string const &delimiter = DEFAULT_DELIMITER,

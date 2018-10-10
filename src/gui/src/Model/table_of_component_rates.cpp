@@ -1,7 +1,6 @@
 #include "table_of_component_rates.h"
 
 simbad::gui::Table_of_component_rates::Table_of_component_rates() {}
-
 simbad::gui::Table_of_component_rates::Table_of_component_rates(
     int Number_of_types_in_model_for_component_rates)
 {

@@ -4,8 +4,8 @@
 #include "core_def.hpp"
 #include "core_fwd.hpp"
 
-#include "interface/model.hpp"
 #include "interface/advance_estimator.hpp"
+#include "interface/model.hpp"
 
 #include <boost/iterator/transform_iterator.hpp>
 

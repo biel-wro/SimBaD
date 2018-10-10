@@ -93,11 +93,8 @@ public:
    */
   size_type occupancy() const { return occupied; }
   constexpr static size_type length() { return chunk_size; }
-
   bool isFull() const { return occupied == chunk_size; }
-
   bool isEmpty() const { return occupied == 0; }
-
   bool containsByAddress(D const *ptr) const
   {
     if(std::greater_equal<D const *>()(ptr, getEmulatedArray().data()) &&
@@ -182,9 +179,7 @@ public:
 
   iterator begin() { return getEmulatedArray().begin(); }
   const_iterator begin() const { return getEmulatedArray().begin(); }
-
   iterator end() { return getEmulatedArray().begin() + occupancy(); }
-
   const_iterator end() const
   {
     return getEmulatedArray().begin() + occupancy();
@@ -192,7 +187,6 @@ public:
 
 protected:
   char *getPlace(size_type idx) { return &array.at(idx * sizeof(D)); }
-
   const char *getPlace(size_type idx) const
   {
     return &array.at(idx * sizeof(D));

@@ -68,7 +68,6 @@ void simbad::gui::points_of_type::setNumber_of_points_in_SpacePointArray(
 }
 
 simbad::gui::points_of_type::~points_of_type() {}
-
 int simbad::gui::points_of_type::get_number_of_points_in_type()
 {
   return Number_of_points_in_SpacePointArray;

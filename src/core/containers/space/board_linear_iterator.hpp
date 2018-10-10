@@ -72,11 +72,8 @@ public:
   }
 
   bool is_valid() const { return valid; }
-
   outer_iter get_outer() const { return oit; }
-
   inner_iter get_inner() const { return iit; }
-
 protected:
   friend class boost::iterator_core_access;
   template <class, class> friend class board_iterator;
@@ -106,7 +103,6 @@ protected:
   }
 
   inline D_ &dereference() const { return *iit; }
-
 private:
   set_type *p_set;
   outer_iter oit;

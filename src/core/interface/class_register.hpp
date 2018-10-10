@@ -43,7 +43,6 @@ public:
     }
     name_iterator begin() const { return m_beg; }
     name_iterator end() const { return m_end; }
-
   private:
     name_iterator m_beg, m_end;
   };
@@ -89,7 +88,6 @@ public:
   }
 
   void unregister_factory(std::string const &name) { m_factories.erase(name); }
-
 private:
   factory_map m_factories;
 };

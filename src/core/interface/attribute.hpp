@@ -24,7 +24,6 @@ public:
   explicit array_attribute(std::size_t sz, T const &v = T()) : super(sz, v) {}
   array_attribute(std::initializer_list<T> il) : super(il) {}
   template <class It> array_attribute(It beg, It end) : super(beg, end) {}
-
   friend std::ostream &operator<<(std::ostream &os, array_attribute const &vec)
   {
     if(vec.empty())
@@ -94,7 +93,6 @@ public:
   using string_const_iterator = string_type const *;
 
   static constexpr std::size_t max_inplace_dimension() { return 3; }
-
   // constructors
   attribute();
 

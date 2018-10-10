@@ -113,6 +113,7 @@ BOOST_AUTO_TEST_CASE(test_stream_as_model)
           BOOST_CHECK_EQUAL(1, e[position_idx].get_real_val());
         },
         1);
+    BOOST_CHECK(ok);
     BOOST_CHECK_EQUAL(5, model.current_configuration().size());
   }
   core::attribute_description description =
@@ -124,7 +125,7 @@ BOOST_AUTO_TEST_CASE(test_stream_as_model)
 
   std::size_t num_visits = 0;
   model.current_configuration().visit_records(
-      [=,&num_visits](core::attribute_list const &record) {
+      [=, &num_visits](core::attribute_list const &record) {
         double position = record[position_idx].get_real_val();
         int id = static_cast<int>(position);
 

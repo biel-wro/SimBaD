@@ -13,7 +13,6 @@ class grid : public board<T, dim, board_coord, chunk_sz>
 {
 public:
   explicit grid(TileAssigner ta = TileAssigner()) : tile_assigner(ta) {}
-
 protected:
   TileAssigner tile_assigner;
 };

@@ -216,12 +216,11 @@ void dataframe_tracker::erase(attribute const &key)
                                     m_attribute_set.hash_function(), //
                                     m_attribute_set.key_eq(),        //
                                     record_disposer(*this)           //
-  );
+                                    );
 }
 
 std::size_t dataframe_tracker::size() const { return m_attribute_set.size(); }
 std::size_t dataframe_tracker::record_length() const { return m_record_length; }
-
 void dataframe_tracker::realloc_buckets(std::size_t new_bucket_count)
 {
   std::unique_ptr<bucket_type[]> new_buckets(new bucket_type[new_bucket_count]);

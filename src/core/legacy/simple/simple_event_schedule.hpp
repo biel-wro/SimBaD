@@ -68,7 +68,6 @@ public:
   }
   bool operator==(float t2) const { return m_time < t2; }
   bool operator<(float t2) const { return m_time < t2; }
-
 private:
   float m_time;
   EVENT_KIND m_event_kind;

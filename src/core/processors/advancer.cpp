@@ -32,11 +32,11 @@ advancer::advancer(model &model_ref, estimator_ptr_vec advancers)
           get_filtered_estimators<static_advance_estimator>(m_all_advancers)),
       m_dynamic_estimators(
           get_filtered_estimators<dynamic_advance_estimator>(m_all_advancers)),
-      m_delta_time_attribute_idx(model_ref.event_description()
-                                     .get_descriptor
-                                     (ATTRIBUTE_KIND::EVENT_DELTA_TIME, true)
-                                     .value()
-                                     .attribute_idx())
+      m_delta_time_attribute_idx(
+          model_ref.event_description()
+              .get_descriptor(ATTRIBUTE_KIND::EVENT_DELTA_TIME, true)
+              .value()
+              .attribute_idx())
 {
   for(dynamic_advance_estimator *estimator_ptr : m_dynamic_estimators)
     estimator_ptr->set_description(m_model_ref.event_description());
@@ -133,5 +133,4 @@ advancer::const_iterator advancer::end() const
   return {m_all_advancers.end(), dereference};
 }
 model const &advancer::get_model() const { return m_model_ref; }
-
 END_NAMESPACE_CORE

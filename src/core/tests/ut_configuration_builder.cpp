@@ -52,17 +52,16 @@ BOOST_AUTO_TEST_CASE(read_stream)
   // std::cerr.flush();
 
   std::vector<std::string> values_to_track = {
-      "float_property",
-      "int_property",
+      "float_property", "int_property",
   };
 
   configuration_builder builder(description, "position", values_to_track);
 
   reader.visit_entries([&builder](attribute_list const &event) {
     builder.push_event(event);
-//    csv_printer printer(&std::cout);
-//    printer.write_dataframe(builder);
-//    std::cout<< "next..." << std::endl;
+    //    csv_printer printer(&std::cout);
+    //    printer.write_dataframe(builder);
+    //    std::cout<< "next..." << std::endl;
   });
 
   assert(3 == builder.description().size());

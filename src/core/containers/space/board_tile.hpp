@@ -41,7 +41,6 @@ public:
    * operations on coordinates
    */
   BC const &get_coords() const { return coords; }
-
 protected:
   BC coords;
 };

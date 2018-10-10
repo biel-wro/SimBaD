@@ -16,8 +16,7 @@ class configuration_builder : public configuration_view
 public:
   configuration_builder(attribute_description const &event_description,
                         std::string const &key_name,
-                        std::vector<std::string> const
-                            &nonkey_attribute_names);
+                        std::vector<std::string> const &nonkey_attribute_names);
 
   ~configuration_builder() override;
 

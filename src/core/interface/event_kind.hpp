@@ -24,9 +24,9 @@ std::uint32_t to_numeric(EVENT_KIND ek);
 
 END_NAMESPACE_CORE
 
-namespace std {
+namespace std
+{
 std::ostream &operator<<(std::ostream &o, simbad::core::EVENT_KIND ek);
 }
-
 
 #endif

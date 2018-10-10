@@ -41,15 +41,10 @@ protected:
 
 public:
   void rehash(size_t new_size) { m_impl.rehash(new_size); }
-
   iterator begin() { return m_impl.begin(); }
-
   iterator end() { return m_impl.end(); }
-
   const_iterator begin() const { return m_impl.begin(); }
-
   const_iterator end() const { return m_impl.end(); }
-
   box_region get_box(coordinates_type min, coordinates_type max)
   {
     return m_impl.get_box(min, max);
@@ -77,11 +72,8 @@ public:
   }
 
   void remove(coordinates_type const &c, T &v) { m_impl.remove(c, v); }
-
   void clear() { m_impl.clear(); }
-
   size_type size() const { return m_impl.size(); }
-
   template <class Visitor> void visit(Visitor v = Visitor())
   {
     m_impl.visit(v);

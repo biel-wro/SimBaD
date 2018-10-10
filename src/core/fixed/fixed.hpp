@@ -43,7 +43,6 @@ public:
   // comparison operators
   bool operator<(Fixed const &other) const { return m_base < other.m_base; }
   bool operator==(Fixed const &other) const { return m_base == other.m_base; }
-
   // arithmetic operators
   Fixed operator+=(Fixed const &other) { return m_base += other.m_base; }
   Fixed operator+() { return *this; }

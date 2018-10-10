@@ -30,5 +30,4 @@ void stream_reader::set_istream(std::istream &ref)
   m_istream_ptr = istream_from_unmanaged(&ref);
 }
 std::istream &stream_reader::istream() const { return *m_istream_ptr; }
-
 END_NAMESPACE_CORE

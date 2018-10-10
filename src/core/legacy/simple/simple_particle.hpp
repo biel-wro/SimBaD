@@ -29,9 +29,7 @@ public:
   simple_particle &operator=(simple_particle &&o) = default;
 
   std::size_t s_dimension() { return DIM; }
-
   std::size_t dimension() const { return s_dimension(); }
-
   coord_type coordinate(std::size_t cdim) const { return coords[cdim]; }
   template <size_t cdim> void set_coordinate(coord_type c) { coords[cdim] = c; }
   template <size_t cdim> coord_type get_coordinate() const
@@ -49,7 +47,6 @@ protected:
   friend bool operator>(cref p1, cref p2) { return p2 < p1; }
   friend bool operator<=(cref p1, cref p2) { return p1 < p2 || p1 == p2; }
   friend bool operator>=(cref p1, cref p2) { return p1 > p2 || p1 == p2; }
-
 private:
   coord_array_type coords;
 };

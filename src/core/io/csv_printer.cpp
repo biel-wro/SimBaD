@@ -6,8 +6,8 @@
 #include "interface/configuration_view.hpp"
 #include "interface/property_tree.hpp"
 
-#include <limits>
 #include <iomanip>
+#include <limits>
 #include <sstream>
 
 BEGIN_NAMESPACE_CORE
@@ -144,5 +144,4 @@ void csv_printer::write_data(dataframe const &conf)
   });
 }
 void csv_printer::write_footer() { ostream() << std::endl; }
-
 END_NAMESPACE_CORE

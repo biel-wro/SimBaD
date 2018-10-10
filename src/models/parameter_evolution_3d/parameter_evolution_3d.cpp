@@ -257,22 +257,21 @@ void parameter_evolution_3d::read_configuration(
   std::size_t pos_idx = conf.position_attr_idx();
   std::size_t mut_idx = conf.description()["mutation.id"].attribute_idx();
 
-  conf.visit_records(
-      [this, pos_idx, mut_idx, attribute_indices](
-          simbad::core::configuration_view::particle_attributes const &p) {
-        cell::position_type pos;
-        pos[0] = p[pos_idx].get_real_ref(0);
-        pos[1] = p[pos_idx].get_real_ref(1);
-        pos[2] = p[pos_idx].get_real_ref(2);
-        std::shared_ptr<cell_params const> params_ptr =
-            std::make_shared<cell_params>(p, attribute_indices);
+  conf.visit_records([this, pos_idx, mut_idx, attribute_indices](
+      simbad::core::configuration_view::particle_attributes const &p) {
+    cell::position_type pos;
+    pos[0] = p[pos_idx].get_real_ref(0);
+    pos[1] = p[pos_idx].get_real_ref(1);
+    pos[2] = p[pos_idx].get_real_ref(2);
+    std::shared_ptr<cell_params const> params_ptr =
+        std::make_shared<cell_params>(p, attribute_indices);
 #ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
-        m_all_mutations.push_back((params_ptr));
+    m_all_mutations.push_back((params_ptr));
 #endif
-        insert(cell(pos, params_ptr));
-        std::size_t mutation_id = p[mut_idx].get_int_val();
-        m_last_mutation_id = std::max(m_last_mutation_id, mutation_id);
-      });
+    insert(cell(pos, params_ptr));
+    std::size_t mutation_id = p[mut_idx].get_int_val();
+    m_last_mutation_id = std::max(m_last_mutation_id, mutation_id);
+  });
 }
 
 double parameter_evolution_3d::time() const { return m_time; }

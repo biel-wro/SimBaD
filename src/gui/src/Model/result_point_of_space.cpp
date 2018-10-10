@@ -16,7 +16,6 @@ simbad::gui::result_point_of_space::result_point_of_space(
 }
 
 simbad::gui::result_point_of_space::~result_point_of_space() {}
-
 void simbad::gui::result_point_of_space::set_Xcoord_of_result_point(float coord)
 {
   Xcoord = coord;

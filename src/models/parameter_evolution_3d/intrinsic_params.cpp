@@ -66,17 +66,19 @@ cell_params::cell_params(const core::attribute_list &p,
                       ,
                   nullptr
 #endif
-      )
+                  )
 {
 }
 cell_params::cell_params(float birth_eff, float birth_res, float lifespan_eff,
                          float lifespan_res, float success_eff,
                          float success_res, std::size_t mutation_id
 #ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
-                         ,std::shared_ptr<const cell_params> parent_ptr
+                         ,
+                         std::shared_ptr<const cell_params> parent_ptr
                              PARAMETER_EVOLUTION_3D_MUTATION_TREE
 #endif
-):
+                         )
+    :
 #ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
       m_parent_ptr(parent_ptr),
 #endif

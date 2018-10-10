@@ -47,7 +47,6 @@ public:
   void set_gamma(scalar_type gamma) { m_gamma = gamma; }
   void set_sigma(scalar_type sigma) { m_sigma = sigma; }
   void set_scale(scalar_type scale) { m_scale = scale; }
-
 private:
   scalar_type m_sigma;
   scalar_type m_gamma;

@@ -29,7 +29,6 @@ public:
 
   accumulated_type current_value() const { return m_acc; }
   operator accumulated_type() const { return m_acc; }
-
 protected:
   accumulated_type m_acc;
 };

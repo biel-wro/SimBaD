@@ -25,7 +25,6 @@ My_GLWidget::My_GLWidget(QWidget *parent) : QWidget(parent)
 }
 
 void My_GLWidget::animate() { repaint(); }
-
 void My_GLWidget::paintEvent(QPaintEvent *event)
 {
   QPainter painter;
@@ -133,14 +132,16 @@ void My_GLWidget::drawSpacePoints(QPainter &painter)
             Big_model->ModelPoints.Vector_of_types[i].DynamicSimulationColor);
 
       painter.drawPoint(
-          256 + (int)(512 * (-shift_X + scaling_factor * Big_model->ModelPoints
-                                                             .Vector_of_types[i]
-                                                             .SpacePointArray[j]
-                                                             .Xcoordinate)),
-          256 - (int)(512 * (shift_Y + scaling_factor * Big_model->ModelPoints
-                                                            .Vector_of_types[i]
-                                                            .SpacePointArray[j]
-                                                            .Ycoordinate)));
+          256 + (int)(512 * (-shift_X +
+                             scaling_factor *
+                                 Big_model->ModelPoints.Vector_of_types[i]
+                                     .SpacePointArray[j]
+                                     .Xcoordinate)),
+          256 - (int)(512 * (shift_Y +
+                             scaling_factor *
+                                 Big_model->ModelPoints.Vector_of_types[i]
+                                     .SpacePointArray[j]
+                                     .Ycoordinate)));
     }
   };
 }

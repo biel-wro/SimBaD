@@ -196,7 +196,7 @@ std::size_t attribute_description::copy_attribute_auto_idx(
                                 source.kind(),               //
                                 source.scalar(),             //
                                 source.attribute_dimension() //
-  );
+                                );
 }
 
 std::pair<std::vector<std::size_t>, std::vector<std::string>>
