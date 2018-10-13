@@ -24,6 +24,7 @@ public:
 
   virtual void write_dataframe(dataframe const &conf) final;
   virtual void write_header(dataframe const &conf) final;
+
   virtual void write_data(dataframe const &conf);
 
   virtual void write_header(attribute_description const &desc) = 0;
