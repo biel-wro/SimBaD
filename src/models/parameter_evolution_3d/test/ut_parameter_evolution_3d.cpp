@@ -127,7 +127,10 @@ BOOST_AUTO_TEST_CASE(short_run)
 
   //  text_printer configuration_printer(&std::cout);
 
-  csv_printer event_printer(&std::cout);
+  csv_printer event_printer(
+      &std::cout, ",", 7,
+      std::unordered_map<std::string, std::size_t>{{"event.time", 17}});
+
   event_printer.write_header(m.event_description());
   m.generate_events(
       [&event_printer](attribute_list const &attributes) {

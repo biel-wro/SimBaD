@@ -15,6 +15,11 @@ stream
     {
       file STDOUT
       delimiter ";"
+      default_precision 6
+      special_precision 
+      {
+        event.time 17
+      }
     }
   }
 }

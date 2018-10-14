@@ -21,7 +21,7 @@ read_special_precisons(property_tree const &pt)
 {
   csv_printer::precision_map result;
   property_tree const &special_pt =
-      pt.get_child("special_precison", property_tree::get_empty());
+      pt.get_child("special_precision", property_tree::get_empty());
   for(auto const &pair : special_pt)
   {
     std::string const &name = pair.first;
@@ -34,7 +34,7 @@ read_special_precisons(property_tree const &pt)
 csv_printer::csv_printer(property_tree const &pt)
     : stream_printer(pt.get("file", "STDIN")),
       m_delimiter{pt.get("delimiter", default_delimiter)},
-      m_default_precison_digits{pt.get("default_precison", double_digits)},
+      m_default_precison_digits{pt.get("default_precision", double_digits)},
       m_special_precison(read_special_precisons(pt))
 {
 }
@@ -108,6 +108,8 @@ std::ostream &csv_printer::s_write_data_part(std::ostream &os,
                                              column_info const &info,
                                              std::string const &delim)
 {
+  os.precision(info.precision_digits);
+
   if(0 == info.dimension)
     return os << "\"" << attr << "\"";
   if(1 == info.dimension)
