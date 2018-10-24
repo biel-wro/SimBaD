@@ -24,7 +24,7 @@ struct record_disposer
   }
   dataframe_tracker &m_tracker;
 };
-}
+} // namespace
 
 dataframe_tracker::dataframe_tracker(std::size_t record_length)
     : m_record_length(record_length),
@@ -184,7 +184,7 @@ struct attribute_list_view final : public attribute_list
 private:
   tracker_record const *m_record_ptr;
 };
-}
+} // namespace
 
 void dataframe_tracker::visit_records(record_visitor visitor) const
 {
@@ -216,7 +216,7 @@ void dataframe_tracker::erase(attribute const &key)
                                     m_attribute_set.hash_function(), //
                                     m_attribute_set.key_eq(),        //
                                     record_disposer(*this)           //
-                                    );
+  );
 }
 
 std::size_t dataframe_tracker::size() const { return m_attribute_set.size(); }
@@ -260,12 +260,12 @@ void dataframe_tracker::rehash_if_needed()
   template bool dataframe_tracker::update<AttrList, Iter>(AttrList, Iter, Iter);
 
 #define DATAFRAME_TRACKER_EXPLICIT_INSTANTIATION(Iter)                         \
-  DATAFRAME_TRACKER_EXPLICIT_INSTANTIATION_ATTR(attribute_list const &, Iter); \
-  DATAFRAME_TRACKER_EXPLICIT_INSTANTIATION_ATTR(attribute_list &, Iter);       \
-  DATAFRAME_TRACKER_EXPLICIT_INSTANTIATION_ATTR(attribute_list &&, Iter);
+  DATAFRAME_TRACKER_EXPLICIT_INSTANTIATION_ATTR(attribute_list const &, Iter)  \
+  DATAFRAME_TRACKER_EXPLICIT_INSTANTIATION_ATTR(attribute_list &, Iter)        \
+  DATAFRAME_TRACKER_EXPLICIT_INSTANTIATION_ATTR(attribute_list &&, Iter)
 
-DATAFRAME_TRACKER_EXPLICIT_INSTANTIATION(std::vector<std::size_t>::iterator);
+DATAFRAME_TRACKER_EXPLICIT_INSTANTIATION(std::vector<std::size_t>::iterator)
 DATAFRAME_TRACKER_EXPLICIT_INSTANTIATION(
-    std::vector<std::size_t>::const_iterator);
+    std::vector<std::size_t>::const_iterator)
 
 END_NAMESPACE_CORE
