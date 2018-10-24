@@ -696,6 +696,12 @@ std::ostream &operator<<(std::ostream &os, attribute const &attr)
   return os;
 }
 
+std::string attribute::nice_string() const{
+  std::stringstream ss;
+  ss << *this;
+  return ss.str();
+}
+
 END_NAMESPACE_CORE
 
 namespace std
