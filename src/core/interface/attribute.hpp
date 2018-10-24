@@ -172,7 +172,6 @@ public:
   // hash
   std::size_t hash_value() const;
 
-  friend std::ostream &operator<<(std::ostream &, attribute const &);
   std::string nice_string() const;
 };
 #undef SIMBAD_CORE_ATTRIBUTE_SUBTYPES

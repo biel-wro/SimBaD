@@ -689,16 +689,10 @@ struct printing_visitor
   }
 };
 
-std::ostream &operator<<(std::ostream &os, attribute const &attr)
-{
-  printing_visitor visitor{os};
-  boost::apply_visitor(visitor, attr);
-  return os;
-}
-
 std::string attribute::nice_string() const{
   std::stringstream ss;
-  ss << *this;
+  printing_visitor visitor{ss};
+  boost::apply_visitor(visitor, *this);
   return ss.str();
 }
 
