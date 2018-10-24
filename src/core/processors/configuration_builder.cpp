@@ -127,7 +127,7 @@ void configuration_builder::create_on_event(attribute const &key,
                                             m_index_mapping.end());
   if(!ok)
     throw std::runtime_error("attempted to create a particle with a key " +
-                             key.nice_string() + " that is already present");                             " that is already present");
+                             key.nice_string() + " that is already present");
 }
 void configuration_builder::update_on_event(attribute const &id,
                                             attribute_list const &event)
