@@ -57,7 +57,6 @@ void configuration_builder::set_configuration(
       m_configuration_description.lin_mapping_from(configuration.description());
 
   auto visitor = [this, &mapping](attribute_list const &entry) {
-
     dataframe_tracker::iterator it;
     bool ok;
     std::tie(it, ok) =
@@ -79,8 +78,7 @@ void configuration_builder::push_event(attribute_list const &event)
 
   switch(event_kind)
   {
-  case EVENT_KIND::NONE:
-    break; // no need to do anything
+  case EVENT_KIND::NONE: break; // no need to do anything
 
   case EVENT_KIND::CREATED: //
     create_on_event(id, event);
@@ -128,8 +126,9 @@ void configuration_builder::create_on_event(attribute const &key,
   std::tie(it, ok) = m_configuration.insert(event, m_index_mapping.begin(),
                                             m_index_mapping.end());
   if(!ok)
-    throw std::runtime_error("attempted to create a particle with a key that "
-                             "is already present");
+    throw std::runtime_error("attempted to create a particle with a key " +
+                             (std::stringstream() << key).str() +
+                             " that is already present");
 }
 void configuration_builder::update_on_event(attribute const &id,
                                             attribute_list const &event)

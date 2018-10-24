@@ -257,21 +257,22 @@ void parameter_evolution_3d::read_configuration(
   std::size_t pos_idx = conf.position_attr_idx();
   std::size_t mut_idx = conf.description()["mutation.id"].attribute_idx();
 
-  conf.visit_records([this, pos_idx, mut_idx, attribute_indices](
-      simbad::core::configuration_view::particle_attributes const &p) {
-    cell::position_type pos;
-    pos[0] = p[pos_idx].get_real_ref(0);
-    pos[1] = p[pos_idx].get_real_ref(1);
-    pos[2] = p[pos_idx].get_real_ref(2);
-    std::shared_ptr<cell_params const> params_ptr =
-        std::make_shared<cell_params>(p, attribute_indices);
+  conf.visit_records(
+      [this, pos_idx, mut_idx, attribute_indices](
+          simbad::core::configuration_view::particle_attributes const &p) {
+        cell::position_type pos;
+        pos[0] = p[pos_idx].get_real_ref(0);
+        pos[1] = p[pos_idx].get_real_ref(1);
+        pos[2] = p[pos_idx].get_real_ref(2);
+        std::shared_ptr<cell_params const> params_ptr =
+            std::make_shared<cell_params>(p, attribute_indices);
 #ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
-    m_all_mutations.push_back((params_ptr));
+        m_all_mutations.push_back((params_ptr));
 #endif
-    insert(cell(pos, params_ptr));
-    std::size_t mutation_id = p[mut_idx].get_int_val();
-    m_last_mutation_id = std::max(m_last_mutation_id, mutation_id);
-  });
+        insert(cell(pos, params_ptr));
+        std::size_t mutation_id = p[mut_idx].get_int_val();
+        m_last_mutation_id = std::max(m_last_mutation_id, mutation_id);
+      });
 }
 
 double parameter_evolution_3d::time() const { return m_time; }
@@ -523,28 +524,28 @@ void parameter_evolution_3d::execute_death(event_visitor v)
 void parameter_evolution_3d::execute_division(
     parameter_evolution_3d::event_visitor v)
 {
-  cell const &parent = m_spacetime.top();
+  //  cell const &parent = m_spacetime.top();
+  spacetime::dirty_handle_type parent_handle = m_spacetime.first_dirty();
 
-  cell::position_type new_position(parent.position());
+  cell::position_type new_position(parent_handle->position());
   new_position[0] += m_model_params.dispersion()(m_rng);
   new_position[1] += m_model_params.dispersion()(m_rng);
   new_position[2] += m_model_params.dispersion()(m_rng);
 
-  cell child(parent);
+  cell child(*parent_handle);
   child.set_position(new_position);
   child.reset_interaction();
 
-  mutate(child);
-  insert(child); // invalidates parent reference
-
-  spacetime::dirty_handle_type parent_handle = m_spacetime.first_dirty();
   mutate(*parent_handle);
   resample_event(*parent_handle);
-  m_spacetime.repair_order(parent_handle);
 
+  m_spacetime.repair_order(parent_handle);
   event_view<EVENT_KIND::TRANSFORMED, 1> parent_birth_view(*parent_handle,
                                                            *this);
   v(parent_birth_view);
+
+  mutate(child);
+  insert(child); // invalidates parent reference
 
   event_view<EVENT_KIND::CREATED, 0> child_birth_view(child, *this);
   v(child_birth_view);

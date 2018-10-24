@@ -3,9 +3,12 @@
 #include "utils/attribute_exceptions.hpp"
 #include "utils/attribute_scalar_visitor.hpp"
 
+#include <boost/core/demangle.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 
 #include <iostream>
+#include <typeinfo>
+
 // using namespace boost;
 
 BEGIN_NAMESPACE_CORE
@@ -42,7 +45,7 @@ template <class T, class Scalar> constexpr bool has_scalar()
 {
   return std::is_same<typename scalar_in<T>::type, Scalar>::value;
 }
-}
+} // namespace
 
 std::ostream &operator<<(std::ostream &os, ATTRIBUTE_SCALAR sc)
 {
@@ -226,7 +229,7 @@ struct empty_checker
   template <class T> bool operator()(T const &) const { return false; }
   bool operator()(std::string const &str) const { return str.empty(); }
 };
-}
+} // namespace
 bool attribute::empty() const
 {
   return boost::apply_visitor(empty_checker(), *this);
@@ -248,7 +251,7 @@ struct dimension_visitor
   }
   template <class T> std::size_t operator()(T const &v) const { return 1; }
 };
-}
+} // namespace
 
 std::size_t attribute::dimension() const
 {
@@ -288,7 +291,7 @@ struct scalar_type_getter_visitor
   }
   // clang-format on
 };
-}
+} // namespace
 ATTRIBUTE_SCALAR attribute::scalar() const
 {
   return boost::apply_visitor(scalar_type_getter_visitor(), *this);
@@ -318,7 +321,7 @@ struct scalar_getter
     return v;
   }
 };
-}
+} // namespace
 
 attribute attribute::get_scalar(std::size_t idx) const
 {
@@ -380,7 +383,7 @@ template <class Ref, class Bind> struct getter
     throw bad_attribute();
   }
 };
-}
+} // namespace
 attribute::string_type &attribute::get_string_ref(std::size_t i)
 {
   return boost::apply_visitor(getter<string_type &, string_type>(i), *this);
@@ -457,7 +460,7 @@ template <class Container, bool is_const> struct iter_getter
     return result_type(val.data(), std::next(val.data(), val.size()));
   }
 };
-}
+} // namespace
 
 std::pair<attribute::string_iterator, attribute::string_iterator>
 attribute::get_string_data()
@@ -573,7 +576,7 @@ struct equal_visitor
     return true;
   }
 };
-}
+} // namespace
 
 bool attribute::operator==(const attribute &rhs) const
 {
@@ -645,11 +648,52 @@ struct hash_visitor
     return seed;
   }
 };
-}
+} // namespace
 
 std::size_t attribute::hash_value() const
 {
   return boost::apply_visitor(hash_visitor(), *this);
+}
+
+struct printing_visitor
+{
+  std::ostream &os;
+  using result_type = void;
+
+  printing_visitor(std::ostream &os) : os(os) {}
+
+  template <class T, std::size_t N>
+  void operator()(coordinates<T, N> const &v) const
+  {
+    os << boost::core::demangle(typeid(T).name()) << "<";
+    if(N > 0)
+      os << v[0];
+    for(std::size_t i = 1; i < N; ++i)
+      os << ", " << v[i];
+    os << ">";
+  }
+  template <class T> void operator()(array_attribute<T> const &v) const
+  {
+    os << boost::core::demangle(typeid(T).name()) << "[";
+
+    auto it = v.begin(), end = v.end();
+    if(it != end)
+      os << *it;
+    for(++it; it != end; ++it)
+      os << ", " << *it;
+    os << "]";
+  }
+  template <class T> void operator()(T const &v) const
+  {
+    os << boost::core::demangle(typeid(T).name()) << "(" << v << ")";
+  }
+};
+
+std::ostream &operator<<(std::ostream &os, attribute const &attr)
+{
+  printing_visitor visitor{os};
+  boost::apply_visitor(visitor, attr);
+  return os;
 }
 
 END_NAMESPACE_CORE
@@ -661,7 +705,7 @@ operator()(::simbad::core::attribute const &attr) const
 {
   return attr.hash_value();
 }
-}
+} // namespace std
 namespace boost
 {
 std::size_t hash<::simbad::core::attribute>::
@@ -669,4 +713,4 @@ operator()(::simbad::core::attribute const &attr) const
 {
   return attr.hash_value();
 }
-}
+} // namespace boost

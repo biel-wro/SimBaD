@@ -171,8 +171,9 @@ public:
 
   // hash
   std::size_t hash_value() const;
-};
 
+  friend std::ostream &operator<<(std::ostream &, attribute const &);
+};
 #undef SIMBAD_CORE_ATTRIBUTE_SUBTYPES
 
 END_NAMESPACE_CORE
@@ -183,13 +184,13 @@ template <> struct hash<::simbad::core::attribute>
 {
   size_t operator()(::simbad::core::attribute const &attr) const;
 };
-}
+} // namespace std
 namespace boost
 {
 template <> struct hash<::simbad::core::attribute>
 {
   std::size_t operator()(::simbad::core::attribute const &attr) const;
 };
-}
+} // namespace boost
 
 #endif // PROPERTY_HPP

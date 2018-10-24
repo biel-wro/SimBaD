@@ -38,7 +38,7 @@ public:
   tile_handle_type get_tile_handle() const { return m_tile_handle; }
   subset_handle_type get_subset_handle() const { return m_subset_handle; }
   particle_type &operator*() const { return *m_subset_handle; }
-  particle_type *operator->() const { return m_subset_handle; }
+  subset_handle_type operator->() const { return m_subset_handle; }
 private:
   tile_handle_type m_tile_handle;
   subset_handle_type m_subset_handle;
