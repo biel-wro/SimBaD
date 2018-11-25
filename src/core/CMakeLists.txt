@@ -61,6 +61,7 @@ set( SOURCES
   processors/advance_estimators/population_size.cpp
 
   # processors
+  processors/abstract_builder.cpp
   processors/configuration_builder.cpp
   processors/advancer.cpp
   processors/final_snapshot.cpp
