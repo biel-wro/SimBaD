@@ -205,6 +205,13 @@ dataframe_tracker::set_type &dataframe_tracker::attribute_set()
   return m_attribute_set;
 }
 
+dataframe_tracker::iterator dataframe_tracker::find(attribute const &key)
+{
+  iterator it = m_attribute_set.find(key, m_attribute_set.hash_function(),
+                                     m_attribute_set.key_eq());
+  return it;
+}
+
 void dataframe_tracker::erase(const_iterator it)
 {
   m_attribute_set.erase_and_dispose(it, record_disposer(*this));
@@ -217,6 +224,25 @@ void dataframe_tracker::erase(attribute const &key)
                                     m_attribute_set.key_eq(),        //
                                     record_disposer(*this)           //
   );
+}
+dataframe_tracker::iterator dataframe_tracker::begin()
+{
+  return m_attribute_set.begin();
+}
+
+dataframe_tracker::const_iterator dataframe_tracker::begin() const
+{
+  return m_attribute_set.begin();
+}
+
+dataframe_tracker::iterator dataframe_tracker::end()
+{
+  return m_attribute_set.end();
+}
+
+dataframe_tracker::const_iterator dataframe_tracker::end() const
+{
+  return m_attribute_set.end();
 }
 
 std::size_t dataframe_tracker::size() const { return m_attribute_set.size(); }

@@ -72,11 +72,19 @@ public:
 
   void visit_records(record_visitor visitor) const;
 
+  iterator find(attribute const &key);
+
+
   void erase(const_iterator it);
   void erase(attribute const &key);
 
   set_type const &attribute_set() const;
   set_type &attribute_set();
+
+  iterator begin();
+  const_iterator begin() const;
+  iterator end();
+  const_iterator end() const;
 
   std::size_t size() const;
   std::size_t record_length() const;

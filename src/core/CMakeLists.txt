@@ -62,6 +62,8 @@ set( SOURCES
 
   # processors
   processors/abstract_builder.cpp
+  processors/chronicler.cpp
+  processors/chronicles_builder.cpp
   processors/configuration_builder.cpp
   processors/advancer.cpp
   processors/final_snapshot.cpp
