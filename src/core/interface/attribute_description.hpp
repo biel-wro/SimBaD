@@ -141,7 +141,8 @@ public:
 
   // simple description getters
   std::size_t get_attribute_idx(std::string const &attribute_name) const;
-  std::size_t get_attribute_idx(ATTRIBUTE_KIND kind) const;
+  std::size_t get_attribute_idx(ATTRIBUTE_KIND kind,
+                                bool try_default_name_too = false) const;
 
 private:
   template <class NameIterator>

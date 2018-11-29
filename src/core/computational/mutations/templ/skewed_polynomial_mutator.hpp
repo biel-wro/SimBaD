@@ -63,7 +63,7 @@ protected:
   }
 
   /*
-   * samples random number fromdistribution given by pdf
+   * samples random number from distribution given by pdf
    * (1-x)^alpha
    */
   template <class RNG> real_type polyrnd_inv(real_type power, RNG &rng) const

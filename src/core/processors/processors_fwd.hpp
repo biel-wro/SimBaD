@@ -4,6 +4,8 @@
 #include "core_def.hpp"
 
 BEGIN_NAMESPACE_CORE
+class chronicler;
+class chronicles_builder;
 class configuration_builder;
 class dataframe_tracker;
 class tracker_record;

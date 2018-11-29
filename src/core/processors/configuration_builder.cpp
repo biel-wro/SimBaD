@@ -95,11 +95,11 @@ void configuration_builder::push_event(attribute_list const &event)
   case EVENT_KIND::TRANSFORMED: //
     remove_on_event(id);
     create_on_event(id, event);
-
     break;
+
   case EVENT_KIND::JUMPED_IN:  //
   case EVENT_KIND::JUMPED_OUT: //
-    std::logic_error("not supported yet");
+    throw std::logic_error("not supported yet");
 
   default: throw std::logic_error("unexpected enum value");
   }

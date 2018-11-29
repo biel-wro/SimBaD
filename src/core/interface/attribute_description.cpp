@@ -196,7 +196,7 @@ std::size_t attribute_description::copy_attribute_auto_idx(
                                 source.kind(),               //
                                 source.scalar(),             //
                                 source.attribute_dimension() //
-                                );
+  );
 }
 
 std::pair<std::vector<std::size_t>, std::vector<std::string>>
@@ -386,12 +386,27 @@ const attribute_description &attribute_description::make_position_only()
 std::size_t attribute_description::get_attribute_idx(
     std::string const &attribute_name) const
 {
-  return get_descriptor(attribute_name).value().attribute_idx();
+  boost::optional<attribute_descriptor const &> maybe_descriptor =
+      get_descriptor(attribute_name);
+  if(!maybe_descriptor)
+    throw std::logic_error("index for attribute `" + attribute_name +
+                           "` not found");
+
+  return maybe_descriptor->attribute_idx();
 }
 
-std::size_t attribute_description::get_attribute_idx(ATTRIBUTE_KIND kind) const
+std::size_t
+attribute_description::get_attribute_idx(ATTRIBUTE_KIND kind,
+                                         bool try_default_name_too) const
 {
-  return get_descriptor(kind).value().attribute_idx();
+  boost::optional<attribute_descriptor const &> maybe_descriptor =
+      get_descriptor(kind, try_default_name_too);
+
+  if(!maybe_descriptor)
+    throw std::logic_error("index for attribute kind `" + to_string(kind) +
+                           "` not found");
+
+  return maybe_descriptor->attribute_idx();
 }
 
 std::ostream &operator<<(std::ostream &os, attribute_description const &desc)

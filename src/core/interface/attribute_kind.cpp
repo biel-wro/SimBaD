@@ -41,15 +41,18 @@ static kind2str const &get_mapping()
   return *ptr;
 }
 
-std::ostream &operator<<(std::ostream &os, ATTRIBUTE_KIND kind)
-{
+std::string to_string(ATTRIBUTE_KIND kind){
   kind2str const &mapping = get_mapping();
   kind2str::left_const_iterator it = mapping.left.find(kind);
 
   if(mapping.left.end() == it)
     throw unrecognized_attribute_kind(kind);
+  return it->second;
+}
 
-  return os << it->second;
+std::ostream &operator<<(std::ostream &os, ATTRIBUTE_KIND kind)
+{
+  return os << to_string(kind);
 }
 
 std::istream &operator>>(std::istream &is, ATTRIBUTE_KIND &kind)

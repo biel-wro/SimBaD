@@ -17,7 +17,7 @@ BEGIN_NAMESPACE_CORE
 using tracker_hook_type = boost::intrusive::unordered_set_base_hook<
     boost::intrusive::store_hash<true>>;
 
-class tracker_record : public tracker_hook_type
+class tracker_record final : public tracker_hook_type
 {
   tracker_record() = default;
   ~tracker_record() = default;

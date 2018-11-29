@@ -12,6 +12,7 @@ set( TEST_SOURCES
   ut_board_coords.cpp
   ut_board_tile.cpp
   ut_cartesian_spacetime.cpp
+  ut_chronicles_builder.cpp
   ut_configuration_builder.cpp
   ut_csv_reader.cpp
   ut_cubic_crystal_configuration.cpp

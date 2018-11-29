@@ -24,6 +24,7 @@ enum class ATTRIBUTE_KIND : std::uint32_t
   UNKNOWN,     // no information provided
 };
 
+std::string to_string(ATTRIBUTE_KIND kind);
 std::ostream &operator<<(std::ostream &, ATTRIBUTE_KIND);
 std::istream &operator>>(std::istream &, ATTRIBUTE_KIND &);
 
