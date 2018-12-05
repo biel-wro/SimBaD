@@ -34,8 +34,8 @@ protected:
   model const &get_model() const;
 
 private:
-  std::unique_ptr<advancer> const m_advancer_ptr;
-  advance_estimator *const m_final_estimator_ptr; // can be nullptr
+  std::unique_ptr<model_advancer> const m_advancer_ptr;
+  advance_estimator const *const m_final_estimator_ptr; // can be nullptr
   std::unique_ptr<stream_printer> const m_stream_printer_ptr;
   stacked_view_configuration m_stacked_view;
 };

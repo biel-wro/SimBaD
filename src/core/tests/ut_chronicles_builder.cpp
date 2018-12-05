@@ -1,10 +1,13 @@
 #include <boost/test/auto_unit_test.hpp>
 
 #include "interface/attribute_list.hpp"
+#include "io/csv_printer.hpp"
 #include "io/csv_reader.hpp"
 #include "processors/chronicles_builder.hpp"
+#include "processors/printing_chronicle_builder.hpp"
 #include "processors/tracker_record.hpp"
 #include "utils/stream_as_configuration.hpp"
+#include "interface/attribute_description.hpp"
 
 BOOST_AUTO_TEST_SUITE(test_chronicle_builder)
 
@@ -29,21 +32,6 @@ R"( position, property, event.time, event.delta_time, event.kind
 
 namespace core = simbad::core;
 
-class checking_chronicles_builder : public core::chronicles_builder
-{
-public:
-  using chronicles_builder::chronicles_builder;
-
-  using checker_fun = std::function<void(core::tracker_record const &,
-                                         chronicle_datum const &, double)>;
-  void emit_particle(core::tracker_record const &record,
-                     chronicle_datum const &datum, double death_time) override
-  {
-    m_checker(record, datum, death_time);
-  }
-  checker_fun m_checker;
-};
-
 BOOST_AUTO_TEST_CASE(smoke)
 {
   // prepare initial configuration
@@ -56,9 +44,11 @@ BOOST_AUTO_TEST_CASE(smoke)
   std::stringstream stream(event_stream_csv);
   core::csv_reader reader(&stream);
   core::attribute_description event_description = reader.read_header();
+  event_description.standardize_record("position");
 
-  checking_chronicles_builder builder(event_description, "position",
-                                      {"property"});
+  core::csv_printer printer{&std::cout, "; ", 3};
+  core::printing_chronicle_builder builder(event_description, "position",
+                                           {"property"}, printer);
 
   builder.set_configuration(initial_configuration);
 
@@ -67,7 +57,16 @@ BOOST_AUTO_TEST_CASE(smoke)
   };
 
 
-          BOOST_REQUIRE(false);
+  builder.write_header();
+  std::cout<< "---------" <<std::endl;
+
+  reader.visit_entries(read_visitor, 1000);
+  std::cout<< "---------" <<std::endl;
+
+  builder.write_footer();
+
+
+  BOOST_REQUIRE(false);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -1,6 +1,6 @@
 #include "snapshoter.hpp"
 
-#include "advancer.hpp"
+#include "model_advancer.hpp"
 #include "configurations/stacked_view_configuration.hpp"
 #include "interface/attribute.hpp"
 #include "interface/attribute_description.hpp"
@@ -8,7 +8,7 @@
 #include "interface/attribute_list.hpp"
 #include "interface/model.hpp"
 #include "interface/stream_printer.hpp"
-#include "processors/advancer.hpp"
+#include "processors/model_advancer.hpp"
 #include "repositories/create_from_property_tree.hpp"
 
 #include <assert.h>
@@ -46,10 +46,10 @@ snapshoter::snapshoter(model &model_ref,
                        std::unique_ptr<advance_estimator> final_advancer_ptr,
                        std::unique_ptr<stream_printer> stream_printer_ptr,
                        stacked_view_configuration stacked_view)
-    : m_advancer_ptr{std::make_unique<advancer>(
+    : m_advancer_ptr{std::make_unique<model_advancer>(
           model_ref,
           [&]() {
-            advancer::estimator_ptr_vec vector;
+            model_advancer::estimator_ptr_vec vector;
             vector.push_back(std::move(step_advancer_ptr));
             vector.push_back(std::move(final_advancer_ptr));
             return vector;

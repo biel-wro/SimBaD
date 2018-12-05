@@ -10,7 +10,7 @@
 BEGIN_NAMESPACE_CORE
 
 // non-enum types
-class advancer;
+class model_advancer;
 class advance_estimator;
 class attribute;
 class attribute_description;

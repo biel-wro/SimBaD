@@ -18,7 +18,7 @@ public:
   ~chronicles_builder() override;
 
   void set_configuration(finite_dataframe const &view) override;
-  void push_event(attribute_list const &event);
+  void emit_alive();
 
 protected:
   std::size_t generate_next_id();
@@ -53,7 +53,6 @@ protected:
     std::vector<attribute> m_keys;
     void reset();
   };
-
   void fetch_time_if_not_set(interpreter_context &context,
                              attribute_list const &event);
 

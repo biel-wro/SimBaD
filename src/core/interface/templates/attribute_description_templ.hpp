@@ -28,15 +28,16 @@ void attribute_description::add_attributes(attribute_description const &other,
   for(NameIterator it = first; it != last; ++it)
   {
     std::string const &name = *it;
-    boost::optional<attribute_descriptor const &> descriptor =
+    boost::optional<attribute_descriptor const &> maybe_descriptor =
         other.get_descriptor(name);
-    if(!descriptor)
+    if(!maybe_descriptor)
       throw unrecognized_attribute_name(name);
 
+    attribute_descriptor const &descriptor = *maybe_descriptor;
     current_idx =
-        1 + add_attribute_auto_idx(current_idx, name, descriptor->kind(),
-                                   descriptor->scalar(),
-                                   descriptor->attribute_dimension());
+        1 + add_attribute_auto_idx(current_idx, name, descriptor.kind(),
+                                   descriptor.scalar(),
+                                   descriptor.attribute_dimension());
   }
 }
 

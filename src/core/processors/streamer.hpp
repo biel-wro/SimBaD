@@ -4,7 +4,7 @@
 #include <core_def.hpp>
 #include <core_fwd.hpp>
 
-#include "processors/advancer.hpp"
+#include "processors/model_advancer.hpp"
 
 #include <memory>
 
@@ -20,7 +20,7 @@ public:
   void launch();
 
 protected:
-  std::unique_ptr<advancer> const m_advancer_ptr;
+  std::unique_ptr<model_advancer> const m_advancer_ptr;
   advance_estimator &m_final_estimator;
   std::unique_ptr<stream_printer> const m_stream_printer_ptr;
 };

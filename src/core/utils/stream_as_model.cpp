@@ -34,13 +34,8 @@ stream_as_model::stream_as_model(
 stream_as_model::stream_as_model(property_tree const &pt)
     : stream_as_model(factory_create_from_property_tree<stream_reader>(
                           pt.get_child("reader")),
-                      pt.get("key_attribute", "position"), [&pt] {
-                        std::vector<std::string> result;
-                        for(auto const &key_child_pair :
-                            pt.get_child("nonkey_attributes"))
-                          result.push_back(key_child_pair.second.data());
-                        return result;
-                      }())
+                      pt.get("key_attribute", "position"),
+                      pt.get_vector<std::string>("nonkey_attributes"))
 {
 }
 stream_as_model::~stream_as_model() = default;
@@ -55,8 +50,7 @@ bool stream_as_model::generate_events(event_source::event_visitor visitor,
   if(!m_maybe_delta_time_idx)
   {
     auto meta_visitor = [&visitor, &builder(*m_configuration_builder_ptr)](
-        attribute_list const &event)
-    {
+                            attribute_list const &event) {
       builder.push_event(event);
       visitor(event);
     };
@@ -66,16 +60,15 @@ bool stream_as_model::generate_events(event_source::event_visitor visitor,
 
   std::size_t full_event_count = 0;
 
-  auto meta_visitor = [
-    &full_event_count, delta_time_idx(m_maybe_delta_time_idx.get()), &visitor,
-    &builder(*m_configuration_builder_ptr)
-  ](attribute_list const &event)
-  {
-    builder.push_event(event);
-    visitor(event);
-    if(0 == event[delta_time_idx].get_int_val())
-      ++full_event_count;
-  };
+  auto meta_visitor =
+      [&full_event_count, delta_time_idx(m_maybe_delta_time_idx.get()),
+       &visitor,
+       &builder(*m_configuration_builder_ptr)](attribute_list const &event) {
+        builder.push_event(event);
+        visitor(event);
+        if(0 == event[delta_time_idx].get_int_val())
+          ++full_event_count;
+      };
 
   while(full_event_count < num_events)
   {

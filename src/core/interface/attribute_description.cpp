@@ -12,7 +12,7 @@
 #include <type_traits>
 
 BEGIN_NAMESPACE_CORE
-attribute_description::attribute_description() {}
+attribute_description::attribute_description() = default;
 attribute_description::attribute_description(
     std::initializer_list<attribute_descriptor> list)
     : attribute_description()
@@ -321,8 +321,9 @@ attribute_description::add_and_map_attributes(
 
     std::size_t src_index = it->attribute_idx();
     new2old.emplace(tgt_index, src_index);
-    ATTRIBUTE_KIND kind = it->kind();
-    insert(attribute_descriptor(tgt_index, name, kind));
+
+    insert(attribute_descriptor(tgt_index, name, it->kind(), it->scalar(),
+                                it->attribute_dimension()));
 
     tgt_index = next_unused_idx(tgt_index + 1);
   }

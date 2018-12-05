@@ -8,6 +8,7 @@ class chronicler;
 class chronicles_builder;
 class configuration_builder;
 class dataframe_tracker;
+class printing_chronicle_builder;
 class tracker_record;
 class snapshoter;
 class stream_printer;

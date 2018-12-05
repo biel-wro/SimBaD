@@ -14,15 +14,15 @@
 
 BEGIN_NAMESPACE_CORE
 
-class advancer
+class model_advancer
 {
 public:
   using estimator_ptr = std::unique_ptr<advance_estimator>;
   using estimator_ptr_vec = std::vector<estimator_ptr>;
 
   // constructors
-  explicit advancer(model &, estimator_ptr_vec);
-  ~advancer();
+  explicit model_advancer(model &, estimator_ptr_vec);
+  ~model_advancer();
 
   model const &get_model() const;
 
@@ -42,6 +42,9 @@ public:
 
   const_iterator begin() const;
   const_iterator end() const;
+
+  advance_estimator *const first_advancer_or_null();
+  advance_estimator const *const first_advancer_or_null() const;
 
 private:
   model &m_model_ref;

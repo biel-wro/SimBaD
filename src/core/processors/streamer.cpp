@@ -1,7 +1,7 @@
 #include "streamer.hpp"
 
 #include "interface/stream_printer.hpp"
-#include "processors/advancer.hpp"
+#include "processors/model_advancer.hpp"
 #include "repositories/create_from_property_tree.hpp"
 
 BEGIN_NAMESPACE_CORE
@@ -17,9 +17,9 @@ streamer::streamer(model &m, property_tree const &pt)
 streamer::streamer(model &m,
                    std::unique_ptr<advance_estimator> final_estimator_ptr,
                    std::unique_ptr<stream_printer> stream_printer_ptr)
-    : m_advancer_ptr{new advancer{m,
+    : m_advancer_ptr{new model_advancer{m,
                                   [&]() {
-                                    advancer::estimator_ptr_vec vector;
+                                    model_advancer::estimator_ptr_vec vector;
                                     vector.push_back(
                                         std::move(final_estimator_ptr));
                                     return vector;
