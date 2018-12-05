@@ -1,6 +1,6 @@
 #include "final_snapshot.hpp"
 
-#include "advancer.hpp"
+#include "model_advancer.hpp"
 #include "configurations/stacked_view_configuration.hpp"
 #include "interface/attribute.hpp"
 #include "interface/attribute_description.hpp"
@@ -8,7 +8,7 @@
 #include "interface/attribute_list.hpp"
 #include "interface/model.hpp"
 #include "interface/stream_printer.hpp"
-#include "processors/advancer.hpp"
+#include "processors/model_advancer.hpp"
 #include "repositories/create_from_property_tree.hpp"
 
 #include <assert.h>
@@ -46,20 +46,17 @@ final_snapshot::final_snapshot(
     std::unique_ptr<advance_estimator> final_advancer_ptr,
     std::unique_ptr<stream_printer> stream_printer_ptr,
     stacked_view_configuration stacked_view)
-    : m_advancer_ptr{std::make_unique<advancer>(
+    : m_advancer_ptr{std::make_unique<model_advancer>(
           model_ref,
           [&]() {
-            advancer::estimator_ptr_vec vector;
+            model_advancer::estimator_ptr_vec vector;
             if(nullptr != final_advancer_ptr)
               vector.push_back(std::move(final_advancer_ptr));
             return vector;
           }())},
-      m_final_estimator_ptr(m_advancer_ptr->begin() != m_advancer_ptr->end()
-                                ? &*m_advancer_ptr->begin()
-                                : nullptr),
+      m_final_estimator_ptr(m_advancer_ptr->first_advancer_or_null()),
       m_stream_printer_ptr(std::move(stream_printer_ptr)),
       m_stacked_view(std::move(stacked_view))
-
 {
 }
 

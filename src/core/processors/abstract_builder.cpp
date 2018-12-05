@@ -31,9 +31,8 @@ abstract_builder::abstract_builder(
       m_event_kind_idx{event_description.get_attribute_idx(
           ATTRIBUTE_KIND::EVENT_KIND, true)},
       m_key_idx{event_description.get_attribute_idx(key_name)},
-      m_delta_time_idx{
-          event_description.get_attribute_idx
-          (ATTRIBUTE_KIND::EVENT_DELTA_TIME,true)}
+      m_delta_time_idx{event_description.get_attribute_idx(
+          ATTRIBUTE_KIND::EVENT_DELTA_TIME, true)}
 {
 }
 
@@ -62,23 +61,28 @@ void abstract_builder::push_event(attribute_list const &event)
 {
   EVENT_KIND event_kind = event[event_kind_idx()].get_event_kind_val();
   attribute key = event[key_idx()];
-  attribute::int_type const delta_time = event[delta_time_idx()].get_int_val();
+  std::size_t const delta_time =
+      boost::numeric_cast<std::size_t>(event[delta_time_idx()].get_int_val());
 
   assert(delta_time >= 0);
 
   if(delta_time < m_current_delta_time)
   {
+    // this is another sub-event in the same event group
     assert(delta_time == m_current_delta_time - 1);
   }
   else
   {
+    // its the first event in the stream or the event group has just ended
     if(m_event_group_open)
       on_event_group_end();
-
-    m_current_delta_time = boost::numeric_cast<std::size_t>(delta_time);
+    else
+      m_event_group_open = true;
 
     on_event_group_start(delta_time + 1);
   }
+
+  m_current_delta_time = delta_time;
 
   switch(event_kind)
   {
@@ -125,7 +129,7 @@ void abstract_builder::on_transform(attribute const &key,
 std::size_t abstract_builder::key_idx() const { return m_key_idx; }
 std::size_t abstract_builder::event_kind_idx() const
 {
-  return m_delta_time_idx;
+  return m_event_kind_idx;
 }
 std::size_t abstract_builder::delta_time_idx() const
 {

@@ -1,7 +1,7 @@
 set( TARGET_NAME ${CORE_NAME} )
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
-
+include_directories( core )
 set( SOURCES
 
   # computational
@@ -65,8 +65,9 @@ set( SOURCES
   processors/chronicler.cpp
   processors/chronicles_builder.cpp
   processors/configuration_builder.cpp
-  processors/advancer.cpp
+  processors/model_advancer.cpp
   processors/final_snapshot.cpp
+  processors/printing_chronicle_builder.cpp
   processors/snapshoter.cpp
   processors/streamer.cpp
 #  processors/tree_builder

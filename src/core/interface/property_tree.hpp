@@ -32,6 +32,7 @@ public:
   }
   std::size_t total_size(bool ignore_empty = true) const;
 
+
   template <typename T> std::vector<T> get_vector(std::string const &key) const
   {
     std::vector<T> r;

@@ -49,6 +49,18 @@ void chronicles_builder::set_configuration(
   configuration.visit_records(visitor);
 }
 
+void chronicles_builder::emit_alive()
+{
+  for(auto const &key_datum_pair : m_chronicle_data)
+  {
+    attribute const &key = key_datum_pair.first;
+    chronicle_datum const &datum = key_datum_pair.second;
+    tracker_record const &record = get_record_or_throw(key);
+
+    emit_particle(record, datum, std::numeric_limits<double>::infinity());
+  }
+}
+
 std::size_t chronicles_builder::generate_next_id() { return m_next_id++; }
 
 void chronicles_builder::interpreter_context::reset()
@@ -62,8 +74,14 @@ void chronicles_builder::on_event_group_start(std::size_t num_subevents) {}
 
 void chronicles_builder::on_event_group_end()
 {
+  if(m_interpreter_context.m_keys.empty())
+  {
+    m_interpreter_context.reset();
+    return;
+  }
+
   std::size_t parent_id = m_interpreter_context.m_maybe_parent
-                              ? *m_interpreter_context.m_maybe_time
+                              ? *m_interpreter_context.m_maybe_parent
                               : 0;
   double birth_time = m_interpreter_context.m_maybe_time
                           ? *m_interpreter_context.m_maybe_time
@@ -114,6 +132,8 @@ void chronicles_builder::on_transform(attribute const &key,
   chronicle_datum &datum = get_chronicle_or_throw(key);
   tracker_record &record = get_record_or_throw(key);
 
+  m_interpreter_context.m_maybe_parent = datum.id;
+
   double event_time = event[m_event_time_idx].get_real_val();
 
   emit_particle(record, datum, event_time);
@@ -121,8 +141,9 @@ void chronicles_builder::on_transform(attribute const &key,
   m_alive_particles.update(event, m_event_to_particle_mapping.begin(),
                            m_event_to_particle_mapping.end());
 
-  fetch_time_if_not_set(m_interpreter_context, event);
-  m_interpreter_context.m_keys.push_back(key);
+  datum.parent_id = datum.id;
+  datum.id = generate_next_id();
+  datum.birth_time = event_time;
 }
 
 chronicles_builder::chronicle_datum &
@@ -132,7 +153,7 @@ chronicles_builder::get_chronicle_or_throw(attribute const &key)
       m_chronicle_data.find(key);
 
   if(m_chronicle_data.end() == chronicle_it)
-    throw std::runtime_error("chronicler for particle with key " +
+    throw std::runtime_error("chronicle for particle with key " +
                              key.nice_string() + " not found");
 
   return chronicle_it->second;

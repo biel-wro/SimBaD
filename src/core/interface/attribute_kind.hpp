@@ -11,6 +11,7 @@ enum class ATTRIBUTE_KIND : std::uint32_t
 {
   /* Special attributes */
   PARTICLE_UID,      // optional, unique, integer, scalar
+  PARENT_UID,        // optional, integer, scalar
   PARTICLE_POSITION, // optional, numeric values, fixed dimension
   EVENT_UID,         // optional, unique, integer, scalar
   EVENT_TIME,        // numeric scalar

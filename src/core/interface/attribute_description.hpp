@@ -118,6 +118,8 @@ public:
 
   void add_attributes(attribute_description const &other,
                       std::vector<std::string> const &names);
+
+
   // mappings
   std::vector<std::size_t>
   lin_mapping_from(attribute_description const &other) const;

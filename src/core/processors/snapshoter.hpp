@@ -34,7 +34,7 @@ protected:
   bool next_step();
 
 private:
-  std::unique_ptr<advancer> const m_advancer_ptr;
+  std::unique_ptr<model_advancer> const m_advancer_ptr;
   advance_estimator &m_step_estimator;
   advance_estimator &m_final_estimator;
   std::unique_ptr<stream_printer> const m_stream_printer_ptr;
