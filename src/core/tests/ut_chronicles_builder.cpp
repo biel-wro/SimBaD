@@ -9,6 +9,8 @@
 #include "utils/stream_as_configuration.hpp"
 #include "interface/attribute_description.hpp"
 
+#include <sstream>
+
 BOOST_AUTO_TEST_SUITE(test_chronicle_builder)
 
 // clang-format off
@@ -28,6 +30,17 @@ R"( position, property, event.time, event.delta_time, event.kind
     2.2,      2.4,      0.4,        1,                1
     2.1,      2.5,      0.4,        0,                4
 )";
+
+const char expected_chronicle_csv[] =
+R"("id"; "parent.id"; "birth_time"; "death_time"; "position"; "property"
+1; 0; -inf; 0.1; 1; 1.1
+2; 0; -inf; 0.2; 2; 2.1
+3; 0; -inf; 0.3; 3; 3.1
+5; 2; 0.2; 0.4; 2.1; 2.3
+7; 5; 0.4; inf; 2.2; 2.4
+4; 2; 0.2; inf; 2; 2.2
+6; 5; 0.4; inf; 2.1; 2.5
+)";
 // clang-format on
 
 namespace core = simbad::core;
@@ -46,7 +59,9 @@ BOOST_AUTO_TEST_CASE(smoke)
   core::attribute_description event_description = reader.read_header();
   event_description.standardize_record("position");
 
-  core::csv_printer printer{&std::cout, "; ", 3};
+  std::stringstream output;
+
+  core::csv_printer printer{&output, "; ", 3};
   core::printing_chronicle_builder builder(event_description, "position",
                                            {"property"}, printer);
 
@@ -58,15 +73,11 @@ BOOST_AUTO_TEST_CASE(smoke)
 
 
   builder.write_header();
-  std::cout<< "---------" <<std::endl;
-
   reader.visit_entries(read_visitor, 1000);
-  std::cout<< "---------" <<std::endl;
-
   builder.write_footer();
 
 
-  BOOST_REQUIRE(false);
+  BOOST_CHECK_EQUAL(output.str(), expected_chronicle_csv);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

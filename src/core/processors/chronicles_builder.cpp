@@ -51,6 +51,12 @@ void chronicles_builder::set_configuration(
 
 void chronicles_builder::emit_alive()
 {
+  if(m_event_group_open)
+  {
+    m_event_group_open = false;
+    on_event_group_end();
+  }
+
   for(auto const &key_datum_pair : m_chronicle_data)
   {
     attribute const &key = key_datum_pair.first;
@@ -62,7 +68,6 @@ void chronicles_builder::emit_alive()
 }
 
 std::size_t chronicles_builder::generate_next_id() { return m_next_id++; }
-
 void chronicles_builder::interpreter_context::reset()
 {
   m_maybe_time = boost::none;
@@ -71,7 +76,6 @@ void chronicles_builder::interpreter_context::reset()
 }
 
 void chronicles_builder::on_event_group_start(std::size_t num_subevents) {}
-
 void chronicles_builder::on_event_group_end()
 {
   if(m_interpreter_context.m_keys.empty())
