@@ -5,6 +5,7 @@
 
 #include <cstdint>
 #include <iosfwd>
+#include <string>
 
 BEGIN_NAMESPACE_CORE
 enum class ATTRIBUTE_KIND : std::uint32_t
