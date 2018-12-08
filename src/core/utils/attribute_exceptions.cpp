@@ -7,6 +7,29 @@
 
 BEGIN_NAMESPACE_CORE
 
+static std::underlying_type_t<ATTRIBUTE_KIND>
+kind_as_integer(ATTRIBUTE_KIND kind)
+{
+  return static_cast<std::underlying_type_t<ATTRIBUTE_KIND>>(kind);
+}
+
+unrecognized_attribute::unrecognized_attribute(std::string name)
+    : super("unrecognized attribute name `" + name + "`")
+{
+}
+unrecognized_attribute::unrecognized_attribute(std::size_t attrno)
+    : super("unrecognized attribute with id=`" + std::to_string(attrno) + "`")
+{
+}
+
+unrecognized_attribute::unrecognized_attribute(ATTRIBUTE_KIND kind,
+                                               bool required_special)
+    : super((required_special ? "unrecognized special attribute kind no`"
+                              : "unrecognized attribute kind no`") +
+            std::to_string(kind_as_integer(kind)) + "`")
+{
+}
+
 unrecognized_attribute_name::unrecognized_attribute_name(std::string name)
     : unrecognized_attribute(std::string("unrecognized attribute name `") +
                              name + "`"),
@@ -28,12 +51,6 @@ unrecognized_attribute_number::unrecognized_attribute_number(std::size_t attrno)
 std::size_t unrecognized_attribute_number::attribute_idx() const
 {
   return m_attributeno;
-}
-
-static std::underlying_type_t<ATTRIBUTE_KIND>
-kind_as_integer(ATTRIBUTE_KIND kind)
-{
-  return static_cast<std::underlying_type_t<ATTRIBUTE_KIND>>(kind);
 }
 
 unrecognized_attribute_kind::unrecognized_attribute_kind(ATTRIBUTE_KIND kind)

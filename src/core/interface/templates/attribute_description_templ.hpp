@@ -58,17 +58,22 @@ attribute_description::add_and_map_attributes(
 
   for(Iterator it = first; it < last; ++it)
   {
-    std::string const &name = *it;
+    auto const &key = *it;
 
     boost::optional<attribute_descriptor const &> descriptor =
-        other.get_descriptor(name);
+        other.get_descriptor(key);
     if(!descriptor)
-      throw unrecognized_attribute_name(name);
+      throw unrecognized_attribute(key);
 
     std::size_t src_index = descriptor->attribute_idx();
     new_to_old.emplace(tgt_index, src_index);
-    ATTRIBUTE_KIND kind = descriptor->kind();
-    insert(attribute_descriptor(tgt_index, name, kind));
+
+    insert(attribute_descriptor(tgt_index,                        //
+                                descriptor->attribute_name(),     //
+                                descriptor->kind(),               //
+                                descriptor->scalar(),             //
+                                descriptor->attribute_dimension() //
+                                ));
     tgt_index = next_unused_idx(tgt_index + 1);
   }
 

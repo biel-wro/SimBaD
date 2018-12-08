@@ -107,9 +107,10 @@ public:
   add_and_map_attributes(property_tree const &pt, bool ignore_empty = true);
 
   // optional map new_idx=>old_idx might be useful sometimes
-  std::unordered_map<std::size_t, std::size_t> add_and_map_attributes(
-      attribute_description const &other, std::size_t start_target_idx = 0,
-      std::unordered_set<std::string> const *names = nullptr);
+  //std::unordered_map<std::size_t, std::size_t>
+  //add_and_map_attributes(attribute_description const &other,
+  //                       std::size_t start_target_idx,
+  //                       const std::unordered_set<string> &names);
 
   std::unordered_map<std::size_t, std::size_t>
   add_and_map_attributes(attribute_description const &other,
@@ -119,7 +120,9 @@ public:
   void add_attributes(attribute_description const &other,
                       std::vector<std::string> const &names);
 
-
+  void add_attributes(attribute_description const &source,
+                      std::vector<std::size_t> const &indices,
+                      std::size_t start_target_idx = 0);
   // mappings
   std::vector<std::size_t>
   lin_mapping_from(attribute_description const &other) const;

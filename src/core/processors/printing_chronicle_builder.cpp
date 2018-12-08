@@ -1,10 +1,10 @@
 #include "processors/printing_chronicle_builder.hpp"
 
+#include "interface/attribute.hpp"
 #include "interface/attribute_description.hpp"
 #include "interface/attribute_kind.hpp"
 #include "interface/attribute_list.hpp"
 #include "interface/stream_printer.hpp"
-#include "interface/attribute.hpp"
 
 BEGIN_NAMESPACE_CORE
 
@@ -64,8 +64,14 @@ attribute_description printing_chronicle_builder::chronicle_description() const
                                 ATTRIBUTE_KIND::EVENT_TIME, //
                                 ATTRIBUTE_SCALAR::REAL,     //
                                 1);
+  std::cerr << m_dataframe_description << std::endl;
 
-  result.add_and_map_attributes(m_dataframe_description);
+  std::vector<std::size_t> indices_to_copy(m_dataframe_description.size());
+  std::iota(indices_to_copy.begin(), indices_to_copy.end(), 0);
+
+  result.add_attributes(m_dataframe_description, indices_to_copy);
+
+  std::cerr << result << std::endl;
 
   return result;
 }
@@ -84,5 +90,4 @@ void printing_chronicle_builder::emit_particle(const tracker_record &record,
 }
 
 void printing_chronicle_builder::write_footer() { emit_alive(); }
-
 END_NAMESPACE_CORE

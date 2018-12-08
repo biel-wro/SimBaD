@@ -4,7 +4,7 @@
 #include "interface/attribute_description.hpp"
 #include "interface/attribute_kind.hpp"
 #include "interface/event_kind.hpp"
-#include "interface/finite_dataframe.hpp"
+#include "interface/configuration_view.hpp"
 
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/optional.hpp>
@@ -38,7 +38,8 @@ abstract_builder::abstract_builder(
 
 abstract_builder::~abstract_builder() = default;
 
-void abstract_builder::set_configuration(finite_dataframe const &configuration)
+void abstract_builder::read_configuration(
+    configuration_view const &configuration)
 {
   std::vector<std::size_t> mapping =
       m_dataframe_description.lin_mapping_from(configuration.description());
@@ -103,7 +104,6 @@ void abstract_builder::push_event(attribute_list const &event)
 
 void abstract_builder::on_event_group_start(std::size_t nm) {}
 void abstract_builder::on_event_group_end() {}
-
 void abstract_builder::on_create(attribute const &key,
                                  attribute_list const &event)
 {

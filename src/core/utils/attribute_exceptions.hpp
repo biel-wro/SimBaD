@@ -12,6 +12,10 @@ BEGIN_NAMESPACE_CORE
 class unrecognized_attribute : public std::logic_error
 {
 public:
+  explicit unrecognized_attribute(std::size_t);
+  explicit unrecognized_attribute(std::string);
+  explicit unrecognized_attribute(ATTRIBUTE_KIND,
+                                  bool should_be_special = false);
   using super = std::logic_error;
   using super::super;
 };
