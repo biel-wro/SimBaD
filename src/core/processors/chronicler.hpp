@@ -26,7 +26,7 @@ public:
   void launch();
 
   void set_initial_configuration(configuration_view const &);
-  configuration_reader &configuration_reader();
+  configuration_reader &reader();
   printing_chronicle_builder &builder();
 protected:
 private:

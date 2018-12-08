@@ -56,7 +56,7 @@ void chronicler::set_initial_configuration(configuration_view const &conf)
 {
   m_builder_ptr->set_configuration(conf);
 }
-configuration_reader &chronicler::configuration_reader()
+configuration_reader &chronicler::reader()
 {
   return *m_builder_ptr;
 }
