@@ -67,7 +67,7 @@ tracker_record *dataframe_tracker::create_record(AttributeList &&list,
                                                  RecordIdxIterator beg_idx,
                                                  RecordIdxIterator last_idx)
 {
-  assert(std::distance(beg_idx, last_idx) == m_record_length);
+  assert(std::size_t(std::distance(beg_idx, last_idx)) == m_record_length);
   void *memory_ptr = m_record_pool.malloc();
   tracker_record *record_ptr =
       tracker_record::initialize(memory_ptr, list, beg_idx, last_idx);

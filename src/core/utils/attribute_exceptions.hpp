@@ -17,7 +17,6 @@ public:
   explicit unrecognized_attribute(ATTRIBUTE_KIND,
                                   bool should_be_special = false);
   using super = std::logic_error;
-  using super::super;
 };
 
 class unrecognized_attribute_name : public unrecognized_attribute

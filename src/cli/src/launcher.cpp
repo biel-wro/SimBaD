@@ -139,7 +139,7 @@ void launcher::launch_chronicler(core::stream_reader &source_ref,
                                  property_tree const &pt)
 {
   chronicler processor(source_ref, pt);
-  set_initial_configuration(processor.configuration_reader());
+  set_initial_configuration(processor.reader());
   processor.launch();
 }
 END_NAMESPACE_CLI
