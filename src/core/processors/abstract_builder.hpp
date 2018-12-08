@@ -1,11 +1,12 @@
 #ifndef SIMBAD_PROCESSORS_CHRONICLE_BUILDER_HPP
 #define SIMBAD_PROCESSORS_CHRONICLE_BUILDER_HPP
 
+#include "interface/configuration_reader.hpp"
 #include "processors/dataframe_tracker.hpp"
 
 BEGIN_NAMESPACE_CORE
 
-class abstract_builder
+class abstract_builder : public configuration_reader
 {
 public:
   abstract_builder(attribute_description const &event_description,
@@ -13,7 +14,7 @@ public:
                    std::vector<std::string> const &nonkey_attribute_names);
   virtual ~abstract_builder();
 
-  virtual void set_configuration(finite_dataframe const &configuration);
+  virtual void read_configuration(configuration_view const &configuration);
   void push_event(attribute_list const &event);
 
 protected:

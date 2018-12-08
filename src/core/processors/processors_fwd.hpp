@@ -4,6 +4,7 @@
 #include "core_def.hpp"
 
 BEGIN_NAMESPACE_CORE
+class abstract_builder;
 class chronicler;
 class chronicles_builder;
 class configuration_builder;

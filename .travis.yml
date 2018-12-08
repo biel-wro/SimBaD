@@ -13,7 +13,7 @@ matrix:
         - docker run -v ${PWD}/:/code $DOCKERIMAGE sh -c "cd /code/build && ctest --VV -output-on-failure"
       env: DOCKERIMAGE=tozanski/simbad-dev:clang39
       
-    - dist: trusty  
+    - dist: trusty
       sudo: required
       services:
         - docker

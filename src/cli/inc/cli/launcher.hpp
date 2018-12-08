@@ -21,12 +21,25 @@ public:
   void launch();
 
 protected:
-  void launch_snapshots(property_tree const &pt);
-  void launch_stream(property_tree const &pt);
-  void launch_final_snapshot(property_tree const &pt);
+  void load_model();
+  void load_replay();
+  void load_reader();
+
+  void set_initial_configuration(core::configuration_reader &);
+
+  void launch_model();
+  void launch_nonmodel();
+
+  void launch_snapshots(core::model &, property_tree const &pt);
+  void launch_stream(core::model &, property_tree const &pt);
+  void launch_final_snapshot(core::model &, property_tree const &pt);
+
+  void launch_chronicler(core::stream_reader &, property_tree const &pt);
 
 private:
   property_tree m_property_tree;
+
+  std::unique_ptr<core::stream_reader> m_stream_reader_ptr;
   std::unique_ptr<core::model> m_model_ptr;
 };
 

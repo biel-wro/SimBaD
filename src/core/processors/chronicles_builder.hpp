@@ -17,7 +17,7 @@ public:
                      std::vector<std::string> const &nonkey_attribute_names);
   ~chronicles_builder() override;
 
-  void set_configuration(finite_dataframe const &view) override;
+  void read_configuration(configuration_view const &view) override;
   void emit_alive();
 
 protected:

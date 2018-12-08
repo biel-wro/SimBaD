@@ -22,8 +22,8 @@ chronicles_builder::chronicles_builder(
 
 chronicles_builder::~chronicles_builder() = default;
 
-void chronicles_builder::set_configuration(
-    finite_dataframe const &configuration)
+void chronicles_builder::read_configuration(
+    configuration_view const &configuration)
 {
   std::vector<std::size_t> mapping =
       m_dataframe_description.lin_mapping_from(configuration.description());

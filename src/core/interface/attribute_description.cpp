@@ -196,7 +196,7 @@ std::size_t attribute_description::copy_attribute_auto_idx(
                                 source.kind(),               //
                                 source.scalar(),             //
                                 source.attribute_dimension() //
-  );
+                                );
 }
 
 std::pair<std::vector<std::size_t>, std::vector<std::string>>
@@ -301,11 +301,11 @@ attribute_description::add_and_map_attributes(const property_tree &pt,
 
   return values;
 }
-
+/*
 std::unordered_map<std::size_t, std::size_t>
 attribute_description::add_and_map_attributes(
     attribute_description const &other, std::size_t start_target_idx,
-    std::unordered_set<std::string> const *names)
+    std::unordered_set<std::string> const &names)
 {
   std::unordered_map<std::size_t, std::size_t> new2old;
 
@@ -328,7 +328,7 @@ attribute_description::add_and_map_attributes(
     tgt_index = next_unused_idx(tgt_index + 1);
   }
   return new2old;
-}
+}*/
 
 std::unordered_map<std::size_t, std::size_t>
 attribute_description::add_and_map_attributes(
@@ -345,8 +345,15 @@ void attribute_description::add_attributes(
   add_attributes(other, names.begin(), names.end());
 }
 
+void attribute_description::add_attributes(
+    attribute_description const &other, std::vector<std::size_t> const &indices,
+        std::size_t start_idx)
+{
+    add_and_map_attributes(other, indices.begin(), indices.end(), start_idx );
+}
+
 std::vector<std::size_t> attribute_description::lin_mapping_from(
-    const attribute_description &other) const
+    attribute_description const &other) const
 {
   std::vector<std::size_t> mapping(this->size());
 
