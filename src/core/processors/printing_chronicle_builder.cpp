@@ -11,26 +11,34 @@ BEGIN_NAMESPACE_CORE
 struct printing_chronicle_builder::chronicle_record : public attribute_list
 {
   chronicle_record(tracker_record const &rec, chronicle_datum const &dat,
-                   double const &death)
-      : record(rec), datum(dat), death_time(death)
-  {
-  }
-  ~chronicle_record() = default;
-  attribute get_attribute(std::size_t idx) const
-  {
-    switch(idx)
-    {
-    case 0: return datum.id;
-    case 1: return datum.parent_id;
-    case 2: return datum.birth_time;
-    case 3: return death_time;
-    default: return record.get(idx - extra_attributes_offset);
-    }
-  }
+                   double const &death);
+  ~chronicle_record();
+  attribute get_attribute(std::size_t idx) const;
   tracker_record const &record;
   chronicle_datum const &datum;
   double const &death_time;
 };
+
+printing_chronicle_builder::chronicle_record::chronicle_record(
+    const tracker_record &rec, const chronicle_datum &dat, const double &death)
+    : record(rec), datum(dat), death_time(death)
+{
+}
+
+printing_chronicle_builder::chronicle_record::~chronicle_record() {}
+
+attribute printing_chronicle_builder::chronicle_record::get_attribute(
+    std::size_t idx) const
+{
+  switch(idx)
+  {
+  case 0: return datum.id;
+  case 1: return datum.parent_id;
+  case 2: return datum.birth_time;
+  case 3: return death_time;
+  default: return record.get(idx - extra_attributes_offset);
+  }
+}
 
 printing_chronicle_builder::printing_chronicle_builder(
     attribute_description const &event_description, std::string const &key_name,
@@ -87,4 +95,5 @@ void printing_chronicle_builder::emit_particle(const tracker_record &record,
 }
 
 void printing_chronicle_builder::write_footer() { emit_alive(); }
+
 END_NAMESPACE_CORE
