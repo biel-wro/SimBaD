@@ -67,7 +67,7 @@ reader
   class csv_reader
   parameters
   {
-    file /home/tomek/SimBaD/mini_stream.csv
+    file STDIN
     delimiter ";"
   }
 }
