@@ -1,0 +1,1 @@
+cut "-d;" -f20 | tee >(grep 1 | wc -l 1>&2 )  | grep 2 | wc -l 1>&2
