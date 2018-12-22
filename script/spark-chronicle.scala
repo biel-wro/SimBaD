@@ -1,5 +1,7 @@
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
+import org.apache.spark.storage.StorageLevel
+import org.apache.spark.sql.SaveMode
 
 //val pathPrefix = "/scratch/dragons_food/neutral_evolution/10M-birth-efficiency-only-mutation-0.002/"
 //val numTimePoints = 100;
@@ -30,7 +32,7 @@ val chronicles = spark.read.
   option("mode","DROPMALFORMED").
   schema(chronicleSchema).
   load(pathPrefix + "/chronicles.csv.gz").
-  cache;
+  persist(StorageLevel.DISK_ONLY);
   
 val maxTime = chronicles.agg( max("birth_time") ).collect()(0).getDouble(0);
 
@@ -38,36 +40,38 @@ val uglyTree =  chronicles.
   select("id", "parent_id", "mutation_id").alias("children").
     join(chronicles.select("id","mutation_id").alias("parents"), $"children.parent_id"===$"parents.id", "left" );         
 
-val tree = ( ugly_tree.map( r => (
+val tree = uglyTree.map( r => (
   r.getLong(0),
   r.getLong(2),
   if (r.isNullAt(3)) 0 else r.getLong(3),
   if (r.isNullAt(4)) 0 else r.getLong(4)
-))
-  .withColumnRenamed("_1", "id")
-  .withColumnRenamed("_2", "mutation")
-  .withColumnRenamed("_3","parent")
-  .withColumnRenamed("_4","parent_mutation")
-)
-
-val mutation_tree = (
-  tree.filter( $"mutation" =!= $"parent_mutation")
-  .dropDuplicates("mutation")
-  .withColumnRenamed("id","first_particle_id")
-  .withColumnRenamed("parent_id","first_particle_parent")
-)
+)).
+  withColumnRenamed("_1", "id").
+  withColumnRenamed("_2", "mutation").
+  withColumnRenamed("_3","parent").
+  withColumnRenamed("_4","parent_mutation")
 
 
-mutation_tree.
+val mutationTree = 
+  tree.filter( $"mutation" =!= $"parent_mutation").
+  dropDuplicates("mutation").
+  withColumnRenamed("id","first_particle_id").
+  withColumnRenamed("parent_id","first_particle_parent")
+
+
+mutationTree.
   sort("mutation").
   select("mutation", "parent_mutation").
-  coalesce(1).
   write.
-  text(pathPrefix + "/tree.txt");
+  format("csv").
+  option("delimiter",";").
+  option("header", "true").
+  mode("overwrite").
+  save(pathPrefix + "/mutation_tree/");
 
 
 // snapshots
-for( t <- 0 to numTimePoints ){
+for( t <- 0 to maxTime ){
   chronicles.
   filter( (col("birth_time") < t) && (col("death_time") > t)  ).
   coalesce(1).
@@ -98,7 +102,7 @@ chronicles.filter( col("death_time") === Double.PositiveInfinity ).
   save(pathPrefix + "/final")  
   
   
-val snapshotsUdf = udf( (t1:Double, t2:Double) => (0d to numTimePoints by 1).filter( t => t1 < t && t < t2 ) )
+val snapshotsUdf = udf( (t1:Double, t2:Double) => (0d to maxTime by 1).filter( t => t1 < t && t < t2 ) )
 
 val snapshots = chronicles.withColumn("time_point", explode(snapshotsUdf($"birth_time", $"death_time") ))
 
