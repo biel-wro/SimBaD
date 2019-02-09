@@ -1,7 +1,9 @@
 #ifndef SKEWED_POLYNOMIAL_MUTATOR_HPP
 #define SKEWED_POLYNOMIAL_MUTATOR_HPP
 
-#include "interface/property_tree.hpp"
+#include "interface/fwd/computational_fwd.hpp"
+#include "interface/mutator.hpp"
+
 #include <random>
 #include <stdexcept>
 
