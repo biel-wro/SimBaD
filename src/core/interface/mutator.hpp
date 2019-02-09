@@ -6,11 +6,11 @@
 
 BEGIN_NAMESPACE_CORE
 
+template<class Scalar>
 class mutator
 {
 public:
-  using real_type = double;
-  mutator(property_tree const &pt);
+  using real_type = Scalar;
   virtual real_type operator()(real_type parent_val,
                                std::mt19937_64 &rng) const = 0;
   virtual ~mutator();

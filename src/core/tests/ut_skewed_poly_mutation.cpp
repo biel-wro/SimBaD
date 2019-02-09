@@ -1,6 +1,6 @@
 #include <boost/test/auto_unit_test.hpp>
 
-#include "computational/mutations/templ/skewed_polynomial_mutator.hpp"
+#include "computational/mutations/skewed_polynomial.hpp"
 #include <boost/math/distributions/beta.hpp>
 #include <iostream>
 using namespace simbad::core;
@@ -12,7 +12,7 @@ BOOST_AUTO_TEST_CASE(sampling_skewed_poly)
   constexpr double increase_power = 2.0;
   constexpr double decrease_power = 1.0;
 
-  skewed_polynomial_mutator<double> mut(improvement_prob, increase_power,
+  skewed_polynomial<double> mut(improvement_prob, increase_power,
                                         decrease_power);
   std::mt19937_64 rng;
 
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(sampling2)
   constexpr double improvement_prob = 0.1;
   constexpr double increase_power = 100.0;
   constexpr double decrease_power = 1.0;
-  skewed_polynomial_mutator<double> mut(improvement_prob, increase_power,
+  skewed_polynomial<double> mut(improvement_prob, increase_power,
                                         decrease_power);
   std::mt19937_64 rng;
 

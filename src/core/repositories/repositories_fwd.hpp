@@ -18,6 +18,8 @@ template <class Interface> factory<Interface> make_global_repository();
 // one specialization for each interface +instance in .cpp file
 SIMBAD_MAKE_REPOSITORY_EXPLICIT_SPECIALIZATION_DECL(advance_estimator);
 SIMBAD_MAKE_REPOSITORY_EXPLICIT_SPECIALIZATION_DECL(configuration_view);
+SIMBAD_MAKE_REPOSITORY_EXPLICIT_SPECIALIZATION_DECL(extractor<double>);
+SIMBAD_MAKE_REPOSITORY_EXPLICIT_SPECIALIZATION_DECL(mutator<double>);
 SIMBAD_MAKE_REPOSITORY_EXPLICIT_SPECIALIZATION_DECL(stream_printer);
 SIMBAD_MAKE_REPOSITORY_EXPLICIT_SPECIALIZATION_DECL(stream_reader);
 SIMBAD_MAKE_REPOSITORY_EXPLICIT_SPECIALIZATION_DECL(time_dependent_scalar);

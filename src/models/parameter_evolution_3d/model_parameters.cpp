@@ -3,14 +3,11 @@
 #include "intrinsic_params.hpp"
 #include "particle.hpp"
 
-#include "computational/mutations/builtin_mutators.hpp"
 #include "computational/time_dependent_scalars/constant_scalar.hpp"
 #include "interface/attribute_description.hpp"
 #include "interface/attribute_descriptor.hpp"
 #include "interface/class_register.hpp"
 #include "repositories/create_from_property_tree.hpp"
-
-using simbad::core::get_builtin_mutators;
 
 BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 
@@ -29,48 +26,59 @@ make_time_dependence(core::property_tree const &pt, std::string const &path)
       pt.get_child(path, default_time_dependence()));
 }
 
+static model_params::extractor_ptr
+create_extractor(core::property_tree const &pt, std::string const &path)
+{
+  return core::factory_create_from_property_tree<core::extractor<double>>(
+      pt.get_child(path));
+}
+
+static model_params::mutator_ptr create_mutator(core::property_tree const &pt,
+                                                std::string const &path)
+{
+  return core::factory_create_from_property_tree<core::mutator<double>>(pt,
+                                                                        path);
+}
+
 model_params::model_params(const simbad::core::property_tree &pt)
     : m_mutation_prob(pt.get<double>("mutation.probability")),
       m_interaction(pt.get_child("interaction")),
       m_dispersion(pt.get_child("birth.dispersion")),
-      m_birth_extractor(pt.get_child("birth.saturation")),
-      m_lifespan_extractor(pt.get_child("lifespan.saturation")),
-      m_success_extractor(pt.get_child("success.saturation")),
-      m_birth_eff_mutator_ptr(get_builtin_mutators().create_instance(
-          pt.get_child("birth.efficiency.mutator"))),
-      m_birth_res_mutator_ptr(get_builtin_mutators().create_instance(
-          pt.get_child("birth.resistance.mutator"))),
-      m_lifespan_eff_mutator_ptr(get_builtin_mutators().create_instance(
-          pt.get_child("lifespan.efficiency.mutator"))),
-      m_lifespan_res_mutator_ptr(get_builtin_mutators().create_instance(
-          pt.get_child("lifespan.resistance.mutator"))),
-      m_success_eff_mutator_ptr(get_builtin_mutators().create_instance(
-          pt.get_child("success.efficiency.mutator"))),
-      m_success_res_mutator_ptr(get_builtin_mutators().create_instance(
-          pt.get_child("success.resistance.mutator"))),
+      m_birth_extractor_ptr(create_extractor(pt, "birth.saturation")),
+      m_death_extractor_ptr(create_extractor(pt, "death.saturation")),
+      m_success_extractor_ptr(create_extractor(pt, "success.saturation")),
+      m_birth_eff_mutator_ptr(create_mutator(pt, "birth.efficiency.mutator")),
+      m_birth_res_mutator_ptr(create_mutator(pt, "birth.resistance.mutator")),
+      m_lifespan_eff_mutator_ptr(
+          create_mutator(pt, "lifespan.efficiency.mutator")),
+      m_lifespan_res_mutator_ptr(create_mutator(pt, "lifespan.resistance"
+                                                    ".mutator")),
+      m_success_eff_mutator_ptr(create_mutator(pt, "success.efficiency"
+                                                   ".mutator")),
+      m_success_res_mutator_ptr(
+          create_mutator(pt, "success.resistance.mutator")),
       m_success_eff_time_dep(
           make_time_dependence(pt, "success.efficiency.time_dependency")),
       m_success_res_time_dep(
-          make_time_dependence(pt, "succeess.resistane.time_dependency"))
+          make_time_dependence(pt, "success.resistance.time_dependency"))
 
 {
 }
 model_params::~model_params() {}
 double model_params::birth_rate(double density, double eff, double res) const
 {
-  double val = eff * birth_saturation(density / res);
+  double val = eff * (*m_birth_extractor_ptr)(density / res);
   return val;
 }
-
-double model_params::lifespan(double density, double eff, double res) const
+double model_params::death_rate(double density, double eff, double res) const
 {
-  double val = eff * lifespan_saturation(density / res);
+  double val = (*m_death_extractor_ptr)(density / res) / eff;
   return val;
 }
 
 double model_params::success_prob(double density, double eff, double res) const
 {
-  double val = eff * success_saturation(density / res);
+  double val = eff * (*m_success_extractor_ptr)(density / res);
   return val;
 }
 
@@ -91,7 +99,7 @@ static void apply_mutator(RealType &val, Mutator const &mutator, RNG &rng)
   RealType res = mutator(StoreRealType(val), rng);
   val = StoreRealType(res);
 }
-
+/*
 double model_params::birth_saturation(double x) const
 {
   return m_birth_extractor(x);
@@ -104,7 +112,7 @@ double model_params::success_saturation(double x) const
 {
   return m_success_extractor(x);
 }
-
+*/
 void model_params::mutate_birth(cell_params &cp, std::mt19937_64 &rnd) const
 {
   apply_mutator(cp.birth_eff(), *m_birth_eff_mutator_ptr, rnd);

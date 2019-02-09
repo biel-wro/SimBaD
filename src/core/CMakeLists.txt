@@ -6,9 +6,6 @@ set( SOURCES
 
   # computational
 
-  computational/mutations/builtin_mutators.cpp
-  computational/mutations/mutator.cpp
-  computational/mutations/mutator_register.cpp
 
   computational/time_dependent_scalars/time_dependent_scalar.cpp
   computational/time_dependent_scalars/constant_scalar.cpp
@@ -36,12 +33,14 @@ set( SOURCES
   interface/event_kind.cpp
   interface/event_sink.cpp
   interface/event_source.cpp
+  interface/extractor.cpp
   interface/finite_dataframe.cpp
   interface/advance_estimator.cpp
   interface/property_tree.cpp
   interface/model.cpp
   interface/model_factory.cpp
   interface/model_register.cpp
+  interface/mutator.cpp
   interface/static_advance_estimator.cpp
   interface/stream_printer.cpp
   interface/stream_reader.cpp
@@ -77,6 +76,8 @@ set( SOURCES
   # repositories
   repositories/advance_estimator_repository.cpp
   repositories/configuration_repository.cpp
+  repositories/extractor_repository.cpp
+  repositories/mutator_repository.cpp
   repositories/stream_printer_repository.cpp
   repositories/stream_reader_repository.cpp
 
