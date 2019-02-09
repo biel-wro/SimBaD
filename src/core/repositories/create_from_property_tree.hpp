@@ -21,6 +21,15 @@ factory_create_from_property_tree(property_tree const &pt)
   return instance;
 }
 
+template <class Interface>
+std::unique_ptr<Interface>
+factory_create_from_property_tree(property_tree const &pt,
+                                  std::string const &child_path)
+{
+  return factory_create_from_property_tree<Interface>(
+      pt.get_child(child_path, property_tree::get_empty()));
+}
+
 END_NAMESPACE_CORE
 
 #endif

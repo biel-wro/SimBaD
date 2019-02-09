@@ -471,9 +471,9 @@ double parameter_evolution_3d::compute_birth_rate(const cell &c) const
 double parameter_evolution_3d::compute_death_rate(const cell &c) const
 {
   cell_params const &cp = c.params();
-  double rate = m_model_params.lifespan(c.density(), cp.lifespan_eff(),
+  double rate = m_model_params.death_rate(c.density(), cp.lifespan_eff(),
                                         cp.lifespan_res());
-  return 1.0 / rate;
+  return rate;
 }
 
 double parameter_evolution_3d::compute_success_rate(const cell &c) const

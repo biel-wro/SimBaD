@@ -29,11 +29,11 @@ static property_tree make_paramaters()
   pt.put("birth.saturation.sigma", 10);
   pt.put("birth.saturation.gamma", 2);
   pt.put("birth.saturation.scale", 10);
-  pt.put("birth.efficiency.mutator.class", "skewed_polynomial_mutator");
+  pt.put("birth.efficiency.mutator.class", "skewed_polynomial");
   pt.put("birth.efficiency.mutator.parameters.improvement_probability", 0.1);
   pt.put("birth.efficiency.mutator.parameters.improvement_exponent", 100);
   pt.put("birth.efficiency.mutator.parameters.deterioration_exponent", 1);
-  pt.put("birth.resistance.mutator.class", "skewed_polynomial_mutator");
+  pt.put("birth.resistance.mutator.class", "skewed_polynomial");
   pt.put("birth.resistance.mutator.parameters.improvement_probability", 0.1);
   pt.put("birth.resistance.mutator.parameters.improvement_exponent", 100);
   pt.put("birth.resistance.mutator.parameters.deterioration_exponent", 1);
@@ -41,11 +41,11 @@ static property_tree make_paramaters()
   pt.put("lifespan.saturation.sigma", 10);
   pt.put("lifespan.saturation.gamma", 2);
   pt.put("lifespan.saturation.scale", 1000);
-  pt.put("lifespan.efficiency.mutator.class", "skewed_polynomial_mutator");
+  pt.put("lifespan.efficiency.mutator.class", "skewed_polynomial");
   pt.put("lifespan.efficiency.mutator.parameters.improvement_probability", 0.1);
   pt.put("lifespan.efficiency.mutator.parameters.improvement_exponent", 100);
   pt.put("lifespan.efficiency.mutator.parameters.deterioration_exponent", 1);
-  pt.put("lifespan.resistance.mutator.class", "skewed_polynomial_mutator");
+  pt.put("lifespan.resistance.mutator.class", "skewed_polynomial");
   pt.put("lifespan.resistance.mutator.parameters.improvement_probability", 0.1);
   pt.put("lifespan.resistance.mutator.parameters.improvement_exponent", 100);
   pt.put("lifespan.resistance.mutator.parameters.deterioration_exponent", 1);
@@ -54,11 +54,11 @@ static property_tree make_paramaters()
   pt.put("success.saturation.gamma", 2);
   pt.put("success.saturation.scale", 1);
 
-  pt.put("success.efficiency.mutator.class", "skewed_polynomial_mutator");
+  pt.put("success.efficiency.mutator.class", "skewed_polynomial");
   pt.put("success.efficiency.mutator.parameters.improvement_probability", 0.1);
   pt.put("success.efficiency.mutator.parameters.improvement_exponent", 100);
   pt.put("success.efficiency.mutator.parameters.deterioration_exponent", 1);
-  pt.put("success.resistance.mutator.class", "skewed_polynomial_mutator");
+  pt.put("success.resistance.mutator.class", "skewed_polynomial");
   pt.put("success.resistance.mutator.parameters.improvement_probability", 0.1);
   pt.put("success.resistance.mutator.parameters.improvement_exponent", 100);
   pt.put("success.resistance.mutator.parameters.deterioration_exponent", 1);

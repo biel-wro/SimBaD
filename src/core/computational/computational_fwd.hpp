@@ -7,7 +7,7 @@
 
 BEGIN_NAMESPACE_CORE
 // interface classes
-class mutator;
+
 class time_dependent_scalar;
 
 // as std::function

@@ -7,6 +7,10 @@
 
 #include "core_def.hpp"
 
+#include "fwd/computational_fwd.hpp"
+#include "fwd/io_fwd.hpp"
+
+
 BEGIN_NAMESPACE_CORE
 
 // non-enum types
@@ -28,8 +32,6 @@ class model_factory;
 class model_register;
 class property_tree;
 class static_advance_estimator;
-class stream_printer;
-class stream_reader;
 
 // enums
 enum class ATTRIBUTE_KIND : std::uint32_t;
@@ -37,8 +39,9 @@ enum class ATTRIBUTE_SCALAR : std::uint32_t;
 enum class EVENT_KIND : std::uint32_t;
 
 // template classes
-template <class T> class array_attribute;
-template <class T> class class_register;
+template <class> class array_attribute;
+template <class> class class_register;
+template <class> class extractor;
 
 // aliases
 using event = attribute_list;
