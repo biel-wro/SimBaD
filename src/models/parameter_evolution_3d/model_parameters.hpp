@@ -23,7 +23,7 @@ struct model_params
   using extractor_ptr = std::unique_ptr<core::extractor<double>>;
   using time_scalar_ptr = std::unique_ptr<core::time_dependent_scalar>;
 
-  model_params(simbad::core::property_tree const &pt);
+  explicit model_params(simbad::core::property_tree const &pt);
   ~model_params();
 
   double birth_rate(double density, double efficiency, double resistance) const;
@@ -36,7 +36,6 @@ struct model_params
   void mutate_success(cell_params &cp, std::mt19937_64 &rnd) const;
   interaction_type const &interaction() const;
   dispersion_type const &dispersion() const;
-
 protected:
 
 private:
@@ -51,8 +50,8 @@ private:
 
   mutator_ptr const m_birth_eff_mutator_ptr;
   mutator_ptr const m_birth_res_mutator_ptr;
-  mutator_ptr const m_lifespan_eff_mutator_ptr;
-  mutator_ptr const m_lifespan_res_mutator_ptr;
+  mutator_ptr const m_death_eff_mutator_ptr;
+  mutator_ptr const m_death_res_mutator_ptr;
   mutator_ptr const m_success_eff_mutator_ptr;
   mutator_ptr const m_success_res_mutator_ptr;
 

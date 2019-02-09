@@ -15,10 +15,17 @@ factory_create_from_property_tree(property_tree const &pt)
   property_tree const &parameters_tree =
       pt.get_child("parameters", property_tree::get_empty());
 
-  std::unique_ptr<Interface> instance =
-      factory<Interface>::global_instance().at(class_name)(parameters_tree);
+  factory<Interface> const &f = factory<Interface>::global_instance();
 
-  return instance;
+  auto it = f.find(class_name);
+  if(f.end() == it)
+    throw std::out_of_range(
+        "could not find name `" + class_name + "` for interface `" +
+        boost::typeindex::type_id<Interface>().pretty_name() + "`");
+
+  std::unique_ptr<Interface> instance_ptr = it->second(parameters_tree);
+
+  return instance_ptr;
 }
 
 template <class Interface>
