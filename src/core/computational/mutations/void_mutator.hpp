@@ -1,14 +1,16 @@
-#ifndef NVOID_MUTATOR_HPP
-#define NVOID_MUTATOR_HPP
+#ifndef SIMBAD_VOID_MUTATOR_HPP
+#define SIMBAD_VOID_MUTATOR_HPP
 
+#include "interface/interface_fwd.hpp"
 #include "interface/mutator.hpp"
 
 BEGIN_NAMESPACE_CORE
-template <class RealType> class void_mutator final: public mutator<RealType>
+template <class RealType> class void_mutator final : public mutator<RealType>
 {
   using real_type = RealType;
+
 public:
-  void_mutator(property_tree const &);
+  explicit void_mutator(property_tree const &);
   template <class RNG> real_type operator()(real_type v, RNG &) const;
   real_type operator()(real_type, std::mt19937_64 &) const override;
 };

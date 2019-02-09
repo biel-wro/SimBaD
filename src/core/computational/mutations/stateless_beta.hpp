@@ -1,9 +1,8 @@
 #ifndef STATELESS_BETA_MUTATOR_HPP
 #define STATELESS_BETA_MUTATOR_HPP
 
+#include "interface/interface_fwd.hpp"
 #include "interface/mutator.hpp"
-
-#include "interface/property_tree.hpp"
 
 #include <boost/math/distributions/beta.hpp>
 
