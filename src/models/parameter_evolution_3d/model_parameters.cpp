@@ -27,14 +27,14 @@ make_time_dependence(core::property_tree const &pt, std::string const &path)
 }
 
 static model_params::extractor_ptr
-create_extractor(core::property_tree const &pt, std::string const &path)
+make_extractor(core::property_tree const &pt, std::string const &path)
 {
   return core::factory_create_from_property_tree<core::extractor<double>>(
       pt.get_child(path));
 }
 
-static model_params::mutator_ptr create_mutator(core::property_tree const &pt,
-                                                std::string const &path)
+static model_params::mutator_ptr make_mutator(core::property_tree const &pt,
+                                              std::string const &path)
 {
   return core::factory_create_from_property_tree<core::mutator<double>>(pt,
                                                                         path);
@@ -44,19 +44,18 @@ model_params::model_params(const simbad::core::property_tree &pt)
     : m_mutation_prob(pt.get<double>("mutation.probability")),
       m_interaction(pt.get_child("interaction")),
       m_dispersion(pt.get_child("birth.dispersion")),
-      m_birth_extractor_ptr(create_extractor(pt, "birth.saturation")),
-      m_death_extractor_ptr(create_extractor(pt, "death.saturation")),
-      m_success_extractor_ptr(create_extractor(pt, "success.saturation")),
-      m_birth_eff_mutator_ptr(create_mutator(pt, "birth.efficiency.mutator")),
-      m_birth_res_mutator_ptr(create_mutator(pt, "birth.resistance.mutator")),
-      m_lifespan_eff_mutator_ptr(
-          create_mutator(pt, "lifespan.efficiency.mutator")),
-      m_lifespan_res_mutator_ptr(create_mutator(pt, "lifespan.resistance"
-                                                    ".mutator")),
-      m_success_eff_mutator_ptr(create_mutator(pt, "success.efficiency"
-                                                   ".mutator")),
-      m_success_res_mutator_ptr(
-          create_mutator(pt, "success.resistance.mutator")),
+
+      m_birth_extractor_ptr(make_extractor(pt, "birth.saturation")),
+      m_death_extractor_ptr(make_extractor(pt, "death.saturation")),
+      m_success_extractor_ptr(make_extractor(pt, "success.saturation")),
+
+      m_birth_eff_mutator_ptr(make_mutator(pt, "birth.mutator.efficiency")),
+      m_birth_res_mutator_ptr(make_mutator(pt, "birth.mutator.resistance")),
+      m_death_eff_mutator_ptr(make_mutator(pt, "death.mutator.efficiency")),
+      m_death_res_mutator_ptr(make_mutator(pt, "death.mutator.resistance")),
+      m_success_eff_mutator_ptr(make_mutator(pt, "success.mutator.efficiency")),
+      m_success_res_mutator_ptr(make_mutator(pt, "success.mutator.resistance")),
+
       m_success_eff_time_dep(
           make_time_dependence(pt, "success.efficiency.time_dependency")),
       m_success_res_time_dep(
@@ -120,8 +119,8 @@ void model_params::mutate_birth(cell_params &cp, std::mt19937_64 &rnd) const
 }
 void model_params::mutate_lifespan(cell_params &cp, std::mt19937_64 &rnd) const
 {
-  apply_mutator(cp.lifespan_eff(), *m_lifespan_eff_mutator_ptr, rnd);
-  apply_mutator(cp.lifespan_res(), *m_lifespan_eff_mutator_ptr, rnd);
+  apply_mutator(cp.lifespan_eff(), *m_death_eff_mutator_ptr, rnd);
+  apply_mutator(cp.lifespan_res(), *m_death_eff_mutator_ptr, rnd);
 }
 
 void model_params::mutate_success(cell_params &cp, std::mt19937_64 &rnd) const
