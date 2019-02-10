@@ -26,8 +26,8 @@ make_time_dependence(core::property_tree const &pt, std::string const &path)
       pt.get_child(path, default_time_dependence()));
 }
 
-static model_params::extractor_ptr
-make_extractor(core::property_tree const &pt, std::string const &path)
+static model_params::extractor_ptr make_extractor(core::property_tree const &pt,
+                                                  std::string const &path)
 {
   return core::factory_create_from_property_tree<core::extractor<double>>(
       pt.get_child(path));
@@ -75,9 +75,13 @@ double model_params::death_rate(double density, double eff, double res) const
   return val;
 }
 
-double model_params::success_prob(double density, double eff, double res) const
+double model_params::success_prob(double density, double eff, double res,
+                                  double time) const
 {
-  double val = eff * (*m_success_extractor_ptr)(density / res);
+  double time_dep_eff = (*m_success_eff_time_dep)(time);
+  double time_dep_res = (*m_success_res_time_dep)(time);
+  double val =
+      time_dep_eff * (*m_success_extractor_ptr)(density / time_dep_res);
   return val;
 }
 

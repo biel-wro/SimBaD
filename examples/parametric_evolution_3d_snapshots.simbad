@@ -14,12 +14,9 @@ snapshots
   } 
   stacked_view { }
 }
-
-model
-{
-  class "parameter_evolution_3d"
-  parameters
-  {
+model {
+  class parameter_evolution_3d
+  parameters {
     space { tile_size 3 }
     seed 13
     mutation { probability 0.05 }
@@ -48,13 +45,10 @@ model
     }
   }
 }
-
-initial_configuration
-{
+initial_configuration {
   class "cubic_crystal"
   parameters { dimension 3 radius 2 spacing 1 }
-  default_attributes
-  {
+  default_attributes {
     birth { efficiency 0.1 resistance 0.5 }
     death { efficiency 0.1 resistance 0.5 }
     success { efficiency 0.9 resistance 0.5 }

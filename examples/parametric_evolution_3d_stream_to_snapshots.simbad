@@ -1,95 +1,35 @@
-snapshots
-{
-  step_estimator
-  {
-    class in_simulation_time
-    parameters
-    {
-      start_time 0
-      time_step 1
-    }
-  }
-  
-  final_estimator
-  {
-    class population_size
-    parameters
-    {
-      start_size 100000
-    }
-  }
-  
-  configuration_printer
-  {
-    class "csv_printer"
-    parameters
-    {
-      delimiter ";"
-      file STDOUT
-    }
-  } 
-  stacked_view
-  {
-  }
+snapshots {
+  step_estimator { class in_simulation_time parameters { start_time 0 time_step 1 } }
+  final_estimator { class population_size parameters { start_size 100000 } }
+  configuration_printer { class "csv_printer" parameters { delimiter ";" file STDOUT } } 
+  stacked_view {}
 }
 
-initial_configuration
-{
+initial_configuration {
   class "cubic_crystal"
-  parameters
-  {
-    dimension 3
-    radius 2
-    spacing 1
-  }
-  default_attributes
-  {
-    birth
-    {
-      efficiency 0.1
-      resistance 0.5
-    }
-    lifespan
-    {
-      efficiency 0.1
-      resistance 0.5
-    }
-    success
-    {
-      efficiency 0.9
-      resistance 0.5
-    }
-    mutation
-    {
-      id 1
-      parent
-      {
-        id 0
-      }
-    }
-    dummy 0.1
+  parameters { dimension 3 radius 2 spacing 1 }
+  default_attributes {
+    birth { efficiency 0.1 resistance 0.5 }
+    death { efficiency 0.1 resistance 0.5 }
+    success { efficiency 0.9 resistance 0.5 }
+    mutation { id 1 }
   }
 }
 
-replay
-{
-  reader
-  {
-    class csv_reader
-    parameters
-    {
-      file STDIN
-      delimiter ";"
-    }
+replay {
+  reader {
+    class csv_reader parameters { file STDIN delimiter ";" }
   }
-  
   key_attribute position
-  
-  nonkey_attributes
-  {
+  nonkey_attributes {
     "" mutation.id
-  }
-  
+    "" birth.efficiency
+    "" birth.resistance
+    "" death.efficiency
+    "" death.resistance
+    "" success.efficiency
+    "" success.resistance
+  }  
 }
 
 
