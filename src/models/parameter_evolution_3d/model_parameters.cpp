@@ -104,10 +104,10 @@ void model_params::mutate_birth(cell_params &cp, std::mt19937_64 &rnd) const
   apply_mutator(cp.birth_eff(), *m_birth_eff_mutator_ptr, rnd);
   apply_mutator(cp.birth_res(), *m_birth_res_mutator_ptr, rnd);
 }
-void model_params::mutate_lifespan(cell_params &cp, std::mt19937_64 &rnd) const
+void model_params::mutate_death(cell_params &cp, std::mt19937_64 &rnd) const
 {
-  apply_mutator(cp.lifespan_eff(), *m_death_eff_mutator_ptr, rnd);
-  apply_mutator(cp.lifespan_res(), *m_death_eff_mutator_ptr, rnd);
+  apply_mutator(cp.death_eff(), *m_death_eff_mutator_ptr, rnd);
+  apply_mutator(cp.death_res(), *m_death_eff_mutator_ptr, rnd);
 }
 
 void model_params::mutate_success(cell_params &cp, std::mt19937_64 &rnd) const

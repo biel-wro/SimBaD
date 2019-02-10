@@ -32,7 +32,7 @@ struct model_params
 
   bool sample_mutation(cell &cp, std::mt19937_64 &rng) const;
   void mutate_birth(cell_params &cp, std::mt19937_64 &rnd) const;
-  void mutate_lifespan(cell_params &cp, std::mt19937_64 &rnd) const;
+  void mutate_death(cell_params &cp, std::mt19937_64 &rnd) const;
   void mutate_success(cell_params &cp, std::mt19937_64 &rnd) const;
   interaction_type const &interaction() const;
   dispersion_type const &dispersion() const;

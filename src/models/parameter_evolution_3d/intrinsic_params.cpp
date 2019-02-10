@@ -69,8 +69,8 @@ cell_params::cell_params(const core::attribute_list &p,
                   )
 {
 }
-cell_params::cell_params(float birth_eff, float birth_res, float lifespan_eff,
-                         float lifespan_res, float success_eff,
+cell_params::cell_params(float birth_eff, float birth_res, float death_eff,
+                         float death_res, float success_eff,
                          float success_res, std::size_t mutation_id
 #ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
                          ,
@@ -85,8 +85,8 @@ cell_params::cell_params(float birth_eff, float birth_res, float lifespan_eff,
       m_mutation_id(mutation_id),
       m_birth_eff(birth_eff),
       m_birth_res(birth_res),
-      m_lifespan_eff(lifespan_eff),
-      m_lifespan_res(lifespan_res),
+      m_death_eff(death_eff),
+      m_death_res(death_res),
       m_success_eff(success_eff),
       m_success_res(success_res)
 {
@@ -98,8 +98,8 @@ core::attribute cell_params::get_attribute(std::size_t attr_idx) const
   {
   case 0: return birth_eff();
   case 1: return birth_res();
-  case 2: return lifespan_eff();
-  case 3: return lifespan_res();
+  case 2: return death_eff();
+  case 3: return death_res();
   case 4: return success_eff();
   case 5: return success_res();
   case 6: return mutation_id();
@@ -166,10 +166,10 @@ core::attribute cell_params::ancestry_ids() const
   return vector;
 }
 #endif
-float cell_params::lifespan_eff() const { return m_lifespan_eff; }
-float &cell_params::lifespan_eff() { return m_lifespan_eff; }
-float cell_params::lifespan_res() const { return m_lifespan_res; }
-float &cell_params::lifespan_res() { return m_lifespan_res; }
+float cell_params::death_eff() const { return m_death_eff; }
+float &cell_params::death_eff() { return m_death_eff; }
+float cell_params::death_res() const { return m_death_res; }
+float &cell_params::death_res() { return m_death_res; }
 float cell_params::birth_eff() const { return m_birth_eff; }
 float &cell_params::birth_eff() { return m_birth_eff; }
 float cell_params::birth_res() const { return m_birth_res; }
