@@ -3,6 +3,9 @@
 
 #include "computational/mutations/skewed_beta.hpp"
 
+#include "interface/property_tree.hpp"
+#include <boost/math/distributions/beta.hpp>
+
 BEGIN_NAMESPACE_CORE
 
 template<class RealType>

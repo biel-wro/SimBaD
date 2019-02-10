@@ -1,5 +1,5 @@
-#ifndef SKEWED_POLYNOMIAL_MUTATOR_HPP
-#define SKEWED_POLYNOMIAL_MUTATOR_HPP
+#ifndef SIMBAD_COMPUTATIONAL_MUTATORS_SKEWED_POLYNOMIAL_MUTATOR_HPP
+#define SIMBAD_COMPUTATIONAL_MUTATORS_SKEWED_POLYNOMIAL_MUTATOR_HPP
 
 #include "interface/fwd/computational_fwd.hpp"
 #include "interface/mutator.hpp"
@@ -47,4 +47,6 @@ private:
 
 END_NAMESPACE_CORE
 
-#endif // SKEWED_POLYNOMIAL_MUTATOR_HPP
+#include "impl/skewed_polynomial_impl.hpp"
+
+#endif

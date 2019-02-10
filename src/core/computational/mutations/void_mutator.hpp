@@ -1,5 +1,5 @@
-#ifndef SIMBAD_VOID_MUTATOR_HPP
-#define SIMBAD_VOID_MUTATOR_HPP
+#ifndef SIMBAD_COMPUTATIONAL_MUTATORS_VOID_MUTATOR_HPP
+#define SIMBAD_COMPUTATIONAL_MUTATORS_VOID_MUTATOR_HPP
 
 #include "interface/interface_fwd.hpp"
 #include "interface/mutator.hpp"
@@ -16,5 +16,7 @@ public:
 };
 
 END_NAMESPACE_CORE
+
+#include "impl/void_mutator_impl.hpp"
 
 #endif // NVOID_MUTATOR_HPP

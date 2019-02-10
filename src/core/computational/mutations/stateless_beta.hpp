@@ -1,5 +1,5 @@
-#ifndef STATELESS_BETA_MUTATOR_HPP
-#define STATELESS_BETA_MUTATOR_HPP
+#ifndef SIMBAD_COMPUTATIONAL_MUTATORS_STATELESS_BETA_MUTATOR_HPP
+#define SIMBAD_COMPUTATIONAL_MUTATORS_STATELESS_BETA_MUTATOR_HPP
 
 #include "interface/interface_fwd.hpp"
 #include "interface/mutator.hpp"
@@ -23,4 +23,6 @@ private:
   boost::math::beta_distribution<real_type> m_dist;
 };
 END_NAMESPACE_CORE
-#endif // STATELESS_BETA_MUTATOR_HPP
+#include "impl/stateless_beta_impl.hpp"
+
+#endif

@@ -3,11 +3,10 @@
 #include "core_def.hpp"
 
 #include "interface/mutator.hpp"
-#include "interface/property_tree.hpp"
-#include <boost/math/distributions/beta.hpp>
 
 #include <random>
 #include <stdexcept>
+
 BEGIN_NAMESPACE_CORE
 template <class RealType> class skewed_beta final : public mutator<RealType>
 {
@@ -34,4 +33,6 @@ private:
 
 END_NAMESPACE_CORE
 
-#endif // SKEWED_BETA_MUTATION_HPP
+#include "impl/skewed_beta_impl.hpp"
+
+#endif
