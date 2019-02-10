@@ -1,6 +1,7 @@
 #ifndef SIMBAD_SKEWED_POLYNOMIAL_IMPL_HPP
 #define SIMBAD_SKEWED_POLYNOMIAL_IMPL_HPP
 #include "computational/mutations/skewed_polynomial.hpp"
+#include "interface/property_tree.hpp"
 BEGIN_NAMESPACE_CORE
 
 template<class RealType>

@@ -20,10 +20,10 @@ static std::unique_ptr<core::attribute_description> make_description()
 
   desc.add_attribute_auto_idx("birth.efficiency", INTRINSIC, REAL, 1);
   desc.add_attribute_auto_idx("birth.resistance", INTRINSIC, REAL, 1);
-  desc.add_attribute_auto_idx("lifespan.efficiency", INTRINSIC, REAL, 1);
-  desc.add_attribute_auto_idx("lifespan.resistance", INTRINSIC, REAL, 1);
+  desc.add_attribute_auto_idx("death.efficiency", INTRINSIC, REAL, 1);
+  desc.add_attribute_auto_idx("death.resistance", INTRINSIC, REAL, 1);
   desc.add_attribute_auto_idx("success.efficiency", INTRINSIC, REAL, 1);
-  desc.add_attribute_auto_idx("succes.resistance", INTRINSIC, REAL, 1);
+  desc.add_attribute_auto_idx("success.resistance", INTRINSIC, REAL, 1);
   desc.add_attribute_auto_idx("mutation.id", INTRINSIC,
                               core::ATTRIBUTE_SCALAR::INT, 1);
 
@@ -40,8 +40,8 @@ const core::attribute_description &cell_params::description()
 cell_params::cell_params(const simbad::core::property_tree &pt)
     : cell_params(pt.get<float>("birth.efficiency"),    //
                   pt.get<float>("birth.resistance"),    //
-                  pt.get<float>("lifespan.efficiency"), //
-                  pt.get<float>("lifespan.resistance"), //
+                  pt.get<float>("death.efficiency"), //
+                  pt.get<float>("death.resistance"), //
                   pt.get<float>("success.efficiency"),  //
                   pt.get<float>("success.resistance"),  //
                   pt.get("mutation.id", std::size_t(0)) //
@@ -113,12 +113,11 @@ std::vector<std::size_t> cell_params::get_attribute_indices(
   return {
       mapping["birth.efficiency"].attribute_idx(),
       mapping["birth.resistance"].attribute_idx(),
-      mapping["lifespan.efficiency"].attribute_idx(),
-      mapping["lifespan.resistance"].attribute_idx(),
+      mapping["death.efficiency"].attribute_idx(),
+      mapping["death.resistance"].attribute_idx(),
       mapping["success.efficiency"].attribute_idx(),
       mapping["success.resistance"].attribute_idx(),
       mapping["mutation.id"].attribute_idx(),
-      // mapping["mutation.parent.id"].attribute_idx(),
   };
 }
 
