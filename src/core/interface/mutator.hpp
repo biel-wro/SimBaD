@@ -1,7 +1,8 @@
 #ifndef MUTATOR_HPP
 #define MUTATOR_HPP
 
-#include "interface/interface_fwd.hpp"
+#include "core_def.hpp"
+
 #include <random>
 
 BEGIN_NAMESPACE_CORE

@@ -1,5 +1,5 @@
-#ifndef UNIFORM_STEP_MUTATOR_HPP
-#define UNIFORM_STEP_MUTATOR_HPP
+#ifndef SIMBAD_COMPUTATIONAL_MUTATORS_UNIFORM_STEP_MUTATOR_HPP
+#define SIMBAD_COMPUTATIONAL_MUTATORS_UNIFORM_STEP_MUTATOR_HPP
 
 #include "interface/interface_fwd.hpp"
 #include "interface/mutator.hpp"
@@ -23,4 +23,7 @@ private:
 };
 
 END_NAMESPACE_CORE
-#endif // UNIFORM_STEP_MUTATOR_HPP
+
+#include "impl/uniform_step_impl.hpp"
+
+#endif
