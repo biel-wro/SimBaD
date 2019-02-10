@@ -28,7 +28,8 @@ struct model_params
 
   double birth_rate(double density, double efficiency, double resistance) const;
   double death_rate(double density, double efficiency, double resistance) const;
-  double success_prob(double densi, double efficiency, double resistance) const;
+  double success_prob(double density, double efficiency,
+                      double resistance, double time) const;
 
   bool sample_mutation(cell &cp, std::mt19937_64 &rng) const;
   void mutate_birth(cell_params &cp, std::mt19937_64 &rnd) const;
@@ -36,8 +37,8 @@ struct model_params
   void mutate_success(cell_params &cp, std::mt19937_64 &rnd) const;
   interaction_type const &interaction() const;
   dispersion_type const &dispersion() const;
-protected:
 
+protected:
 private:
   double m_mutation_prob;
 

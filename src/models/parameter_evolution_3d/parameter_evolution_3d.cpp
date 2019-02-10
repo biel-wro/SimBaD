@@ -481,7 +481,8 @@ double parameter_evolution_3d::compute_success_rate(const cell &c) const
 {
   cell_params const &cp = c.params();
   double r = m_model_params.success_prob(c.density(), cp.success_eff(),
-                                         cp.success_res());
+                                         cp.success_res(),
+                                         m_time);
   return r;
 }
 
