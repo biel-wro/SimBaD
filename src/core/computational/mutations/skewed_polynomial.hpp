@@ -2,6 +2,7 @@
 #define SIMBAD_COMPUTATIONAL_MUTATORS_SKEWED_POLYNOMIAL_MUTATOR_HPP
 
 #include "interface/fwd/computational_fwd.hpp"
+#include "interface/fwd/properties_fwd.hpp"
 #include "interface/mutator.hpp"
 
 #include <random>
@@ -50,3 +51,4 @@ END_NAMESPACE_CORE
 #include "impl/skewed_polynomial_impl.hpp"
 
 #endif
+

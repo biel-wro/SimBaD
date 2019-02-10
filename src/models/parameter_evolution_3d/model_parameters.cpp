@@ -98,20 +98,7 @@ static void apply_mutator(RealType &val, Mutator const &mutator, RNG &rng)
   RealType res = mutator(StoreRealType(val), rng);
   val = StoreRealType(res);
 }
-/*
-double model_params::birth_saturation(double x) const
-{
-  return m_birth_extractor(x);
-}
-double model_params::lifespan_saturation(double x) const
-{
-  return m_lifespan_extractor(x);
-}
-double model_params::success_saturation(double x) const
-{
-  return m_success_extractor(x);
-}
-*/
+
 void model_params::mutate_birth(cell_params &cp, std::mt19937_64 &rnd) const
 {
   apply_mutator(cp.birth_eff(), *m_birth_eff_mutator_ptr, rnd);

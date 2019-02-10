@@ -3,6 +3,7 @@
 #include "core_def.hpp"
 
 #include "interface/mutator.hpp"
+#include "interface/fwd/properties_fwd.hpp"
 
 #include <random>
 #include <stdexcept>
