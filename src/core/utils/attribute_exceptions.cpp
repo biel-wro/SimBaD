@@ -31,8 +31,7 @@ unrecognized_attribute::unrecognized_attribute(ATTRIBUTE_KIND kind,
 }
 
 unrecognized_attribute_name::unrecognized_attribute_name(std::string name)
-    : unrecognized_attribute(std::string("unrecognized attribute name `") +
-                             name + "`"),
+    : unrecognized_attribute(name),
       m_attribute_name(std::move(name))
 {
 }

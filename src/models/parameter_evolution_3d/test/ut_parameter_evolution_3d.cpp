@@ -86,8 +86,8 @@ static property_tree make_initial_vals()
   property_tree pt;
   pt.put("birth.efficiency", 0.1);
   pt.put("birth.resistance", 0.5);
-  pt.put("lifespan.efficiency", 0.1);
-  pt.put("lifespan.resistance", 0.5);
+  pt.put("death.efficiency", 0.1);
+  pt.put("death.resistance", 0.5);
   pt.put("success.efficiency", 0.9);
   pt.put("success.resistance", 0.5);
   pt.put("mutation.id", 1);

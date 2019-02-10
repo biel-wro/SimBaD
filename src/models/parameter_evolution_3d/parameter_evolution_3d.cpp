@@ -37,8 +37,9 @@ make_particle_descriptor()
   desc.add_attribute_auto_idx("next_event.kind", KIND::INFO, INT, 1);
   desc.add_attribute_auto_idx("birth.efficiency", KIND::INTRINSIC, REAL, 1);
   desc.add_attribute_auto_idx("birth.resistance", KIND::INTRINSIC, REAL, 1);
-  desc.add_attribute_auto_idx("lifespan.efficiency", KIND::INTRINSIC, REAL, 1);
-  desc.add_attribute_auto_idx("lifespan.resistance", KIND::INTRINSIC, REAL, 1);
+  desc.add_attribute_auto_idx("death.efficiency", KIND::INTRINSIC, REAL,
+      1);
+  desc.add_attribute_auto_idx("death.resistance", KIND::INTRINSIC, REAL, 1);
   desc.add_attribute_auto_idx("success.efficiency", KIND::INTRINSIC, REAL, 1);
   desc.add_attribute_auto_idx("success.resistance", KIND::INTRINSIC, REAL, 1);
   desc.add_attribute_auto_idx("mutation.id", KIND::INTRINSIC, INT, 1);
@@ -67,8 +68,8 @@ parameter_evolution_3d::particle_attribute(const cell &c,
   case 3: return std::int64_t(c.event_kind());
   case 4: return c.params().birth_eff();
   case 5: return c.params().birth_res();
-  case 6: return c.params().lifespan_eff();
-  case 7: return c.params().lifespan_res();
+  case 6: return c.params().death_eff();
+  case 7: return c.params().death_res();
   case 8: return c.params().success_eff();
   case 9: return c.params().success_res();
   case 10: return c.params().mutation_id();
@@ -471,8 +472,8 @@ double parameter_evolution_3d::compute_birth_rate(const cell &c) const
 double parameter_evolution_3d::compute_death_rate(const cell &c) const
 {
   cell_params const &cp = c.params();
-  double rate = m_model_params.death_rate(c.density(), cp.lifespan_eff(),
-                                        cp.lifespan_res());
+  double rate = m_model_params.death_rate(c.density(), cp.death_eff(),
+                                          cp.death_res());
   return rate;
 }
 
@@ -509,7 +510,7 @@ void parameter_evolution_3d::mutate(cell &c)
   mutated_params_ptr->set_mutation_id(next_mutation_id());
 
   m_model_params.mutate_birth(*mutated_params_ptr, m_rng);
-  m_model_params.mutate_lifespan(*mutated_params_ptr, m_rng);
+  m_model_params.mutate_death(*mutated_params_ptr, m_rng);
   m_model_params.mutate_success(*mutated_params_ptr, m_rng);
 
   c.set_params_ptr(mutated_params_ptr);

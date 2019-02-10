@@ -21,14 +21,14 @@ public:
   cell_params(simbad::core::property_tree const &pt);
   cell_params(simbad::core::attribute_list const &p,
               std::vector<std::size_t> const &attribute_indices);
-  cell_params(float birth_eff, float birth_res, float lifespan_eff,
-              float lifespan_res, float success_eff, float success_res,
+  cell_params(float birth_eff, float birth_res, float death_eff,
+              float death_res, float success_eff, float success_res,
               std::size_t mutation_id
 #ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
               ,
               std::shared_ptr<cell_params const> parent_ptr = nullptr
 #endif
-              );
+  );
 
   // accessors
   core::attribute get_attribute(std::size_t attr_idx) const;
@@ -40,10 +40,10 @@ public:
   void set_parent_ptr(std::shared_ptr<cell_params const> parent_ptr);
   core::attribute ancestry_ids() const;
 #endif
-  float lifespan_eff() const;
-  float &lifespan_eff();
-  float lifespan_res() const;
-  float &lifespan_res();
+  float death_eff() const;
+  float &death_eff();
+  float death_res() const;
+  float &death_res();
   float birth_eff() const;
   float &birth_eff();
   float birth_res() const;
@@ -60,8 +60,8 @@ private:
   std::size_t m_mutation_id;
   float m_birth_eff;
   float m_birth_res;
-  float m_lifespan_eff;
-  float m_lifespan_res;
+  float m_death_eff;
+  float m_death_res;
   float m_success_eff;
   float m_success_res;
 };
