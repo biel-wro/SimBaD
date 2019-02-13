@@ -3,7 +3,7 @@
 #include "intrinsic_params.hpp"
 #include "particle.hpp"
 
-#include "computational/time_dependent_scalars/constant_scalar.hpp"
+#include "computational/time_dependent_scalars/identity.hpp"
 #include "interface/attribute_description.hpp"
 #include "interface/attribute_descriptor.hpp"
 #include "interface/class_register.hpp"
@@ -14,7 +14,7 @@ BEGIN_NAMESPACE_PARAMETER_EVOLUTION_3D
 static core::property_tree const &default_time_dependence()
 {
   static std::unique_ptr<core::property_tree> const result_ptr{
-      new core::property_tree{{"class", "constant_scalar"},
+      new core::property_tree{{"class", "identity"},
                               {"parameters.scalar", "1"}}};
   return *result_ptr;
 }
@@ -63,12 +63,14 @@ model_params::model_params(const simbad::core::property_tree &pt)
 
 {
 }
-model_params::~model_params() {}
+model_params::~model_params() = default;
+
 double model_params::birth_rate(double density, double eff, double res) const
 {
   double val = eff * (*m_birth_extractor_ptr)(density / res);
   return val;
 }
+
 double model_params::death_rate(double density, double eff, double res) const
 {
   double val = (*m_death_extractor_ptr)(density / res) / eff;
@@ -78,8 +80,8 @@ double model_params::death_rate(double density, double eff, double res) const
 double model_params::success_prob(double density, double eff, double res,
                                   double time) const
 {
-  double time_dep_eff = (*m_success_eff_time_dep)(time);
-  double time_dep_res = (*m_success_res_time_dep)(time);
+  double time_dep_eff = (*m_success_eff_time_dep)(time, eff);
+  double time_dep_res = (*m_success_res_time_dep)(time, res);
   double val =
       time_dep_eff * (*m_success_extractor_ptr)(density / time_dep_res);
   return val;

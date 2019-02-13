@@ -8,7 +8,7 @@ set( SOURCES
 
 
   computational/time_dependent_scalars/time_dependent_scalar.cpp
-  computational/time_dependent_scalars/constant_scalar.cpp
+  computational/time_dependent_scalars/identity.cpp
   computational/time_dependent_scalars/repository.cpp
 
   # configuration
