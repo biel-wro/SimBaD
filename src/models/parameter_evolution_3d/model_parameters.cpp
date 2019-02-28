@@ -57,9 +57,9 @@ model_params::model_params(const simbad::core::property_tree &pt)
       m_success_res_mutator_ptr(make_mutator(pt, "success.mutator.resistance")),
 
       m_success_eff_time_dep(
-          make_time_dependence(pt, "success.efficiency.time_dependency")),
+          make_time_dependence(pt, "success.time_dependency.efficiency")),
       m_success_res_time_dep(
-          make_time_dependence(pt, "success.resistance.time_dependency"))
+          make_time_dependence(pt, "success.time_dependency.resistance"))
 
 {
 }
