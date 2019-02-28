@@ -27,17 +27,16 @@ get_filtered_estimators(model_advancer::estimator_ptr_vec const &all)
 
 model_advancer::model_advancer(model &model_ref, estimator_ptr_vec advancers)
     : m_model_ref(model_ref),
-      m_all_advancers(std::move(advancers)),
+      m_all_estimators(std::move(advancers)),
       m_static_estimators(
-          get_filtered_estimators<static_advance_estimator>(m_all_advancers)),
+          get_filtered_estimators<static_advance_estimator>(m_all_estimators)),
       m_dynamic_estimators(
-          get_filtered_estimators<dynamic_advance_estimator>(m_all_advancers)),
+          get_filtered_estimators<dynamic_advance_estimator>(m_all_estimators)),
       m_delta_time_attribute_idx(
           model_ref.event_description()
               .get_descriptor(ATTRIBUTE_KIND::EVENT_DELTA_TIME, true)
               .value()
-              .attribute_idx())
-{
+              .attribute_idx()){
   for(dynamic_advance_estimator *estimator_ptr : m_dynamic_estimators)
     estimator_ptr->set_description(m_model_ref.event_description());
 
@@ -115,30 +114,30 @@ static advance_estimator &dereference(model_advancer::estimator_ptr const &ptr)
 
 model_advancer::iterator model_advancer::begin()
 {
-  return {m_all_advancers.begin(), dereference};
+  return {m_all_estimators.begin(), dereference};
 }
 model_advancer::iterator model_advancer::end()
 {
-  return {m_all_advancers.end(), dereference};
+  return {m_all_estimators.end(), dereference};
 }
 
 model_advancer::const_iterator model_advancer::begin() const
 {
-  return {m_all_advancers.begin(), dereference};
+  return {m_all_estimators.begin(), dereference};
 }
 model_advancer::const_iterator model_advancer::end() const
 {
-  return {m_all_advancers.end(), dereference};
+  return {m_all_estimators.end(), dereference};
 }
 
 advance_estimator *const model_advancer::first_advancer_or_null()
 {
-  return m_all_advancers.empty() ? nullptr : m_all_advancers.front().get();
+  return m_all_estimators.empty() ? nullptr : m_all_estimators.front().get();
 }
 
 advance_estimator const *const model_advancer::first_advancer_or_null() const
 {
-  return m_all_advancers.empty() ? nullptr : m_all_advancers.front().get();
+  return m_all_estimators.empty() ? nullptr : m_all_estimators.front().get();
 }
 model const &model_advancer::get_model() const { return m_model_ref; }
 END_NAMESPACE_CORE

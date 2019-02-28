@@ -54,8 +54,8 @@ protected:
   std::size_t next_mutation_id();
   bool sample_mutation(cell const &c) const;
   void mutate(cell &c);
-  void execute_death(event_visitor v);
-  void execute_division(event_visitor v);
+  void execute_death(event_visitor const &v);
+  void execute_division(event_visitor const &v);
 #ifdef PARAMETER_EVOLUTION_3D_MUTATION_TREE
   std::vector<std::shared_ptr<cell_params const>> all_mutations() const;
 #endif
