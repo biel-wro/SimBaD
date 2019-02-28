@@ -49,7 +49,7 @@ public:
 private:
   model &m_model_ref;
 
-  estimator_ptr_vec const m_all_advancers;
+  estimator_ptr_vec const m_all_estimators;
   std::vector<static_advance_estimator *> const m_static_estimators;
   std::vector<dynamic_advance_estimator *> const m_dynamic_estimators;
 

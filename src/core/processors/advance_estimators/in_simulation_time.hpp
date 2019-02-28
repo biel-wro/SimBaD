@@ -17,7 +17,10 @@ public:
   std::size_t estimate() const override;
   bool next_target() override;
   void set_description(attribute_description const &) override;
-  void event_update(std::size_t, event const &) override;
+  void event_update(std::size_t events_since_last_measurement,
+                    event const &) override;
+
+protected:
 
 private:
   double const m_time_step;
@@ -29,6 +32,8 @@ private:
   std::size_t m_time_attribute_idx;
 
   double m_last_observed_time;
+  double m_delta_time;
+  double m_speed;
 };
 END_NAMESPACE_ADVANCE_ESTIMATORS
 #endif // SIMBAD_IN_SIMULATION_TIME_ADVANCER_HPP

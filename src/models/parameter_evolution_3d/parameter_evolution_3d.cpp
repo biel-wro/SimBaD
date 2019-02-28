@@ -517,14 +517,14 @@ void parameter_evolution_3d::mutate(cell &c)
   c.set_params_ptr(mutated_params_ptr);
 }
 
-void parameter_evolution_3d::execute_death(event_visitor v)
+void parameter_evolution_3d::execute_death(event_visitor const &v)
 {
   event_view<EVENT_KIND::REMOVED, 0> death_view(m_spacetime.top(), *this);
   v(death_view);
   pop();
 }
 void parameter_evolution_3d::execute_division(
-    parameter_evolution_3d::event_visitor v)
+    parameter_evolution_3d::event_visitor const &v)
 {
   //  cell const &parent = m_spacetime.top();
   spacetime::dirty_handle_type parent_handle = m_spacetime.first_dirty();
