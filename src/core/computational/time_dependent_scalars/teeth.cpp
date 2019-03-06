@@ -2,6 +2,8 @@
 
 #include "interface/property_tree.hpp"
 
+#include <cmath>
+
 BEGIN_NAMESPACE_CORE
 
 teeth::teeth(real_type start_time, real_type end_time, real_type factor,
@@ -15,9 +17,12 @@ teeth::teeth(real_type start_time, real_type end_time, real_type factor,
 }
 
 teeth::teeth(property_tree const &pt)
-    : teeth(pt.get<real_type>("start_time"), pt.get<real_type>("end_time"),
-            pt.get<real_type>("factor"), pt.get<real_type>("on_period"),
-            pt.get<real_type>("off_period"))
+    : m_start_time(pt.get<real_type>("start_time", 0.0)),
+      m_end_time(pt.get<real_type>("end_time",
+                                   std::numeric_limits<real_type>::infinity())),
+      m_factor(pt.get<real_type>("factor")),
+      m_on_period(pt.get<real_type>("on_period")),
+      m_off_period(pt.get<real_type>("off_period"))
 {
 }
 teeth::real_type teeth::operator()(real_type time, real_type value) const
