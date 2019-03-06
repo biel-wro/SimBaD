@@ -11,6 +11,7 @@ set( SOURCES
   computational/time_dependent_scalars/identity.cpp
   computational/time_dependent_scalars/repository.cpp
   computational/time_dependent_scalars/segment_multiplied.cpp
+  computational/time_dependent_scalars/teeth.cpp
 
   # configuration
   configurations/default_attributed_configuration.cpp
