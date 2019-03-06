@@ -14,7 +14,7 @@ public:
         real_type off_period);
   explicit teeth(property_tree const &pt);
 
-  virtual real_type operator()(real_type time, real_type value) const = 0;
+  virtual real_type operator()(real_type time, real_type value) const override;
   virtual ~teeth();
 
 private:
