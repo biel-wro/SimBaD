@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(ptree_experiments_arrays)
 
     counter++;
   }
-  BOOST_REQUIRE_EQUAL(counter, 2);
+  BOOST_REQUIRE_EQUAL(counter, std::size_t(2));
 }
 
 BOOST_AUTO_TEST_CASE(tree_merging)
