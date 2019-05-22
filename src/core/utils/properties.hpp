@@ -24,9 +24,9 @@ public:
 
   void add_properties(const ptree_type &tree);
 
-  void add_properties_info(std::string const filepath);
+  void add_properties_info(std::string const &filepath);
   void add_properties_info(std::istream &is);
-  void add_properites_ini(std::string const filepath);
+  void add_properites_ini(std::string const &filepath);
   void add_properites_ini(std::istream &is);
   void add_properties_json(std::string const &filepath);
   void add_properties_json(std::istream &input);
@@ -36,9 +36,10 @@ public:
   void add_properties_auto(std::string const &filepath);
   void add_properties_auto(std::vector<std::string> const &filepaths);
 
-  const ptree_type &get_property_tree() const;
+  ptree_type const &get_property_tree() const;
 
-  static void merge_trees(ptree_type &target, ptree_type const &source);
+  static void merge_trees(ptree_type &target, ptree_type const &source,
+                          bool overwrite=false);
 
 private:
   std::unique_ptr<ptree_type> m_tree_ptr;

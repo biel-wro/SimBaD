@@ -14,49 +14,65 @@
 BEGIN_NAMESPACE_CORE
 
 properties::properties() : m_tree_ptr(new ptree_type) {}
-properties::~properties() {}
+properties::~properties() = default;
 void properties::add_properties(const ptree_type &tree)
 {
   merge_trees(*m_tree_ptr, tree);
 }
 
-void properties::add_properties_info(const std::string filepath)
+void properties::add_properties_info(std::string const &filepath)
 {
-  boost::property_tree::read_info(filepath, *m_tree_ptr);
+  ptree_type local;
+  boost::property_tree::read_info(filepath, local);
+  merge_trees(*m_tree_ptr, local);
 }
 
 void properties::add_properties_info(std::istream &is)
 {
-  boost::property_tree::read_info(is, *m_tree_ptr);
+  ptree_type local;
+  boost::property_tree::read_info(is, local);
+  merge_trees(*m_tree_ptr, local);
 }
 
-void properties::add_properites_ini(const std::string filepath)
+void properties::add_properites_ini(std::string const &filepath)
 {
-  boost::property_tree::read_ini(filepath, *m_tree_ptr);
+  ptree_type local;
+  boost::property_tree::read_ini(filepath, local);
+  merge_trees(*m_tree_ptr, local);
 }
 
 void properties::add_properites_ini(std::istream &is)
 {
-  boost::property_tree::read_ini(is, *m_tree_ptr);
+  ptree_type local;
+  boost::property_tree::read_ini(is, local);
+  merge_trees(*m_tree_ptr, local);
 }
 void properties::add_properties_json(std::string const &filepath)
 {
-  boost::property_tree::read_json(filepath, *m_tree_ptr);
+  ptree_type local;
+  boost::property_tree::read_json(filepath, local);
+  merge_trees(*m_tree_ptr, local);
 }
 
 void properties::add_properties_json(std::istream &input)
 {
-  boost::property_tree::read_json(input, *m_tree_ptr);
+  ptree_type local;
+  boost::property_tree::read_json(input, local);
+  merge_trees(*m_tree_ptr, local);
 }
 
 void properties::add_properties_xml(std::string const &filepath)
 {
-  boost::property_tree::read_xml(filepath, *m_tree_ptr);
+  ptree_type local;
+  boost::property_tree::read_xml(filepath, local);
+  merge_trees(*m_tree_ptr, local);
 }
 
 void properties::add_properties_xml(std::istream &is)
 {
-  boost::property_tree::read_xml(is, *m_tree_ptr);
+  ptree_type local;
+  boost::property_tree::read_xml(is, local);
+  merge_trees(*m_tree_ptr, local);
 }
 
 void properties::add_properties_auto(const std::string &filepath)
@@ -87,27 +103,31 @@ const properties::ptree_type &properties::get_property_tree() const
 }
 
 static void merge_trees_recrsively(properties::ptree_type &target,
-                                   const properties::ptree_type &source,
-                                   std::string const &prefix)
+                                   properties::ptree_type const &source,
+                                   bool overwrite)
 {
-  std::string const &data = source.data();
-
-  target.put(prefix, data);
+  if(overwrite)
+    target.data() = source.data();
 
   for(auto const &value : source)
   {
-    properties::ptree_type::key_type key = value.first;
-    properties::ptree_type subtree = value.second;
+    properties::ptree_type::key_type const &key = value.first;
+    properties::ptree_type const &subtree = value.second;
 
-    std::string new_prefix = prefix.empty() ? key : prefix + '.' + key;
-    merge_trees_recrsively(target, subtree, new_prefix);
+    auto it = target.find(key);
+
+    if(target.not_found() == it)
+      target.push_back(value);
+    else
+      merge_trees_recrsively(it->second, subtree, overwrite);
   }
 }
 
 void properties::merge_trees(properties::ptree_type &target,
-                             const properties::ptree_type &source)
+                             properties::ptree_type const &source,
+                             bool overwrite)
 {
-  merge_trees_recrsively(target, source, "");
+  merge_trees_recrsively(target, source, overwrite);
 }
 
 END_NAMESPACE_CORE

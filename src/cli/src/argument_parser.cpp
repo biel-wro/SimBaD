@@ -2,7 +2,6 @@
 
 #include <string>
 
-#include <boost/lexical_cast.hpp>
 #include <boost/program_options.hpp>
 #include <boost/property_tree/ptree.hpp>
 
@@ -15,7 +14,7 @@ argument_parser::argument_parser(int argc, const char **argv)
   parse(argc, argv);
 }
 
-argument_parser::~argument_parser() {}
+argument_parser::~argument_parser() = default;
 void argument_parser::parse(int argc, const char **argv)
 {
   namespace po = boost::program_options;
@@ -26,26 +25,23 @@ void argument_parser::parse(int argc, const char **argv)
   cl_parser.allow_unregistered();
   po::parsed_options parsed_options = cl_parser.run();
 
-  // tree_ptr -> put("positional_cmd_arg","");
-
   for(auto const &option : parsed_options.options)
   {
     std::string string_key = option.string_key;
     int position = option.position_key;
 
-    std::vector<std::string> values = option.value;
+    std::vector<std::string> const &values = option.value;
 
-    if(string_key == "")
+    if(string_key.empty())
     {
-      tree_ptr->put("positional_cmd_arg." +
-                        boost::lexical_cast<std::string>(position),
+      tree_ptr->put("positional_cmd_arg." + std::to_string(position),
                     values[0]);
+      continue;
     }
-    else
-    {
-      for(std::string const &value : values)
-        tree_ptr->put(string_key, value);
-    }
+
+    // last value overwrites
+    for(std::string const &value : values)
+      tree_ptr->put(string_key, value);
   }
 }
 
