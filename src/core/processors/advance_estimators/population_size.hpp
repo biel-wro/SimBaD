@@ -13,6 +13,7 @@ public:
   explicit population_size(property_tree const &);
 
   std::size_t estimate() const override;
+  float progress() const override;
   bool next_target() override;
 
   void initialize(std::size_t initial_events,
@@ -22,8 +23,9 @@ public:
 
 private:
   std::size_t m_next_target;
-  std::size_t m_target_step;
+  std::size_t const m_target_step;
   std::size_t m_last_observed;
+  std::size_t m_prev_target;
 };
 END_NAMESPACE_ADVANCE_ESTIMATORS
 #endif

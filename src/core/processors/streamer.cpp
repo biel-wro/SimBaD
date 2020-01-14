@@ -28,6 +28,7 @@ streamer::streamer(model &m,
       m_stream_printer_ptr{std::move(stream_printer_ptr)}
 {
 }
+
 streamer::~streamer() = default;
 
 void streamer::launch()

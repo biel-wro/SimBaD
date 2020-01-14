@@ -4,7 +4,10 @@
 
 BEGIN_NAMESPACE_ADVANCE_ESTIMATORS
 population_size::population_size(std::size_t initial, std::size_t step)
-    : m_next_target(initial), m_target_step(step), m_last_observed(0)
+    : m_next_target(initial),
+      m_target_step(step),
+      m_last_observed(0),
+      m_prev_target(0)
 {
 }
 population_size::population_size(property_tree const &pt)
@@ -29,8 +32,22 @@ std::size_t population_size::estimate() const
     return 1000;
   return 10000;
 }
+
+float population_size::progress() const
+{
+  std::size_t cycle_pos = m_next_target - m_last_observed;
+
+  if(cycle_pos > m_next_target) // last observation is beyond target
+    return 1.0f;
+
+  std::size_t cycle_size = m_next_target - m_prev_target;
+
+  return float(double(cycle_pos)/cycle_size);
+}
+
 bool population_size::next_target()
 {
+  m_prev_target = m_next_target;
   m_next_target += m_target_step;
   return true;
 }
