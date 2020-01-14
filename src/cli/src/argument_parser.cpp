@@ -27,7 +27,7 @@ void argument_parser::parse(int argc, const char **argv)
 
   for(auto const &option : parsed_options.options)
   {
-    std::string string_key = option.string_key;
+    std::string const &string_key = option.string_key;
     int position = option.position_key;
 
     std::vector<std::string> const &values = option.value;
@@ -38,6 +38,7 @@ void argument_parser::parse(int argc, const char **argv)
                     values[0]);
       continue;
     }
+
 
     // last value overwrites
     for(std::string const &value : values)

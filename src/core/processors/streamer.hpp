@@ -15,6 +15,8 @@ public:
   explicit streamer(model &, property_tree const &);
   explicit streamer(model &, std::unique_ptr<advance_estimator>,
                     std::unique_ptr<stream_printer>);
+  streamer(streamer const &) = delete;
+  streamer(streamer &&) = delete;
   ~streamer();
 
   void launch();
