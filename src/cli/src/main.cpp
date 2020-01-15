@@ -29,6 +29,8 @@ core::property_tree get_args(int argc, const char **argv)
   if(param_fname)
     prop.add_properties_auto(param_fname.get());
 
+
+
   boost::optional<std::string> stdin_format =
       tree.get_optional<std::string>("stdin");
   if(stdin_format)
