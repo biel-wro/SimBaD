@@ -1,9 +1,12 @@
 #include "cli/argument_parser.hpp"
 
-#include <string>
+#include "version.hpp"
 
 #include <boost/program_options.hpp>
 #include <boost/property_tree/ptree.hpp>
+
+#include <string>
+#include <iostream>
 
 BEGIN_NAMESPACE_CORE
 
@@ -31,6 +34,17 @@ void argument_parser::parse(int argc, const char **argv)
     int position = option.position_key;
 
     std::vector<std::string> const &values = option.value;
+
+    if(string_key == "version")
+    {
+      std::cout << SIMBAD_VERSION_STRING << std::endl;
+      std::exit(0);
+    }
+    if(string_key == "help")
+    {
+      std::cout << desc;
+      std::exit(0);
+    }
 
     if(string_key.empty())
     {
