@@ -1,6 +1,11 @@
 project(SimBaD)
 cmake_minimum_required(VERSION 3.0)
 
+add_compile_definitions(
+  "SIMBAD_VERSION_MAJOR=3"
+  "SIMBAD_VERSION_MINOR=3"
+  "SIMBAD_VERSION_PATCH=0")
+
 set( CLI_NAME cli )
 set( CORE_NAME core )
 set( GUI_NAME gui )
