@@ -1,4 +1,5 @@
 #include "version/version.hpp"
+
 #include <iostream>
 
 BEGIN_NAMESPACE_CORE
