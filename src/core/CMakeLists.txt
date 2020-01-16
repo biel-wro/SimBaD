@@ -94,16 +94,7 @@ set( SOURCES
   utils/stream_as_model.cpp
   utils/stream_from_name.cpp
 
-  #version/version.cpp
- )
-
-#set_property(
-#  SOURCE version/version.cpp
-#  PROPERTY COMPILE_DEFINITIONS
-#  SIMBAD_VERSION_MAJOR=${SimBaD_VERSION_MAJOR}
-#  SIMBAD_VERSION_MINOR=${SimBaD_VERSION_MINOR}
-#  SIMBAD_VERSION_PATCH=${SimBaD_VERSION_PATCH}
-#)
+)
 
 set( LIBS
   ${Boost_LIBRARIES}
