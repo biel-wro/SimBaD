@@ -1,6 +1,6 @@
 #include "cli/argument_parser.hpp"
 
-#include "version.hpp"
+#include "version/version.hpp"
 
 #include <boost/program_options.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -37,7 +37,7 @@ void argument_parser::parse(int argc, const char **argv)
 
     if(string_key == "version")
     {
-      std::cout << SIMBAD_VERSION_STRING << std::endl;
+      std::cout << core::SimBaD_core_version() << std::endl;
       std::exit(0);
     }
     if(string_key == "help")

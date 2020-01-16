@@ -5,8 +5,6 @@ include_directories( core )
 set( SOURCES
 
   # computational
-
-
   computational/time_dependent_scalars/time_dependent_scalar.cpp
   computational/time_dependent_scalars/identity.cpp
   computational/time_dependent_scalars/repository.cpp
@@ -95,13 +93,24 @@ set( SOURCES
   utils/stream_as_configuration.cpp
   utils/stream_as_model.cpp
   utils/stream_from_name.cpp
+
+  #version/version.cpp
  )
+
+#set_property(
+#  SOURCE version/version.cpp
+#  PROPERTY COMPILE_DEFINITIONS
+#  SIMBAD_VERSION_MAJOR=${SimBaD_VERSION_MAJOR}
+#  SIMBAD_VERSION_MINOR=${SimBaD_VERSION_MINOR}
+#  SIMBAD_VERSION_PATCH=${SimBaD_VERSION_PATCH}
+#)
 
 set( LIBS
   ${Boost_LIBRARIES}
+  core_version
 )
 
 add_library(${TARGET_NAME} ${IF_SHARED_LIBS} ${SOURCES} ${HEADERS})
 target_link_libraries( ${TARGET_NAME} ${LIBS} )
 
-subdirs( tests )
+subdirs( tests version )
