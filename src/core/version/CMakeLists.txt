@@ -1,0 +1,14 @@
+
+set( SOURCES
+  version.cpp
+)
+
+set_property(
+  SOURCE version.cpp
+  PROPERTY COMPILE_DEFINITIONS
+  SIMBAD_VERSION_MAJOR=${SimBaD_VERSION_MAJOR}
+  SIMBAD_VERSION_MINOR=${SimBaD_VERSION_MINOR}
+  SIMBAD_VERSION_PATCH=${SimBaD_VERSION_PATCH}
+)
+
+add_library(core_version STATIC ${SOURCES})
