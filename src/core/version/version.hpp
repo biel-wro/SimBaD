@@ -9,9 +9,9 @@ BEGIN_NAMESPACE_CORE
 struct Version
 {
   explicit Version(unsigned major, unsigned minor, unsigned patch);
-  unsigned major;
-  unsigned minor;
-  unsigned patch;
+  unsigned major_version;
+  unsigned minor_version;
+  unsigned patch_version;
 };
 
 Version const &SimBaD_core_version();
